@@ -5,7 +5,14 @@
 
 settings =
 {
-	
+
+	plugins =
+	{
+		["plugin.gameanalytics"]=
+		{
+			publisherId = "com.gameanalytics",
+		},
+	},
 	orientation =
 	{
 		-- Supported values for orientation:
