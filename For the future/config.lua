@@ -3,9 +3,9 @@ application =
 
 	content =
 	{
-		width = 320,
-		height = 480, 
-		scale = "letterBox",
+		width = 1080,
+		height = 1920, 
+		scale = "letterbox",
 		fps = 30,
 		
 		--[[

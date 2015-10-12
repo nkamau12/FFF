@@ -19,8 +19,8 @@ GA.init ( {
 		secret_key = '378b4c3481bfbd954ea49d1611df233fca998b44',
 		build_name = "FTF",
 		} )
--- load scene1
-composer.gotoScene( "MainMenu" )
+
+composer.gotoScene( "Splash" )
 
 -- Add any objects that should appear on all scenes below (e.g. tab bar, hud, etc)
 

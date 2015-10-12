@@ -10,8 +10,7 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 
-local function showmain()
-
+local function showMain()
 	local options = {
 		effect = "fade",
 		time = 500
@@ -22,7 +21,9 @@ end
 function scene:create( event )
 
     local sceneGroup = self.view
-
+	local backgroundMusic = audio.loadStream( "bensound-scifi.mp3")
+	local backgroundMusicplay = audio.play( backgroundMusic, {  loops=-1 } )
+	
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end
@@ -36,18 +37,24 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
-		local background = display.newRect(display.contentCenterX,display.contentCenterY,1920,1080)
-		background:setFillColor(.3,.1,.8)
-		sceneGroup:insert(background)
+		--local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
+		--background:setFillColor(.3,.1,.8)
 		
-		local myText = display.newText("This is it",display.contentCenterX,display.contentCenterY,native.systemFont,48)
-		myText:setFillColor(1,1,1)
-		sceneGroup:insert(myText)
+		local background = display.newImage("title_background.png",system.ResourceDirectory)
+		background.anchorX=0.5
+		background.anchorY=0.5
+		background.height=1080
+		background.width=1920
+		background.x= display.contentCenterX
+		background.y=display.contentCenterY
+		sceneGroup:insert(background)
+		background:addEventListener( "touch", showMain )
+		
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-		timer.performWithDelay(3000,showmain)
+		
     end
 end
 
