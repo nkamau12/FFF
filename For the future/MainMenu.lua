@@ -18,6 +18,15 @@ local function showSearch1()
 	}
 		composer.gotoScene("Search1",options)
 end
+
+local function showRescue()
+	audio.pause( backgroundMusicplay)
+	local options = {
+		effect = "crossFade",
+		time = 500
+	}
+		composer.gotoScene("Rescue1",options)
+end
 -- "scene:create()"
 function scene:create( event )
 
@@ -59,7 +68,7 @@ function scene:show( event )
 		play.x = display.contentCenterX
 		play.y=display.contentCenterY-180
 		sceneGroup:insert(play)
-		play:addEventListener( "touch", showSearch1 )
+		play:addEventListener( "touch", showRescue )
 		
 		local tut = display.newImage("Tutorial.png")
 		tut.height=180

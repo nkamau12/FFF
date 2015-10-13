@@ -9,7 +9,9 @@ display.setStatusBar( display.HiddenStatusBar )
 
 -- require the composer library
 local composer = require "composer"
+
 local GA = require "plugin.gameanalytics"
+composer.gotoScene( "Splash" )
 GA.isDebug = true
 GA.runInSimulator=true
 GA.submitAverageFps=true
@@ -20,7 +22,7 @@ GA.init ( {
 		build_name = "FTF",
 		} )
 
-composer.gotoScene( "Splash" )
+
 
 -- Add any objects that should appear on all scenes below (e.g. tab bar, hud, etc)
 
