@@ -115,16 +115,100 @@ local function setupmap()
 		start= display.newImage("start_button.png")
 		start.anchorX=0
 		start.anchorY=0
-		start.x=1773
-		start.y=346.86
-		start.height=106.04
-		start.width=106.04
+		start.x=123
+		start.y=918
+		start.height=60
+		start.width=223
+
+		--wall_a
+		start= display.newImage("locked_door_horizontal.png")
+		start.anchorX=0
+		start.anchorY=0
+		start.x=181
+		start.y=305
+		start.height=10
+		start.width=110.5
+
+		--wall_b
+		start= display.newImage("locked_door_horizontal.png")
+		start.anchorX=0
+		start.anchorY=0
+		start.x=408
+		start.y=305
+		start.height=10
+		start.width=110.5
+
+		--wall_c
+		start= display.newImage("locked_door_horizontal.png")
+		start.anchorX=0
+		start.anchorY=0
+		start.x=621
+		start.y=305
+		start.height=10
+		start.width=110.5
+
+		--wall_d
+		start= display.newImage("locked_door_horizontal.png")
+		start.anchorX=0
+		start.anchorY=0
+		start.x=842
+		start.y=305
+		start.height=10
+		start.width=110.5
+
+		--wall_f
+		start= display.newImage("locked_door_horizontal.png")
+		start.anchorX=0
+		start.anchorY=0
+		start.x=408
+		start.y=527
+		start.height=10
+		start.width=110.5
+
+		--wall_j
+		start= display.newImage("locked_door_horizontal.png")
+		start.anchorX=0
+		start.anchorY=0
+		start.x=408
+		start.y=750
+		start.height=10
+		start.width=110.5
+
+		--wall_7
+		start= display.newImage("locked_door_vertical.png")
+		start.anchorX=0
+		start.anchorY=0
+		start.x=341
+		start.y=590
+		start.height=110.5
+		start.width=10
+
+		--wall_8
+		start= display.newImage("locked_door_vertical.png")
+		start.anchorX=0
+		start.anchorY=0
+		start.x=564
+		start.y=590
+		start.height=110.5
+		start.width=10
+
+		--scientist
+		start= display.newImage("scientist.png")
+		start.anchorX=0
+		start.anchorY=0
+		start.x=859
+		start.y=363
+		start.height=126
+		start.width=126
 end 
 
 -- "scene:create()"
 function scene:create( event )
 
     local sceneGroup = self.view
+    local backgroundMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
+	local backgroundMusicplay = audio.play( backgroundMusic, {  loops=-1 } )
+    
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
