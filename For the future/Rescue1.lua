@@ -18,7 +18,42 @@ local function setupmap()
 		grida.y=41.93
 		grida.height=993.04
 		grida.width=993.04
+
+		--left_wall
+		grida = display.newImage("side_wall.png")
+		grida.anchorX=0
+		grida.anchorY=0
+		grida.x=43.01
+		grida.y=41.93
+		grida.height=993.04
+		grida.width=10
+
+		--right_wall
+		grida = display.newImage("side_wall.png")
+		grida.anchorX=0
+		grida.anchorY=0
+		grida.x=1026.05
+		grida.y=41.93
+		grida.height=993.04
+		grida.width=10
+
+		--top_wall
+		grida = display.newImage("topbottom_wall.png")
+		grida.anchorX=0
+		grida.anchorY=0
+		grida.x=43.01
+		grida.y=41.93
+		grida.height=10
+		grida.width=993.04
 		
+		--bottom_wall
+		grida = display.newImage("topbottom_wall.png")
+		grida.anchorX=0
+		grida.anchorY=0
+		grida.x=43.01
+		grida.y=1024.97
+		grida.height=10
+		grida.width=993.04
 		
 		--one_loop
 		onel = display.newImage("one_loop.png")
