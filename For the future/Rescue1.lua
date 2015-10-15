@@ -1,5 +1,5 @@
 local composer = require( "composer" )
-
+local physics = require("physics")
 local scene = composer.newScene()
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ local function setupmap()
 		threel.width=805
 		
 		--up_arrow
-		 upa = display.newImage("up_arrow.png")
+		upa = display.newImage("up_arrow.png")
 		upa.anchorX=0
 		upa.anchorY=0
 		upa.x=1192
@@ -121,102 +121,214 @@ local function setupmap()
 		start.width=246
 
 		--wall_a
-		start= display.newImage("locked_door_horizontal.png")
-		start.anchorX=0
-		start.anchorY=0
-		start.x=110
-		start.y=288
-		start.height=10
-		start.width=124
+		walla= display.newImage("locked_door_horizontal.png")
+		walla.anchorX=0
+		walla.anchorY=0
+		walla.x=110
+		walla.y=288
+		walla.height=10
+		walla.width=124
 
 		--wall_b
-		start= display.newImage("locked_door_horizontal.png")
-		start.anchorX=0
-		start.anchorY=0
-		start.x=359
-		start.y=288
-		start.height=11
-		start.width=124
+		wallb= display.newImage("locked_door_horizontal.png")
+		wallb.anchorX=0
+		wallb.anchorY=0
+		wallb.x=359
+		wallb.y=288
+		wallb.height=11
+		wallb.width=124
 
 		--wall_c
-		start= display.newImage("locked_door_horizontal.png")
-		start.anchorX=0
-		start.anchorY=0
-		start.x=598
-		start.y=288
-		start.height=11
-		start.width=124
+		wallc= display.newImage("locked_door_horizontal.png")
+		wallc.anchorX=0
+		wallc.anchorY=0
+		wallc.x=598
+		wallc.y=288
+		wallc.height=11
+		wallc.width=124
 
 		--wall_d
-		start= display.newImage("locked_door_horizontal.png")
-		start.anchorX=0
-		start.anchorY=0
-		start.x=839
-		start.y=288
-		start.height=11
-		start.width=124
+		walld= display.newImage("locked_door_horizontal.png")
+		walld.anchorX=0
+		walld.anchorY=0
+		walld.x=839
+		walld.y=288
+		walld.height=11
+		walld.width=124
 
 		--wall_f
-		start= display.newImage("locked_door_horizontal.png")
-		start.anchorX=0
-		start.anchorY=0
-		start.x=359
-		start.y=533
-		start.height=11
-		start.width=124
+		wallf= display.newImage("locked_door_horizontal.png")
+		wallf.anchorX=0
+		wallf.anchorY=0
+		wallf.x=359
+		wallf.y=533
+		wallf.height=11
+		wallf.width=124
 
 		--wall_j
-		start= display.newImage("locked_door_horizontal.png")
-		start.anchorX=0
-		start.anchorY=0
-		start.x=359
-		start.y=777
-		start.height=11
-		start.width=124
+		wallj= display.newImage("locked_door_horizontal.png")
+		wallj.anchorX=0
+		wallj.anchorY=0
+		wallj.x=359
+		wallj.y=777
+		wallj.height=11
+		wallj.width=124
 
 		--wall_7
-		start= display.newImage("locked_door_vertical.png")
-		start.anchorX=0
-		start.anchorY=0
-		start.x=290
-		start.y=602
-		start.height=124
-		start.width=11
+		wall7= display.newImage("locked_door_vertical.png")
+		wall7.anchorX=0
+		wall7.anchorY=0
+		wall7.x=290
+		wall7.y=602
+		wall7.height=124
+		wall7.width=11
 
 		--wall_8
-		start= display.newImage("locked_door_vertical.png")
-		start.anchorX=0
-		start.anchorY=0
-		start.x=534
-		start.y=602
-		start.height=124
-		start.width=12
+		wall8= display.newImage("locked_door_vertical.png")
+		wall8.anchorX=0
+		wall8.anchorY=0
+		wall8.x=534
+		wall8.y=602
+		wall8.height=124
+		wall8.width=12
 
 		--scientist
-		start= display.newImage("scientist.png")
-		start.anchorX=0
-		start.anchorY=0
-		start.x=843
-		start.y=348
-		start.height=140
-		start.width=140
+		science= display.newImage("scientist.png")
+		science.anchorX=0
+		science.anchorY=0
+		science.x=843
+		science.y=348
+		science.height=140
+		science.width=140
 
 		--robot
-		start= display.newImage("robot.png")
-		start.anchorX=0
-		start.anchorY=0
-		start.x=109
-		start.y=819
-		start.height=140
-		start.width=140
+		local robot= display.newImage("robot.png")
+		robot.anchorX=0
+		robot.anchorY=0
+		robot.x=109
+		robot.y=819
+		robot.height=140
+		robot.width=140
+		robot.myName="robot"
+		
+		--physics add bodies
+		physics.start()
+		physics.setGravity( 0, 0 )
+		--walls
+		physics.addBody( wall8, "static",{bounce=0})
+		physics.addBody( wall7, "static",{bounce=0})
+		physics.addBody( walla, "static",{bounce=0})
+		physics.addBody( wallb, "static",{bounce=0})
+		physics.addBody( wallc, "static",{bounce=0})
+		physics.addBody( walld, "static",{bounce=0})
+		physics.addBody( wallf, "static",{bounce=0})
+		physics.addBody( wallj, "static",{bounce=0})
+		
+		--robot
+		physics.addBody( robot,"dynamic",{bounce=0,friction=.8})
+		robot.isFixedRotation = true
+		robo=robot
+		--Misc
+		local robotX, robotY = robo:localToContent( -70, -70 )
+		myrectu = display.newRect( robotX, robotY-240, 1, 1)
+		physics.addBody( myrectu, "static",{bounce=0})
+		myrectd = display.newRect( robotX, robotY+240, 1, 1)
+		physics.addBody( myrectd, "static",{bounce=0})
+		myrectl = display.newRect( robotX-240, robotY, 1, 1)
+		physics.addBody( myrectl, "static",{bounce=0})
+		myrectr = display.newRect( robotX+240, robotY, 1, 1)
+		physics.addBody( myrectr, "static",{bounce=0})
+		
+		--scientist
+		physics.addBody( science, "static",{bounce=0})
 end 
+
+local function moveu()
+		robo:applyForce( 0, -200, robo.x+70, robo.y+70 )
+end
+
+local function moveup()
+		
+		
+		local robotX, robotY = robo:localToContent( 0, -70 )
+		transition.to( myrectu, { time=16, x=robotX, y=robotY-240} )
+		--transition.to( myrectl, { time=16, x=robotX, y=robotY-240} )
+		timer.performWithDelay(20,moveu)
+		
+		
+end
+
+local function moveri()
+		robo:applyForce( 200, 0, robo.x+70, robo.y+70 )
+end
+
+local function mover()
+		--local robotX, robotY = robot:localToContent( -70, -70 )
+		--transition.to( robot, { time=500, x=robotX+240, y=robotY} )
+		--physics.removeBody( myrect )
+		--myrect:removeSelf()
+		local robotX, robotY = robo:localToContent( 0, -70 )
+		transition.to( myrectr, { time=16, x=robotX+310, y=robotY} )
+		
+		timer.performWithDelay(20,moveri)
+end
+
+local function movedo()
+		robo:applyForce( 0, 200, robo.x+70, robo.y+70 )
+end
+
+local function moved()
+		local robotX, robotY = robo:localToContent( 0, -70 )
+		transition.to( myrectd, { time=16, x=robotX, y=robotY+380} )
+		
+		timer.performWithDelay(20,movedo)
+		
+end
+
+local function movele()
+		robo:applyForce( -200, 0, robo.x+70, robo.y+70 )
+end
+
+local function movel()
+		local robotX, robotY = robo:localToContent( 0, -70 )
+		transition.to( myrectl, { time=16, x=robotX-310, y=robotY} )
+		
+		timer.performWithDelay(20,movele)
+end
+
+local function onCollision( event )
+		if (event.object2==myrectu or event.object2==myrectd or event.object2==myrectl or event.object2==myrectr) then
+		
+		elseif (event.object2==science) then
+			print("Scientist")
+		else
+			local options = {
+			isModal = true,
+			
+			params = {
+			sampleVar = "my sample variable"
+				}
+			}
+			composer.showOverlay( "fail", options )
+		end
+
+end 
+
+function scene:resetrobot()
+		local robotX, robotY = robo:localToContent( -70, -70 )
+		transition.to( robo, { time=16, x=109, y=819} )
+		transition.to( myrectu, { time=16, x=robotX, y=robotY-240} )
+		transition.to( myrectl, { time=16, x=robotX-240, y=robotY} )
+		transition.to( myrectd, { time=16, x=robotX, y=robotY+240} )
+		transition.to( myrectr, { time=16, x=robotX+240, y=robotY} )
+end
 
 -- "scene:create()"
 function scene:create( event )
 
     local sceneGroup = self.view
-    local backgroundMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
-	local backgroundMusicplay = audio.play( backgroundMusic, {  loops=-1 } )
+    --local backgroundMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
+	--local backgroundMusicplay = audio.play( backgroundMusic, {  loops=-1 } )
     
 
     -- Initialize the scene here.
@@ -231,6 +343,15 @@ function scene:create( event )
 		sceneGroup:insert(background)
 		
 		setupmap()
+		
+		--robo.collision = onLocalCollision
+		--robo:addEventListener( "collision", robo )
+		Runtime:addEventListener( "collision", onCollision )
+		upa:addEventListener( "tap", moveup )
+		
+		downa:addEventListener( "tap", moved )
+		lefta:addEventListener( "tap", movel )
+		righta:addEventListener( "tap", mover )
 		sceneGroup:insert(grida)
 		sceneGroup:insert(onel)
 		sceneGroup:insert(twol)
@@ -242,7 +363,16 @@ function scene:create( event )
 		sceneGroup:insert(oneb)
 		sceneGroup:insert(twob)
 		sceneGroup:insert(threeb)
-		--sceneGroup:insert(start)
+		sceneGroup:insert(robo)
+		sceneGroup:insert(science)
+		sceneGroup:insert(walla)
+		sceneGroup:insert(wallb)
+		sceneGroup:insert(wallc)
+		sceneGroup:insert(walld)
+		sceneGroup:insert(wallf)
+		sceneGroup:insert(wallj)
+		sceneGroup:insert(wall7)
+		sceneGroup:insert(wall8)
 end
 
 
@@ -262,6 +392,7 @@ function scene:show( event )
 		
     end
 end
+
 
 
 -- "scene:hide()"

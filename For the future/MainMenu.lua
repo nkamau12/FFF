@@ -9,6 +9,60 @@ local scene = composer.newScene()
 -- local forward references should go here
 
 -- -------------------------------------------------------------------------------
+local function writeaccept()
+	-- Data (string) to write
+	local saveData = "1"
+
+	-- Path for the file to write
+	local path = system.pathForFile( "agree.txt", system.DocumentsDirectory )
+
+	-- Open the file handle
+	local file, errorString = io.open( path, "w" )
+
+	if not file then
+    -- Error occurred; output the cause
+    print( "File error: " .. errorString )
+	else
+    -- Write data to file
+    file:write( saveData )
+    -- Close the file handle
+    io.close( file )
+	end
+
+	file = nil
+end
+
+local function check()
+	
+	
+	
+	-- Path for the file to read
+	local path = system.pathForFile( "agree.txt" )
+
+	-- Open the file handle
+	local file, errorString = io.open( path, "r" )
+	print(file)
+	if not file then
+	
+    -- Error occurred; output the cause
+    print( "File error: " .. errorString )
+	else
+    -- Read data from file
+    local contents = file:read( "*a" )
+		if (contents == 1) then
+			print("blah")
+			
+			return 1
+		else 
+			print("blah2")
+			return 0
+		end
+    io.close( file )
+	end
+
+	file = nil
+
+end
 
 local function showSearch1()
 	audio.pause( backgroundMusicplay)
@@ -32,6 +86,19 @@ function scene:create( event )
 
     local sceneGroup = self.view
 	
+	--local checks = check()
+	
+	--[[if (checks~=1) then
+		local options = {
+			isModal = true,
+			
+			params = {
+			sampleVar = "my sample variable"
+				}
+			}
+			composer.showOverlay( "fail", options )
+	else
+	end]]--
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end
@@ -47,7 +114,6 @@ function scene:show( event )
         -- Called when the scene is still off screen (but is about to come on screen).
 		--local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
 		--background:setFillColor(.3,.1,.8)
-		
 		local background = display.newImage("splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
@@ -68,7 +134,7 @@ function scene:show( event )
 		play.x = display.contentCenterX
 		play.y=display.contentCenterY-180
 		sceneGroup:insert(play)
-		play:addEventListener( "touch", showRescue )
+		play:addEventListener( "tap", showRescue )
 		
 		local tut = display.newImage("Tutorial.png")
 		tut.height=180
@@ -76,7 +142,7 @@ function scene:show( event )
 		tut.x = display.contentCenterX
 		tut.y=display.contentCenterY+20
 		sceneGroup:insert(tut)
-		tut:addEventListener( "touch", play )
+		tut:addEventListener( "tap", play )
 		
 		local credit = display.newImage("Credits.png")
 		credit.height=180
@@ -84,7 +150,7 @@ function scene:show( event )
 		credit.x = display.contentCenterX
 		credit.y=display.contentCenterY+240
 		sceneGroup:insert(credit)
-		credit:addEventListener( "touch", play )
+		credit:addEventListener( "tap", play )
 		
 		audio.resume( backgroundMusicplay )
 
