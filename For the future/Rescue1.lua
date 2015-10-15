@@ -20,40 +20,40 @@ local function setupmap()
 		grida.width=993.04
 
 		--left_wall
-		grida = display.newImage("side_wall.png")
-		grida.anchorX=0
-		grida.anchorY=0
-		grida.x=43.01
-		grida.y=41.93
-		grida.height=993.04
-		grida.width=10
+		leftwall = display.newImage("side_wall.png")
+		leftwall.anchorX=0
+		leftwall.anchorY=0
+		leftwall.x=43.01
+		leftwall.y=41.93
+		leftwall.height=993.04
+		leftwall.width=10
 
 		--right_wall
-		grida = display.newImage("side_wall.png")
-		grida.anchorX=0
-		grida.anchorY=0
-		grida.x=1026.05
-		grida.y=41.93
-		grida.height=993.04
-		grida.width=10
+		rightwall = display.newImage("side_wall.png")
+		rightwall.anchorX=0
+		rightwall.anchorY=0
+		rightwall.x=1026.05
+		rightwall.y=41.93
+		rightwall.height=993.04
+		rightwall.width=10
 
 		--top_wall
-		grida = display.newImage("topbottom_wall.png")
-		grida.anchorX=0
-		grida.anchorY=0
-		grida.x=43.01
-		grida.y=41.93
-		grida.height=10
-		grida.width=993.04
+		topwall = display.newImage("topbottom_wall.png")
+		topwall.anchorX=0
+		topwall.anchorY=0
+		topwall.x=43.01
+		topwall.y=41.93
+		topwall.height=10
+		topwall.width=993.04
 		
 		--bottom_wall
-		grida = display.newImage("topbottom_wall.png")
-		grida.anchorX=0
-		grida.anchorY=0
-		grida.x=43.01
-		grida.y=1024.97
-		grida.height=10
-		grida.width=993.04
+		bottomwall = display.newImage("topbottom_wall.png")
+		bottomwall.anchorX=0
+		bottomwall.anchorY=0
+		bottomwall.x=43.01
+		bottomwall.y=1024.97
+		bottomwall.height=10
+		bottomwall.width=993.04
 		
 		--one_loop
 		onel = display.newImage("one_loop.png")
@@ -388,6 +388,10 @@ function scene:create( event )
 		lefta:addEventListener( "tap", movel )
 		righta:addEventListener( "tap", mover )
 		sceneGroup:insert(grida)
+		sceneGroup:insert(leftwall)
+		sceneGroup:insert(rightwall)
+		sceneGroup:insert(topwall)
+		sceneGroup:insert(bottomwall)
 		sceneGroup:insert(onel)
 		sceneGroup:insert(twol)
 		sceneGroup:insert(threel)
