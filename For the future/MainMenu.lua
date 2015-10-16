@@ -29,7 +29,14 @@ local function showRescue()
 		composer.gotoScene("Rescue1",options)
 end
 
-
+local function showTutorial()
+	audio.pause( backgroundMusicplay)
+	local options = {
+		effect = "crossFade",
+		time = 500
+	}
+		composer.gotoScene("RescueTutorial",options)
+end
 
 
 
@@ -123,7 +130,7 @@ function scene:show( event )
 		tut.x = display.contentCenterX
 		tut.y=display.contentCenterY+20
 		sceneGroup:insert(tut)
-		tut:addEventListener( "tap", play )
+		tut:addEventListener( "tap", showTutorial )
 		
 		local credit = display.newImage("Credits.png")
 		credit.height=180
