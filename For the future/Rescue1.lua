@@ -25,7 +25,8 @@ local pic35
 local table1 = {}
 local table2 = {}
 local table3 = {}
-
+local fintable = {}
+local counter = 1;
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -283,7 +284,10 @@ local function setupmap()
 		physics.addBody( walld, "static",{bounce=0})
 		physics.addBody( wallf, "static",{bounce=0})
 		physics.addBody( wallj, "static",{bounce=0})
-		
+		physics.addBody( leftwall, "static",{bounce=0})
+		physics.addBody( rightwall, "static",{bounce=0})
+		physics.addBody( topwall, "static",{bounce=0})
+		physics.addBody( bottomwall, "static",{bounce=0})
 		--robot
 		physics.addBody( robot,"dynamic",{bounce=0,friction=.8})
 		robot.isFixedRotation = true
@@ -694,7 +698,7 @@ end
 
 local function moveup()
 		
-		picToAdd = "up_arrow.png"
+		
 		
 		
 		local robotX, robotY = robo:localToContent( 0, -70 )
@@ -709,7 +713,7 @@ end
 
 local function moveri()
 		robo:applyForce( 200, 0, robo.x+70, robo.y+70 )
-		picToAdd = "right_arrow.png"
+		
 		
 end
 
@@ -734,7 +738,7 @@ local function moved()
 		
 		timer.performWithDelay(20,movedo)
 		
-		picToAdd = "down_arrow.png"
+		
 		
 		
 end
@@ -750,8 +754,28 @@ local function movel()
 		
 		timer.performWithDelay(20,movele)
 		
-		picToAdd = "left_arrow.png"
 		
+		
+end
+
+local function mdtap()
+	picToAdd = "down_arrow.png"
+
+end
+
+local function mutap()
+	picToAdd = "up_arrow.png"
+
+end
+
+local function mrtap()
+	picToAdd = "right_arrow.png"
+
+end
+
+local function mltap()
+	picToAdd = "left_arrow.png"
+
 end
 
 local function onetap()
@@ -764,16 +788,99 @@ local function twotap()
 	picToAdd = "two_button.png"
 
 end
-
+function scene:resetrobot()
+		
+		transition.to( robo, { time=16, x=109, y=819} )
+		local robotX, robotY = robo:localToContent( -70, -70 )
+		transition.to( myrectu, { time=16, x=robotX, y=robotY-240} )
+		transition.to( myrectl, { time=16, x=robotX-240, y=robotY} )
+		transition.to( myrectd, { time=16, x=robotX, y=robotY+240} )
+		transition.to( myrectr, { time=16, x=robotX+240, y=robotY} )
+		fintable=nil
+		fintable={}
+		counter=1
+end
+function restartrobot()
+	
+		transition.to( robo, { time=16, x=109, y=819} )
+		local robotX, robotY = robo:localToContent( -70, -70 )
+		transition.to( myrectu, { time=16, x=robotX, y=robotY-240} )
+		transition.to( myrectl, { time=16, x=robotX-240, y=robotY} )
+		transition.to( myrectd, { time=16, x=robotX, y=robotY+240} )
+		transition.to( myrectr, { time=16, x=robotX+240, y=robotY} )
+		fintable=nil
+		fintable={}
+		counter=1
+end
 
 local function threetap()
 	picToAdd = "three_button.png"
 
 end
+local function findsize()
+	if (fintable~=nil) then
+	local count =1;
+	while (fintable[count]~=nil) do
+		count=count+1
+	end
+	return count
+	else
+	return 0
+	end
+end
 
+local function moverobot()
+	local max = findsize()
+	--[[for i = 1, max,1 do
+		if (fintable[i]=="up_arrow.png") then
+			--moveup()
+			timer.performWithDelay(50,moveup)
+		elseif (fintable[i]=="down_arrow.png") then
+			--moved()
+			timer.performWithDelay(50,moved)
+		elseif (fintable[i]=="left_arrow.png") then
+			--movel()
+			timer.performWithDelay(50,movel)
+		elseif (fintable[i]=="right_arrow.png") then
+			--mover()
+			timer.performWithDelay(50,mover)
+		else
+		end
+		
+	end]]--
+	if not (counter>max) then
+		if (fintable[counter]=="up_arrow.png") then
+			moveup()
+			--timer.performWithDelay(50,moveup)
+		elseif (fintable[counter]=="down_arrow.png") then
+			moved()
+			--timer.performWithDelay(50,moved)
+		elseif (fintable[counter]=="left_arrow.png") then
+			movel()
+			--timer.performWithDelay(50,movel)
+		elseif (fintable[counter]=="right_arrow.png") then
+			mover()
+			--timer.performWithDelay(50,mover)
+		else
+			
+		end
+		counter=counter+1
+	else
+		local options = {
+			isModal = true,
+			
+			params = {
+			sampleVar = "my sample variable"
+				}
+			}
+			composer.showOverlay( "fail", options )
+	end	
+end
 local function onCollision( event )
 		if (event.object2==myrectu or event.object2==myrectd or event.object2==myrectl or event.object2==myrectr) then
-		
+			if ( event.phase == "began" ) then
+				moverobot()
+			end
 		elseif (event.object2==science) then
 			print("Scientist")
 		else
@@ -789,14 +896,34 @@ local function onCollision( event )
 
 end 
 
-function scene:resetrobot()
-		local robotX, robotY = robo:localToContent( -70, -70 )
-		transition.to( robo, { time=16, x=109, y=819} )
-		transition.to( myrectu, { time=16, x=robotX, y=robotY-240} )
-		transition.to( myrectl, { time=16, x=robotX-240, y=robotY} )
-		transition.to( myrectd, { time=16, x=robotX, y=robotY+240} )
-		transition.to( myrectr, { time=16, x=robotX+240, y=robotY} )
+
+
+local function merge(tablel)
+	
+	for i=1,5,1 do
+		print(tablel[i])
+		if (tablel[i]=="one") then
+			merge(table1)
+		elseif (tablel[i]=="two") then
+			merge(table2)
+		elseif (tablel[i]=="three") then
+			merge(table3)
+		elseif ( tablel[i]=="up_arrow.png" or tablel[i]=="down_arrow.png" or tablel[i]=="left_arrow.png" or tablel[i]=="right_arrow.png") then
+			table.insert(fintable,tablel[i])
+		else
+		end
+	end
 end
+
+
+local function pass()
+	merge(table1)
+	moverobot()
+end
+
+
+
+
 
 
 
@@ -1032,14 +1159,15 @@ function scene:create( event )
 	--robo.collision = onLocalCollision
 	--robo:addEventListener( "collision", robo )
 	Runtime:addEventListener( "collision", onCollision )
-	upa:addEventListener( "tap", moveup )
+	upa:addEventListener( "tap", mutap )
 		
-	downa:addEventListener( "tap", moved )
-	lefta:addEventListener( "tap", movel )
-	righta:addEventListener( "tap", mover )
+	downa:addEventListener( "tap", mdtap )
+	lefta:addEventListener( "tap", mltap )
+	righta:addEventListener( "tap", mrtap )
 	oneb:addEventListener("tap", onetap)
 	twob:addEventListener("tap", twotap)
 	threeb:addEventListener("tap", threetap)
+	start:addEventListener("tap", pass)
 	
 	--add buttons
 	sceneGroup:insert(one_loop_btn1)
@@ -1072,6 +1200,7 @@ function scene:create( event )
 	sceneGroup:insert(oneb)
 	sceneGroup:insert(twob)
 	sceneGroup:insert(threeb)
+	sceneGroup:insert(start)
 	
 	--add character
 	sceneGroup:insert(robo)
