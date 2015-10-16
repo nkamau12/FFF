@@ -43,7 +43,7 @@ local function setupmap()
 		grida.y=41.93
 		grida.height=993.04
 		grida.width=993.04
-
+		
 		--left_wall
 		leftwall = display.newImage("side_wall.png")
 		leftwall.anchorX=0
@@ -291,7 +291,6 @@ local function setupmap()
 		--Misc
 		local robotX, robotY = robo:localToContent( -70, -70 )
 		myrectu = display.newRect( robotX, robotY-240, 1, 1)
-		--{26,74,94}
 		physics.addBody( myrectu, "static",{bounce=0})
 		myrectd = display.newRect( robotX, robotY+240, 1, 1)
 		physics.addBody( myrectd, "static",{bounce=0})
@@ -800,12 +799,11 @@ function scene:resetrobot()
 end
 
 
-local sceneGroup
 
 -- "scene:create()"
 function scene:create( event )
 
-    sceneGroup = self.view
+    local sceneGroup = self.view
     --local backgroundMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
 	--local backgroundMusicplay = audio.play( backgroundMusic, {  loops=-1 } )
     
@@ -813,7 +811,6 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 	local background = display.newImage("rescue_background.png",system.ResourceDirectory)
--- HEAD
 	background.anchorX=0.5
 	background.anchorY=0.5
 	background.height=1080
@@ -1089,51 +1086,10 @@ function scene:create( event )
 	sceneGroup:insert(wallj)
 	sceneGroup:insert(wall7)
 	sceneGroup:insert(wall8)
-
-		background.anchorX=0.5
-		background.anchorY=0.5
-		background.height=1080
-		background.width=1920
-		background.x= display.contentCenterX
-		background.y=display.contentCenterY
-		sceneGroup:insert(background)
-		
-		setupmap()
-		
-		--robo.collision = onLocalCollision
-		--robo:addEventListener( "collision", robo )
-		Runtime:addEventListener( "collision", onCollision )
-		upa:addEventListener( "tap", moveup )
-		
-		downa:addEventListener( "tap", moved )
-		lefta:addEventListener( "tap", movel )
-		righta:addEventListener( "tap", mover )
-		sceneGroup:insert(grida)
-		sceneGroup:insert(leftwall)
-		sceneGroup:insert(rightwall)
-		sceneGroup:insert(topwall)
-		sceneGroup:insert(bottomwall)
-		sceneGroup:insert(onel)
-		sceneGroup:insert(twol)
-		sceneGroup:insert(threel)
-		sceneGroup:insert(upa)
-		sceneGroup:insert(downa)
-		sceneGroup:insert(lefta)
-		sceneGroup:insert(righta)
-		sceneGroup:insert(oneb)
-		sceneGroup:insert(twob)
-		sceneGroup:insert(threeb)
-		sceneGroup:insert(robo)
-		sceneGroup:insert(science)
-		sceneGroup:insert(walla)
-		sceneGroup:insert(wallb)
-		sceneGroup:insert(wallc)
-		sceneGroup:insert(walld)
-		sceneGroup:insert(wallf)
-		sceneGroup:insert(wallj)
-		sceneGroup:insert(wall7)
-		sceneGroup:insert(wall8)
-
+	sceneGroup:insert(bottomwall)
+	sceneGroup:insert(topwall)
+	sceneGroup:insert(leftwall)
+	sceneGroup:insert(rightwall)
 end
 
 
