@@ -698,7 +698,7 @@ local function moveup()
 		
 		
 		local robotX, robotY = robo:localToContent( 0, -70 )
-		transition.to( myrectu, { time=16, x=robotX, y=robotY-240} )
+		transition.to( myrectu, { time=16, x=robotX, y=robotY-248} )
 		--transition.to( myrectl, { time=16, x=robotX, y=robotY-240} )
 		timer.performWithDelay(20,moveu)
 		
@@ -730,7 +730,7 @@ end
 
 local function moved()
 		local robotX, robotY = robo:localToContent( 0, -70 )
-		transition.to( myrectd, { time=16, x=robotX, y=robotY+380} )
+		transition.to( myrectd, { time=16, x=robotX, y=robotY+388} )
 		
 		timer.performWithDelay(20,movedo)
 		
@@ -774,8 +774,14 @@ end
 local function onCollision( event )
 		if (event.object2==myrectu or event.object2==myrectd or event.object2==myrectl or event.object2==myrectr) then
 		
-		elseif (event.object2==science) then
+		elseif (event.object2==science) then 
 			print("Scientist")
+			local options = {
+			effect = "crossFade",
+			time = 500
+			}
+			composer.gotoScene("Search1",options)
+		
 		else
 			local options = {
 			isModal = true,
