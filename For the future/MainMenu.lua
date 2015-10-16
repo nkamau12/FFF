@@ -1,5 +1,5 @@
 local composer = require( "composer" )
-
+local JSON = require ("json")
 local scene = composer.newScene()
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -9,60 +9,7 @@ local scene = composer.newScene()
 -- local forward references should go here
 
 -- -------------------------------------------------------------------------------
-local function writeaccept()
-	-- Data (string) to write
-	local saveData = "1"
 
-	-- Path for the file to write
-	local path = system.pathForFile( "agree.txt", system.DocumentsDirectory )
-
-	-- Open the file handle
-	local file, errorString = io.open( path, "w" )
-
-	if not file then
-    -- Error occurred; output the cause
-    print( "File error: " .. errorString )
-	else
-    -- Write data to file
-    file:write( saveData )
-    -- Close the file handle
-    io.close( file )
-	end
-
-	file = nil
-end
-
-local function check()
-	
-	
-	
-	-- Path for the file to read
-	local path = system.pathForFile( "agree.txt" )
-
-	-- Open the file handle
-	local file, errorString = io.open( path, "r" )
-	print(file)
-	if not file then
-	
-    -- Error occurred; output the cause
-    print( "File error: " .. errorString )
-	else
-    -- Read data from file
-    local contents = file:read( "*a" )
-		if (contents == 1) then
-			print("blah")
-			
-			return 1
-		else 
-			print("blah2")
-			return 0
-		end
-    io.close( file )
-	end
-
-	file = nil
-
-end
 
 local function showSearch1()
 	audio.pause( backgroundMusicplay)
@@ -81,28 +28,53 @@ local function showRescue()
 	}
 		composer.gotoScene("Rescue1",options)
 end
+
+
+
+
+
+function check1()
+    if (dir == nil) then
+        dir = system.DocumentsDirectory;
+    end
+
+    local path = system.pathForFile( "agree.json", dir)
+    local contents = ""
+    local myTable = {}
+    local file = io.open( path, "r" )
+    if file then
+		
+         -- read all contents of file into a string
+         local contents = file:read( "*a" )
+		 
+         myTable = JSON.decode(contents);
+         io.close( file )
+         return myTable 
+    end
+    return nil
+end
+
+
+
 -- "scene:create()"
 function scene:create( event )
-
-    local sceneGroup = self.view
 	
-	--local checks = check()
-	
-	--[[if (checks~=1) then
-		local options = {
-			isModal = true,
-			
-			params = {
-			sampleVar = "my sample variable"
-				}
-			}
-			composer.showOverlay( "fail", options )
-	else
-	end]]--
+	--update()
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end
-
+function update()
+    local path = system.pathForFile( "agree.json", system.DocumentsDirectory)
+    local file = io.open(path, "w")
+    if file then
+        local contents = JSON.encode("0")
+        file:write( contents )
+        io.close( file )
+        return true
+    else
+        return false
+    end
+end
 
 -- "scene:show()"
 function scene:show( event )
@@ -114,6 +86,15 @@ function scene:show( event )
         -- Called when the scene is still off screen (but is about to come on screen).
 		--local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
 		--background:setFillColor(.3,.1,.8)
+		if (check1()=="1") then
+		
+		else
+		local options = {
+			isModal = true,
+				}
+			
+			composer.showOverlay( "permission", options )
+		end
 		local background = display.newImage("splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5

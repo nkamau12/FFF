@@ -291,6 +291,7 @@ local function setupmap()
 		--Misc
 		local robotX, robotY = robo:localToContent( -70, -70 )
 		myrectu = display.newRect( robotX, robotY-240, 1, 1)
+		--{26,74,94}
 		physics.addBody( myrectu, "static",{bounce=0})
 		myrectd = display.newRect( robotX, robotY+240, 1, 1)
 		physics.addBody( myrectd, "static",{bounce=0})
