@@ -11,7 +11,7 @@ display.setStatusBar( display.HiddenStatusBar )
 local composer = require "composer"
 
 local GA = require "plugin.gameanalytics"
-composer.gotoScene( "new" )
+composer.gotoScene( "Splash" )
 GA.isDebug = true
 GA.runInSimulator=true
 GA.submitAverageFps=true
