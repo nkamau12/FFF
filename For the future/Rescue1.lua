@@ -308,7 +308,8 @@ local function setupmap()
 end 
 
 local function handleButtonEvent( event )
-    if ( "ended" == event.phase ) then
+	if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
         if(event.target.id == "oneloopBtn1") then
 			table1[1] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 11)

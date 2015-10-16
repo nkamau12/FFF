@@ -10,6 +10,15 @@ local scene = composer.newScene()
 -- -------------------------------------------------------------------------------
 local function setupmap()
 
+        --level_map
+        levelmap = display.newImage("search1.png")
+        levelmap.anchorX=0
+        levelmap.anchorY=0
+        levelmap.x=194
+        levelmap.y=583
+        levelmap.height=447
+        levelmap.width=862
+
         --red_block
         blockred = display.newImage("red_block.png")
         blockred.anchorX=0
@@ -78,7 +87,7 @@ local function addred( event )
 
         spacecolor[countmax] = "red"
 
-        spotx = spotx + 140
+        spotx = spotx + 130
         countmax = countmax + 1
     else
     end
@@ -96,7 +105,7 @@ local function addgreen( event )
 
         spacecolor[countmax] = "green"
 
-        spotx = spotx + 140
+        spotx = spotx + 130
         countmax = countmax + 1
     else
     end
@@ -114,7 +123,7 @@ local function addblue( event )
 
         spacecolor[countmax] = "blue"
 
-        spotx = spotx + 140
+        spotx = spotx + 130
         countmax = countmax + 1
     else
     end
@@ -132,7 +141,7 @@ local function addyellow( event )
 
         spacecolor[countmax] = "yellow"
 
-        spotx = spotx + 140
+        spotx = spotx + 130
         countmax = countmax + 1
     else
     end
@@ -149,11 +158,80 @@ local function checkresult( event )
         resultblock.anchorX=0
         resultblock.anchorY=0
         resultblock.x= newblock[0].x
-        resultblock.y= newblock[0].y + 200
+        resultblock.y= newblock[0].y + 207
         resultblock.height=120
         resultblock.width=120
-    else
+
+            if(spacecolor[1] == "green")then
+            resultblock = display.newImage("green_block.png")
+            resultblock.anchorX=0
+            resultblock.anchorY=0
+            resultblock.x= newblock[1].x
+            resultblock.y= newblock[1].y + 207
+            resultblock.height=120
+            resultblock.width=120
+
+                if(spacecolor[2] == "blue")then
+                resultblock = display.newImage("blue_block.png")
+                resultblock.anchorX=0
+                resultblock.anchorY=0
+                resultblock.x= newblock[2].x
+                resultblock.y= newblock[2].y + 207
+                resultblock.height=120
+                resultblock.width=120
+
+                    if(spacecolor[3] == "green")then
+                    resultblock = display.newImage("green_block.png")
+                    resultblock.anchorX=0
+                    resultblock.anchorY=0
+                    resultblock.x= newblock[3].x
+                    resultblock.y= newblock[3].y + 207
+                    resultblock.height=120
+                    resultblock.width=120
+
+                        if(spacecolor[4] == "yellow")then
+                        resultblock = display.newImage("yellow_block.png")
+                        resultblock.anchorX=0
+                        resultblock.anchorY=0
+                        resultblock.x= newblock[4].x
+                        resultblock.y= newblock[4].y + 207
+                        resultblock.height=120
+                        resultblock.width=120
+                        else
+                        display.remove(newblock[4])
+                        countmax=4
+                        spotx = 1151
+                    end
+                    else
+                    display.remove(newblock[3])
+                    display.remove(newblock[4])
+                    countmax=3
+                    spotx = 1021
+
+                end
+                else
+                display.remove(newblock[2])
+                display.remove(newblock[3])
+                display.remove(newblock[4])
+                countmax=2
+                spotx = 891
+            end
+            else
+            display.remove(newblock[1])
+            display.remove(newblock[2])
+            display.remove(newblock[3])
+            display.remove(newblock[4])
+            countmax=1
+            spotx = 761
+        end
+        else
         display.remove(newblock[0])
+        display.remove(newblock[1])
+        display.remove(newblock[2])
+        display.remove(newblock[3])
+        display.remove(newblock[4])
+        countmax=0
+        spotx = 631
     end
 end
 
@@ -193,8 +271,8 @@ function scene:create( event )
         blockyellow:addEventListener( "tap", addyellow )
         deletebutton:addEventListener("tap",removelast)
         runbutton:addEventListener("tap",checkresult)
-        spotx = 500
-        spoty = 200
+        spotx = 631
+        spoty = 90
         countmax = 0
 end
 
