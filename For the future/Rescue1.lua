@@ -813,7 +813,7 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 	local background = display.newImage("rescue_background.png",system.ResourceDirectory)
-<<<<<<< HEAD
+-- HEAD
 	background.anchorX=0.5
 	background.anchorY=0.5
 	background.height=1080
@@ -1089,7 +1089,7 @@ function scene:create( event )
 	sceneGroup:insert(wallj)
 	sceneGroup:insert(wall7)
 	sceneGroup:insert(wall8)
-=======
+
 		background.anchorX=0.5
 		background.anchorY=0.5
 		background.height=1080
@@ -1133,7 +1133,7 @@ function scene:create( event )
 		sceneGroup:insert(wallj)
 		sceneGroup:insert(wall7)
 		sceneGroup:insert(wall8)
->>>>>>> origin/master
+
 end
 
 
