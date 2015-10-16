@@ -70,16 +70,6 @@ function check1()
     end
     return nil
 end
-
-
-
--- "scene:create()"
-function scene:create( event )
-	
-	--update()
-    -- Initialize the scene here.
-    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-end
 function update()
     local path = system.pathForFile( "agree.json", system.DocumentsDirectory)
     local file = io.open(path, "w")
@@ -92,6 +82,16 @@ function update()
         return false
     end
 end
+
+
+-- "scene:create()"
+function scene:create( event )
+	
+	--update()
+    -- Initialize the scene here.
+    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
+end
+
 
 -- "scene:show()"
 function scene:show( event )
