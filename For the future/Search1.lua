@@ -187,8 +187,14 @@ local function checkresult( event )
             resultblock[answer].height=120
             resultblock[answer].width=120
             answer = answer + 1
+			
         else
-            tryagain()
+			local options = 
+			{
+				isModal = true
+			}
+            composer.showOverlay( "fail_search", options )
+			tryagain()
             answer = 10
         end
     end
