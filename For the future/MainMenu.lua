@@ -29,6 +29,15 @@ local function showRescue()
 		composer.gotoScene("Rescue1",options)
 end
 
+local function showCredits()
+	audio.pause( backgroundMusicplay)
+	local options = {
+		effect = "crossFade",
+		time = 500
+	}
+		composer.gotoScene("Credits",options)
+end
+
 
 
 
@@ -131,7 +140,7 @@ function scene:show( event )
 		credit.x = display.contentCenterX
 		credit.y=display.contentCenterY+240
 		sceneGroup:insert(credit)
-		credit:addEventListener( "tap", play )
+		credit:addEventListener( "tap", showCredits )
 		
 		audio.resume( backgroundMusicplay )
 

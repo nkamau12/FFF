@@ -10,14 +10,36 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 
+function bye()
+    local options = {
+            effect = "crossFade",
+            time = 500
+        }
+
+    timer.performWithDelay( 5000, composer.gotoScene("MainMenu",options))
+end
+
 -- "scene:create()"
 function scene:create( event )
 
     local sceneGroup = self.view
-    local backgroundMusic = audio.loadStream( "bensound-scifi.mp3")
-    local backgroundMusicplay = audio.play( backgroundMusic, {  loops=-1 } )
+    
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
+    creds = display.newImage("credits_screen.png",system.ResourceDirectory)
+        creds.anchorX=0
+        creds.anchorY=1
+        creds.height=2448.6
+        creds.width=1920
+        creds.x= 0
+        creds.y=2448.6
+        sceneGroup:insert(creds)
+
+    local backgroundMusic = audio.loadStream( "bensound-slowmotion.mp3")
+    local backgroundMusicplay = audio.play( backgroundMusic, {  fadein = 4000, loops=-1 } )
+
+    timer.performWithDelay( 9000, transition.moveTo(creds, { x=0, y=1080, time=20000 } ))
+    
 end
 
 
@@ -32,24 +54,13 @@ function scene:show( event )
         --local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
         --background:setFillColor(.3,.1,.8)
         
-        local background = display.newImage("splash_main.png",system.ResourceDirectory)
-        background.anchorX=0.5
-        background.anchorY=0.5
-        background.height=1080
-        background.width=1920
-        background.x= display.contentCenterX
-        background.y=display.contentCenterY
-        sceneGroup:insert(background)
-        
         
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-        
-        
 
-        
+
     end
 end
 
@@ -64,6 +75,7 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
+
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
     end

@@ -895,6 +895,7 @@ local function onCollision( event )
 				effect = "crossFade",
 				time = 500
 			}
+			audio.pause(elevatorMusicplay)
 			audio.pause(backgroundMusicplay)
 			composer.gotoScene("Credits",options)
 		else
@@ -945,8 +946,8 @@ end
 function scene:create( event )
 
     local sceneGroup = self.view
-    local backgroundMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
-	local backgroundMusicplay = audio.play( backgroundMusic, {  fadein = 4000, loops=-1 } )
+    local elevatorMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
+	local elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
     
 
     -- Initialize the scene here.
