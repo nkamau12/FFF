@@ -43,7 +43,42 @@ local function setupmap()
 		grida.y=41.93
 		grida.height=993.04
 		grida.width=993.04
+
+		--left_wall
+		leftwall = display.newImage("side_wall.png")
+		leftwall.anchorX=0
+		leftwall.anchorY=0
+		leftwall.x=43.01
+		leftwall.y=41.93
+		leftwall.height=993.04
+		leftwall.width=10
+
+		--right_wall
+		rightwall = display.newImage("side_wall.png")
+		rightwall.anchorX=0
+		rightwall.anchorY=0
+		rightwall.x=1026.05
+		rightwall.y=41.93
+		rightwall.height=993.04
+		rightwall.width=10
+
+		--top_wall
+		topwall = display.newImage("topbottom_wall.png")
+		topwall.anchorX=0
+		topwall.anchorY=0
+		topwall.x=43.01
+		topwall.y=41.93
+		topwall.height=10
+		topwall.width=993.04
 		
+		--bottom_wall
+		bottomwall = display.newImage("topbottom_wall.png")
+		bottomwall.anchorX=0
+		bottomwall.anchorY=0
+		bottomwall.x=43.01
+		bottomwall.y=1024.97
+		bottomwall.height=10
+		bottomwall.width=993.04
 		
 		--one_loop
 		onel = display.newImage("one_loop.png")
@@ -777,6 +812,7 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 	local background = display.newImage("rescue_background.png",system.ResourceDirectory)
+<<<<<<< HEAD
 	background.anchorX=0.5
 	background.anchorY=0.5
 	background.height=1080
@@ -1052,6 +1088,51 @@ function scene:create( event )
 	sceneGroup:insert(wallj)
 	sceneGroup:insert(wall7)
 	sceneGroup:insert(wall8)
+=======
+		background.anchorX=0.5
+		background.anchorY=0.5
+		background.height=1080
+		background.width=1920
+		background.x= display.contentCenterX
+		background.y=display.contentCenterY
+		sceneGroup:insert(background)
+		
+		setupmap()
+		
+		--robo.collision = onLocalCollision
+		--robo:addEventListener( "collision", robo )
+		Runtime:addEventListener( "collision", onCollision )
+		upa:addEventListener( "tap", moveup )
+		
+		downa:addEventListener( "tap", moved )
+		lefta:addEventListener( "tap", movel )
+		righta:addEventListener( "tap", mover )
+		sceneGroup:insert(grida)
+		sceneGroup:insert(leftwall)
+		sceneGroup:insert(rightwall)
+		sceneGroup:insert(topwall)
+		sceneGroup:insert(bottomwall)
+		sceneGroup:insert(onel)
+		sceneGroup:insert(twol)
+		sceneGroup:insert(threel)
+		sceneGroup:insert(upa)
+		sceneGroup:insert(downa)
+		sceneGroup:insert(lefta)
+		sceneGroup:insert(righta)
+		sceneGroup:insert(oneb)
+		sceneGroup:insert(twob)
+		sceneGroup:insert(threeb)
+		sceneGroup:insert(robo)
+		sceneGroup:insert(science)
+		sceneGroup:insert(walla)
+		sceneGroup:insert(wallb)
+		sceneGroup:insert(wallc)
+		sceneGroup:insert(walld)
+		sceneGroup:insert(wallf)
+		sceneGroup:insert(wallj)
+		sceneGroup:insert(wall7)
+		sceneGroup:insert(wall8)
+>>>>>>> origin/master
 end
 
 
