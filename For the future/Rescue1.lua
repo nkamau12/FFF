@@ -1,6 +1,31 @@
 local composer = require( "composer" )
 local physics = require("physics")
 local scene = composer.newScene()
+local widget = require("widget")
+
+local picToAdd
+local pic11 
+local pic12
+local pic13
+local pic14
+local pic15
+
+local pic21
+local pic22
+local pic23
+local pic24
+local pic25
+
+local pic31
+local pic32
+local pic33
+local pic34
+local pic35
+
+local table1 = {}
+local table2 = {}
+local table3 = {}
+
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -243,11 +268,398 @@ local function setupmap()
 		physics.addBody( science, "static",{bounce=0})
 end 
 
+local function handleButtonEvent( event )
+    if ( "ended" == event.phase ) then
+        if(event.target.id == "oneloopBtn1") then
+			table1[1] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 11)
+		end
+		if(event.target.id == "oneloopBtn2") then
+			table1[2] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 12)
+		end
+		if(event.target.id == "oneloopBtn3") then
+			table1[3] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 13)
+		end
+		if(event.target.id == "oneloopBtn4") then
+			table1[4] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 14)
+		end
+		if(event.target.id == "oneloopBtn5") then
+			table1[5] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 15)
+		end
+		if(event.target.id == "twoloopBtn1") then
+			table2[1] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 21)
+		end
+		if(event.target.id == "twoloopBtn2") then
+			table2[2] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 22)
+		end
+		if(event.target.id == "twoloopBtn3") then
+			table2[3] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 23)
+		end
+		if(event.target.id == "twoloopBtn4") then
+			table2[4] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 24)
+		end
+		if(event.target.id == "twoloopBtn5") then
+			table2[5] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 25)
+		end
+		if(event.target.id == "threeloopBtn1") then
+			table3[1] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 31)
+		end
+		if(event.target.id == "threeloopBtn2") then
+			table3[2] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 32)
+		end
+		if(event.target.id == "threeloopBtn3") then
+			table3[3] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 33)
+		end
+		if(event.target.id == "threeloopBtn4") then
+			table3[4] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 34)
+		end
+		if(event.target.id == "threeloopBtn5") then
+			table3[5] = picToAdd
+			addPic(event.target.x, event.target.y,picToAdd, 35)
+		end
+    end
+end
+
+
+
+
+function addPic(xVal,yVal,name,spot)
+
+	if(spot == 11) then
+	
+		if(pic11 == nil) then
+			pic11 = display.newImage(name)
+			pic11.anchorX = 0.5
+			pic11.anchorY = 0.5
+			pic11.x = xVal
+			pic11.y = yVal
+			pic11.height = 120
+			pic11.width = 120
+		else
+			pic11:removeSelf()
+			pic11 = display.newImage(name)
+			pic11.anchorX = 0.5
+			pic11.anchorY = 0.5
+			pic11.x = xVal
+			pic11.y = yVal
+			pic11.height = 120
+			pic11.width = 120
+		end
+	end
+	if(spot == 12) then
+		if(pic12 == nil) then
+			pic12 = display.newImage(name)
+			pic12.anchorX = 0.5
+			pic12.anchorY = 0.5
+			pic12.x = xVal
+			pic12.y = yVal
+			pic12.height = 120
+			pic12.width = 120
+		else
+			pic12:removeSelf()
+			pic12 = display.newImage(name)
+			pic12.anchorX = 0.5
+			pic12.anchorY = 0.5
+			pic12.x = xVal
+			pic12.y = yVal
+			pic12.height = 120
+			pic12.width = 120
+			
+			
+		end
+	end
+	if(spot == 13) then
+		if(pic13 == nil) then
+			pic13 = display.newImage(name)
+			pic13.anchorX = 0.5
+			pic13.anchorY = 0.5
+			pic13.x = xVal
+			pic13.y = yVal
+			pic13.height = 120
+			pic13.width = 120
+			
+		else
+			pic13:removeSelf()
+			pic13 = display.newImage(name)
+			pic13.anchorX = 0.5
+			pic13.anchorY = 0.5
+			pic13.x = xVal
+			pic13.y = yVal
+			pic13.height = 120
+			pic13.width = 120
+		end
+	end
+	if(spot == 14) then
+		if(pic14 == nil) then
+			pic14 = display.newImage(name)
+			pic14.anchorX = 0.5
+			pic14.anchorY = 0.5
+			pic14.x = xVal
+			pic14.y = yVal
+			pic14.height = 120
+			pic14.width = 120
+		else
+			pic14:removeSelf()
+			pic14 = display.newImage(name)
+			pic14.anchorX = 0.5
+			pic14.anchorY = 0.5
+			pic14.x = xVal
+			pic14.y = yVal
+			pic14.height = 120
+			pic14.width = 120
+			
+			
+		end
+	end
+	if(spot == 15) then
+		if(pic15 == nil) then
+			pic15 = display.newImage(name)
+			pic15.anchorX = 0.5
+			pic15.anchorY = 0.5
+			pic15.x = xVal
+			pic15.y = yVal
+			pic15.height = 120
+			pic15.width = 120
+		else
+			pic15:removeSelf()
+			pic15 = display.newImage(name)
+			pic15.anchorX = 0.5
+			pic15.anchorY = 0.5
+			pic15.x = xVal
+			pic15.y = yVal
+			pic15.height = 120
+			pic15.width = 120
+			
+			
+		end
+	end
+	if(spot == 21) then
+		if(pic21 == nil) then
+			pic21 = display.newImage(name)
+			pic21.anchorX = 0.5
+			pic21.anchorY = 0.5
+			pic21.x = xVal
+			pic21.y = yVal
+			pic21.height = 120
+			pic21.width = 120
+		else
+			pic21:removeSelf()
+			pic21 = display.newImage(name)
+			pic21.anchorX = 0.5
+			pic21.anchorY = 0.5
+			pic21.x = xVal
+			pic21.y = yVal
+			pic21.height = 120
+			pic21.width = 120
+		end
+	end
+	if(spot == 22) then
+		if(pic22 == nil) then
+			pic22 = display.newImage(name)
+			pic22.anchorX = 0.5
+			pic22.anchorY = 0.5
+			pic22.x = xVal
+			pic22.y = yVal
+			pic22.height = 120
+			pic22.width = 120
+		else
+			pic22:removeSelf()
+			pic22 = display.newImage(name)
+			pic22.anchorX = 0.5
+			pic22.anchorY = 0.5
+			pic22.x = xVal
+			pic22.y = yVal
+			pic22.height = 120
+			pic22.width = 120
+		end
+	end
+	if(spot == 23) then
+		if(pic23 == nil) then
+			pic23 = display.newImage(name)
+			pic23.anchorX = 0.5
+			pic23.anchorY = 0.5
+			pic23.x = xVal
+			pic23.y = yVal
+			pic23.height = 120
+			pic23.width = 120
+		else
+			pic23:removeSelf()
+			pic23 = display.newImage(name)
+			pic23.anchorX = 0.5
+			pic23.anchorY = 0.5
+			pic23.x = xVal
+			pic23.y = yVal
+			pic23.height = 120
+			pic23.width = 120
+		end
+	end
+	if(spot == 24) then
+		if(pic24 == nil) then
+			pic24 = display.newImage(name)
+			pic24.anchorX = 0.5
+			pic24.anchorY = 0.5
+			pic24.x = xVal
+			pic24.y = yVal
+			pic24.height = 120
+			pic24.width = 120
+		else
+			pic24:removeSelf()
+			pic24 = display.newImage(name)
+			pic24.anchorX = 0.5
+			pic24.anchorY = 0.5
+			pic24.x = xVal
+			pic24.y = yVal
+			pic24.height = 120
+			pic24.width = 120
+		end
+	end
+	if(spot == 25) then
+		if(pic25 == nil) then
+			pic25 = display.newImage(name)
+			pic25.anchorX = 0.5
+			pic25.anchorY = 0.5
+			pic25.x = xVal
+			pic25.y = yVal
+			pic25.height = 120
+			pic25.width = 120
+		else
+			pic25:removeSelf()
+			pic25 = display.newImage(name)
+			pic25.anchorX = 0.5
+			pic25.anchorY = 0.5
+			pic25.x = xVal
+			pic25.y = yVal
+			pic25.height = 120
+			pic25.width = 120
+		end
+	end
+	if(spot == 31) then
+		if(pic31 == nil) then
+			pic31 = display.newImage(name)
+			pic31.anchorX = 0.5
+			pic31.anchorY = 0.5
+			pic31.x = xVal
+			pic31.y = yVal
+			pic31.height = 120
+			pic31.width = 120
+		else
+			pic31:removeSelf()
+			pic31 = display.newImage(name)
+			pic31.anchorX = 0.5
+			pic31.anchorY = 0.5
+			pic31.x = xVal
+			pic31.y = yVal
+			pic31.height = 120
+			pic31.width = 120
+		end
+	end
+	if(spot == 32) then
+		if(pic32 == nil) then
+			pic32 = display.newImage(name)
+			pic32.anchorX = 0.5
+			pic32.anchorY = 0.5
+			pic32.x = xVal
+			pic32.y = yVal
+			pic32.height = 120
+			pic32.width = 120
+		else
+			pic32:removeSelf()
+			pic32 = display.newImage(name)
+			pic32.anchorX = 0.5
+			pic32.anchorY = 0.5
+			pic32.x = xVal
+			pic32.y = yVal
+			pic32.height = 120
+			pic32.width = 120
+		end
+	end
+	if(spot == 33) then
+		if(pic33 == nil) then
+			pic33 = display.newImage(name)
+			pic33.anchorX = 0.5
+			pic33.anchorY = 0.5
+			pic33.x = xVal
+			pic33.y = yVal
+			pic33.height = 120
+			pic33.width = 120
+		else
+			pic33:removeSelf()
+			pic33 = display.newImage(name)
+			pic33.anchorX = 0.5
+			pic33.anchorY = 0.5
+			pic33.x = xVal
+			pic33.y = yVal
+			pic33.height = 120
+			pic33.width = 120
+		end
+	end
+	if(spot == 34) then
+		if(pic34 == nil) then
+			pic34 = display.newImage(name)
+			pic34.anchorX = 0.5
+			pic34.anchorY = 0.5
+			pic34.x = xVal
+			pic34.y = yVal
+			pic34.height = 120
+			pic34.width = 120
+		else
+			pic34:removeSelf()
+			pic34 = display.newImage(name)
+			pic34.anchorX = 0.5
+			pic34.anchorY = 0.5
+			pic34.x = xVal
+			pic34.y = yVal
+			pic34.height = 120
+			pic34.width = 120
+		end
+	end
+	if(spot == 35) then
+		if(pic35 == nil) then
+			pic35 = display.newImage(name)
+			pic35.anchorX = 0.5
+			pic35.anchorY = 0.5
+			pic35.x = xVal
+			pic35.y = yVal
+			pic35.height = 120
+			pic35.width = 120
+		else
+			pic35:removeSelf()
+			pic35 = display.newImage(name)
+			pic35.anchorX = 0.5
+			pic35.anchorY = 0.5
+			pic35.x = xVal
+			pic35.y = yVal
+			pic35.height = 120
+			pic35.width = 120
+		end
+	end
+	picToAdd = ""
+	
+end
+
 local function moveu()
 		robo:applyForce( 0, -200, robo.x+70, robo.y+70 )
+		--get command
+		
+		
 end
 
 local function moveup()
+		
+		picToAdd = "up_arrow.png"
 		
 		
 		local robotX, robotY = robo:localToContent( 0, -70 )
@@ -256,10 +668,14 @@ local function moveup()
 		timer.performWithDelay(20,moveu)
 		
 		
+		
+		
 end
 
 local function moveri()
 		robo:applyForce( 200, 0, robo.x+70, robo.y+70 )
+		picToAdd = "right_arrow.png"
+		
 end
 
 local function mover()
@@ -283,10 +699,14 @@ local function moved()
 		
 		timer.performWithDelay(20,movedo)
 		
+		picToAdd = "down_arrow.png"
+		
+		
 end
 
 local function movele()
 		robo:applyForce( -200, 0, robo.x+70, robo.y+70 )
+		
 end
 
 local function movel()
@@ -294,6 +714,26 @@ local function movel()
 		transition.to( myrectl, { time=16, x=robotX-310, y=robotY} )
 		
 		timer.performWithDelay(20,movele)
+		
+		picToAdd = "left_arrow.png"
+		
+end
+
+local function onetap()
+	picToAdd = "one_button.png"
+
+end
+
+
+local function twotap()
+	picToAdd = "two_button.png"
+
+end
+
+
+local function threetap()
+	picToAdd = "three_button.png"
+
 end
 
 local function onCollision( event )
@@ -323,10 +763,13 @@ function scene:resetrobot()
 		transition.to( myrectr, { time=16, x=robotX+240, y=robotY} )
 end
 
+
+local sceneGroup
+
 -- "scene:create()"
 function scene:create( event )
 
-    local sceneGroup = self.view
+    sceneGroup = self.view
     --local backgroundMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
 	--local backgroundMusicplay = audio.play( backgroundMusic, {  loops=-1 } )
     
@@ -334,45 +777,281 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 	local background = display.newImage("rescue_background.png",system.ResourceDirectory)
-		background.anchorX=0.5
-		background.anchorY=0.5
-		background.height=1080
-		background.width=1920
-		background.x= display.contentCenterX
-		background.y=display.contentCenterY
-		sceneGroup:insert(background)
+	background.anchorX=0.5
+	background.anchorY=0.5
+	background.height=1080
+	background.width=1920
+	background.x= display.contentCenterX
+	background.y=display.contentCenterY
+	sceneGroup:insert(background)
+	
+	--buttons
+	
+	--one loop button
+	local one_loop_btn1 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1270.21 ,
+		y = 690.86 ,
+	    label = "",
+		id = "oneloopBtn1",
+		onEvent = handleButtonEvent
 		
-		setupmap()
 		
-		--robo.collision = onLocalCollision
-		--robo:addEventListener( "collision", robo )
-		Runtime:addEventListener( "collision", onCollision )
-		upa:addEventListener( "tap", moveup )
+	}
+	
+	local one_loop_btn2 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1402.21 ,
+		y = 690.86 ,
+	    label = "",
+		id = "oneloopBtn2",
+		onEvent = handleButtonEvent
 		
-		downa:addEventListener( "tap", moved )
-		lefta:addEventListener( "tap", movel )
-		righta:addEventListener( "tap", mover )
-		sceneGroup:insert(grida)
-		sceneGroup:insert(onel)
-		sceneGroup:insert(twol)
-		sceneGroup:insert(threel)
-		sceneGroup:insert(upa)
-		sceneGroup:insert(downa)
-		sceneGroup:insert(lefta)
-		sceneGroup:insert(righta)
-		sceneGroup:insert(oneb)
-		sceneGroup:insert(twob)
-		sceneGroup:insert(threeb)
-		sceneGroup:insert(robo)
-		sceneGroup:insert(science)
-		sceneGroup:insert(walla)
-		sceneGroup:insert(wallb)
-		sceneGroup:insert(wallc)
-		sceneGroup:insert(walld)
-		sceneGroup:insert(wallf)
-		sceneGroup:insert(wallj)
-		sceneGroup:insert(wall7)
-		sceneGroup:insert(wall8)
+		
+	}
+	
+	local one_loop_btn3 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1530.21  ,
+		y = 690.86 ,
+	    label = "",
+		id = "oneloopBtn3",
+		onEvent = handleButtonEvent
+		
+		
+	}
+	
+	
+	local one_loop_btn4 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1660.21 ,
+		y = 690.86 ,
+	    label = "",
+		id = "oneloopBtn4",
+		onEvent = handleButtonEvent
+		
+		
+	}
+	
+	local one_loop_btn5 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1790.21 ,
+		y = 690.86,
+	    label = "",
+		id = "oneloopBtn5",
+		onEvent = handleButtonEvent
+		
+	}
+	
+	--two loop buttons
+	
+	local two_loop_btn1 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1270.21 ,
+		y = 835.86 ,
+	    label = "",
+		id = "twoloopBtn1",
+		onEvent = handleButtonEvent
+		
+		
+	}
+	
+	local two_loop_btn2 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1402.21 ,
+		y = 835.86  ,
+	    label = "",
+		id = "twoloopBtn2",
+		onEvent = handleButtonEvent
+		
+		
+	}
+	
+	local two_loop_btn3 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1530.21  ,
+		y = 835.86  ,
+	    label = "",
+		id = "twoloopBtn3",
+		onEvent = handleButtonEvent
+		
+		
+	}
+	
+	
+	local two_loop_btn4 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1660.21 ,
+		y = 835.86 ,
+	    label = "",
+		id = "twoloopBtn4",
+		onEvent = handleButtonEvent
+		
+		
+	}
+	
+	local two_loop_btn5 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1790.21 ,
+		y = 835.86 ,
+	    label = "",
+		id = "twoloopBtn5",
+		onEvent = handleButtonEvent
+		
+		
+	}
+	
+	--three loop buttons
+	
+	local three_loop_btn1 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1270.21 ,
+		y = 980.86 ,
+	    label = "",
+		id = "threeloopBtn1",
+		onEvent = handleButtonEvent
+		
+		
+	}
+	
+	local three_loop_btn2 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1402.21 ,
+		y = 980.86  ,
+	    label = "",
+		id = "threeloopBtn2",
+		onEvent = handleButtonEvent
+		
+		
+	}
+	
+	local three_loop_btn3 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1530.21  ,
+		y = 980.86  ,
+	    label = "",
+		id = "threeloopBtn3",
+		onEvent = handleButtonEvent
+		
+		
+	}
+	
+	
+	local three_loop_btn4 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1660.21 ,
+		y = 980.86 ,
+	    label = "",
+		id = "threeloopBtn4",
+		onEvent = handleButtonEvent
+		
+		
+	}
+	
+	local three_loop_btn5 = widget.newButton
+	{
+		width = 120,
+	    height = 120,
+		x = 1790.21 ,
+		y = 980.86 ,
+	    label = "",
+		id = "threeloopBtn5",
+		onEvent = handleButtonEvent
+		
+		
+	}
+	
+	
+		
+		
+		
+	setupmap()
+		
+	--robo.collision = onLocalCollision
+	--robo:addEventListener( "collision", robo )
+	Runtime:addEventListener( "collision", onCollision )
+	upa:addEventListener( "tap", moveup )
+		
+	downa:addEventListener( "tap", moved )
+	lefta:addEventListener( "tap", movel )
+	righta:addEventListener( "tap", mover )
+	oneb:addEventListener("tap", onetap)
+	twob:addEventListener("tap", twotap)
+	threeb:addEventListener("tap", threetap)
+	
+	--add buttons
+	sceneGroup:insert(one_loop_btn1)
+	sceneGroup:insert(one_loop_btn2)
+	sceneGroup:insert(one_loop_btn3)
+	sceneGroup:insert(one_loop_btn4)
+	sceneGroup:insert(one_loop_btn5)
+	
+	sceneGroup:insert(two_loop_btn1)
+	sceneGroup:insert(two_loop_btn2)
+	sceneGroup:insert(two_loop_btn3)
+	sceneGroup:insert(two_loop_btn4)
+	sceneGroup:insert(two_loop_btn5)
+	
+	sceneGroup:insert(three_loop_btn1)
+	sceneGroup:insert(three_loop_btn2)
+	sceneGroup:insert(three_loop_btn3)
+	sceneGroup:insert(three_loop_btn4)
+	sceneGroup:insert(three_loop_btn5)
+	
+	--add grid
+	sceneGroup:insert(grida)
+	sceneGroup:insert(onel)
+	sceneGroup:insert(twol)
+	sceneGroup:insert(threel)
+	sceneGroup:insert(upa)
+	sceneGroup:insert(downa)
+	sceneGroup:insert(lefta)
+	sceneGroup:insert(righta)
+	sceneGroup:insert(oneb)
+	sceneGroup:insert(twob)
+	sceneGroup:insert(threeb)
+	
+	--add character
+	sceneGroup:insert(robo)
+	sceneGroup:insert(science)
+	
+	--add walls
+	sceneGroup:insert(walla)
+	sceneGroup:insert(wallb)
+	sceneGroup:insert(wallc)
+	sceneGroup:insert(walld)
+	sceneGroup:insert(wallf)
+	sceneGroup:insert(wallj)
+	sceneGroup:insert(wall7)
+	sceneGroup:insert(wall8)
 end
 
 
