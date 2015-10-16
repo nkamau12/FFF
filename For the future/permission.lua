@@ -39,6 +39,7 @@ function scene:create( event )
 		background.width=1920-888
 		background.x= display.contentCenterX
 		background.y=display.contentCenterY
+	background:setFillColor(grey,0.5)
 	sceneGroup:insert(background)
 	local trial=display.newText("User information will be \n recorded during gameplay ",display.contentCenterX,display.contentCenterY)
 	sceneGroup:insert(trial)	
