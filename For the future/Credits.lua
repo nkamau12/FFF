@@ -14,7 +14,8 @@ local scene = composer.newScene()
 function scene:create( event )
 
     local sceneGroup = self.view
-    
+    local backgroundMusic = audio.loadStream( "bensound-scifi.mp3")
+    local backgroundMusicplay = audio.play( backgroundMusic, {  loops=-1 } )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end
@@ -46,7 +47,7 @@ function scene:show( event )
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
         
-        audio.resume( backgroundMusicplay )
+        
 
         
     end

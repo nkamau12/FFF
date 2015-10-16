@@ -197,6 +197,7 @@ local function checkresult( event )
             effect = "crossFade",
             time = 500
         }
+        audio.pause( backgroundMusicplay)
         composer.gotoScene("Rescue1",options)
     else
         answer = countmax
@@ -207,8 +208,8 @@ end
 function scene:create( event )
 
     local sceneGroup = self.view
-    --local backgroundMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
-    --local backgroundMusicplay = audio.play( backgroundMusic, {  loops=-1 } )
+    local backgroundMusic = audio.loadStream( "bensound-slowmotion.mp3")
+    local backgroundMusicplay = audio.play( backgroundMusic, {  fadein = 4000, loops=-1 } )
     
 
     -- Initialize the scene here.

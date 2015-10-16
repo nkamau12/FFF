@@ -700,7 +700,8 @@ end
 local function moveup()
 		
 		
-		
+		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
+		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
 		
 		local robotX, robotY = robo:localToContent( 0, -70 )
 		transition.to( myrectu, { time=16, x=robotX, y=robotY-240} )
@@ -723,6 +724,8 @@ local function mover()
 		--transition.to( robot, { time=500, x=robotX+240, y=robotY} )
 		--physics.removeBody( myrect )
 		--myrect:removeSelf()
+		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
+		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
 		local robotX, robotY = robo:localToContent( 0, -70 )
 		transition.to( myrectr, { time=16, x=robotX+310, y=robotY} )
 		
@@ -734,6 +737,8 @@ local function movedo()
 end
 
 local function moved()
+		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
+		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
 		local robotX, robotY = robo:localToContent( 0, -70 )
 		transition.to( myrectd, { time=16, x=robotX, y=robotY+380} )
 		
@@ -750,6 +755,8 @@ local function movele()
 end
 
 local function movel()
+		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
+		local robotMusicplay = audio.play( robotMusic, { loops=0 } )
 		local robotX, robotY = robo:localToContent( 0, -70 )
 		transition.to( myrectl, { time=16, x=robotX-310, y=robotY} )
 		
@@ -888,6 +895,7 @@ local function onCollision( event )
 				effect = "crossFade",
 				time = 500
 			}
+			audio.pause(backgroundMusicplay)
 			composer.gotoScene("Credits",options)
 		else
 			local options = {
@@ -937,8 +945,8 @@ end
 function scene:create( event )
 
     local sceneGroup = self.view
-    --local backgroundMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
-	--local backgroundMusicplay = audio.play( backgroundMusic, {  loops=-1 } )
+    local backgroundMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
+	local backgroundMusicplay = audio.play( backgroundMusic, {  fadein = 4000, loops=-1 } )
     
 
     -- Initialize the scene here.
