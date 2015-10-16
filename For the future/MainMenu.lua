@@ -45,7 +45,7 @@ local function showTutorial()
 		effect = "crossFade",
 		time = 500
 	}
-		composer.gotoScene("RescueTutorial",options)
+		composer.gotoScene("SearchTutorial",options)
 end
 
 
