@@ -115,7 +115,7 @@ function scene:show( event )
 		play.x = display.contentCenterX
 		play.y=display.contentCenterY-180
 		sceneGroup:insert(play)
-		play:addEventListener( "tap", showRescue )
+		play:addEventListener( "tap", showSearch1 )
 		
 		local tut = display.newImage("Tutorial.png")
 		tut.height=180

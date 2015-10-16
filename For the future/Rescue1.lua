@@ -294,13 +294,13 @@ local function setupmap()
 		robo=robot
 		--Misc
 		local robotX, robotY = robo:localToContent( -70, -70 )
-		myrectu = display.newRect( robotX, robotY-240, 1, 1)
+		myrectu = display.newRect( robotX, robotY-248, 1, 1)
 		physics.addBody( myrectu, "static",{bounce=0})
-		myrectd = display.newRect( robotX, robotY+240, 1, 1)
+		myrectd = display.newRect( robotX, robotY+248, 1, 1)
 		physics.addBody( myrectd, "static",{bounce=0})
-		myrectl = display.newRect( robotX-240, robotY, 1, 1)
+		myrectl = display.newRect( robotX-248, robotY, 1, 1)
 		physics.addBody( myrectl, "static",{bounce=0})
-		myrectr = display.newRect( robotX+240, robotY, 1, 1)
+		myrectr = display.newRect( robotX+248, robotY, 1, 1)
 		physics.addBody( myrectr, "static",{bounce=0})
 		
 		--scientist
@@ -883,11 +883,12 @@ local function onCollision( event )
 				moverobot()
 			end
 		elseif (event.object2==science) then
+			print("Scientist")
 			local options = {
-		effect = "fade",
-		time = 500
-	}
-		composer.gotoScene("Search1",options)
+				effect = "crossFade",
+				time = 500
+			}
+			composer.gotoScene("Credits",options)
 		else
 			local options = {
 			isModal = true,

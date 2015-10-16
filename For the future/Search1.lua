@@ -148,90 +148,58 @@ local function addyellow( event )
 end
 
 local function removelast( event )
+    if(countmax > answer)then
         display.remove(newblock[countmax-1])
         countmax = countmax - 1
+        spotx = 631 + countmax*130
+    else
+    end
+end
+
+local function tryagain()
+    countmax=answer
+    spotx = 631 + answer*130
+    for i=8,answer,-1 
+    do 
+        display.remove(newblock[i]) 
+    end
 end
 
 local function checkresult( event )
-    if(spacecolor[0] == "red")then
-        resultblock = display.newImage("red_block.png")
-        resultblock.anchorX=0
-        resultblock.anchorY=0
-        resultblock.x= newblock[0].x
-        resultblock.y= newblock[0].y + 207
-        resultblock.height=120
-        resultblock.width=120
-
-            if(spacecolor[1] == "green")then
-            resultblock = display.newImage("green_block.png")
-            resultblock.anchorX=0
-            resultblock.anchorY=0
-            resultblock.x= newblock[1].x
-            resultblock.y= newblock[1].y + 207
-            resultblock.height=120
-            resultblock.width=120
-
-                if(spacecolor[2] == "blue")then
-                resultblock = display.newImage("blue_block.png")
-                resultblock.anchorX=0
-                resultblock.anchorY=0
-                resultblock.x= newblock[2].x
-                resultblock.y= newblock[2].y + 207
-                resultblock.height=120
-                resultblock.width=120
-
-                    if(spacecolor[3] == "green")then
-                    resultblock = display.newImage("green_block.png")
-                    resultblock.anchorX=0
-                    resultblock.anchorY=0
-                    resultblock.x= newblock[3].x
-                    resultblock.y= newblock[3].y + 207
-                    resultblock.height=120
-                    resultblock.width=120
-
-                        if(spacecolor[4] == "yellow")then
-                        resultblock = display.newImage("yellow_block.png")
-                        resultblock.anchorX=0
-                        resultblock.anchorY=0
-                        resultblock.x= newblock[4].x
-                        resultblock.y= newblock[4].y + 207
-                        resultblock.height=120
-                        resultblock.width=120
-                        else
-                        display.remove(newblock[4])
-                        countmax=4
-                        spotx = 1151
-                    end
-                    else
-                    display.remove(newblock[3])
-                    display.remove(newblock[4])
-                    countmax=3
-                    spotx = 1021
-
-                end
-                else
-                display.remove(newblock[2])
-                display.remove(newblock[3])
-                display.remove(newblock[4])
-                countmax=2
-                spotx = 891
+    while answer<5 do
+        print(answer)
+        if(spacecolor[answer] == answerkey[answer+1])then
+            if(answer == 0)then
+                resultblock[answer]= display.newImage("red_block.png")
+            elseif(answer == 1)then
+                resultblock[answer]= display.newImage("green_block.png")
+            elseif(answer == 2)then
+                resultblock[answer]= display.newImage("blue_block.png")
+            elseif(answer == 3)then
+                resultblock[answer]= display.newImage("green_block.png")
+            elseif(answer == 4)then
+                resultblock[answer]= display.newImage("yellow_block.png")
             end
-            else
-            display.remove(newblock[1])
-            display.remove(newblock[2])
-            display.remove(newblock[3])
-            display.remove(newblock[4])
-            countmax=1
-            spotx = 761
-        end
+            resultblock[answer].anchorX=0
+            resultblock[answer].anchorY=0
+            resultblock[answer].x= newblock[answer].x
+            resultblock[answer].y= newblock[answer].y + 207
+            resultblock[answer].height=120
+            resultblock[answer].width=120
+            answer = answer + 1
         else
-        display.remove(newblock[0])
-        display.remove(newblock[1])
-        display.remove(newblock[2])
-        display.remove(newblock[3])
-        display.remove(newblock[4])
-        countmax=0
-        spotx = 631
+            tryagain()
+            answer = 10
+        end
+    end
+    if(answer < 10)then
+        local options = {
+            effect = "crossFade",
+            time = 500
+        }
+        composer.gotoScene("Rescue1",options)
+    else
+        answer = countmax
     end
 end
 
@@ -245,6 +213,9 @@ function scene:create( event )
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
+
+    
+
     local background = display.newImage("search_background.png")
         background.anchorX=0.5
         background.anchorY=0.5
@@ -255,15 +226,20 @@ function scene:create( event )
         sceneGroup:insert(background)
         
         setupmap()
+        newblock = {}
+        resultblock = {}
+        spacecolor = {}
+        answer = 0
+        answerkey = {"red","green","blue","green","yellow"}
 
         sceneGroup:insert(blockred)
         sceneGroup:insert(blockgreen)
         sceneGroup:insert(blockblue)
         sceneGroup:insert(blockyellow)
         sceneGroup:insert(runbutton)
-        
-        newblock = {}
-        spacecolor = {}
+        sceneGroup:insert(deletebutton)
+        sceneGroup:insert(levelmap)
+
 
         blockred:addEventListener( "tap", addred )
         blockgreen:addEventListener( "tap", addgreen )
@@ -306,6 +282,11 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
+        for i=8,0,-1 
+        do 
+            display.remove(resultblock[i])
+            display.remove(newblock[i]) 
+        end
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
     end
