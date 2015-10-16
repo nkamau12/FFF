@@ -883,7 +883,11 @@ local function onCollision( event )
 				moverobot()
 			end
 		elseif (event.object2==science) then
-			print("Scientist")
+			local options = {
+		effect = "fade",
+		time = 500
+	}
+		composer.gotoScene("Search1",options)
 		else
 			local options = {
 			isModal = true,
@@ -903,11 +907,11 @@ local function merge(tablel)
 	
 	for i=1,5,1 do
 		print(tablel[i])
-		if (tablel[i]=="one") then
+		if (tablel[i]=="one_button.png") then
 			merge(table1)
-		elseif (tablel[i]=="two") then
+		elseif (tablel[i]=="two_button.png") then
 			merge(table2)
-		elseif (tablel[i]=="three") then
+		elseif (tablel[i]=="three_button.png") then
 			merge(table3)
 		elseif ( tablel[i]=="up_arrow.png" or tablel[i]=="down_arrow.png" or tablel[i]=="left_arrow.png" or tablel[i]=="right_arrow.png") then
 			table.insert(fintable,tablel[i])
@@ -1254,6 +1258,11 @@ function scene:hide( event )
         -- Example: stop timers, stop animation, stop audio, etc.
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
+		pic11:removeSelf()
+		pic12:removeSelf()
+		pic13:removeSelf()
+		pic14:removeSelf()
+		pic15:removeSelf()
     end
 end
 
