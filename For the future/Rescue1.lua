@@ -14,13 +14,7 @@ local counter = 1;
 local buttonTable = {}
 local picTable = {}
 local pics = 
-{	"down_arrow.png", 
-	"up_arrow.png", 
-	"right_arrow.png", 
-	"left_arrow.png",
-	"one_button.png",
-	"two_button.png",
-	"three_button.png"
+{	11,12,13,14,15,21,22,23,24,25,31,32,33,34,35
 }
 local setupItems = {}
 
@@ -177,63 +171,63 @@ local function handleButtonEvent( event )
     elseif ( "ended" == event.phase ) then
         if(event.target.id == "oneloopBtn1") then
 			table1[1] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 11)
+			addPic(event.target.x, event.target.y,picToAdd, 1)
 		end
 		if(event.target.id == "oneloopBtn2") then
 			table1[2] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 12)
+			addPic(event.target.x, event.target.y,picToAdd, 2)
 		end
 		if(event.target.id == "oneloopBtn3") then
 			table1[3] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 13)
+			addPic(event.target.x, event.target.y,picToAdd, 3)
 		end
 		if(event.target.id == "oneloopBtn4") then
 			table1[4] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 14)
+			addPic(event.target.x, event.target.y,picToAdd, 4)
 		end
 		if(event.target.id == "oneloopBtn5") then
 			table1[5] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 15)
+			addPic(event.target.x, event.target.y,picToAdd, 5)
 		end
 		if(event.target.id == "twoloopBtn1") then
 			table2[1] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 21)
+			addPic(event.target.x, event.target.y,picToAdd, 6)
 		end
 		if(event.target.id == "twoloopBtn2") then
 			table2[2] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 22)
+			addPic(event.target.x, event.target.y,picToAdd, 7)
 		end
 		if(event.target.id == "twoloopBtn3") then
 			table2[3] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 23)
+			addPic(event.target.x, event.target.y,picToAdd, 8)
 		end
 		if(event.target.id == "twoloopBtn4") then
 			table2[4] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 24)
+			addPic(event.target.x, event.target.y,picToAdd, 9)
 		end
 		if(event.target.id == "twoloopBtn5") then
 			table2[5] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 25)
+			addPic(event.target.x, event.target.y,picToAdd, 10)
 		end
 		if(event.target.id == "threeloopBtn1") then
 			table3[1] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 31)
+			addPic(event.target.x, event.target.y,picToAdd, 11)
 		end
 		if(event.target.id == "threeloopBtn2") then
 			table3[2] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 32)
+			addPic(event.target.x, event.target.y,picToAdd, 12)
 		end
 		if(event.target.id == "threeloopBtn3") then
 			table3[3] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 33)
+			addPic(event.target.x, event.target.y,picToAdd, 13)
 		end
 		if(event.target.id == "threeloopBtn4") then
 			table3[4] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 34)
+			addPic(event.target.x, event.target.y,picToAdd, 14)
 		end
 		if(event.target.id == "threeloopBtn5") then
 			table3[5] = picToAdd
-			addPic(event.target.x, event.target.y,picToAdd, 35)
+			addPic(event.target.x, event.target.y,picToAdd, 15)
 		end
     end
 end
@@ -328,33 +322,47 @@ end
 	--picToAdd = pics[num]
 --end
 
+local function printStuff()
+	print("in")
+	for i = 15,1,-1 do
+		print(pics[i])
+	
+	end
+end
+
 local function mdtap()
-	picToAdd = pics[1]
+	picToAdd = "down_arrow.png"
+	printStuff()
 end
 
 local function mutap()
 	picToAdd = "up_arrow.png"
+	printStuff()
 end
 
 local function mrtap()
 	picToAdd = "right_arrow.png"
+	printStuff()
 end
 
 local function mltap()
 	picToAdd = "left_arrow.png"
+	printStuff()
 end
 
 local function onetap()
 	picToAdd = "one_button.png"
+	print()
 end
 
 local function twotap()
 	picToAdd = "two_button.png"
+	printStuff()
 end
 
 local function threetap()
 	picToAdd = "three_button.png"
-
+	printStuff()
 end
 
 function scene:resetrobot()
@@ -649,11 +657,17 @@ function scene:hide( event )
         -- Example: stop timers, stop animation, stop audio, etc.
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
-		picTable[11]:removeSelf()
+		for i = 15, 1, -1 do
+			if(not(picTable[i]== nil)) then
+				picTable[i]:removeSelf()
+			end
+		end
+		
+		--[[picTable[11]:removeSelf()
 		picTable[12]:removeSelf()
 		picTable[13]:removeSelf()
 		picTable[14]:removeSelf()
-		picTable[15]:removeSelf()
+		picTable[15]:removeSelf()]]--
     end
 end
 
