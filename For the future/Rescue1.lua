@@ -60,7 +60,7 @@ local function setupmap()
 		setupPic("twol", "two_loop.png", 1063.96, 768, 133, 805)
 				
 		--three_loop
-		setupPic("threel", "one_loop.png", 1063.96, 910, 133, 805)
+		setupPic("threel", "three_loop.png", 1063.96, 910, 133, 805)
 		
 		--up_arrow
 		setupPic("upa", "up_arrow.png", 1192, 186, 122, 122)
@@ -262,7 +262,7 @@ function addPic(xVal,yVal,name,spot)
 end
 
 local function moveu()
-		robo:applyForce( 0, -200, robo.x+70, robo.y+70 )
+		robo:applyForce( 0, -200, robo.x+300, robo.y+70 )
 end
 
 local function moveup()
@@ -270,7 +270,7 @@ local function moveup()
 		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
 		
 		local robotX, robotY = robo:localToContent( 0, -70 )
-		transition.to( myrectu, { time=16, x=robotX, y=robotY-240} )
+		transition.to( myrectu, { time=16, x=robotX, y=robotY-250} )
 		--transition.to( myrectl, { time=16, x=robotX, y=robotY-240} )
 		timer.performWithDelay(20,moveu)
 end
@@ -287,7 +287,7 @@ local function mover()
 		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
 		local robotX, robotY = robo:localToContent( 0, -70 )
-		transition.to( myrectr, { time=16, x=robotX+310, y=robotY} )
+		transition.to( myrectr, { time=16, x=robotX+320, y=robotY} )
 		
 		timer.performWithDelay(20,moveri)
 end
@@ -300,7 +300,7 @@ local function moved()
 		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
 		local robotX, robotY = robo:localToContent( 0, -70 )
-		transition.to( myrectd, { time=16, x=robotX, y=robotY+380} )
+		transition.to( myrectd, { time=16, x=robotX, y=robotY+390} )
 		
 		timer.performWithDelay(20,movedo)	
 end
@@ -313,56 +313,39 @@ local function movel()
 		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, { loops=0 } )
 		local robotX, robotY = robo:localToContent( 0, -70 )
-		transition.to( myrectl, { time=16, x=robotX-310, y=robotY} )
+		transition.to( myrectl, { time=16, x=robotX-320, y=robotY} )
 		
 		timer.performWithDelay(20,movele)	
 end
 
---local function tap(num)
-	--picToAdd = pics[num]
---end
 
-local function printStuff()
-	print("in")
-	for i = 15,1,-1 do
-		print(pics[i])
-	
-	end
-end
 
 local function mdtap()
 	picToAdd = "down_arrow.png"
-	printStuff()
 end
 
 local function mutap()
 	picToAdd = "up_arrow.png"
-	printStuff()
 end
 
 local function mrtap()
 	picToAdd = "right_arrow.png"
-	printStuff()
 end
 
 local function mltap()
 	picToAdd = "left_arrow.png"
-	printStuff()
 end
 
 local function onetap()
 	picToAdd = "one_button.png"
-	print()
 end
 
 local function twotap()
 	picToAdd = "two_button.png"
-	printStuff()
 end
 
 local function threetap()
 	picToAdd = "three_button.png"
-	printStuff()
 end
 
 function scene:resetrobot()
@@ -663,11 +646,6 @@ function scene:hide( event )
 			end
 		end
 		
-		--[[picTable[11]:removeSelf()
-		picTable[12]:removeSelf()
-		picTable[13]:removeSelf()
-		picTable[14]:removeSelf()
-		picTable[15]:removeSelf()]]--
     end
 end
 
