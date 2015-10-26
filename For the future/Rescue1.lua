@@ -482,7 +482,7 @@ local function onCollision( event )
 			}
 			audio.stop(elevatorMusicplay)
 			audio.pause(backgroundMusicplay)
-			composer.gotoScene("Credits",options)
+			composer.gotoScene("Search2",options)
 		else
 			local options = {
 			isModal = true,
