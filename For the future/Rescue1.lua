@@ -214,7 +214,8 @@ local function addPic(xVal,yVal,name,spot)
 		
 	else
 		picTable[spot]:removeSelf()
-		addPicTo(spot, name, xVal, yVal)	
+		addPicTo(spot, name, xVal, yVal)
+			
 		undoloop = undoloop + 1
 		local function onUndoSearch( event )
         	if not event.error then
@@ -465,7 +466,6 @@ if ( event.phase == "began" ) then
 			end
 		elseif (event.object2==science) then
 			print("Scientist")
-			parse:logEvent( "Credits", { ["screen"] = "Game"})
 			local options = {
 				effect = "crossFade",
 				time = 500

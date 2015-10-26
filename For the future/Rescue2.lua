@@ -102,13 +102,13 @@ local function setupmap()
 		setupPic("wall8", "locked_door_horizontal.png", 534, 602, 124, 12)
 
 		--scientist
-		science= display.newImage("scientist.png")
-		science.anchorX=0
-		science.anchorY=0
-		science.x=843
-		science.y=840
-		science.height=140
-		science.width=140
+		science2= display.newImage("scientist.png")
+		science2.anchorX=0
+		science2.anchorY=0
+		science2.x=843
+		science2.y=840
+		science2.height=140
+		science2.width=140
 
 		--robo
 		robo= display.newImage("robot.png")
@@ -150,7 +150,7 @@ local function physxget()
 		physics.addBody( myrectr, "static",{bounce=0})
 		
 		--scientist
-		physics.addBody( science, "static",{bounce=0})
+		physics.addBody( science2, "static",{bounce=0})
 end
 
 
@@ -178,6 +178,7 @@ local function addPic(xVal,yVal,name,spot)
     	end
     	local dataTable = {["Rescue2"] = emptyloop }
     	parse:updateObject("EmptyCount", myData.emptyid, dataTable, onEmptyRescue)
+
 	elseif(picTable[spot] == nil) then
 		addPicTo(spot, name, xVal, yVal)
 	elseif (picToAdd == "") then
@@ -192,6 +193,7 @@ local function addPic(xVal,yVal,name,spot)
     	end
     	local dataTable = {["Rescue2"] = undoloop }
     	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
+
 	else
 		picTable[spot]:removeSelf()
 		addPicTo(spot, name, xVal, yVal)	
@@ -203,7 +205,9 @@ local function addPic(xVal,yVal,name,spot)
         	end
     	end
     	local dataTable = {["Rescue2"] = undoloop }
-    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)		
+    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)	
+
+
 	end
 	picToAdd = ""
 	
@@ -440,7 +444,7 @@ if ( event.phase == "began" ) then
 				moverobot()
 				print("stupido")
 			end
-		elseif (event.object2==science) then
+		elseif (event.object2==science2) then
 			print("Scientist")
 			local options = {
 				effect = "crossFade",
@@ -448,9 +452,10 @@ if ( event.phase == "began" ) then
 			}
 			audio.stop(elevatorMusicplay)
 			audio.pause(backgroundMusicplay)
+			physics.stop()
 			composer.gotoScene("Search3",options)
-		elseif (event.object2==setupItems2["wall7"] or event.object2==setupItems2["wall8"] or event.object2==setupItems["bottomwall"] or
-		event.object2==setupItems["topwall"] or event.object2==setupItems["leftwall"] or event.object2==setupItems["rightwall"]) then
+		elseif (event.object2==setupItems2["wall7"] or event.object2==setupItems2["wall8"] or event.object2==setupItems2["bottomwall"] or
+		event.object2==setupItems2["topwall"] or event.object2==setupItems2["leftwall"] or event.object2==setupItems2["rightwall"]) then
 		
 		print("why")
 			local options = {
@@ -646,7 +651,7 @@ function scene:show( event )
 	
 	--add character
 	sceneGroup:insert(robo)
-	sceneGroup:insert(science)
+	sceneGroup:insert(science2)
 	
 	--add walls
 	sceneGroup:insert(setupItems2["wall7"])
@@ -672,13 +677,38 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
-    elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.
-		for i = 15, 1, -1 do
-			if(picTable[i]~= nil) then
+        for i = 15, 1, -1 do
+			if(not(picTable[i]== nil)) then
 				picTable[i]:removeSelf()
 			end
 		end
+		display.remove( robo)
+		robo=nil
+	
+		display.remove( myrectu)
+		myrectu=nil
+		display.remove( myrectd)
+		myrectd=nil
+		display.remove( myrectl)
+		myrectl=nil
+		display.remove( myrectr)
+		myrectr=nil
+		--scientist
+		display.remove( science2)
+		science2=nil
+		display.remove( setupItems2["wall8"])
+		display.remove( setupItems2["wall7"])
+		display.remove( setupItems2["leftwall"])
+		display.remove( setupItems2["rightwall"])
+		display.remove( setupItems2["topwall"])
+		display.remove( setupItems2["bottomwall"])
+		setupItems2["wall7"]=nil
+		setupItems2["wall8"]=nil
+		--robot
+		--physics.removeBody( robot)
+		physics.stop()
+    elseif ( phase == "did" ) then
+        -- Called immediately after scene goes off screen.
 		
 		
     end

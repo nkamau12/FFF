@@ -93,13 +93,13 @@ local function setupmap()
 		
 
 		--scientist
-		science= display.newImage("scientist.png")
-		science.anchorX=0
-		science.anchorY=0
-		science.x=843
-		science.y=348
-		science.height=140
-		science.width=140
+		science3= display.newImage("scientist.png")
+		science3.anchorX=0
+		science3.anchorY=0
+		science3.x=843
+		science3.y=348
+		science3.height=140
+		science3.width=140
 
 		--robot
 		local robot= display.newImage("robot.png")
@@ -136,7 +136,7 @@ local function setupmap()
 		physics.addBody( myrectr, "static",{bounce=0})
 		
 		--scientist
-		physics.addBody( science, "static",{bounce=0})
+		physics.addBody( science3, "static",{bounce=0})
 end 
 
 
@@ -442,7 +442,7 @@ local function onCollision( event )
 			if ( event.phase == "began" ) then
 				moverobot()
 			end
-		elseif (event.object2==science) then
+		elseif (event.object2==science3) then
 			print("Scientist")
 			local options = {
 				effect = "crossFade",
@@ -634,7 +634,7 @@ function scene:create( event )
 	
 	--add character
 	sceneGroup:insert(robo)
-	sceneGroup:insert(science)
+	sceneGroup:insert(science3)
 	
 	--add walls
 
