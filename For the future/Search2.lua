@@ -278,7 +278,7 @@ local function checkresult( event )
         countmax = 0
         local attribute = "Search2"
         parse:updateObject("LevelTime", myData.timeid, {[attribute] = endTime})
-        composer.gotoScene("Rescue2",options)
+        composer.gotoScene("Search3",options)
     else
         answer = countmax
     end
