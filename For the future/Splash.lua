@@ -1,5 +1,7 @@
-local composer = require( "composer" )
+local parse = require( "mod_parse" )
 
+local composer = require( "composer" )
+--local parse = require( "mod_parse" )
 local scene = composer.newScene()
 
 -- -----------------------------------------------------------------------------------------------------------------

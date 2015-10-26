@@ -1,3 +1,4 @@
+local parse = require( "mod_parse" )
 local composer = require( "composer" )
 local physics = require("physics")
 local scene = composer.newScene()
@@ -85,6 +86,9 @@ local function setupmap()
 				
 		--start_button
 		setupPic("start", "start_button.png", 46, 968, 66, 246)
+
+		--start_button
+		setupPic("home", "home.png", 1766, 28, 120, 120)
 		
 
 		--wall_a
@@ -444,7 +448,7 @@ local function onCollision( event )
 				effect = "crossFade",
 				time = 500
 			}
-			audio.pause(elevatorMusicplay)
+			audio.stop(elevatorMusicplay)
 			audio.pause(backgroundMusicplay)
 			composer.gotoScene("Credits",options)
 		else
@@ -485,6 +489,16 @@ local function pass()
 	moverobot()
 end
 
+--local function gohome()
+--    local optionsh = {
+--				effect = "crossFade",
+--				time = 500
+--			}
+			--audio.stop(elevatorMusicplay)
+			--audio.pause(backgroundMusicplay)
+--			composer.gotoScene("MainMenu",optionsh)
+--end
+
 local function addButton(position, xPos, yPos,idName)
 	
 	buttonTable[position] = widget.newButton
@@ -503,8 +517,8 @@ end
 function scene:create( event )
 
     local sceneGroup = self.view
-    local elevatorMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
-	local elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
+    elevatorMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
+	elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
     
 
     -- Initialize the scene here.
@@ -555,6 +569,7 @@ function scene:create( event )
 	setupItems["twob"]:addEventListener("tap", twotap)
 	setupItems["threeb"]:addEventListener("tap", threetap)
 	setupItems["start"]:addEventListener("tap", pass)
+	--setupItems["home"]:addEventListener("tap", gohome)
 	
 	--add buttons
 	sceneGroup:insert(buttonTable[11])
@@ -588,6 +603,7 @@ function scene:create( event )
 	sceneGroup:insert(setupItems["twob"])
 	sceneGroup:insert(setupItems["threeb"])
 	sceneGroup:insert(setupItems["start"])
+	sceneGroup:insert(setupItems["home"])
 	
 	--add character
 	sceneGroup:insert(robo)

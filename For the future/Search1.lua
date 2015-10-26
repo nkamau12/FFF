@@ -1,3 +1,4 @@
+local parse = require( "mod_parse" )
 local composer = require( "composer" )
 local scene = composer.newScene()
 
@@ -72,6 +73,15 @@ local function setupmap()
         deletebutton.y=887
         deletebutton.height=120
         deletebutton.width=120
+
+        --home_button
+        homebutton = display.newImage("home.png")
+        homebutton.anchorX=0
+        homebutton.anchorY=0
+        homebutton.x=1766
+        homebutton.y=28
+        homebutton.height=120
+        homebutton.width=120
         
 end 
 
@@ -148,12 +158,24 @@ local function addyellow( event )
 end
 
 local function removelast( event )
+    parse:logEvent( "Undo", { ["game"] = "Search",["level"] = "One"})
     if(countmax > answer)then
         display.remove(newblock[countmax-1])
         countmax = countmax - 1
         spotx = 631 + countmax*130
     else
     end
+end
+
+local function gohome( event )
+    audio.stop(searchMusicplay)
+    audio.dispose( searchMusic )
+    local options = {
+            effect = "crossFade",
+            time = 500
+    }
+    parse:logEvent( "Home", { ["screen"] = "Search1"})
+    composer.gotoScene("MainMenu",options)
 end
 
 local function tryagain()
@@ -166,6 +188,7 @@ local function tryagain()
 end
 
 local function checkresult( event )
+    parse:logEvent( "CheckSearch", { ["game"] = "Search",["level"] = "One"})
     while answer<5 do
         print(answer)
         if(spacecolor[answer] == answerkey[answer+1])then
@@ -199,11 +222,11 @@ local function checkresult( event )
         end
     end
     if(answer < 10)then
+        audio.pause(searchMusicplay)
         local options = {
             effect = "crossFade",
             time = 500
         }
-        audio.pause( backgroundMusicplay)
         composer.gotoScene("Rescue1",options)
     else
         answer = countmax
@@ -214,8 +237,8 @@ end
 function scene:create( event )
 
     local sceneGroup = self.view
-    local backgroundMusic = audio.loadStream( "bensound-slowmotion.mp3")
-    local backgroundMusicplay = audio.play( backgroundMusic, {  fadein = 4000, loops=-1 } )
+    searchMusic = audio.loadStream( "bensound-slowmotion.mp3")
+    searchMusicplay = audio.play( searchMusic, {  fadein = 4000, loops=-1 } )
     
 
     -- Initialize the scene here.
@@ -245,6 +268,7 @@ function scene:create( event )
         sceneGroup:insert(blockyellow)
         sceneGroup:insert(runbutton)
         sceneGroup:insert(deletebutton)
+        sceneGroup:insert(homebutton)
         sceneGroup:insert(levelmap)
 
 
@@ -253,6 +277,7 @@ function scene:create( event )
         blockblue:addEventListener( "tap", addblue )
         blockyellow:addEventListener( "tap", addyellow )
         deletebutton:addEventListener("tap",removelast)
+        homebutton:addEventListener("tap",gohome)
         runbutton:addEventListener("tap",checkresult)
         spotx = 631
         spoty = 90
@@ -304,7 +329,6 @@ end
 function scene:destroy( event )
 
     local sceneGroup = self.view
-
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.
     -- Example: remove display objects, save state, etc.

@@ -7,6 +7,17 @@
 -- hide the status bar
 display.setStatusBar( display.HiddenStatusBar )
 
+local parse = require( "mod_parse" )
+parse:init({ 
+  appId = "YZIbu9ERjYD4h8OdtdJ3fknrWIwjMUZGjUSrZOQe", 
+  apiKey = "WTmSOin1ChKS2l0CXkenSNaSwMEMy2ytEwyaBesn"
+})
+
+parse.showStatus = true
+--Register when app is opened
+parse:appOpened()
+
+
 -- require the composer library
 local composer = require "composer"
 

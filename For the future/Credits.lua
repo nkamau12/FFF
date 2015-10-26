@@ -1,3 +1,4 @@
+local parse = require( "mod_parse" )
 local composer = require( "composer" )
 
 local scene = composer.newScene()

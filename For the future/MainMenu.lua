@@ -1,3 +1,4 @@
+local parse = require( "mod_parse" )
 local composer = require( "composer" )
 local JSON = require ("json")
 local scene = composer.newScene()
@@ -12,39 +13,43 @@ local scene = composer.newScene()
 
 
 local function showSearch1()
-	audio.pause( backgroundMusicplay)
+	audio.pause(backgroundMusicplay)
 	local options = {
 		effect = "fade",
 		time = 500
 	}
+		parse:logEvent( "Play", { ["screen"] = "MainMenu"})
 		composer.gotoScene("Search1",options)
 end
 
 local function showRescue()
-	audio.pause( backgroundMusicplay)
+	audio.pause(backgroundMusicplay)
 	local options = {
 		effect = "crossFade",
 		time = 500
 	}
+
 		composer.gotoScene("Rescue1",options)
 end
 
 
 local function showCredits()
-audio.pause( backgroundMusicplay)
+audio.pause(backgroundMusicplay)
 	local options = {
 		effect = "crossFade",
 		time = 500
 	}
+parse:logEvent( "Credits", { ["screen"] = "MainMenu"})
 composer.gotoScene("Credits",options)
 end
 
 local function showTutorial()
-	audio.pause( backgroundMusicplay)
+	audio.pause(backgroundMusicplay)
 	local options = {
 		effect = "crossFade",
 		time = 500
 	}
+		parse:logEvent( "Tutorial", { ["screen"] = "MainMenu"})
 		composer.gotoScene("SearchTutorial",options)
 end
 
@@ -150,8 +155,7 @@ function scene:show( event )
 		sceneGroup:insert(credit)
 		credit:addEventListener( "tap", showCredits )
 		
-		audio.resume( backgroundMusicplay )
-
+		audio.resume(backgroundMusicplay)
 		
     end
 end
