@@ -16,6 +16,7 @@ end
 
 local function nextspeech()
 			composer.hideOverlay( "fade", 400 )
+			--one_loop_btn1:removeSelf()
 end
 -- "scene:create()"
 function scene:create( event )
@@ -45,15 +46,15 @@ function scene:create( event )
 			pic1.width = 120
 		sceneGroup:insert(pic1)
 		
-		pic11 = display.newImage("two_button.png")
-			pic11.anchorX = 0.5
-			pic11.anchorY = 0.5
-			pic11.x = 1402.21
-			pic11.y = 690.86
-			pic11.height = 120
-			pic11.width = 120
-			pic11.alpha=1
-		sceneGroup:insert(pic11)
+		picsy = display.newImage("two_button.png")
+			picsy.anchorX = 0.5
+			picsy.anchorY = 0.5
+			picsy.x = 1402.21
+			picsy.y = 690.86
+			picsy.height = 120
+			picsy.width = 120
+			picsy.alpha=1
+		sceneGroup:insert(picsy)
 		
 		upa = display.newImage("right_arrow.png")
 		upa.anchorX=0.5
@@ -91,7 +92,7 @@ function scene:create( event )
 		
 		
 	}
-	
+	sceneGroup:insert(two_loop_btn1)
 	sceneGroup:insert(speech1)
 	sceneGroup:insert(nextb)
 	nextb:addEventListener("tap",nextspeech)

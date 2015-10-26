@@ -4,7 +4,7 @@ local physics = require("physics")
 local scene = composer.newScene()
 local widget = require("widget")
 
-local picToAdd
+local picToAdd=""
 
 local table1 = {}
 local table2 = {}
@@ -354,19 +354,13 @@ end
 
 function scene:resetrobot()
 		
-		transition.to( robo, { time=16, x=109, y=819} )
-		local robotX, robotY = robo:localToContent( -70, -70 )
-		transition.to( myrectu, { time=16, x=robotX, y=robotY-240} )
-		transition.to( myrectl, { time=16, x=robotX-240, y=robotY} )
-		transition.to( myrectd, { time=16, x=robotX, y=robotY+240} )
-		transition.to( myrectr, { time=16, x=robotX+240, y=robotY} )
-		fintable=nil
-		fintable={}
-		counter=1
+		transition.moveTo( robo, { time=0, x=109, y=819} )
+		timer.performWithDelay(20,restartr)	
 end
-function restartrobot()
+
+
+function restartr()
 	
-		transition.to( robo, { time=16, x=109, y=819} )
 		local robotX, robotY = robo:localToContent( -70, -70 )
 		transition.to( myrectu, { time=16, x=robotX, y=robotY-240} )
 		transition.to( myrectl, { time=16, x=robotX-240, y=robotY} )
@@ -423,7 +417,14 @@ local function moverobot()
 			mover()
 			--timer.performWithDelay(50,mover)
 		else
+			local options = {
+			isModal = true,
 			
+			params = {
+			sampleVar = "my sample variable"
+				}
+			}
+			composer.showOverlay( "fail1", options )
 		end
 		counter=counter+1
 	else

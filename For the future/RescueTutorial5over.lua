@@ -1,7 +1,7 @@
 local composer = require( "composer" )
 local widget = require("widget")
 local scene = composer.newScene()
-local pic11
+local picsy
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
@@ -10,13 +10,14 @@ local pic11
 
 -- -------------------------------------------------------------------------------
 function handleButtonEvent()
-		pic11.alpha=1
+		picsy.alpha=1
 end 
 local function nextspeech()
-		display.remove(pic11)
-		pic11:removeSelf()
-		pic11=nil
+		display.remove(picsy)
+		picsy:removeSelf()
+		picsy=nil
 			composer.hideOverlay( "fade", 400 )
+		--one_loop_btn1:removeSelf()
 end
 -- "scene:create()"
 function scene:create( event )
@@ -43,15 +44,15 @@ function scene:create( event )
 	arrow.y=705
 	sceneGroup:insert(arrow)
 	
-	pic11 = display.newImage("up_arrow.png")
-			pic11.anchorX = 0.5
-			pic11.anchorY = 0.5
-			pic11.x = 1270.21
-			pic11.y = 690.86
-			pic11.height = 120
-			pic11.width = 120
-			pic11.alpha=0
-	sceneGroup:insert(pic11)
+	picsy = display.newImage("up_arrow.png")
+			picsy.anchorX = 0.5
+			picsy.anchorY = 0.5
+			picsy.x = 1270.21
+			picsy.y = 690.86
+			picsy.height = 120
+			picsy.width = 120
+			picsy.alpha=0
+	sceneGroup:insert(picsy)
 	
 	local one_loop_btn1 = widget.newButton
 	{
@@ -65,7 +66,7 @@ function scene:create( event )
 		
 		
 	}
-	
+	sceneGroup:insert(one_loop_btn1)
 	sceneGroup:insert(speech1)
 	sceneGroup:insert(nextb)
 	nextb:addEventListener("tap",nextspeech)
