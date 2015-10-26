@@ -17,21 +17,47 @@ parse.showStatus = true
 --Register when app is opened
 parse:appOpened()
 
+local myData = require( "mydata" )
+--Save the parse object id for later use
+local function saveTime(event)
+  if not event.error then
+    myData.timeid = event.response.objectId
+  end
+end
+local function saveUndo(event)
+  if not event.error then
+    myData.undoid = event.response.objectId
+  end
+end
+local function saveHome(event)
+  if not event.error then
+    myData.homeid = event.response.objectId
+  end
+end
+local function saveRun(event)
+  if not event.error then
+    myData.runid = event.response.objectId
+  end
+end
+local function saveEmpty(event)
+  if not event.error then
+    myData.emptyid = event.response.objectId
+  end
+end
+
+--Generate parse object
+local datatable = {}
+parse:createObject("LevelTime", datatable, saveTime)
+parse:createObject("UndoCount", datatable, saveUndo)
+parse:createObject("HomeCount", datatable, saveHome)
+parse:createObject("RunCount", datatable, saveRun)
+parse:createObject("EmptyCount", datatable, saveEmpty)
 
 -- require the composer library
 local composer = require "composer"
 
-local GA = require "plugin.gameanalytics"
 composer.gotoScene( "Splash" )
-GA.isDebug = true
-GA.runInSimulator=true
-GA.submitAverageFps=true
-GA.submitSystemInfo=true
-GA.init ( {
-		game_key = 'c5fff2a3c3f7970f8560e139994010c9',
-		secret_key = '378b4c3481bfbd954ea49d1611df233fca998b44',
-		build_name = "FTF",
-		} )
+
 
 
 

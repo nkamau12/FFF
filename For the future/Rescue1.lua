@@ -1,4 +1,5 @@
 local parse = require( "mod_parse" )
+local myData = require( "mydata" )
 local composer = require( "composer" )
 local physics = require("physics")
 local scene = composer.newScene()
@@ -252,14 +253,43 @@ end
 function addPic(xVal,yVal,name,spot)
 
 	if((picTable[spot]== nil) and (picToAdd == ""))then
+		emptyloop = emptyloop + 1
+		local function onEmptyRescue( event )
+        	if not event.error then
+            	print( event.response.updatedAt )
+        	end
+    	end
+    	local dataTable = {["Rescue1"] = emptyloop }
+    	parse:updateObject("EmptyCount", myData.emptyid, dataTable, onEmptyRescue)
+
 	elseif(picTable[spot] == nil) then
 		addPicTo(spot, name, xVal, yVal)
 	elseif (picToAdd == "") then
 		picTable[spot]:removeSelf()
 		picTable[spot] = nil
+
+		undoloop = undoloop + 1
+		local function onUndoSearch( event )
+        	if not event.error then
+            	print( event.response.updatedAt )
+        	end
+    	end
+    	local dataTable = {["Rescue1"] = undoloop }
+    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
+		
 	else
 		picTable[spot]:removeSelf()
-		addPicTo(spot, name, xVal, yVal)			
+		addPicTo(spot, name, xVal, yVal)	
+		undoloop = undoloop + 1
+		local function onUndoSearch( event )
+        	if not event.error then
+            	print( event.response.updatedAt )
+        	end
+    	end
+    	local dataTable = {["Rescue1"] = undoloop }
+    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
+
+		
 	end
 	picToAdd = ""
 	
@@ -445,6 +475,7 @@ local function onCollision( event )
 			end
 		elseif (event.object2==science) then
 			print("Scientist")
+			parse:logEvent( "Credits", { ["screen"] = "Game"})
 			local options = {
 				effect = "crossFade",
 				time = 500
@@ -486,19 +517,39 @@ end
 
 
 local function pass()
+	runrescue = runrescue + 1
+    local function onRunningObject( event )
+        if not event.error then
+            print( event.response.updatedAt )
+        end
+    end
+    local runsearchTable = {["Rescue1"] = runrescue }
+    parse:updateObject("RunCount", myData.runid, runsearchTable, onRunningObject)
+
 	merge(table1)
 	moverobot()
+	
 end
 
---local function gohome()
---    local optionsh = {
---				effect = "crossFade",
---				time = 500
---			}
-			--audio.stop(elevatorMusicplay)
-			--audio.pause(backgroundMusicplay)
---			composer.gotoScene("MainMenu",optionsh)
---end
+local function gohome()
+	homerescue = homerescue + 1
+
+    local function onUpdateObject( event )
+        if not event.error then
+            print( event.response.updatedAt )
+        end
+    end
+    local dataTable = {["Rescue1"] = homerescue }
+    parse:updateObject("HomeCount", myData.homeid, dataTable, onUpdateObject)
+
+    local options = {
+				effect = "crossFade",
+				time = 500
+			}
+			audio.stop(elevatorMusicplay)
+			audio.pause(backgroundMusicplay)
+			composer.gotoScene("MainMenu",optionsh)
+end
 
 local function addButton(position, xPos, yPos,idName)
 	
@@ -521,6 +572,11 @@ function scene:create( event )
     elevatorMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
 	elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
     
+
+	homerescue = 0
+	runrescue = 0
+	undoloop = 0
+	emptyloop = 0
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -570,7 +626,7 @@ function scene:create( event )
 	setupItems["twob"]:addEventListener("tap", twotap)
 	setupItems["threeb"]:addEventListener("tap", threetap)
 	setupItems["start"]:addEventListener("tap", pass)
-	--setupItems["home"]:addEventListener("tap", gohome)
+	setupItems["home"]:addEventListener("tap", gohome)
 	
 	--add buttons
 	sceneGroup:insert(buttonTable[11])

@@ -1,4 +1,5 @@
 local parse = require( "mod_parse" )
+local myData = require( "mydata" )
 local composer = require( "composer" )
 local JSON = require ("json")
 local scene = composer.newScene()
@@ -39,7 +40,6 @@ audio.pause(backgroundMusicplay)
 		effect = "crossFade",
 		time = 500
 	}
-parse:logEvent( "Credits", { ["screen"] = "MainMenu"})
 composer.gotoScene("Credits",options)
 end
 
@@ -49,7 +49,6 @@ local function showTutorial()
 		effect = "crossFade",
 		time = 500
 	}
-		parse:logEvent( "Tutorial", { ["screen"] = "MainMenu"})
 		composer.gotoScene("SearchTutorial",options)
 end
 

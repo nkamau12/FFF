@@ -1,4 +1,5 @@
 local parse = require( "mod_parse" )
+local myData = require( "mydata" )
 local composer = require( "composer" )
 local scene = composer.newScene()
 
@@ -158,7 +159,16 @@ local function addyellow( event )
 end
 
 local function removelast( event )
-    parse:logEvent( "Undo", { ["game"] = "Search",["level"] = "One"})
+    undosearch = undosearch + 1
+
+    local function onUndoSearch( event )
+        if not event.error then
+            print( event.response.updatedAt )
+        end
+    end
+    local dataTable = {["Search1"] = undosearch }
+    parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
+
     if(countmax > answer)then
         display.remove(newblock[countmax-1])
         countmax = countmax - 1
@@ -168,13 +178,30 @@ local function removelast( event )
 end
 
 local function gohome( event )
+    homesearch = homesearch + 1
+
+    local function onUpdateObject( event )
+        if not event.error then
+            print( event.response.updatedAt )
+        end
+    end
+    local dataTable = {["Search1"] = homesearch }
+    parse:updateObject("HomeCount", myData.homeid, dataTable, onUpdateObject)
+
     audio.stop(searchMusicplay)
     audio.dispose( searchMusic )
     local options = {
             effect = "crossFade",
             time = 500
     }
-    parse:logEvent( "Home", { ["screen"] = "Search1"})
+    for i=8,0,-1 
+    do 
+        display.remove(newblock[i]) 
+    end
+    answer = 0
+    spotx = 631
+    spoty = 90
+    countmax = 0
     composer.gotoScene("MainMenu",options)
 end
 
@@ -188,7 +215,15 @@ local function tryagain()
 end
 
 local function checkresult( event )
-    parse:logEvent( "CheckSearch", { ["game"] = "Search",["level"] = "One"})
+    runsearch = runsearch + 1
+    local function onRunningObject( event )
+        if not event.error then
+            print( event.response.updatedAt )
+        end
+    end
+    local runsearchTable = {["Search1"] = runsearch }
+    parse:updateObject("RunCount", myData.runid, runsearchTable, onRunningObject)
+
     while answer<5 do
         print(answer)
         if(spacecolor[answer] == answerkey[answer+1])then
@@ -227,6 +262,16 @@ local function checkresult( event )
             effect = "crossFade",
             time = 500
         }
+        for i=8,0,-1 
+        do 
+            display.remove(newblock[i]) 
+        end
+        answer = 0
+        spotx = 631
+        spoty = 90
+        countmax = 0
+        local attribute = "Search1"
+        parse:updateObject("LevelTime", myData.timeid, {[attribute] = endTime})
         composer.gotoScene("Rescue1",options)
     else
         answer = countmax
@@ -260,6 +305,9 @@ function scene:create( event )
         resultblock = {}
         spacecolor = {}
         answer = 0
+        undosearch = 0
+        homesearch = 0
+        runsearch = 0
         answerkey = {"red","green","blue","green","yellow"}
 
         sceneGroup:insert(blockred)
