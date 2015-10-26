@@ -35,7 +35,7 @@ function scene:create( event )
         creds.x= 0
         creds.y=2448.6
         sceneGroup:insert(creds)
-
+	creds:addEventListener( "tap", bye )
     local backgroundMusic = audio.loadStream( "bensound-slowmotion.mp3")
     local backgroundMusicplay = audio.play( backgroundMusic, {  fadein = 4000, loops=-1 } )
 
