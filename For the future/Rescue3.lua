@@ -12,13 +12,13 @@ local table2 = {}
 local table3 = {}
 local fintable = {}
 local counter = 1;
-
+local robo
 local buttonTable = {}
 local picTable = {}
 local pics = 
 {	11,12,13,14,15,21,22,23,24,25,31,32,33,34,35
 }
-local setupItems = {}
+local setupItems2 = {}
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -29,13 +29,13 @@ local setupItems = {}
 -- -------------------------------------------------------------------------------
 local function setupPic(name, pic, xVal, yVal, hVal,wVal)
 
-	setupItems[name] = display.newImage(pic)
-	setupItems[name].anchorX = 0
-	setupItems[name].anchorY =0
-	setupItems[name].x = xVal
-	setupItems[name].y = yVal
-	setupItems[name].height = hVal
-	setupItems[name].width= wVal
+	setupItems2[name] = display.newImage(pic)
+	setupItems2[name].anchorX = 0
+	setupItems2[name].anchorY =0
+	setupItems2[name].x = xVal
+	setupItems2[name].y = yVal
+	setupItems2[name].height = hVal
+	setupItems2[name].width= wVal
 
 end
 
@@ -116,10 +116,10 @@ local function setupmap()
 		physics.setGravity( 0, 0 )
 		--walls
 		
-		physics.addBody( setupItems["leftwall"], "static",{bounce=0})
-		physics.addBody( setupItems["rightwall"], "static",{bounce=0})
-		physics.addBody( setupItems["topwall"], "static",{bounce=0})
-		physics.addBody( setupItems["bottomwall"], "static",{bounce=0})
+		physics.addBody( setupItems2["leftwall"], "static",{bounce=0})
+		physics.addBody( setupItems2["rightwall"], "static",{bounce=0})
+		physics.addBody( setupItems2["topwall"], "static",{bounce=0})
+		physics.addBody( setupItems2["bottomwall"], "static",{bounce=0})
 		--robot
 		physics.addBody( robot,"dynamic",{bounce=0,friction=.8})
 		robot.isFixedRotation = true
@@ -452,7 +452,8 @@ local function onCollision( event )
 			audio.pause(backgroundMusicplay)
 			physics.stop()
 			composer.gotoScene("Credits",options)
-		else
+		elseif (event.object2==setupItems2["bottomwall"] or
+		event.object2==setupItems2["topwall"] or event.object2==setupItems2["leftwall"] or event.object2==setupItems2["rightwall"]) then
 			local options = {
 			isModal = true,
 			
@@ -587,15 +588,15 @@ function scene:create( event )
 	--robo:addEventListener( "collision", robo )
 	Runtime:addEventListener( "collision", onCollision )
 	
-	setupItems["upa"]:addEventListener( "tap", mutap )
-	setupItems["downa"]:addEventListener( "tap", mdtap )
-	setupItems["lefta"]:addEventListener( "tap", mltap )
-	setupItems["righta"]:addEventListener( "tap", mrtap )
-	setupItems["oneb"]:addEventListener("tap", onetap)
-	setupItems["twob"]:addEventListener("tap", twotap)
-	setupItems["threeb"]:addEventListener("tap", threetap)
-	setupItems["start"]:addEventListener("tap", pass)
-	setupItems["home"]:addEventListener("tap", gohome)
+	setupItems2["upa"]:addEventListener( "tap", mutap )
+	setupItems2["downa"]:addEventListener( "tap", mdtap )
+	setupItems2["lefta"]:addEventListener( "tap", mltap )
+	setupItems2["righta"]:addEventListener( "tap", mrtap )
+	setupItems2["oneb"]:addEventListener("tap", onetap)
+	setupItems2["twob"]:addEventListener("tap", twotap)
+	setupItems2["threeb"]:addEventListener("tap", threetap)
+	setupItems2["start"]:addEventListener("tap", pass)
+	setupItems2["home"]:addEventListener("tap", gohome)
 	
 	--add buttons
 	sceneGroup:insert(buttonTable[11])
@@ -617,19 +618,19 @@ function scene:create( event )
 	sceneGroup:insert(buttonTable[35])
 	
 	--add grid
-	sceneGroup:insert(setupItems["grida"])
-	sceneGroup:insert(setupItems["onel"])
-	sceneGroup:insert(setupItems["twol"])
-	sceneGroup:insert(setupItems["threel"])
-	sceneGroup:insert(setupItems["upa"])
-	sceneGroup:insert(setupItems["downa"])
-	sceneGroup:insert(setupItems["lefta"])
-	sceneGroup:insert(setupItems["righta"])
-	sceneGroup:insert(setupItems["oneb"])
-	sceneGroup:insert(setupItems["twob"])
-	sceneGroup:insert(setupItems["threeb"])
-	sceneGroup:insert(setupItems["start"])
-	sceneGroup:insert(setupItems["home"])
+	sceneGroup:insert(setupItems2["grida"])
+	sceneGroup:insert(setupItems2["onel"])
+	sceneGroup:insert(setupItems2["twol"])
+	sceneGroup:insert(setupItems2["threel"])
+	sceneGroup:insert(setupItems2["upa"])
+	sceneGroup:insert(setupItems2["downa"])
+	sceneGroup:insert(setupItems2["lefta"])
+	sceneGroup:insert(setupItems2["righta"])
+	sceneGroup:insert(setupItems2["oneb"])
+	sceneGroup:insert(setupItems2["twob"])
+	sceneGroup:insert(setupItems2["threeb"])
+	sceneGroup:insert(setupItems2["start"])
+	sceneGroup:insert(setupItems2["home"])
 	
 	--add character
 	sceneGroup:insert(robo)
@@ -637,10 +638,10 @@ function scene:create( event )
 	
 	--add walls
 
-	sceneGroup:insert(setupItems["bottomwall"])
-	sceneGroup:insert(setupItems["topwall"])
-	sceneGroup:insert(setupItems["leftwall"])
-	sceneGroup:insert(setupItems["rightwall"])
+	sceneGroup:insert(setupItems2["bottomwall"])
+	sceneGroup:insert(setupItems2["topwall"])
+	sceneGroup:insert(setupItems2["leftwall"])
+	sceneGroup:insert(setupItems2["rightwall"])
 end
 
 

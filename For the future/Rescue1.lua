@@ -12,13 +12,17 @@ local table2 = {}
 local table3 = {}
 local fintable = {}
 local counter = 1;
-
+local robot
 local buttonTable = {}
 local picTable = {}
 local pics = 
 {	11,12,13,14,15,21,22,23,24,25,31,32,33,34,35
 }
 local setupItems = {}
+local myrectd
+local myrectu
+local myrectl
+local myrectr
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -126,7 +130,7 @@ local function setupmap()
 		science.width=140
 
 		--robot
-		local robot= display.newImage("robot.png")
+		robot= display.newImage("robot.png")
 		robot.anchorX=0
 		robot.anchorY=0
 		robot.x=109
@@ -154,9 +158,9 @@ local function setupmap()
 		--robot
 		physics.addBody( robot,"dynamic",{bounce=0,friction=.8})
 		robot.isFixedRotation = true
-		robo=robot
+		
 		--Misc
-		local robotX, robotY = robo:localToContent( -70, -70 )
+		local robotX, robotY = robot:localToContent( -70, -70 )
 		myrectu = display.newRect( robotX, robotY-248, 1, 1)
 		physics.addBody( myrectu, "static",{bounce=0})
 		myrectd = display.newRect( robotX, robotY+248, 1, 1)
@@ -170,7 +174,61 @@ local function setupmap()
 		physics.addBody( science, "static",{bounce=0})
 end 
 
+local function addPicTo(position, name, xVal, yVal)
+	picTable[position] = display.newImage(name)
+	picTable[position].anchorX = 0.5
+	picTable[position].anchorY = 0.5
+	picTable[position].x = xVal
+	picTable[position].y = yVal
+	picTable[position].height = 120
+	picTable[position].width = 120
+	picTable[position].id = name
 
+end
+local function addPic(xVal,yVal,name,spot)
+
+	if((picTable[spot]== nil) and (picToAdd == ""))then
+		emptyloop = emptyloop + 1
+		local function onEmptyRescue( event )
+        	if not event.error then
+            	print( event.response.updatedAt )
+        	end
+    	end
+    	local dataTable = {["Rescue1"] = emptyloop }
+    	parse:updateObject("EmptyCount", myData.emptyid, dataTable, onEmptyRescue)
+
+	elseif(picTable[spot] == nil) then
+		addPicTo(spot, name, xVal, yVal)
+	elseif (picToAdd == "") then
+		picTable[spot]:removeSelf()
+		picTable[spot] = nil
+
+		undoloop = undoloop + 1
+		local function onUndoSearch( event )
+        	if not event.error then
+            	print( event.response.updatedAt )
+        	end
+    	end
+    	local dataTable = {["Rescue1"] = undoloop }
+    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
+		
+	else
+		picTable[spot]:removeSelf()
+		addPicTo(spot, name, xVal, yVal)	
+		undoloop = undoloop + 1
+		local function onUndoSearch( event )
+        	if not event.error then
+            	print( event.response.updatedAt )
+        	end
+    	end
+    	local dataTable = {["Rescue1"] = undoloop }
+    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
+
+		
+	end
+	picToAdd = ""
+	
+end
 local function handleButtonEvent( event )
 	if ( "moved" == event.phase ) then
     elseif ( "ended" == event.phase ) then
@@ -237,80 +295,27 @@ local function handleButtonEvent( event )
     end
 end
 
-function addPicTo(position, name, xVal, yVal)
-	picTable[position] = display.newImage(name)
-	picTable[position].anchorX = 0.5
-	picTable[position].anchorY = 0.5
-	picTable[position].x = xVal
-	picTable[position].y = yVal
-	picTable[position].height = 120
-	picTable[position].width = 120
-	picTable[position].id = name
-
-end
 
 
-function addPic(xVal,yVal,name,spot)
 
-	if((picTable[spot]== nil) and (picToAdd == ""))then
-		emptyloop = emptyloop + 1
-		local function onEmptyRescue( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
-    	local dataTable = {["Rescue1"] = emptyloop }
-    	parse:updateObject("EmptyCount", myData.emptyid, dataTable, onEmptyRescue)
 
-	elseif(picTable[spot] == nil) then
-		addPicTo(spot, name, xVal, yVal)
-	elseif (picToAdd == "") then
-		picTable[spot]:removeSelf()
-		picTable[spot] = nil
-
-		undoloop = undoloop + 1
-		local function onUndoSearch( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
-    	local dataTable = {["Rescue1"] = undoloop }
-    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
-		
-	else
-		picTable[spot]:removeSelf()
-		addPicTo(spot, name, xVal, yVal)	
-		undoloop = undoloop + 1
-		local function onUndoSearch( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
-    	local dataTable = {["Rescue1"] = undoloop }
-    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
-
-		
-	end
-	picToAdd = ""
-	
-end
 
 local function moveu()
-		robo:applyForce( 0, -200, robo.x+300, robo.y+70 )
+		robot:applyForce( 0, -200, robot.x+300, robot.y+70 )
 end
 
 local function moveup()
 		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
 		
-		local robotX, robotY = robo:localToContent( 0, -70 )
+		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectu, { time=16, x=robotX, y=robotY-250} )
 		--transition.to( myrectl, { time=16, x=robotX, y=robotY-240} )
 		timer.performWithDelay(20,moveu)
 end
 
 local function moveri()
-		robo:applyForce( 200, 0, robo.x+70, robo.y+70 )	
+		robot:applyForce( 200, 0, robot.x+70, robot.y+70 )	
 end
 
 local function mover()
@@ -320,33 +325,33 @@ local function mover()
 		--myrect:removeSelf()
 		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
-		local robotX, robotY = robo:localToContent( 0, -70 )
+		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectr, { time=16, x=robotX+320, y=robotY} )
 		
 		timer.performWithDelay(20,moveri)
 end
 
 local function movedo()
-		robo:applyForce( 0, 200, robo.x+70, robo.y+70 )
+		robot:applyForce( 0, 200, robot.x+70, robot.y+70 )
 end
 
 local function moved()
 		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
-		local robotX, robotY = robo:localToContent( 0, -70 )
+		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectd, { time=16, x=robotX, y=robotY+390} )
 		
 		timer.performWithDelay(20,movedo)	
 end
 
 local function movele()
-		robo:applyForce( -200, 0, robo.x+70, robo.y+70 )
+		robot:applyForce( -200, 0, robot.x+70, robot.y+70 )
 end
 
 local function movel()
 		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, { loops=0 } )
-		local robotX, robotY = robo:localToContent( 0, -70 )
+		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectl, { time=16, x=robotX-320, y=robotY} )
 		
 		timer.performWithDelay(20,movele)	
@@ -384,14 +389,14 @@ end
 
 function scene:resetrobot()
 		
-		transition.moveTo( robo, { time=0, x=109, y=819} )
+		transition.moveTo( robot, { time=0, x=109, y=819} )
 		timer.performWithDelay(20,restartr)	
 end
 
 
-function restartr()
+local function restartr()
 	
-		local robotX, robotY = robo:localToContent( -70, -70 )
+		local robotX, robotY = robot:localToContent( -70, -70 )
 		transition.to( myrectu, { time=16, x=robotX, y=robotY-240} )
 		transition.to( myrectl, { time=16, x=robotX-240, y=robotY} )
 		transition.to( myrectd, { time=16, x=robotX, y=robotY+240} )
@@ -416,23 +421,7 @@ end
 
 local function moverobot()
 	local max = findsize()
-	--[[for i = 1, max,1 do
-		if (fintable[i]=="up_arrow.png") then
-			--moveup()
-			timer.performWithDelay(50,moveup)
-		elseif (fintable[i]=="down_arrow.png") then
-			--moved()
-			timer.performWithDelay(50,moved)
-		elseif (fintable[i]=="left_arrow.png") then
-			--movel()
-			timer.performWithDelay(50,movel)
-		elseif (fintable[i]=="right_arrow.png") then
-			--mover()
-			timer.performWithDelay(50,mover)
-		else
-		end
-		
-	end]]--
+	
 	if not (counter>max) then
 		if (fintable[counter]=="up_arrow.png") then
 			moveup()
@@ -469,6 +458,7 @@ local function moverobot()
 	end	
 end
 local function onCollision( event )
+if ( event.phase == "began" ) then
 		if (event.object2==myrectu or event.object2==myrectd or event.object2==myrectl or event.object2==myrectr) then
 			if ( event.phase == "began" ) then
 				moverobot()
@@ -480,10 +470,15 @@ local function onCollision( event )
 				effect = "crossFade",
 				time = 500
 			}
+			
 			audio.stop(elevatorMusicplay)
 			audio.pause(backgroundMusicplay)
+			physics.stop()
 			composer.gotoScene("Search2",options)
-		else
+		elseif (event.object2==setupItems["walla"] or event.object2==setupItems["walld"] or event.object2==setupItems["wallb"] or 
+		event.object2==setupItems["wallc"] or event.object2==setupItems["wallf"] or event.object2==setupItems["wallj"] or
+		event.object2==setupItems["wall7"] or event.object2==setupItems["wall8"] or event.object2==setupItems["bottomwall"] or
+		event.object2==setupItems["topwall"] or event.object2==setupItems["leftwall"] or event.object2==setupItems["rightwall"] ) then
 			local options = {
 			isModal = true,
 			
@@ -492,9 +487,11 @@ local function onCollision( event )
 				}
 			}
 			composer.showOverlay( "fail", options )
+			print("why1")
 		end
-
+end
 end 
+
 
 
 
@@ -614,8 +611,8 @@ function scene:create( event )
 	
 	setupmap()
 		
-	--robo.collision = onLocalCollision
-	--robo:addEventListener( "collision", robo )
+	--robot.collision = onLocalCollision
+	--robot:addEventListener( "collision", robot )
 	Runtime:addEventListener( "collision", onCollision )
 	
 	setupItems["upa"]:addEventListener( "tap", mutap )
@@ -663,7 +660,7 @@ function scene:create( event )
 	sceneGroup:insert(setupItems["home"])
 	
 	--add character
-	sceneGroup:insert(robo)
+	sceneGroup:insert(robot)
 	sceneGroup:insert(science)
 	
 	--add walls
@@ -718,7 +715,46 @@ function scene:hide( event )
 				picTable[i]:removeSelf()
 			end
 		end
+		display.remove( robot)
+		robot=nil
+	
+		display.remove( myrectu)
+		myrectu=nil
+		display.remove( myrectd)
+		myrectd=nil
+		display.remove( myrectl)
+		myrectl=nil
+		display.remove( myrectr)
+		myrectr=nil
+		--scientist
+		display.remove( science)
+		science=nil
+		display.remove( setupItems["wall8"])
+		setupItems["wall8"]=nil
+		display.remove( setupItems["wall7"])
 		
+		
+		display.remove( setupItems["walla"])
+		display.remove( setupItems["wallb"])
+		display.remove( setupItems["wallc"])
+		display.remove( setupItems["walld"])
+		display.remove( setupItems["wallf"])
+		display.remove( setupItems["wallj"])
+		display.remove( setupItems["leftwall"])
+		display.remove( setupItems["rightwall"])
+		display.remove( setupItems["topwall"])
+		display.remove( setupItems["bottomwall"])
+		setupItems["wall7"]=nil
+		setupItems["wall8"]=nil
+		setupItems["walla"]=nil
+		setupItems["wallb"]=nil
+		setupItems["wallc"]=nil
+		setupItems["walld"]=nil
+		setupItems["wallf"]=nil
+		setupItems["wallj"]=nil
+		--robot
+		--physics.removeBody( robot)
+		physics.stop()
     end
 end
 

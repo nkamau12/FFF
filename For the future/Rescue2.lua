@@ -12,14 +12,17 @@ local table2 = {}
 local table3 = {}
 local fintable = {}
 local counter = 1;
-
+local robo
 local buttonTable = {}
 local picTable = {}
 local pics = 
 {	11,12,13,14,15,21,22,23,24,25,31,32,33,34,35
 }
-local setupItems = {}
-
+local setupItems2 = {}
+local myrectd
+local myrectu
+local myrectl
+local myrectr
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
@@ -29,13 +32,13 @@ local setupItems = {}
 -- -------------------------------------------------------------------------------
 local function setupPic(name, pic, xVal, yVal, hVal,wVal)
 
-	setupItems[name] = display.newImage(pic)
-	setupItems[name].anchorX = 0
-	setupItems[name].anchorY =0
-	setupItems[name].x = xVal
-	setupItems[name].y = yVal
-	setupItems[name].height = hVal
-	setupItems[name].width= wVal
+	setupItems2[name] = display.newImage(pic)
+	setupItems2[name].anchorX = 0
+	setupItems2[name].anchorY =0
+	setupItems2[name].x = xVal
+	setupItems2[name].y = yVal
+	setupItems2[name].height = hVal
+	setupItems2[name].width= wVal
 
 end
 
@@ -107,30 +110,34 @@ local function setupmap()
 		science.height=140
 		science.width=140
 
-		--robot
-		local robot= display.newImage("robot.png")
-		robot.anchorX=0
-		robot.anchorY=0
-		robot.x=109
-		robot.y=819
-		robot.height=140
-		robot.width=140
-		robot.myName="robot"
+		--robo
+		robo= display.newImage("robot.png")
+		robo.anchorX=0
+		robo.anchorY=0
+		robo.x=109
+		robo.y=819
+		robo.height=140
+		robo.width=140
+		robo.myName="robo2"
 		
-		--physics add bodies
+		
+end 
+
+local function physxget()
+	--physics add bodies
 		physics.start()
 		physics.setGravity( 0, 0 )
 		--walls
-		physics.addBody( setupItems["wall8"], "static",{bounce=0})
-		physics.addBody( setupItems["wall7"], "static",{bounce=0})
-		physics.addBody( setupItems["leftwall"], "static",{bounce=0})
-		physics.addBody( setupItems["rightwall"], "static",{bounce=0})
-		physics.addBody( setupItems["topwall"], "static",{bounce=0})
-		physics.addBody( setupItems["bottomwall"], "static",{bounce=0})
+		physics.addBody( setupItems2["wall8"], "static",{bounce=0})
+		physics.addBody( setupItems2["wall7"], "static",{bounce=0})
+		physics.addBody( setupItems2["leftwall"], "static",{bounce=0})
+		physics.addBody( setupItems2["rightwall"], "static",{bounce=0})
+		physics.addBody( setupItems2["topwall"], "static",{bounce=0})
+		physics.addBody( setupItems2["bottomwall"], "static",{bounce=0})
 		--robot
-		physics.addBody( robot,"dynamic",{bounce=0,friction=.8})
-		robot.isFixedRotation = true
-		robo=robot
+		physics.addBody( robo,"dynamic",{bounce=0,friction=.8})
+		robo.isFixedRotation = true
+		
 		--Misc
 		local robotX, robotY = robo:localToContent( -70, -70 )
 		myrectu = display.newRect( robotX, robotY-248, 1, 1)
@@ -144,8 +151,63 @@ local function setupmap()
 		
 		--scientist
 		physics.addBody( science, "static",{bounce=0})
-end 
+end
 
+
+local function addPicTo(position, name, xVal, yVal)
+	picTable[position] = display.newImage(name)
+	picTable[position].anchorX = 0.5
+	picTable[position].anchorY = 0.5
+	picTable[position].x = xVal
+	picTable[position].y = yVal
+	picTable[position].height = 120
+	picTable[position].width = 120
+	picTable[position].id = name
+
+end
+
+
+local function addPic(xVal,yVal,name,spot)
+
+	if((picTable[spot]== nil) and (picToAdd == ""))then
+		emptyloop = emptyloop + 1
+		local function onEmptyRescue( event )
+        	if not event.error then
+            	print( event.response.updatedAt )
+        	end
+    	end
+    	local dataTable = {["Rescue2"] = emptyloop }
+    	parse:updateObject("EmptyCount", myData.emptyid, dataTable, onEmptyRescue)
+	elseif(picTable[spot] == nil) then
+		addPicTo(spot, name, xVal, yVal)
+	elseif (picToAdd == "") then
+		picTable[spot]:removeSelf()
+		picTable[spot] = nil
+
+		undoloop = undoloop + 1
+		local function onUndoSearch( event )
+        	if not event.error then
+            	print( event.response.updatedAt )
+        	end
+    	end
+    	local dataTable = {["Rescue2"] = undoloop }
+    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
+	else
+		picTable[spot]:removeSelf()
+		addPicTo(spot, name, xVal, yVal)	
+
+		undoloop = undoloop + 1
+		local function onUndoSearch( event )
+        	if not event.error then
+            	print( event.response.updatedAt )
+        	end
+    	end
+    	local dataTable = {["Rescue2"] = undoloop }
+    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)		
+	end
+	picToAdd = ""
+	
+end
 
 local function handleButtonEvent( event )
 	if ( "moved" == event.phase ) then
@@ -213,60 +275,6 @@ local function handleButtonEvent( event )
     end
 end
 
-function addPicTo(position, name, xVal, yVal)
-	picTable[position] = display.newImage(name)
-	picTable[position].anchorX = 0.5
-	picTable[position].anchorY = 0.5
-	picTable[position].x = xVal
-	picTable[position].y = yVal
-	picTable[position].height = 120
-	picTable[position].width = 120
-	picTable[position].id = name
-
-end
-
-
-function addPic(xVal,yVal,name,spot)
-
-	if((picTable[spot]== nil) and (picToAdd == ""))then
-		emptyloop = emptyloop + 1
-		local function onEmptyRescue( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
-    	local dataTable = {["Rescue2"] = emptyloop }
-    	parse:updateObject("EmptyCount", myData.emptyid, dataTable, onEmptyRescue)
-	elseif(picTable[spot] == nil) then
-		addPicTo(spot, name, xVal, yVal)
-	elseif (picToAdd == "") then
-		picTable[spot]:removeSelf()
-		picTable[spot] = nil
-
-		undoloop = undoloop + 1
-		local function onUndoSearch( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
-    	local dataTable = {["Rescue2"] = undoloop }
-    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
-	else
-		picTable[spot]:removeSelf()
-		addPicTo(spot, name, xVal, yVal)	
-
-		undoloop = undoloop + 1
-		local function onUndoSearch( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
-    	local dataTable = {["Rescue2"] = undoloop }
-    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)		
-	end
-	picToAdd = ""
-	
-end
 
 local function moveu()
 		robo:applyForce( 0, -200, robo.x+300, robo.y+70 )
@@ -362,7 +370,7 @@ function scene:resetrobot()
 end
 
 
-function restartr()
+local function restartr()
 	
 		local robotX, robotY = robo:localToContent( -70, -70 )
 		transition.to( myrectu, { time=16, x=robotX, y=robotY-240} )
@@ -389,23 +397,7 @@ end
 
 local function moverobot()
 	local max = findsize()
-	--[[for i = 1, max,1 do
-		if (fintable[i]=="up_arrow.png") then
-			--moveup()
-			timer.performWithDelay(50,moveup)
-		elseif (fintable[i]=="down_arrow.png") then
-			--moved()
-			timer.performWithDelay(50,moved)
-		elseif (fintable[i]=="left_arrow.png") then
-			--movel()
-			timer.performWithDelay(50,movel)
-		elseif (fintable[i]=="right_arrow.png") then
-			--mover()
-			timer.performWithDelay(50,mover)
-		else
-		end
-		
-	end]]--
+	
 	if not (counter>max) then
 		if (fintable[counter]=="up_arrow.png") then
 			moveup()
@@ -442,9 +434,11 @@ local function moverobot()
 	end	
 end
 local function onCollision( event )
+if ( event.phase == "began" ) then
 		if (event.object2==myrectu or event.object2==myrectd or event.object2==myrectl or event.object2==myrectr) then
 			if ( event.phase == "began" ) then
 				moverobot()
+				print("stupido")
 			end
 		elseif (event.object2==science) then
 			print("Scientist")
@@ -455,7 +449,10 @@ local function onCollision( event )
 			audio.stop(elevatorMusicplay)
 			audio.pause(backgroundMusicplay)
 			composer.gotoScene("Search3",options)
-		else
+		elseif (event.object2==setupItems2["wall7"] or event.object2==setupItems2["wall8"] or event.object2==setupItems["bottomwall"] or
+		event.object2==setupItems["topwall"] or event.object2==setupItems["leftwall"] or event.object2==setupItems["rightwall"]) then
+		
+		print("why")
 			local options = {
 			isModal = true,
 			
@@ -465,12 +462,12 @@ local function onCollision( event )
 			}
 			composer.showOverlay( "fail", options )
 		end
-
+end
 end 
 
 
 
-local function merge(tablel)
+ local function merge(tablel)
 	
 	for i=1,5,1 do
 		print(tablel[i])
@@ -560,7 +557,23 @@ function scene:create( event )
 	
 	--buttons
 	
-	--one loop button
+	
+end
+
+
+-- "scene:show()"
+function scene:show( event )
+
+    local sceneGroup = self.view
+    local phase = event.phase
+
+    if ( phase == "will" ) then
+        -- Called when the scene is still off screen (but is about to come on screen).
+		
+		
+		
+    elseif ( phase == "did" ) then
+		--one loop button
 	addButton(11, 1270.21, 690.86, "oneloopBtn1")
 	addButton(12, 1402.21, 690.86, "oneloopBtn2")
 	addButton(13, 1530.21, 690.86, "oneloopBtn3")
@@ -587,15 +600,15 @@ function scene:create( event )
 	--robo:addEventListener( "collision", robo )
 	Runtime:addEventListener( "collision", onCollision )
 	
-	setupItems["upa"]:addEventListener( "tap", mutap )
-	setupItems["downa"]:addEventListener( "tap", mdtap )
-	setupItems["lefta"]:addEventListener( "tap", mltap )
-	setupItems["righta"]:addEventListener( "tap", mrtap )
-	setupItems["oneb"]:addEventListener("tap", onetap)
-	setupItems["twob"]:addEventListener("tap", twotap)
-	setupItems["threeb"]:addEventListener("tap", threetap)
-	setupItems["start"]:addEventListener("tap", pass)
-	setupItems["home"]:addEventListener("tap", gohome)
+	setupItems2["upa"]:addEventListener( "tap", mutap )
+	setupItems2["downa"]:addEventListener( "tap", mdtap )
+	setupItems2["lefta"]:addEventListener( "tap", mltap )
+	setupItems2["righta"]:addEventListener( "tap", mrtap )
+	setupItems2["oneb"]:addEventListener("tap", onetap)
+	setupItems2["twob"]:addEventListener("tap", twotap)
+	setupItems2["threeb"]:addEventListener("tap", threetap)
+	setupItems2["start"]:addEventListener("tap", pass)
+	setupItems2["home"]:addEventListener("tap", gohome)
 	
 	--add buttons
 	sceneGroup:insert(buttonTable[11])
@@ -617,47 +630,32 @@ function scene:create( event )
 	sceneGroup:insert(buttonTable[35])
 	
 	--add grid
-	sceneGroup:insert(setupItems["grida"])
-	sceneGroup:insert(setupItems["onel"])
-	sceneGroup:insert(setupItems["twol"])
-	sceneGroup:insert(setupItems["threel"])
-	sceneGroup:insert(setupItems["upa"])
-	sceneGroup:insert(setupItems["downa"])
-	sceneGroup:insert(setupItems["lefta"])
-	sceneGroup:insert(setupItems["righta"])
-	sceneGroup:insert(setupItems["oneb"])
-	sceneGroup:insert(setupItems["twob"])
-	sceneGroup:insert(setupItems["threeb"])
-	sceneGroup:insert(setupItems["start"])
-	sceneGroup:insert(setupItems["home"])
+	sceneGroup:insert(setupItems2["grida"])
+	sceneGroup:insert(setupItems2["onel"])
+	sceneGroup:insert(setupItems2["twol"])
+	sceneGroup:insert(setupItems2["threel"])
+	sceneGroup:insert(setupItems2["upa"])
+	sceneGroup:insert(setupItems2["downa"])
+	sceneGroup:insert(setupItems2["lefta"])
+	sceneGroup:insert(setupItems2["righta"])
+	sceneGroup:insert(setupItems2["oneb"])
+	sceneGroup:insert(setupItems2["twob"])
+	sceneGroup:insert(setupItems2["threeb"])
+	sceneGroup:insert(setupItems2["start"])
+	sceneGroup:insert(setupItems2["home"])
 	
 	--add character
 	sceneGroup:insert(robo)
 	sceneGroup:insert(science)
 	
 	--add walls
-	sceneGroup:insert(setupItems["wall7"])
-	sceneGroup:insert(setupItems["wall8"])
-	sceneGroup:insert(setupItems["bottomwall"])
-	sceneGroup:insert(setupItems["topwall"])
-	sceneGroup:insert(setupItems["leftwall"])
-	sceneGroup:insert(setupItems["rightwall"])
-end
-
-
--- "scene:show()"
-function scene:show( event )
-
-    local sceneGroup = self.view
-    local phase = event.phase
-
-    if ( phase == "will" ) then
-        -- Called when the scene is still off screen (but is about to come on screen).
-		
-		
-		
-    elseif ( phase == "did" ) then
-        
+	sceneGroup:insert(setupItems2["wall7"])
+	sceneGroup:insert(setupItems2["wall8"])
+	sceneGroup:insert(setupItems2["bottomwall"])
+	sceneGroup:insert(setupItems2["topwall"])
+	sceneGroup:insert(setupItems2["leftwall"])
+	sceneGroup:insert(setupItems2["rightwall"])
+        physxget()
 		
     end
 end
@@ -677,7 +675,7 @@ function scene:hide( event )
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
 		for i = 15, 1, -1 do
-			if(not(picTable[i]== nil)) then
+			if(picTable[i]~= nil) then
 				picTable[i]:removeSelf()
 			end
 		end
