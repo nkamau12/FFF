@@ -13,7 +13,7 @@ parse:init({
   apiKey = "WTmSOin1ChKS2l0CXkenSNaSwMEMy2ytEwyaBesn"
 })
 
-parse.showStatus = true
+parse.showStatus = false
 --Register when app is opened
 parse:appOpened()
 

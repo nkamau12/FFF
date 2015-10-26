@@ -228,7 +228,7 @@ function addPic(xVal,yVal,name,spot)
             	print( event.response.updatedAt )
         	end
     	end
-    	local dataTable = {["Rescue1"] = emptyloop }
+    	local dataTable = {["Rescue3"] = emptyloop }
     	parse:updateObject("EmptyCount", myData.emptyid, dataTable, onEmptyRescue)
 
 	elseif(picTable[spot] == nil) then
@@ -243,7 +243,7 @@ function addPic(xVal,yVal,name,spot)
             	print( event.response.updatedAt )
         	end
     	end
-    	local dataTable = {["Rescue1"] = undoloop }
+    	local dataTable = {["Rescue3"] = undoloop }
     	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
 		
 	else
@@ -255,7 +255,7 @@ function addPic(xVal,yVal,name,spot)
             	print( event.response.updatedAt )
         	end
     	end
-    	local dataTable = {["Rescue1"] = undoloop }
+    	local dataTable = {["Rescue3"] = undoloop }
     	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
 
 		
@@ -444,7 +444,6 @@ local function onCollision( event )
 			end
 		elseif (event.object2==science) then
 			print("Scientist")
-			parse:logEvent( "Credits", { ["screen"] = "Game"})
 			local options = {
 				effect = "crossFade",
 				time = 500
@@ -452,7 +451,7 @@ local function onCollision( event )
 			audio.stop(elevatorMusicplay)
 			audio.pause(backgroundMusicplay)
 			physics.stop()
-			composer.gotoScene("Search2",options)
+			composer.gotoScene("Credits",options)
 		else
 			local options = {
 			isModal = true,
@@ -493,7 +492,7 @@ local function pass()
             print( event.response.updatedAt )
         end
     end
-    local runsearchTable = {["Rescue1"] = runrescue }
+    local runsearchTable = {["Rescue3"] = runrescue }
     parse:updateObject("RunCount", myData.runid, runsearchTable, onRunningObject)
 
 	merge(table1)
@@ -509,7 +508,7 @@ local function gohome()
             print( event.response.updatedAt )
         end
     end
-    local dataTable = {["Rescue1"] = homerescue }
+    local dataTable = {["Rescue3"] = homerescue }
     parse:updateObject("HomeCount", myData.homeid, dataTable, onUpdateObject)
 
     local options = {

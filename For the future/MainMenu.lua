@@ -19,7 +19,6 @@ local function showSearch1()
 		effect = "fade",
 		time = 500
 	}
-		parse:logEvent( "Play", { ["screen"] = "MainMenu"})
 		composer.gotoScene("Search1",options)
 end
 

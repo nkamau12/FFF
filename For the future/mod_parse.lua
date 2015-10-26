@@ -26,7 +26,7 @@ local Parse =
 
   --Output some basic information in
   --a pop-up alert. Best for phone.
-  showAlert = true, --default: false
+  showAlert = false, --default: false
 
   --Output the Parse response as
   --JSON in the output console.
