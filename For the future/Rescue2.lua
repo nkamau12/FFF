@@ -454,8 +454,7 @@ if ( event.phase == "began" ) then
 			audio.pause(backgroundMusicplay)
 			physics.stop()
 			composer.gotoScene("Search3",options)
-		elseif (event.object2==setupItems2["wall7"] or event.object2==setupItems2["wall8"] or event.object2==setupItems2["bottomwall"] or
-		event.object2==setupItems2["topwall"] or event.object2==setupItems2["leftwall"] or event.object2==setupItems2["rightwall"]) then
+		else
 		
 		print("why")
 			local options = {

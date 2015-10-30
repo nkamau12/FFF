@@ -452,8 +452,7 @@ local function onCollision( event )
 			audio.pause(backgroundMusicplay)
 			physics.stop()
 			composer.gotoScene("Credits",options)
-		elseif (event.object2==setupItems2["bottomwall"] or
-		event.object2==setupItems2["topwall"] or event.object2==setupItems2["leftwall"] or event.object2==setupItems2["rightwall"]) then
+		else
 			local options = {
 			isModal = true,
 			

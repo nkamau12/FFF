@@ -475,10 +475,7 @@ if ( event.phase == "began" ) then
 			audio.pause(backgroundMusicplay)
 			physics.stop()
 			composer.gotoScene("Search2",options)
-		elseif (event.object2==setupItems["walla"] or event.object2==setupItems["walld"] or event.object2==setupItems["wallb"] or 
-		event.object2==setupItems["wallc"] or event.object2==setupItems["wallf"] or event.object2==setupItems["wallj"] or
-		event.object2==setupItems["wall7"] or event.object2==setupItems["wall8"] or event.object2==setupItems["bottomwall"] or
-		event.object2==setupItems["topwall"] or event.object2==setupItems["leftwall"] or event.object2==setupItems["rightwall"] ) then
+		else 
 			local options = {
 			isModal = true,
 			
