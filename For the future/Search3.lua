@@ -227,27 +227,7 @@ local function checkresult( event )
     while answer<6 do
         print(answer)
         if(spacecolor[answer] == answerkey[answer+1])then
-            if(answer == 0)then
-                resultblock[answer]= display.newImage("yellow_block.png")
-            elseif(answer == 1)then
-                resultblock[answer]= display.newImage("red_block.png")
-            elseif(answer == 2)then
-                resultblock[answer]= display.newImage("yellow_block.png")
-            elseif(answer == 3)then
-                resultblock[answer]= display.newImage("green_block.png")
-            elseif(answer == 4)then
-                resultblock[answer]= display.newImage("blue_block.png")
-            elseif(answer == 5)then
-                resultblock[answer]= display.newImage("yellow_block.png")
-            end
-            resultblock[answer].anchorX=0
-            resultblock[answer].anchorY=0
-            resultblock[answer].x= newblock[answer].x
-            resultblock[answer].y= newblock[answer].y + 207
-            resultblock[answer].height=120
-            resultblock[answer].width=120
             answer = answer + 1
-			
         else
 			local options = 
 			{
@@ -293,7 +273,7 @@ function scene:create( event )
 
     
 
-    local background = display.newImage("search_background.png")
+    local background = display.newImage("search_background_2.png")
         background.anchorX=0.5
         background.anchorY=0.5
         background.height=1080
@@ -304,7 +284,6 @@ function scene:create( event )
         
         setupmap()
         newblock = {}
-        resultblock = {}
         spacecolor = {}
         answer = 0
         undosearch = 0
@@ -330,7 +309,7 @@ function scene:create( event )
         homebutton:addEventListener("tap",gohome)
         runbutton:addEventListener("tap",checkresult)
         spotx = 631
-        spoty = 90
+        spoty = 230
         countmax = 0
 end
 
@@ -366,7 +345,6 @@ function scene:hide( event )
         -- Example: stop timers, stop animation, stop audio, etc.
         for i=8,0,-1 
         do 
-            display.remove(resultblock[i])
             display.remove(newblock[i]) 
         end
     elseif ( phase == "did" ) then

@@ -77,13 +77,13 @@ local function setupmap()
 		setupPic("righta", "right_arrow.png", 1606, 186, 122, 122)
 				
 		--one_button
-		setupPic("oneb", "one_button.png", 1261, 332, 122, 122)
+		setupPic("oneb", "one_button_white.png", 1261, 332, 122, 122)
 				
 		--two_button
-		setupPic("twob", "two_button.png", 1399, 332, 122, 122)
+		setupPic("twob", "two_button_white.png", 1399, 332, 122, 122)
 				
 		--three_button
-		setupPic("threeb", "three_button.png", 1538, 332, 122, 122)
+		setupPic("threeb", "three_button_white.png", 1538, 332, 122, 122)
 				
 		--start_button
 		setupPic("start", "start_button.png", 46, 968, 66, 246)
@@ -97,19 +97,19 @@ local function setupmap()
 		science3.anchorX=0
 		science3.anchorY=0
 		science3.x=843
-		science3.y=348
+		science3.y=100
 		science3.height=140
 		science3.width=140
 
 		--robot
-		local robot= display.newImage("robot.png")
-		robot.anchorX=0
-		robot.anchorY=0
-		robot.x=109
-		robot.y=819
-		robot.height=140
-		robot.width=140
-		robot.myName="robot"
+		robo= display.newImage("robot.png")
+		robo.anchorX=0
+		robo.anchorY=0
+		robo.x=109
+		robo.y=819
+		robo.height=140
+		robo.width=140
+		robo.myName="robot3"
 		
 		--physics add bodies
 		physics.start()
@@ -121,9 +121,8 @@ local function setupmap()
 		physics.addBody( setupItems2["topwall"], "static",{bounce=0})
 		physics.addBody( setupItems2["bottomwall"], "static",{bounce=0})
 		--robot
-		physics.addBody( robot,"dynamic",{bounce=0,friction=.8})
-		robot.isFixedRotation = true
-		robo=robot
+		physics.addBody( robo,"dynamic",{bounce=0,friction=.8})
+		robo.isFixedRotation = true
 		--Misc
 		local robotX, robotY = robo:localToContent( -70, -70 )
 		myrectu = display.newRect( robotX, robotY-248, 1, 1)
@@ -340,15 +339,15 @@ local function mltap()
 end
 
 local function onetap()
-	picToAdd = "one_button.png"
+	picToAdd = "one_button_white.png"
 end
 
 local function twotap()
-	picToAdd = "two_button.png"
+	picToAdd = "two_button_white.png"
 end
 
 local function threetap()
-	picToAdd = "three_button.png"
+	picToAdd = "three_button_white.png"
 end
 
 function scene:resetrobot()
@@ -358,7 +357,7 @@ function scene:resetrobot()
 end
 
 
-function restartr()
+local function restartr()
 	
 		local robotX, robotY = robo:localToContent( -70, -70 )
 		transition.to( myrectu, { time=16, x=robotX, y=robotY-240} )
@@ -452,6 +451,8 @@ local function onCollision( event )
 			audio.pause(backgroundMusicplay)
 			physics.stop()
 			composer.gotoScene("Credits",options)
+			myData.rescue = 0
+			myData.searchLvl = 1
 		elseif (event.object2==setupItems2["bottomwall"] or
 		event.object2==setupItems2["topwall"] or event.object2==setupItems2["leftwall"] or event.object2==setupItems2["rightwall"]) then
 			local options = {
@@ -472,11 +473,11 @@ local function merge(tablel)
 	
 	for i=1,5,1 do
 		print(tablel[i])
-		if (tablel[i]=="one_button.png") then
+		if (tablel[i]=="one_button_white.png") then
 			merge(table1)
-		elseif (tablel[i]=="two_button.png") then
+		elseif (tablel[i]=="two_button_white.png") then
 			merge(table2)
-		elseif (tablel[i]=="three_button.png") then
+		elseif (tablel[i]=="three_button_white.png") then
 			merge(table3)
 		elseif ( tablel[i]=="up_arrow.png" or tablel[i]=="down_arrow.png" or tablel[i]=="left_arrow.png" or tablel[i]=="right_arrow.png") then
 			table.insert(fintable,tablel[i])
@@ -519,6 +520,7 @@ local function gohome()
 			audio.stop(elevatorMusicplay)
 			audio.pause(backgroundMusicplay)
 			composer.gotoScene("MainMenu",optionsh)
+			myData.rescue = 1
 end
 
 local function addButton(position, xPos, yPos,idName)
@@ -657,7 +659,52 @@ function scene:show( event )
 		
 		
     elseif ( phase == "did" ) then
-        
+        if(robo == nil) then
+			elevatorMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
+			elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
+
+			robo= display.newImage("robot.png")
+			robo.anchorX=0
+			robo.anchorY=0
+			robo.x=109
+			robo.y=819
+			robo.height=140
+			robo.width=140
+			robo.myName="robo2"
+			
+			science3= display.newImage("scientist.png")
+			science3.anchorX=0
+			science3.anchorY=0
+			science3.x=843
+			science3.y=100
+			science3.height=140
+			science3.width=140
+
+			setupPic("leftwall", "side_wall.png", 43.01, 41.93, 993.04, 10)
+			setupPic("rightwall", "side_wall.png", 1026.05, 41.93, 993.04, 10)
+			setupPic("topwall", "topbottom_wall.png", 43.01, 41.93, 10, 993.04)
+			setupPic("bottomwall", "topbottom_wall.png", 43.01, 1024.97, 10, 993.04)
+
+			physics.start()
+			physics.setGravity( 0, 0 )
+
+			physics.addBody( setupItems2["leftwall"], "static",{bounce=0})
+			physics.addBody( setupItems2["rightwall"], "static",{bounce=0})
+			physics.addBody( setupItems2["topwall"], "static",{bounce=0})
+			physics.addBody( setupItems2["bottomwall"], "static",{bounce=0})
+			physics.addBody( robo,"dynamic",{bounce=0,friction=.8})
+			robo.isFixedRotation = true
+			local robotX, robotY = robo:localToContent( -70, -70 )
+			myrectu = display.newRect( robotX, robotY-248, 1, 1)
+			physics.addBody( myrectu, "static",{bounce=0})
+			myrectd = display.newRect( robotX, robotY+248, 1, 1)
+			physics.addBody( myrectd, "static",{bounce=0})
+			myrectl = display.newRect( robotX-248, robotY, 1, 1)
+			physics.addBody( myrectl, "static",{bounce=0})
+			myrectr = display.newRect( robotX+248, robotY, 1, 1)
+			physics.addBody( myrectr, "static",{bounce=0})
+			physics.addBody( science3, "static",{bounce=0})
+	end
 		
     end
 end
@@ -681,7 +728,27 @@ function scene:hide( event )
 				picTable[i]:removeSelf()
 			end
 		end
-		restartr()
+		display.remove( robo)
+		robo=nil
+		display.remove( myrectu)
+		myrectu=nil
+		display.remove( myrectd)
+		myrectd=nil
+		display.remove( myrectl)
+		myrectl=nil
+		display.remove( myrectr)
+		myrectr=nil
+		display.remove( science3)
+		science3=nil
+		display.remove( setupItems2["leftwall"])
+		display.remove( setupItems2["rightwall"])
+		display.remove( setupItems2["topwall"])
+		display.remove( setupItems2["bottomwall"])
+		setupItems2["wall10"]=nil
+		setupItems2["wall8"]=nil
+		--robot
+		--physics.removeBody( robot)
+		physics.stop()
     end
 end
 

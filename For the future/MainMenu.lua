@@ -13,25 +13,19 @@ local scene = composer.newScene()
 -- -------------------------------------------------------------------------------
 
 
-local function showSearch1()
+local function showLevel()
 	audio.pause(backgroundMusicplay)
 	local options = {
 		effect = "fade",
 		time = 500
 	}
-		composer.gotoScene("Search1",options)
+	if(myData.rescue == 1) then
+		composer.gotoScene("Rescue"..(myData.searchLvl - 1),options)
+		print("Going to Rescue "..(myData.searchLvl - 1))
+	else
+		composer.gotoScene("Search",options)
+	end
 end
-
-local function showRescue()
-	audio.pause(backgroundMusicplay)
-	local options = {
-		effect = "crossFade",
-		time = 500
-	}
-
-		composer.gotoScene("Rescue1",options)
-end
-
 
 local function showCredits()
 audio.pause(backgroundMusicplay)
@@ -129,13 +123,15 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
+        
+
 		local play = display.newImage("Play.png")
 		play.height=180
 		play.width=350
 		play.x = display.contentCenterX
 		play.y=display.contentCenterY-180
 		sceneGroup:insert(play)
-		play:addEventListener( "tap", showSearch1 )
+		play:addEventListener( "tap", showLevel )
 		
 		local tut = display.newImage("Tutorial.png")
 		tut.height=180

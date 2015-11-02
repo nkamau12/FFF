@@ -80,13 +80,13 @@ local function setupmap()
 		setupPic("righta", "right_arrow.png", 1606, 186, 122, 122)
 				
 		--one_button
-		setupPic("oneb", "one_button.png", 1261, 332, 122, 122)
+		setupPic("oneb", "one_button_white.png", 1261, 332, 122, 122)
 				
 		--two_button
-		setupPic("twob", "two_button.png", 1399, 332, 122, 122)
+		setupPic("twob", "two_button_white.png", 1399, 332, 122, 122)
 				
 		--three_button
-		setupPic("threeb", "three_button.png", 1538, 332, 122, 122)
+		setupPic("threeb", "three_button_white.png", 1538, 332, 122, 122)
 				
 		--start_button
 		setupPic("start", "start_button.png", 46, 968, 66, 246)
@@ -96,7 +96,7 @@ local function setupmap()
 		
 
 		--wall_7
-		setupPic("wall7", "locked_door_horizontal.png", 289, 848, 124, 11)
+		setupPic("wall10", "locked_door_horizontal.png", 290, 848, 124, 11)
 
 		--wall_8
 		setupPic("wall8", "locked_door_horizontal.png", 534, 602, 124, 12)
@@ -120,16 +120,11 @@ local function setupmap()
 		robo.width=140
 		robo.myName="robo2"
 		
-		
-end 
-
-local function physxget()
-	--physics add bodies
 		physics.start()
 		physics.setGravity( 0, 0 )
 		--walls
 		physics.addBody( setupItems2["wall8"], "static",{bounce=0})
-		physics.addBody( setupItems2["wall7"], "static",{bounce=0})
+		physics.addBody( setupItems2["wall10"], "static",{bounce=0})
 		physics.addBody( setupItems2["leftwall"], "static",{bounce=0})
 		physics.addBody( setupItems2["rightwall"], "static",{bounce=0})
 		physics.addBody( setupItems2["topwall"], "static",{bounce=0})
@@ -356,15 +351,15 @@ local function mltap()
 end
 
 local function onetap()
-	picToAdd = "one_button.png"
+	picToAdd = "one_button_white.png"
 end
 
 local function twotap()
-	picToAdd = "two_button.png"
+	picToAdd = "two_button_white.png"
 end
 
 local function threetap()
-	picToAdd = "three_button.png"
+	picToAdd = "three_button_white.png"
 end
 
 function scene:resetrobot()
@@ -453,8 +448,8 @@ if ( event.phase == "began" ) then
 			audio.stop(elevatorMusicplay)
 			audio.pause(backgroundMusicplay)
 			physics.stop()
-			composer.gotoScene("Search3",options)
-		elseif (event.object2==setupItems2["wall7"] or event.object2==setupItems2["wall8"] or event.object2==setupItems2["bottomwall"] or
+			composer.gotoScene("Search",options)
+		elseif (event.object2==setupItems2["wall10"] or event.object2==setupItems2["wall8"] or event.object2==setupItems2["bottomwall"] or
 		event.object2==setupItems2["topwall"] or event.object2==setupItems2["leftwall"] or event.object2==setupItems2["rightwall"]) then
 		
 		print("why")
@@ -476,11 +471,11 @@ end
 	
 	for i=1,5,1 do
 		print(tablel[i])
-		if (tablel[i]=="one_button.png") then
+		if (tablel[i]=="one_button_white.png") then
 			merge(table1)
-		elseif (tablel[i]=="two_button.png") then
+		elseif (tablel[i]=="two_button_white.png") then
 			merge(table2)
-		elseif (tablel[i]=="three_button.png") then
+		elseif (tablel[i]=="three_button_white.png") then
 			merge(table3)
 		elseif ( tablel[i]=="up_arrow.png" or tablel[i]=="down_arrow.png" or tablel[i]=="left_arrow.png" or tablel[i]=="right_arrow.png") then
 			table.insert(fintable,tablel[i])
@@ -520,6 +515,7 @@ local function gohome()
 			audio.stop(elevatorMusicplay)
 			audio.pause(backgroundMusicplay)
 			composer.gotoScene("MainMenu",optionsh)
+			myData.rescue = 1
 end
 
 local function addButton(position, xPos, yPos,idName)
@@ -561,24 +557,7 @@ function scene:create( event )
 	sceneGroup:insert(background)
 	
 	--buttons
-	
-	
-end
-
-
--- "scene:show()"
-function scene:show( event )
-
-    local sceneGroup = self.view
-    local phase = event.phase
-
-    if ( phase == "will" ) then
-        -- Called when the scene is still off screen (but is about to come on screen).
-		
-		
-		
-    elseif ( phase == "did" ) then
-		--one loop button
+	--one loop button
 	addButton(11, 1270.21, 690.86, "oneloopBtn1")
 	addButton(12, 1402.21, 690.86, "oneloopBtn2")
 	addButton(13, 1530.21, 690.86, "oneloopBtn3")
@@ -600,7 +579,7 @@ function scene:show( event )
 	addButton(35, 1790.21, 980.86, "threeloopBtn5")
 	
 	setupmap()
-		
+
 	--robo.collision = onLocalCollision
 	--robo:addEventListener( "collision", robo )
 	Runtime:addEventListener( "collision", onCollision )
@@ -648,19 +627,83 @@ function scene:show( event )
 	sceneGroup:insert(setupItems2["threeb"])
 	sceneGroup:insert(setupItems2["start"])
 	sceneGroup:insert(setupItems2["home"])
-	
+
 	--add character
 	sceneGroup:insert(robo)
 	sceneGroup:insert(science2)
 	
 	--add walls
-	sceneGroup:insert(setupItems2["wall7"])
+	sceneGroup:insert(setupItems2["wall10"])
 	sceneGroup:insert(setupItems2["wall8"])
 	sceneGroup:insert(setupItems2["bottomwall"])
 	sceneGroup:insert(setupItems2["topwall"])
 	sceneGroup:insert(setupItems2["leftwall"])
 	sceneGroup:insert(setupItems2["rightwall"])
-        physxget()
+end
+
+
+-- "scene:show()"
+function scene:show( event )
+
+    local sceneGroup = self.view
+    local phase = event.phase
+
+    if ( phase == "will" ) then
+        -- Called when the scene is still off screen (but is about to come on screen).
+		
+		
+		
+    elseif ( phase == "did" ) then
+		if(robo == nil) then
+			elevatorMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
+			elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
+
+			robo= display.newImage("robot.png")
+			robo.anchorX=0
+			robo.anchorY=0
+			robo.x=109
+			robo.y=819
+			robo.height=140
+			robo.width=140
+			robo.myName="robo2"
+			
+			science2= display.newImage("scientist.png")
+			science2.anchorX=0
+			science2.anchorY=0
+			science2.x=843
+			science2.y=840
+			science2.height=140
+			science2.width=140
+
+			setupPic("leftwall", "side_wall.png", 43.01, 41.93, 993.04, 10)
+			setupPic("rightwall", "side_wall.png", 1026.05, 41.93, 993.04, 10)
+			setupPic("topwall", "topbottom_wall.png", 43.01, 41.93, 10, 993.04)
+			setupPic("bottomwall", "topbottom_wall.png", 43.01, 1024.97, 10, 993.04)
+			setupPic("wall10", "locked_door_horizontal.png", 290, 848, 124, 11)
+			setupPic("wall8", "locked_door_horizontal.png", 534, 602, 124, 12)
+
+			physics.start()
+			physics.setGravity( 0, 0 )
+
+			physics.addBody( setupItems2["wall8"], "static",{bounce=0})
+			physics.addBody( setupItems2["wall10"], "static",{bounce=0})
+			physics.addBody( setupItems2["leftwall"], "static",{bounce=0})
+			physics.addBody( setupItems2["rightwall"], "static",{bounce=0})
+			physics.addBody( setupItems2["topwall"], "static",{bounce=0})
+			physics.addBody( setupItems2["bottomwall"], "static",{bounce=0})
+			physics.addBody( robo,"dynamic",{bounce=0,friction=.8})
+			robo.isFixedRotation = true
+			local robotX, robotY = robo:localToContent( -70, -70 )
+			myrectu = display.newRect( robotX, robotY-248, 1, 1)
+			physics.addBody( myrectu, "static",{bounce=0})
+			myrectd = display.newRect( robotX, robotY+248, 1, 1)
+			physics.addBody( myrectd, "static",{bounce=0})
+			myrectl = display.newRect( robotX-248, robotY, 1, 1)
+			physics.addBody( myrectl, "static",{bounce=0})
+			myrectr = display.newRect( robotX+248, robotY, 1, 1)
+			physics.addBody( myrectr, "static",{bounce=0})
+			physics.addBody( science2, "static",{bounce=0})
+	end
 		
     end
 end
@@ -677,6 +720,7 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
+    elseif ( phase == "did" ) then
         for i = 15, 1, -1 do
 			if(not(picTable[i]== nil)) then
 				picTable[i]:removeSelf()
@@ -693,22 +737,19 @@ function scene:hide( event )
 		myrectl=nil
 		display.remove( myrectr)
 		myrectr=nil
-		--scientist
 		display.remove( science2)
 		science2=nil
 		display.remove( setupItems2["wall8"])
-		display.remove( setupItems2["wall7"])
+		display.remove( setupItems2["wall10"])
 		display.remove( setupItems2["leftwall"])
 		display.remove( setupItems2["rightwall"])
 		display.remove( setupItems2["topwall"])
 		display.remove( setupItems2["bottomwall"])
-		setupItems2["wall7"]=nil
+		setupItems2["wall10"]=nil
 		setupItems2["wall8"]=nil
 		--robot
 		--physics.removeBody( robot)
 		physics.stop()
-    elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.
 		
 		
     end

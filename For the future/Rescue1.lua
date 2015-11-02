@@ -81,13 +81,13 @@ local function setupmap()
 		setupPic("righta", "right_arrow.png", 1606, 186, 122, 122)
 				
 		--one_button
-		setupPic("oneb", "one_button.png", 1261, 332, 122, 122)
+		setupPic("oneb", "one_button_white.png", 1261, 332, 122, 122)
 				
 		--two_button
-		setupPic("twob", "two_button.png", 1399, 332, 122, 122)
+		setupPic("twob", "two_button_white.png", 1399, 332, 122, 122)
 				
 		--three_button
-		setupPic("threeb", "three_button.png", 1538, 332, 122, 122)
+		setupPic("threeb", "three_button_white.png", 1538, 332, 122, 122)
 				
 		--start_button
 		setupPic("start", "start_button.png", 46, 968, 66, 246)
@@ -377,15 +377,15 @@ local function mltap()
 end
 
 local function onetap()
-	picToAdd = "one_button.png"
+	picToAdd = "one_button_white.png"
 end
 
 local function twotap()
-	picToAdd = "two_button.png"
+	picToAdd = "two_button_white.png"
 end
 
 local function threetap()
-	picToAdd = "three_button.png"
+	picToAdd = "three_button_white.png"
 end
 
 function scene:resetrobot()
@@ -474,7 +474,7 @@ if ( event.phase == "began" ) then
 			audio.stop(elevatorMusicplay)
 			audio.pause(backgroundMusicplay)
 			physics.stop()
-			composer.gotoScene("Search2",options)
+			composer.gotoScene("Search",options)
 		elseif (event.object2==setupItems["walla"] or event.object2==setupItems["walld"] or event.object2==setupItems["wallb"] or 
 		event.object2==setupItems["wallc"] or event.object2==setupItems["wallf"] or event.object2==setupItems["wallj"] or
 		event.object2==setupItems["wall7"] or event.object2==setupItems["wall8"] or event.object2==setupItems["bottomwall"] or
@@ -499,11 +499,11 @@ local function merge(tablel)
 	
 	for i=1,5,1 do
 		print(tablel[i])
-		if (tablel[i]=="one_button.png") then
+		if (tablel[i]=="one_button_white.png") then
 			merge(table1)
-		elseif (tablel[i]=="two_button.png") then
+		elseif (tablel[i]=="two_button_white.png") then
 			merge(table2)
-		elseif (tablel[i]=="three_button.png") then
+		elseif (tablel[i]=="three_button_white.png") then
 			merge(table3)
 		elseif ( tablel[i]=="up_arrow.png" or tablel[i]=="down_arrow.png" or tablel[i]=="left_arrow.png" or tablel[i]=="right_arrow.png") then
 			table.insert(fintable,tablel[i])
@@ -546,6 +546,7 @@ local function gohome()
 			audio.stop(elevatorMusicplay)
 			audio.pause(backgroundMusicplay)
 			composer.gotoScene("MainMenu",optionsh)
+			myData.rescue = 1
 end
 
 local function addButton(position, xPos, yPos,idName)
@@ -676,6 +677,8 @@ function scene:create( event )
 	sceneGroup:insert(setupItems["topwall"])
 	sceneGroup:insert(setupItems["leftwall"])
 	sceneGroup:insert(setupItems["rightwall"])
+
+
 end
 
 
@@ -689,9 +692,68 @@ function scene:show( event )
         -- Called when the scene is still off screen (but is about to come on screen).
 		
 		
-		
     elseif ( phase == "did" ) then
-        
+        if(robot == nil) then
+			elevatorMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
+			elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
+
+			robot= display.newImage("robot.png")
+			robot.anchorX=0
+			robot.anchorY=0
+			robot.x=109
+			robot.y=819
+			robot.height=140
+			robot.width=140
+			robot.myName="robot"
+			
+			science= display.newImage("scientist.png")
+			science.anchorX=0
+			science.anchorY=0
+			science.x=843
+			science.y=348
+			science.height=140
+			science.width=140
+
+			setupPic("leftwall", "side_wall.png", 43.01, 41.93, 993.04, 10)
+			setupPic("rightwall", "side_wall.png", 1026.05, 41.93, 993.04, 10)
+			setupPic("topwall", "topbottom_wall.png", 43.01, 41.93, 10, 993.04)
+			setupPic("bottomwall", "topbottom_wall.png", 43.01, 1024.97, 10, 993.04)
+			setupPic("walla", "locked_door_horizontal.png", 110, 288, 10, 124)
+			setupPic("wallb", "locked_door_horizontal.png", 359, 288, 11, 124)
+			setupPic("wallc", "locked_door_horizontal.png", 598, 288, 11, 124)
+			setupPic("walld", "locked_door_horizontal.png", 839, 288, 11, 124)
+			setupPic("wallf", "locked_door_horizontal.png", 359, 533, 11, 124)
+			setupPic("wallj", "locked_door_horizontal.png", 359, 777, 11, 124)
+			setupPic("wall7", "locked_door_horizontal.png", 290, 602, 124, 11)
+			setupPic("wall8", "locked_door_horizontal.png", 534, 602, 124, 12)
+
+			physics.start()
+			physics.setGravity( 0, 0 )
+			physics.addBody( setupItems["wall8"], "static",{bounce=0})
+			physics.addBody( setupItems["wall7"], "static",{bounce=0})
+			physics.addBody( setupItems["walla"], "static",{bounce=0})
+			physics.addBody( setupItems["wallb"], "static",{bounce=0})
+			physics.addBody( setupItems["wallc"], "static",{bounce=0})
+			physics.addBody( setupItems["walld"], "static",{bounce=0})
+			physics.addBody( setupItems["wallf"], "static",{bounce=0})
+			physics.addBody( setupItems["wallj"], "static",{bounce=0})
+			physics.addBody( setupItems["leftwall"], "static",{bounce=0})
+			physics.addBody( setupItems["rightwall"], "static",{bounce=0})
+			physics.addBody( setupItems["topwall"], "static",{bounce=0})
+			physics.addBody( setupItems["bottomwall"], "static",{bounce=0})
+			physics.addBody( robot,"dynamic",{bounce=0,friction=.8})
+			robot.isFixedRotation = true
+			local robotX, robotY = robot:localToContent( -70, -70 )
+			myrectu = display.newRect( robotX, robotY-248, 1, 1)
+			physics.addBody( myrectu, "static",{bounce=0})
+			myrectd = display.newRect( robotX, robotY+248, 1, 1)
+			physics.addBody( myrectd, "static",{bounce=0})
+			myrectl = display.newRect( robotX-248, robotY, 1, 1)
+			physics.addBody( myrectl, "static",{bounce=0})
+			myrectr = display.newRect( robotX+248, robotY, 1, 1)
+			physics.addBody( myrectr, "static",{bounce=0})
+			physics.addBody( science, "static",{bounce=0})
+	end
 		
     end
 end
@@ -726,14 +788,10 @@ function scene:hide( event )
 		myrectl=nil
 		display.remove( myrectr)
 		myrectr=nil
-		--scientist
 		display.remove( science)
 		science=nil
 		display.remove( setupItems["wall8"])
-		setupItems["wall8"]=nil
 		display.remove( setupItems["wall7"])
-		
-		
 		display.remove( setupItems["walla"])
 		display.remove( setupItems["wallb"])
 		display.remove( setupItems["wallc"])

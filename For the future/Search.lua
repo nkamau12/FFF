@@ -13,7 +13,7 @@ local scene = composer.newScene()
 local function setupmap()
 
         --level_map
-        levelmap = display.newImage("search1.png")
+        levelmap = display.newImage("search"..currLvl..".png")
         levelmap.anchorX=0
         levelmap.anchorY=0
         levelmap.x=194
@@ -166,7 +166,7 @@ local function removelast( event )
             print( event.response.updatedAt )
         end
     end
-    local dataTable = {["Search1"] = undosearch }
+    local dataTable = {["Search"..currLvl] = undosearch }
     parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
 
     if(countmax > answer)then
@@ -185,7 +185,7 @@ local function gohome( event )
             print( event.response.updatedAt )
         end
     end
-    local dataTable = {["Search1"] = homesearch }
+    local dataTable = {["Search"..currLvl] = homesearch }
     parse:updateObject("HomeCount", myData.homeid, dataTable, onUpdateObject)
 
     audio.stop(searchMusicplay)
@@ -200,7 +200,6 @@ local function gohome( event )
     end
     answer = 0
     spotx = 631
-    spoty = 90
     countmax = 0
     composer.gotoScene("MainMenu",options)
 end
@@ -221,7 +220,7 @@ local function checkresult( event )
             print( event.response.updatedAt )
         end
     end
-    local runsearchTable = {["Search1"] = runsearch }
+    local runsearchTable = {["Search"..currLvl] = runsearch }
     parse:updateObject("RunCount", myData.runid, runsearchTable, onRunningObject)
 
     while answer<5 do
@@ -250,18 +249,33 @@ local function checkresult( event )
         end
         answer = 0
         spotx = 631
-        spoty = 90
+        spoty = 230
         countmax = 0
-        local attribute = "Search1"
+        local attribute = "Search"..currLvl
         parse:updateObject("LevelTime", myData.timeid, {[attribute] = endTime})
-        composer.gotoScene("Rescue1",options)
+        composer.gotoScene("Rescue"..currLvl,options)
+        myData.searchLvl = currLvl + 1
+        print("Current level: "..myData.searchLvl)
     else
         answer = countmax
     end
 end
 
+local function getKey()
+    if(currLvl == 1)then
+        answerkey = {"red","green","blue","green","yellow"}
+    elseif(currLvl == 2)then
+        answerkey = {"green","green","red","yellow","blue","green","green","red"}
+    elseif(currLvl == 3)then
+        answerkey = {"yellow","red","yellow","green","blue","yellow"}
+    end
+end
+
 -- "scene:create()"
 function scene:create( event )
+
+    currLvl = myData.searchLvl
+    myData.rescue = 0
 
     local sceneGroup = self.view
     searchMusic = audio.loadStream( "bensound-slowmotion.mp3")
@@ -270,8 +284,6 @@ function scene:create( event )
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-
-    
 
     local background = display.newImage("search_background_2.png")
         background.anchorX=0.5
@@ -289,7 +301,8 @@ function scene:create( event )
         undosearch = 0
         homesearch = 0
         runsearch = 0
-        answerkey = {"red","green","blue","green","yellow"}
+
+        getKey()
 
         sceneGroup:insert(blockred)
         sceneGroup:insert(blockgreen)
@@ -316,14 +329,30 @@ end
 
 -- "scene:show()"
 function scene:show( event )
-
     local sceneGroup = self.view
     local phase = event.phase
 
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
+        currLvl = myData.searchLvl
+        myData.rescue = 0
+        if(levelmap == nil) then
+         undosearch = 0
+         homesearch = 0
+         runsearch = 0
+         searchMusic = audio.loadStream( "bensound-slowmotion.mp3")
+         searchMusicplay = audio.play( searchMusic, {  fadein = 4000, loops=-1 } )
+         levelmap = display.newImage("search"..currLvl..".png")
+         levelmap.anchorX=0
+         levelmap.anchorY=0
+         levelmap.x=194
+         levelmap.y=583
+         levelmap.height=447
+         levelmap.width=862
+        end
         
-        
+
+        getKey()
         
     elseif ( phase == "did" ) then
     
@@ -348,7 +377,13 @@ function scene:hide( event )
             display.remove(newblock[i]) 
         end
     elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.
+        
+
+        display.remove( levelmap)
+        levelmap=nil
+        
+        currLvl = nil
+
     end
 end
 

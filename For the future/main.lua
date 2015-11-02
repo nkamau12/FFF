@@ -52,6 +52,8 @@ parse:createObject("UndoCount", datatable, saveUndo)
 parse:createObject("HomeCount", datatable, saveHome)
 parse:createObject("RunCount", datatable, saveRun)
 parse:createObject("EmptyCount", datatable, saveEmpty)
+myData.searchLvl = 1
+myData.rescue = 0
 
 -- require the composer library
 local composer = require "composer"
