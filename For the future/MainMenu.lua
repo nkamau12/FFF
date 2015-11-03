@@ -20,8 +20,8 @@ local function showLevel()
 		time = 500
 	}
 	if(myData.rescue == 1) then
-		composer.gotoScene("Rescue"..(myData.searchLvl - 1),options)
-		print("Going to Rescue "..(myData.searchLvl - 1))
+		composer.gotoScene("Rescue",options)
+		print("Going to Rescue")
 	else
 		composer.gotoScene("Search",options)
 	end
