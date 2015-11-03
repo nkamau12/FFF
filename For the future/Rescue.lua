@@ -73,7 +73,7 @@ local function setupmap()
 	setupPic("home", myData.homebutton[5], myData.homebutton[1], myData.homebutton[2], myData.homebutton[3], myData.homebutton[4])
 
 	--robot
-	robot = display.newImage("robot.png")
+	robot = display.newImage("Images/robot.png")
 	robot.anchorX=0
 	robot.anchorY=0
 	robot.x=109
@@ -84,7 +84,7 @@ local function setupmap()
 
 	--scientist
 	setscience(currResc)
-	science = display.newImage("scientist.png")
+	science = display.newImage("Images/scientist.png")
 	science.anchorX=0
 	science.anchorY=0
 	science.x=myData.science[1]
@@ -275,7 +275,7 @@ local function moveu()
 end
 
 local function moveup()
-		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
+		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
 		
 		local robotX, robotY = robot:localToContent( 0, -70 )
@@ -289,7 +289,7 @@ local function moveri()
 end
 
 local function mover()
-		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
+		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
 		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectr, { time=16, x=robotX+320, y=robotY} )
@@ -302,7 +302,7 @@ local function movedo()
 end
 
 local function moved()
-		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
+		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
 		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectd, { time=16, x=robotX, y=robotY+390} )
@@ -315,7 +315,7 @@ local function movele()
 end
 
 local function movel()
-		local robotMusic = audio.loadStream( "Pew_Pew.mp3")
+		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, { loops=0 } )
 		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectl, { time=16, x=robotX-320, y=robotY} )
@@ -325,31 +325,31 @@ end
 
 
 local function mdtap()
-	picToAdd = "down_arrow.png"
+	picToAdd = "Images/down_arrow.png"
 end
 
 local function mutap()
-	picToAdd = "up_arrow.png"
+	picToAdd = "Images/up_arrow.png"
 end
 
 local function mrtap()
-	picToAdd = "right_arrow.png"
+	picToAdd = "Images/right_arrow.png"
 end
 
 local function mltap()
-	picToAdd = "left_arrow.png"
+	picToAdd = "Images/left_arrow.png"
 end
 
 local function onetap()
-	picToAdd = "one_button_white.png"
+	picToAdd = "Images/one_button_white.png"
 end
 
 local function twotap()
-	picToAdd = "two_button_white.png"
+	picToAdd = "Images/two_button_white.png"
 end
 
 local function threetap()
-	picToAdd = "three_button_white.png"
+	picToAdd = "Images/three_button_white.png"
 end
 
 
@@ -392,13 +392,13 @@ local function moverobot()
 	local max = findsize()
 	
 	if not (counter>max) then
-		if (fintable[counter]=="up_arrow.png") then
+		if (fintable[counter]=="Images/up_arrow.png") then
 			moveup()
-		elseif (fintable[counter]=="down_arrow.png") then
+		elseif (fintable[counter]=="Images/down_arrow.png") then
 			moved()
-		elseif (fintable[counter]=="left_arrow.png") then
+		elseif (fintable[counter]=="Images/left_arrow.png") then
 			movel()
-		elseif (fintable[counter]=="right_arrow.png") then
+		elseif (fintable[counter]=="Images/right_arrow.png") then
 			mover()
 		else
 			local options = {
@@ -437,6 +437,7 @@ local function onCollision( event )
 			if(currResc ~= 3) then
 				composer.gotoScene("Search",options)
 				myData.rescueLvl = currResc + 1
+				myData.searchLvl = currResc + 1
 			else
 				composer.gotoScene("Credits",options)
 			end
@@ -476,13 +477,14 @@ local function merge(tablel)
 	
 	for i=1,5,1 do
 		print(tablel[i])
-		if (tablel[i]=="one_button_white.png") then
+		if (tablel[i]=="Images/one_button_white.png") then
 			merge(table1)
-		elseif (tablel[i]=="two_button_white.png") then
+		elseif (tablel[i]=="Images/two_button_white.png") then
 			merge(table2)
-		elseif (tablel[i]=="three_button_white.png") then
+		elseif (tablel[i]=="Images/three_button_white.png") then
 			merge(table3)
-		elseif ( tablel[i]=="up_arrow.png" or tablel[i]=="down_arrow.png" or tablel[i]=="left_arrow.png" or tablel[i]=="right_arrow.png") then
+		elseif ( tablel[i]=="Images/up_arrow.png" or tablel[i]=="Images/down_arrow.png" 
+				or tablel[i]=="Images/left_arrow.png" or tablel[i]=="Images/right_arrow.png") then
 			table.insert(fintable,tablel[i])
 		else
 		end
@@ -554,7 +556,7 @@ function scene:create( event )
 	setscience(currResc)
 
     local sceneGroup = self.view
-    elevatorMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
+    elevatorMusic = audio.loadStream( "Music/bensound-theelevatorbossanova.mp3")
 	elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
     
 	picTable = {}
@@ -565,7 +567,7 @@ function scene:create( event )
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-	local background = display.newImage("rescue_background.png",system.ResourceDirectory)
+	local background = display.newImage("Images/rescue_background.png",system.ResourceDirectory)
 	background.anchorX=0.5
 	background.anchorY=0.5
 	background.height=1080
@@ -678,11 +680,11 @@ function scene:show( event )
     	currResc = myData.rescueLvl
         myData.rescue = 1
         if(robot == nil) then
-			elevatorMusic = audio.loadStream( "bensound-theelevatorbossanova.mp3")
+			elevatorMusic = audio.loadStream( "Music/bensound-theelevatorbossanova.mp3")
 			elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
 
 			--robot
-			robot = display.newImage("robot.png")
+			robot = display.newImage("Images/robot.png")
 			robot.anchorX=0
 			robot.anchorY=0
 			robot.x=109
@@ -693,7 +695,7 @@ function scene:show( event )
 
 			--scientist
 			setscience(currResc)
-			science = display.newImage("scientist.png")
+			science = display.newImage("Images/scientist.png")
 			science.anchorX=0
 			science.anchorY=0
 			science.x=myData.science[1]
@@ -747,6 +749,33 @@ function scene:show( event )
 		
 			--scientist
 			physics.addBody(science, "static",{bounce=0})
+
+
+			sceneGroup:insert(setupItems["grida"])
+			sceneGroup:insert(setupItems["onel"])
+			sceneGroup:insert(setupItems["twol"])
+			sceneGroup:insert(setupItems["threel"])
+			sceneGroup:insert(setupItems["upa"])
+			sceneGroup:insert(setupItems["downa"])
+			sceneGroup:insert(setupItems["lefta"])
+			sceneGroup:insert(setupItems["righta"])
+			sceneGroup:insert(setupItems["oneb"])
+			sceneGroup:insert(setupItems["twob"])
+			sceneGroup:insert(setupItems["threeb"])
+			sceneGroup:insert(setupItems["start"])
+			sceneGroup:insert(setupItems["home"])
+			sceneGroup:insert(robot)
+			sceneGroup:insert(science)
+			sceneGroup:insert(setupItems["bottomwall"])
+			sceneGroup:insert(setupItems["topwall"])
+			sceneGroup:insert(setupItems["leftwall"])
+			sceneGroup:insert(setupItems["rightwall"])
+			while(myData.levelkey[currResc].walls[i] ~= nil) do
+				currwall = "wall"..myData.levelkey[currResc].walls[i]
+				sceneGroup:insert(setupItems[currwall])
+				i = i + 1
+			end
+			i = 1
 		end	
 		
     elseif ( phase == "did" ) then

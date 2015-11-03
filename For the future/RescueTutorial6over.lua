@@ -10,7 +10,7 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 local function handleButtonEvent()
-		picsy = display.newImage("two_button.png")
+		picsy = display.newImage("Images/two_button_white.png")
 			picsy.anchorX = 0.5
 			picsy.anchorY = 0.5
 			picsy.x = 1402.21
@@ -28,28 +28,28 @@ function scene:create( event )
 
     local sceneGroup = self.view
 	
-	speech1= display.newImage("tutorial_rescue_6.png")
+	speech1= display.newImage("Tutorials/tutorial_rescue_6.png")
 		speech1.anchorX=0
 		speech1.anchorY=1
 		speech1.x=109
 		speech1.y=819+20
 		speech1.myName="speech1"
 		local speech1X, speech1Y = speech1:localToContent( -70, -70 )
-		nextb = display.newImage("next.png")
+		nextb = display.newImage("Tutorials/next.png")
 		nextb.anchorX=0
 		nextb.anchorY=0
 		nextb.x=speech1X-20
 		nextb.y=speech1Y+150
 		nextb.myName="nextb"
 	
-	arrow = display.newImage("alert_arrow.png")
+	arrow = display.newImage("Tutorials/alert_arrow.png")
 	arrow.anchorX=1
 	arrow.anchorY=0.5
 	arrow.x=1399
 	arrow.y=394
 	sceneGroup:insert(arrow)
 	
-	arrow2 = display.newImage("alert_arrow.png")
+	arrow2 = display.newImage("Tutorials/alert_arrow.png")
 	arrow2.anchorX=1
 	arrow2.anchorY=0.5
 	arrow2.x=1402.21 

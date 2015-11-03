@@ -27,7 +27,7 @@ function scene:create( event )
     
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-    creds = display.newImage("credits_screen.png",system.ResourceDirectory)
+    creds = display.newImage("Images/credits_screen.png",system.ResourceDirectory)
         creds.anchorX=0
         creds.anchorY=1
         creds.height=2448.6
@@ -36,7 +36,7 @@ function scene:create( event )
         creds.y=2448.6
         sceneGroup:insert(creds)
 	creds:addEventListener( "tap", bye )
-    local backgroundMusic = audio.loadStream( "bensound-slowmotion.mp3")
+    local backgroundMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
     local backgroundMusicplay = audio.play( backgroundMusic, {  fadein = 4000, loops=-1 } )
 
     timer.performWithDelay( 9000, transition.moveTo(creds, { x=0, y=1080, time=20000 } ))

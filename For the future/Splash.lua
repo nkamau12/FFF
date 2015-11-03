@@ -23,7 +23,7 @@ end
 function scene:create( event )
 
     local sceneGroup = self.view
-	local backgroundMusic = audio.loadStream( "bensound-scifi.mp3")
+	local backgroundMusic = audio.loadStream( "Music/bensound-scifi.mp3")
 	local backgroundMusicplay = audio.play( backgroundMusic, {  loops=-1 } )
 	
     -- Initialize the scene here.
@@ -42,7 +42,7 @@ function scene:show( event )
 		--local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
 		--background:setFillColor(.3,.1,.8)
 		
-		local background = display.newImage("title_background.png",system.ResourceDirectory)
+		local background = display.newImage("Images/title_background.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
 		background.height=1080

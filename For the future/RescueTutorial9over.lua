@@ -24,28 +24,28 @@ function scene:create( event )
 
     local sceneGroup = self.view
 	
-	speech1= display.newImage("tutorial_rescue_9.png")
+	speech1= display.newImage("Tutorials/tutorial_rescue_9.png")
 		speech1.anchorX=0
 		speech1.anchorY=1
 		speech1.x=109
 		speech1.y=819+20
 		speech1.myName="speech1"
 		local speech1X, speech1Y = speech1:localToContent( -70, -70 )
-		nextb = display.newImage("next.png")
+		nextb = display.newImage("Tutorials/next.png")
 		nextb.anchorX=0
 		nextb.anchorY=0
 		nextb.x=speech1X-20
 		nextb.y=speech1Y+200
 		nextb.myName="nextb"
 	
-	arrow = display.newImage("alert_arrow.png")
+	arrow = display.newImage("Tutorials/alert_arrow.png")
 	arrow.anchorX=1
 	arrow.anchorY=0.5
 	arrow.x=1192
 	arrow.y=246
 	sceneGroup:insert(arrow)
 	
-	arrow2 = display.newImage("alert_arrow_v.png")
+	arrow2 = display.newImage("Tutorials/alert_arrow_v.png")
 	arrow2.anchorX=0.5
 	arrow2.anchorY=0
 	arrow2.x=1270.21  
@@ -70,7 +70,7 @@ function scene:create( event )
 	nextb:addEventListener("tap",nextspeech)
 	
     -- Initialize the scene here.
-	pic1 = display.newImage("up_arrow.png")
+	pic1 = display.newImage("Images/up_arrow.png")
 			pic1.anchorX = 0.5
 			pic1.anchorY = 0.5
 			pic1.x = 1270.21
@@ -79,7 +79,7 @@ function scene:create( event )
 			pic1.width = 120
 		sceneGroup:insert(pic1)
 		
-		picsy = display.newImage("two_button.png")
+		picsy = display.newImage("Images/two_button_white.png")
 			picsy.anchorX = 0.5
 			picsy.anchorY = 0.5
 			picsy.x = 1402.21
@@ -89,7 +89,7 @@ function scene:create( event )
 			picsy.alpha=1
 		sceneGroup:insert(picsy)
 		
-		upa1 = display.newImage("right_arrow.png")
+		upa1 = display.newImage("Images/right_arrow.png")
 		upa1.anchorX=0.5
 		upa1.anchorY=0.5
 		upa1.x=1270.21 
@@ -98,7 +98,7 @@ function scene:create( event )
 		upa1.width=120
 		sceneGroup:insert(upa1)
 		
-		upa = display.newImage("up_arrow.png")
+		upa = display.newImage("Images/up_arrow.png")
 		upa.anchorX=0.5
 		upa.anchorY=0.5
 		upa.x=1270.21 

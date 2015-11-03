@@ -24,27 +24,27 @@ function scene:create( event )
 
     local sceneGroup = self.view
 	
-	speech1= display.newImage("tutorial_rescue_5.png")
+	speech1= display.newImage("Tutorials/tutorial_rescue_5.png")
 		speech1.anchorX=0
 		speech1.anchorY=1
 		speech1.x=109
 		speech1.y=819+20
 		speech1.myName="speech1"
 		local speech1X, speech1Y = speech1:localToContent( -70, -70 )
-		nextb = display.newImage("next.png")
+		nextb = display.newImage("Tutorials/next.png")
 		nextb.anchorX=0
 		nextb.anchorY=0
 		nextb.x=speech1X-20
 		nextb.y=speech1Y+150
 		nextb.myName="nextb"
-	arrow = display.newImage("alert_arrow.png")
+	arrow = display.newImage("Tutorials/alert_arrow.png")
 	arrow.anchorX=1
 	arrow.anchorY=0.5
 	arrow.x=1192
 	arrow.y=705
 	sceneGroup:insert(arrow)
 	
-	picsy = display.newImage("up_arrow.png")
+	picsy = display.newImage("Images/up_arrow.png")
 			picsy.anchorX = 0.5
 			picsy.anchorY = 0.5
 			picsy.x = 1270.21

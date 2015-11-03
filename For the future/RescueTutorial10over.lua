@@ -29,7 +29,7 @@ function scene:create( event )
 
     local sceneGroup = self.view
 	
-	speech1= display.newImage("tutorial_rescue_10.png")
+	speech1= display.newImage("Tutorials/tutorial_rescue_10.png")
 		speech1.anchorX=0
 		speech1.anchorY=1
 		speech1.x=109
@@ -37,21 +37,21 @@ function scene:create( event )
 		speech1.myName="speech1"
 		
 	
-	arrow = display.newImage("alert_arrow.png")
+	arrow = display.newImage("Tutorials/alert_arrow.png")
 	arrow.anchorX=1
 	arrow.anchorY=0.5
 	arrow.x=1192
 	arrow.y=246
 	sceneGroup:insert(arrow)
 	
-	arrow2 = display.newImage("alert_arrow_v.png")
+	arrow2 = display.newImage("Tutorials/alert_arrow_v.png")
 	arrow2.anchorX=0.5
 	arrow2.anchorY=0
 	arrow2.x=1530.21  
 	arrow2.y=750.86
 	sceneGroup:insert(arrow2)
 	
-	arrow3 = display.newImage("alert_arrowl.png")
+	arrow3 = display.newImage("Tutorials/alert_arrowl.png")
 	arrow3.anchorX=0
 	arrow3.anchorY=0.5
 	arrow3.x=46 +246
@@ -90,7 +90,7 @@ function scene:create( event )
 	nextb:addEventListener("tap",nextspeech)
 	
     -- Initialize the scene here.
-	pic1 = display.newImage("up_arrow.png")
+	pic1 = display.newImage("Images/up_arrow.png")
 			pic1.anchorX = 0.5
 			pic1.anchorY = 0.5
 			pic1.x = 1270.21
@@ -99,7 +99,7 @@ function scene:create( event )
 			pic1.width = 120
 		sceneGroup:insert(pic1)
 		
-		picsy = display.newImage("two_button.png")
+		picsy = display.newImage("Images/two_button_white.png")
 			picsy.anchorX = 0.5
 			picsy.anchorY = 0.5
 			picsy.x = 1402.21
@@ -109,7 +109,7 @@ function scene:create( event )
 			picsy.alpha=1
 		sceneGroup:insert(picsy)
 		
-		upa2 = display.newImage("right_arrow.png")
+		upa2 = display.newImage("Images/right_arrow.png")
 		upa2.anchorX=0.5
 		upa2.anchorY=0.5
 		upa2.x=1270.21 
@@ -118,7 +118,7 @@ function scene:create( event )
 		upa2.width=120
 		sceneGroup:insert(upa2)
 		
-		upa = display.newImage("up_arrow.png")
+		upa = display.newImage("Images/up_arrow.png")
 		upa.anchorX=0.5
 		upa.anchorY=0.5
 		upa.x=1270.21 
@@ -128,7 +128,7 @@ function scene:create( event )
 		upa.alpha=1
 		sceneGroup:insert(upa)
 		
-		upa1 = display.newImage("up_arrow.png")
+		upa1 = display.newImage("Images/up_arrow.png")
 		upa1.anchorX=0.5
 		upa1.anchorY=0.5
 		upa1.x=1530.21

@@ -37,7 +37,7 @@ local counter = 1;
 -- -------------------------------------------------------------------------------
 local function setupmap()
 		--grid
-		grida = display.newImage("rescue_grid.png")
+		grida = display.newImage("Images/rescue_grid.png")
 		grida.anchorX=0
 		grida.anchorY=0
 		grida.x=43.01
@@ -46,7 +46,7 @@ local function setupmap()
 		grida.width=993.04
 		
 		--left_wall
-		leftwall = display.newImage("side_wall.png")
+		leftwall = display.newImage("Images/side_wall.png")
 		leftwall.anchorX=0
 		leftwall.anchorY=0
 		leftwall.x=43.01
@@ -55,7 +55,7 @@ local function setupmap()
 		leftwall.width=10
 
 		--right_wall
-		rightwall = display.newImage("side_wall.png")
+		rightwall = display.newImage("Images/side_wall.png")
 		rightwall.anchorX=0
 		rightwall.anchorY=0
 		rightwall.x=1026.05
@@ -64,7 +64,7 @@ local function setupmap()
 		rightwall.width=10
 
 		--top_wall
-		topwall = display.newImage("topbottom_wall.png")
+		topwall = display.newImage("Images/topbottom_wall.png")
 		topwall.anchorX=0
 		topwall.anchorY=0
 		topwall.x=43.01
@@ -73,7 +73,7 @@ local function setupmap()
 		topwall.width=993.04
 		
 		--bottom_wall
-		bottomwall = display.newImage("topbottom_wall.png")
+		bottomwall = display.newImage("Images/topbottom_wall.png")
 		bottomwall.anchorX=0
 		bottomwall.anchorY=0
 		bottomwall.x=43.01
@@ -82,7 +82,7 @@ local function setupmap()
 		bottomwall.width=993.04
 		
 		--one_loop
-		onel = display.newImage("one_loop.png")
+		onel = display.newImage("Images/one_loop.png")
 		onel.anchorX=0
 		onel.anchorY=0
 		onel.x=1063.96
@@ -91,7 +91,7 @@ local function setupmap()
 		onel.width=805
 		
 		--two_loop
-		twol = display.newImage("two_loop.png")
+		twol = display.newImage("Images/two_loop.png")
 		twol.anchorX=0
 		twol.anchorY=0
 		twol.x=1063.96
@@ -101,7 +101,7 @@ local function setupmap()
 		
 		
 		--three_loop
-		threel = display.newImage("three_loop.png")
+		threel = display.newImage("Images/three_loop.png")
 		threel.anchorX=0
 		threel.anchorY=0
 		threel.x=1063.96
@@ -110,7 +110,7 @@ local function setupmap()
 		threel.width=805
 		
 		--up_arrow
-		upa = display.newImage("up_arrow.png")
+		upa = display.newImage("Images/up_arrow.png")
 		upa.anchorX=0
 		upa.anchorY=0
 		upa.x=1192
@@ -119,7 +119,7 @@ local function setupmap()
 		upa.width=122
 		
 		--down_arrow
-		downa = display.newImage("down_arrow.png")
+		downa = display.newImage("Images/down_arrow.png")
 		downa.anchorX=0
 		downa.anchorY=0
 		downa.x=1330
@@ -128,7 +128,7 @@ local function setupmap()
 		downa.width=122
 		
 		--left_arrow
-		lefta = display.newImage("left_arrow.png")
+		lefta = display.newImage("Images/left_arrow.png")
 		lefta.anchorX=0
 		lefta.anchorY=0
 		lefta.x=1468
@@ -137,7 +137,7 @@ local function setupmap()
 		lefta.width=122
 		
 		--right_arrow
-		righta = display.newImage("right_arrow.png")
+		righta = display.newImage("Images/right_arrow.png")
 		righta.anchorX=0
 		righta.anchorY=0
 		righta.x=1606
@@ -146,44 +146,44 @@ local function setupmap()
 		righta.width=122
 		
 		--one_button
-		oneb = display.newImage("one_button.png")
+		oneb = display.newImage("Images/one_button_white.png")
 		oneb.anchorX=0
 		oneb.anchorY=0
-		oneb.x=1261
+		oneb.x=1126
 		oneb.y=332
 		oneb.height=122
 		oneb.width=122
 		
 		--two_button
-		twob = display.newImage("two_button.png")
+		twob = display.newImage("Images/two_button_white.png")
 		twob.anchorX=0
 		twob.anchorY=0
-		twob.x=1399
+		twob.x=1264
 		twob.y=332
 		twob.height=122
 		twob.width=122
 		
 		--three_button
-		threeb = display.newImage("three_button.png")
+		threeb = display.newImage("Images/three_button_white.png")
 		threeb.anchorX=0
 		threeb.anchorY=0
-		threeb.x=1538
+		threeb.x=1403
 		threeb.y=332
 		threeb.height=122
 		threeb.width=122
 		
 		--start_button
-		start= display.newImage("start_button.png")
+		start= display.newImage("Images/run_button.png")
 		start.anchorX=0
 		start.anchorY=0
-		start.x=46
-		start.y=968
-		start.height=66
-		start.width=246
+		start.x=1542
+		start.y=332
+		start.height=122
+		start.width=320
 
 		
 		--wall_b
-		wallb= display.newImage("locked_door_horizontal.png")
+		wallb= display.newImage("Images/locked_door_horizontal.png")
 		wallb.anchorX=0
 		wallb.anchorY=0
 		wallb.x=359
@@ -192,7 +192,7 @@ local function setupmap()
 		wallb.width=124
 
 		--wall_c
-		wallc= display.newImage("locked_door_horizontal.png")
+		wallc= display.newImage("Images/locked_door_horizontal.png")
 		wallc.anchorX=0
 		wallc.anchorY=0
 		wallc.x=598
@@ -201,7 +201,7 @@ local function setupmap()
 		wallc.width=124
 
 		--wall_d
-		walld= display.newImage("locked_door_horizontal.png")
+		walld= display.newImage("Images/locked_door_horizontal.png")
 		walld.anchorX=0
 		walld.anchorY=0
 		walld.x=839
@@ -210,7 +210,7 @@ local function setupmap()
 		walld.width=124
 
 		--wall_f
-		wallf= display.newImage("locked_door_horizontal.png")
+		wallf= display.newImage("Images/locked_door_horizontal.png")
 		wallf.anchorX=0
 		wallf.anchorY=0
 		wallf.x=359
@@ -219,7 +219,7 @@ local function setupmap()
 		wallf.width=124
 
 		--wall_j
-		wallj= display.newImage("locked_door_horizontal.png")
+		wallj= display.newImage("Images/locked_door_horizontal.png")
 		wallj.anchorX=0
 		wallj.anchorY=0
 		wallj.x=359
@@ -228,7 +228,7 @@ local function setupmap()
 		wallj.width=124
 
 		--wall_7
-		wall7= display.newImage("locked_door_vertical.png")
+		wall7= display.newImage("Images/locked_door_horizontal.png")
 		wall7.anchorX=0
 		wall7.anchorY=0
 		wall7.x=290
@@ -237,7 +237,7 @@ local function setupmap()
 		wall7.width=11
 
 		--wall_8
-		wall8= display.newImage("locked_door_vertical.png")
+		wall8= display.newImage("Images/locked_door_horizontal.png")
 		wall8.anchorX=0
 		wall8.anchorY=0
 		wall8.x=534
@@ -246,7 +246,7 @@ local function setupmap()
 		wall8.width=12
 
 		--scientist
-		science= display.newImage("scientist.png")
+		science= display.newImage("Images/scientist.png")
 		science.anchorX=0
 		science.anchorY=0
 		science.x=843-(3*240)
@@ -255,7 +255,7 @@ local function setupmap()
 		science.width=140
 
 		--robot
-		robot= display.newImage("robot.png")
+		robot= display.newImage("Images/robot.png")
 		robot.anchorX=0
 		robot.anchorY=0
 		robot.x=109
@@ -294,7 +294,7 @@ function scene:create( event )
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-	local background = display.newImage("rescue_background.png",system.ResourceDirectory)
+	local background = display.newImage("Images/rescue_background.png",system.ResourceDirectory)
 	background.anchorX=0.5
 	background.anchorY=0.5
 	background.height=1080

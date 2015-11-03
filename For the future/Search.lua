@@ -13,7 +13,7 @@ local scene = composer.newScene()
 local function setupmap()
 
         --level_map
-        levelmap = display.newImage("search"..currLvl..".png")
+        levelmap = display.newImage("Images/search"..currLvl..".png")
         levelmap.anchorX=0
         levelmap.anchorY=0
         levelmap.x=194
@@ -22,7 +22,7 @@ local function setupmap()
         levelmap.width=862
 
         --red_block
-        blockred = display.newImage("red_block.png")
+        blockred = display.newImage("Images/red_block.png")
         blockred.anchorX=0
         blockred.anchorY=0
         blockred.x=1289
@@ -31,7 +31,7 @@ local function setupmap()
         blockred.width=120
 
         --green_block
-        blockgreen = display.newImage("green_block.png")
+        blockgreen = display.newImage("Images/green_block.png")
         blockgreen.anchorX=0
         blockgreen.anchorY=0
         blockgreen.x=1426
@@ -40,7 +40,7 @@ local function setupmap()
         blockgreen.width=120
 
         --blue_block
-        blockblue = display.newImage("blue_block.png")
+        blockblue = display.newImage("Images/blue_block.png")
         blockblue.anchorX=0
         blockblue.anchorY=0
         blockblue.x=1564
@@ -49,7 +49,7 @@ local function setupmap()
         blockblue.width=120
         
         --yellow_block
-        blockyellow = display.newImage("yellow_block.png")
+        blockyellow = display.newImage("Images/yellow_block.png")
         blockyellow.anchorX=0
         blockyellow.anchorY=0
         blockyellow.x=1700
@@ -58,7 +58,7 @@ local function setupmap()
         blockyellow.width=120
         
         --run_button
-        runbutton = display.newImage("run_button.png")
+        runbutton = display.newImage("Images/run_button.png")
         runbutton.anchorX=0
         runbutton.anchorY=0
         runbutton.x=1450
@@ -67,7 +67,7 @@ local function setupmap()
         runbutton.width=360
 
         --delete_button
-        deletebutton = display.newImage("delete_button.png")
+        deletebutton = display.newImage("Images/delete_button.png")
         deletebutton.anchorX=0
         deletebutton.anchorY=0
         deletebutton.x=1289
@@ -76,7 +76,7 @@ local function setupmap()
         deletebutton.width=120
 
         --home_button
-        homebutton = display.newImage("home.png")
+        homebutton = display.newImage("Images/home.png")
         homebutton.anchorX=0
         homebutton.anchorY=0
         homebutton.x=1766
@@ -88,7 +88,7 @@ end
 
 local function addred( event )
     if (countmax < 8) then
-        newblock[countmax] = display.newImage("red_block.png")
+        newblock[countmax] = display.newImage("Images/red_block.png")
         newblock[countmax].anchorX=0
         newblock[countmax].anchorY=0
         newblock[countmax].x= spotx
@@ -106,7 +106,7 @@ end
 
 local function addgreen( event )
     if (countmax < 8) then
-        newblock[countmax] = display.newImage("green_block.png")
+        newblock[countmax] = display.newImage("Images/green_block.png")
         newblock[countmax].anchorX=0
         newblock[countmax].anchorY=0
         newblock[countmax].x= spotx
@@ -124,7 +124,7 @@ end
 
 local function addblue( event )
     if (countmax < 8) then
-        newblock[countmax] = display.newImage("blue_block.png")
+        newblock[countmax] = display.newImage("Images/blue_block.png")
         newblock[countmax].anchorX=0
         newblock[countmax].anchorY=0
         newblock[countmax].x= spotx
@@ -142,7 +142,7 @@ end
 
 local function addyellow( event )
     if (countmax < 8) then
-        newblock[countmax] = display.newImage("yellow_block.png")
+        newblock[countmax] = display.newImage("Images/yellow_block.png")
         newblock[countmax].anchorX=0
         newblock[countmax].anchorY=0
         newblock[countmax].x= spotx
@@ -255,6 +255,7 @@ local function checkresult( event )
         parse:updateObject("LevelTime", myData.timeid, {[attribute] = endTime})
         composer.gotoScene("Rescue",options)
         myData.searchLvl = currLvl + 1
+        myData.rescueLvl = currLvl
         print("Current level: "..myData.searchLvl)
     else
         answer = countmax
@@ -278,14 +279,14 @@ function scene:create( event )
     myData.rescue = 0
 
     local sceneGroup = self.view
-    searchMusic = audio.loadStream( "bensound-slowmotion.mp3")
+    searchMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
     searchMusicplay = audio.play( searchMusic, {  fadein = 4000, loops=-1 } )
     
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 
-    local background = display.newImage("search_background_2.png")
+    local background = display.newImage("Images/search_background_2.png")
         background.anchorX=0.5
         background.anchorY=0.5
         background.height=1080
@@ -334,28 +335,30 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
+        
+        
+    elseif ( phase == "did" ) then
         currLvl = myData.searchLvl
         myData.rescue = 0
         if(levelmap == nil) then
-         undosearch = 0
-         homesearch = 0
-         runsearch = 0
-         searchMusic = audio.loadStream( "bensound-slowmotion.mp3")
-         searchMusicplay = audio.play( searchMusic, {  fadein = 4000, loops=-1 } )
-         levelmap = display.newImage("search"..currLvl..".png")
-         levelmap.anchorX=0
-         levelmap.anchorY=0
-         levelmap.x=194
-         levelmap.y=583
-         levelmap.height=447
-         levelmap.width=862
+            undosearch = 0
+            homesearch = 0
+            runsearch = 0
+            searchMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
+            searchMusicplay = audio.play( searchMusic, {  fadein = 4000, loops=-1 } )
+            levelmap = display.newImage("Images/search"..currLvl..".png")
+            levelmap.anchorX=0
+            levelmap.anchorY=0
+            levelmap.x=194
+            levelmap.y=583
+            levelmap.height=447
+            levelmap.width=862
+
+            sceneGroup:insert(levelmap)
         end
         
 
         getKey()
-        
-    elseif ( phase == "did" ) then
-    
         
     end
 end

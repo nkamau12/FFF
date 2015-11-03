@@ -19,12 +19,13 @@ local function showLevel()
 		effect = "fade",
 		time = 500
 	}
-	if(myData.rescue == 1) then
-		composer.gotoScene("Rescue",options)
-		print("Going to Rescue")
-	else
-		composer.gotoScene("Search",options)
-	end
+	composer.gotoScene("LevelMenu",options)
+	--if(myData.rescue == 1) then
+	--	composer.gotoScene("Rescue",options)
+	--	print("Going to Rescue")
+	--else
+	--	composer.gotoScene("Search",options)
+	--end
 end
 
 local function showCredits()
@@ -109,7 +110,7 @@ function scene:show( event )
 			
 			composer.showOverlay( "permission", options )
 		end
-		local background = display.newImage("splash_main.png",system.ResourceDirectory)
+		local background = display.newImage("Images/splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
 		background.height=1080
@@ -125,7 +126,7 @@ function scene:show( event )
         -- Example: start timers, begin animation, play audio, etc.
         
 
-		local play = display.newImage("Play.png")
+		local play = display.newImage("Images/Play.png")
 		play.height=180
 		play.width=350
 		play.x = display.contentCenterX
@@ -133,7 +134,7 @@ function scene:show( event )
 		sceneGroup:insert(play)
 		play:addEventListener( "tap", showLevel )
 		
-		local tut = display.newImage("Tutorial.png")
+		local tut = display.newImage("Images/Tutorial.png")
 		tut.height=180
 		tut.width=520
 		tut.x = display.contentCenterX
@@ -141,7 +142,7 @@ function scene:show( event )
 		sceneGroup:insert(tut)
 		tut:addEventListener( "tap", showTutorial )
 		
-		local credit = display.newImage("Credits.png")
+		local credit = display.newImage("Images/Credits.png")
 		credit.height=180
 		credit.width=430
 		credit.x = display.contentCenterX

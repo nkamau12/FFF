@@ -1,7 +1,0 @@
-local myData = require( "mydata" )
-
-
-
-
-
-

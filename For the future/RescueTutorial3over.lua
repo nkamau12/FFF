@@ -18,14 +18,14 @@ function scene:create( event )
 
     local sceneGroup = self.view
 	
-	speech1= display.newImage("tutorial_rescue_3.png")
+	speech1= display.newImage("Tutorials/tutorial_rescue_3.png")
 		speech1.anchorX=0
 		speech1.anchorY=1
 		speech1.x=109
 		speech1.y=819+20
 		speech1.myName="speech1"
 		local speech1X, speech1Y = speech1:localToContent( -70, -70 )
-		nextb = display.newImage("next.png")
+		nextb = display.newImage("Tutorials/next.png")
 		nextb.anchorX=0
 		nextb.anchorY=0
 		nextb.x=speech1X-20

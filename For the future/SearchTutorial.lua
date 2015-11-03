@@ -11,7 +11,7 @@ local scene = composer.newScene()
 local function setupmap()
 
         --level_map
-        levelmap = display.newImage("search1.png")
+        levelmap = display.newImage("Images/search1.png")
         levelmap.anchorX=0
         levelmap.anchorY=0
         levelmap.x=194
@@ -20,7 +20,7 @@ local function setupmap()
         levelmap.width=862
 
         --red_block
-        blockred = display.newImage("red_block.png")
+        blockred = display.newImage("Images/red_block.png")
         blockred.anchorX=0
         blockred.anchorY=0
         blockred.x=1289
@@ -29,7 +29,7 @@ local function setupmap()
         blockred.width=120
 
         --green_block
-        blockgreen = display.newImage("green_block.png")
+        blockgreen = display.newImage("Images/green_block.png")
         blockgreen.anchorX=0
         blockgreen.anchorY=0
         blockgreen.x=1426
@@ -38,7 +38,7 @@ local function setupmap()
         blockgreen.width=120
 
         --blue_block
-        blockblue = display.newImage("blue_block.png")
+        blockblue = display.newImage("Images/blue_block.png")
         blockblue.anchorX=0
         blockblue.anchorY=0
         blockblue.x=1564
@@ -47,7 +47,7 @@ local function setupmap()
         blockblue.width=120
         
         --yellow_block
-        blockyellow = display.newImage("yellow_block.png")
+        blockyellow = display.newImage("Images/yellow_block.png")
         blockyellow.anchorX=0
         blockyellow.anchorY=0
         blockyellow.x=1700
@@ -56,7 +56,7 @@ local function setupmap()
         blockyellow.width=120
         
         --run_button
-        runbutton = display.newImage("run_button.png")
+        runbutton = display.newImage("Images/run_button.png")
         runbutton.anchorX=0
         runbutton.anchorY=0
         runbutton.x=1450
@@ -65,7 +65,7 @@ local function setupmap()
         runbutton.width=360
 
         --delete_button
-        deletebutton = display.newImage("delete_button.png")
+        deletebutton = display.newImage("Images/delete_button.png")
         deletebutton.anchorX=0
         deletebutton.anchorY=0
         deletebutton.x=1289
@@ -77,7 +77,7 @@ end
 
 local function addred( event )
     if (countmax < 8) then
-        newblock[countmax] = display.newImage("red_block.png")
+        newblock[countmax] = display.newImage("Images/red_block.png")
         newblock[countmax].anchorX=0
         newblock[countmax].anchorY=0
         newblock[countmax].x= spotx
@@ -95,7 +95,7 @@ end
 
 local function addgreen( event )
     if (countmax < 8) then
-        newblock[countmax] = display.newImage("green_block.png")
+        newblock[countmax] = display.newImage("Images/green_block.png")
         newblock[countmax].anchorX=0
         newblock[countmax].anchorY=0
         newblock[countmax].x= spotx
@@ -113,7 +113,7 @@ end
 
 local function addblue( event )
     if (countmax < 8) then
-        newblock[countmax] = display.newImage("blue_block.png")
+        newblock[countmax] = display.newImage("Images/blue_block.png")
         newblock[countmax].anchorX=0
         newblock[countmax].anchorY=0
         newblock[countmax].x= spotx
@@ -131,7 +131,7 @@ end
 
 local function addyellow( event )
     if (countmax < 8) then
-        newblock[countmax] = display.newImage("yellow_block.png")
+        newblock[countmax] = display.newImage("Images/yellow_block.png")
         newblock[countmax].anchorX=0
         newblock[countmax].anchorY=0
         newblock[countmax].x= spotx
@@ -170,15 +170,15 @@ local function checkresult( event )
         print(answer)
         if(spacecolor[answer] == answerkey[answer+1])then
             if(answer == 0)then
-                resultblock[answer]= display.newImage("red_block.png")
+                resultblock[answer]= display.newImage("Images/red_block.png")
             elseif(answer == 1)then
-                resultblock[answer]= display.newImage("green_block.png")
+                resultblock[answer]= display.newImage("Images/green_block.png")
             elseif(answer == 2)then
-                resultblock[answer]= display.newImage("blue_block.png")
+                resultblock[answer]= display.newImage("Images/blue_block.png")
             elseif(answer == 3)then
-                resultblock[answer]= display.newImage("green_block.png")
+                resultblock[answer]= display.newImage("Images/green_block.png")
             elseif(answer == 4)then
-                resultblock[answer]= display.newImage("yellow_block.png")
+                resultblock[answer]= display.newImage("Images/yellow_block.png")
             end
             resultblock[answer].anchorX=0
             resultblock[answer].anchorY=0
@@ -225,7 +225,7 @@ function scene:create( event )
 			
 			composer.showOverlay( "SearchTutorial1", options )
 
-    local background = display.newImage("search_background.png")
+    local background = display.newImage("Images/search_background_2.png")
         background.anchorX=0.5
         background.anchorY=0.5
         background.height=1080
