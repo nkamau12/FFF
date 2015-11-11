@@ -8,7 +8,7 @@ end
 function scene:create( event )
 
     local sceneGroup = self.view
-	local background = display.newImage("splash_main.png",system.ResourceDirectory)
+	local background = display.newImage("Images/theme_red/splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
 		background.height=1080-500
