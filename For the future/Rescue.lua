@@ -404,14 +404,14 @@ local function moverobot()
 			local options = {
 			isModal = true
 			}
-			composer.showOverlay( "fail1", options )
+			composer.showOverlay( "fail_rescue_scientist", options )
 		end
 		counter=counter+1
 	else
 		local options = {
 			isModal = true
 			}
-			composer.showOverlay( "fail", options )
+			composer.showOverlay( "fail_rescue_path", options )
 	end	
 end
 
@@ -435,7 +435,7 @@ local function onCollision( event )
 			physics.stop()
 
 			if(currResc ~= 3) then
-				composer.gotoScene("Search",options)
+				composer.showOverlay("pass_rescue",options)
 				myData.rescueLvl = currResc + 1
 				myData.searchLvl = currResc + 1
 			else

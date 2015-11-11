@@ -8,13 +8,7 @@ end
 function scene:create( event )
 
     local sceneGroup = self.view
-	local background = display.newImage("splash_main.png",system.ResourceDirectory)
-		background.anchorX=0.5
-		background.anchorY=0.5
-		background.height=1080-500
-		background.width=1920-888
-		background.x= display.contentCenterX
-		background.y=display.contentCenterY
+	local background = display.newRect(display.contentCenterX, display.contentCenterY,1920-888,1080-500)
 	background:setFillColor(grey,0.5)
 	sceneGroup:insert(background)
 	local trial=display.newText("Sorry that path is blocked",display.contentCenterX,display.contentCenterY)

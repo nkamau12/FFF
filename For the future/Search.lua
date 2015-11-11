@@ -253,7 +253,7 @@ local function checkresult( event )
         countmax = 0
         local attribute = "Search"..currLvl
         parse:updateObject("LevelTime", myData.timeid, {[attribute] = endTime})
-        composer.gotoScene("Rescue",options)
+		composer.showOverlay("pass_search", options)
         myData.searchLvl = currLvl + 1
         myData.rescueLvl = currLvl
         print("Current level: "..myData.searchLvl)
