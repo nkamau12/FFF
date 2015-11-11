@@ -68,21 +68,21 @@ local sciencex
 local sciencey
 
 -- myData.objectname = {xVal, yVal, hVal, wVal, imageFile}
---        (1)   (2)   (3)   (4)
---       _____ __topwall__ _____
---      |     |     |     |     |
---  (w)   |     |1    |2    |3    |r
---     l|__A__|__B__|__C__|__D__|i
---     e|     |     |     |     |g
---  (x)  f|     |4    |5    |6    |h
---     t|__E__|__F__|__G__|__H__|t
---     w|     |     |     |     |w
---  (y)  a|     |7    |8    |9    |a
---     l|__I__|__J__|__K__|__L__|l
---     l|     |     |     |     |l
---  (z)   |     |10   |11   |12   |
---      |_____|_____|_____|_____|
---           bottomwall
+--         (1)   (2)   (3)   (4)
+--        _____ __topwall__ _____
+--       |     |     |     |     |
+--  (w)  |     |1    |2    |3    |r
+--      l|__A__|__B__|__C__|__D__|i
+--      e|     |     |     |     |g
+--  (x) f|     |4    |5    |6    |h
+--      t|__E__|__F__|__G__|__H__|t
+--      w|     |     |     |     |w
+--  (y) a|     |7    |8    |9    |a
+--      l|__I__|__J__|__K__|__L__|l
+--      l|     |     |     |     |l
+--  (z)  |     |10   |11   |12   |
+--       |_____|_____|_____|_____|
+--              bottomwall
 function setObjects()
   --horizontal walls
   myData.walla = {110, 288, 10, 124, "Images/locked_door_horizontal.png"}
@@ -114,10 +114,10 @@ function setObjects()
 
   --outer walls
   myData.grida = {43.01, 41.93, 993.04, 993.04,"Images/rescue_grid.png"}
-  myData.leftwall = {43.01, 41.93, 993.04, 10,"Images/side_wall.png"}
-  myData.rightwall = {1026.05, 41.93, 993.04, 10,"Images/side_wall.png"}
-  myData.topwall = {43.01, 41.93, 10, 993.04,"Images/topbottom_wall.png"}
-  myData.bottomwall = {43.01, 1024.97, 10, 993.04,"Images/topbottom_wall.png"}
+  myData.leftwall = {43.01, 41.93, 993.04, 10,"Images/theme_red/left_wall.png"}
+  myData.rightwall = {1026.05, 41.93, 993.04, 10,"Images/theme_red/left_wall.png"}
+  myData.topwall = {43.01, 41.93, 10, 993.04,"Images/theme_red/topbottom_wall.png"}
+  myData.bottomwall = {43.01, 1024.97, 10, 993.04,"Images/theme_red/topbottom_wall.png"}
 
   --loop objects
   myData.oneloop = {1063.96, 625, 133, 805,"Images/one_loop.png"}
@@ -136,10 +136,10 @@ function setObjects()
   myData.startbutton = {1542, 332, 122, 320, "Images/run_button.png"}
 
   --robot
-  myData.robot = {109, 819, 140, 140, "Images/robot.png"}
+  myData.robot = {109, 819, 140, 140, "Images/robot_potato.png"}
 
   --scientist
-  myData.science = {nil, nil, 140, 140, "Images/scientist.png"}
+  myData.science = {nil, nil, 140, 140, "Images/scientist_sadface.png"}
 
   --Level keys
   myData.levelkey = {

@@ -87,7 +87,7 @@ function scene:create( event )
     	maxrsc = myData.rescueLvl
     end
 
-    local background = display.newImage("Images/levels_menu.png",system.ResourceDirectory)
+    local background = display.newImage("Images/theme_red/levels_menu.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
 		background.height=1080

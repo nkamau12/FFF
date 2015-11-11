@@ -286,7 +286,7 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 
-    local background = display.newImage("Images/search_background_2.png")
+    local background = display.newImage("Images/theme_red/search_background.png")
         background.anchorX=0.5
         background.anchorY=0.5
         background.height=1080

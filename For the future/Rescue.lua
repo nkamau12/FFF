@@ -73,7 +73,7 @@ local function setupmap()
 	setupPic("home", myData.homebutton[5], myData.homebutton[1], myData.homebutton[2], myData.homebutton[3], myData.homebutton[4])
 
 	--robot
-	robot = display.newImage("Images/robot.png")
+	robot = display.newImage("Images/robot_potato.png")
 	robot.anchorX=0
 	robot.anchorY=0
 	robot.x=109
@@ -84,7 +84,7 @@ local function setupmap()
 
 	--scientist
 	setscience(currResc)
-	science = display.newImage("Images/scientist.png")
+	science = display.newImage("Images/scientist_sadface.png")
 	science.anchorX=0
 	science.anchorY=0
 	science.x=myData.science[1]
@@ -567,7 +567,7 @@ function scene:create( event )
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-	local background = display.newImage("Images/rescue_background.png",system.ResourceDirectory)
+	local background = display.newImage("Images/theme_red/rescue_background.png",system.ResourceDirectory)
 	background.anchorX=0.5
 	background.anchorY=0.5
 	background.height=1080
@@ -684,7 +684,7 @@ function scene:show( event )
 			elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
 
 			--robot
-			robot = display.newImage("Images/robot.png")
+			robot = display.newImage("Images/robot_potato.png")
 			robot.anchorX=0
 			robot.anchorY=0
 			robot.x=109
@@ -695,7 +695,7 @@ function scene:show( event )
 
 			--scientist
 			setscience(currResc)
-			science = display.newImage("Images/scientist.png")
+			science = display.newImage("Images/scientist_sadface.png")
 			science.anchorX=0
 			science.anchorY=0
 			science.x=myData.science[1]

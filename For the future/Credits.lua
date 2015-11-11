@@ -27,10 +27,10 @@ function scene:create( event )
     
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-    creds = display.newImage("Images/credits_screen.png",system.ResourceDirectory)
+    creds = display.newImage("Images/theme_red/credits_screen.png",system.ResourceDirectory)
         creds.anchorX=0
         creds.anchorY=1
-        creds.height=2448.6
+        creds.height=2615.227
         creds.width=1920
         creds.x= 0
         creds.y=2448.6
