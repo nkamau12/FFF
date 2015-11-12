@@ -20,12 +20,6 @@ local function showLevel()
 		time = 500
 	}
 	composer.gotoScene("GamesMenu",options)
-	--if(myData.rescue == 1) then
-	--	composer.gotoScene("Rescue",options)
-	--	print("Going to Rescue")
-	--else
-	--	composer.gotoScene("Search",options)
-	--end
 end
 
 local function showCredits()

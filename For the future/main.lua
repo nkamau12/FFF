@@ -141,11 +141,15 @@ function setObjects()
   --scientist
   myData.science = {nil, nil, 140, 140, "Images/scientist_sadface.png"}
 
+  --key
+  myData.key = {nil, nil, 124, 140, "Images/key.png"}
+
   --Level keys
   myData.levelkey = {
-    { walls = {'a','b','c','d','f','j',7,8}, scientist = {4, 'x'}}, -- level 1
-    { walls = {8,10},              scientist = {4, 'z'}}, -- level 2
-    { walls = {},                scientist = {4, 'w'}}  -- level 3
+    { walls = {'a','b','c','d','f','j',7,8}, scientist = {4, 'x'}, key = {nil,nil}}, -- level 1
+    { walls = {8,10},                     scientist = {4, 'z'}, key = {nil,nil}}, -- level 2
+    { walls = {},                         scientist = {4, 'w'}, key = {nil,nil}},  -- level 3
+    { walls = {'e','f','g','h','l',9,12}, scientist = {4, 'y'}, key = {3,'y'}}  -- level 4
   }
 end
 
@@ -174,8 +178,38 @@ function setscience(level)
   end
 end
 
+function setkey(level)
+  lvl = level
+  keyx = myData.levelkey[lvl].key[1]
+  if(keyx == nil) then
+    myData.key[1] = nil
+  elseif(keyx == 1) then
+    myData.key[1] = 100
+  elseif(keyx == 2) then
+    myData.key[1] = 347
+  elseif(keyx == 3) then
+    myData.key[1] = 595
+  elseif(keyx == 4) then
+    myData.key[1] = 843
+  end
+
+  keyy = myData.levelkey[lvl].key[2]
+  if(keyy == nil) then
+    myData.key[2] = nil
+  elseif(keyy == 'w') then
+    myData.key[2] = 100
+  elseif(keyy == 'x') then
+    myData.key[2] = 348
+  elseif(keyy == 'y') then
+    myData.key[2] = 596
+  elseif(keyy == 'z') then
+    myData.key[2] = 840
+  end
+end
+
 setObjects()
 setscience(1)
+setkey(1)
 
 
 -- require the composer library

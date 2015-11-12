@@ -90,6 +90,19 @@ local function setupmap()
 	science.height=140
 	science.width=140
 
+	--keys
+	setkey(currResc)
+	if(myData.key[1] ~= nil)then
+		key = display.newImage("Images/key.png")
+		key.anchorX=0
+		key.anchorY=0
+		key.x=myData.key[1]
+		key.y=myData.key[2]
+		key.height=124
+		key.width=140
+	else
+	end
+
 	--walls
 	i = 1
 	while(myData.levelkey[currResc].walls[i] ~= nil) do
@@ -108,18 +121,6 @@ local function setupmap()
 	--physics add bodies
 	physics.start()
 	physics.setGravity( 0, 0 )
-
-	--walls physics
-	physics.addBody( setupItems["leftwall"], "static",{bounce=0})
-	physics.addBody( setupItems["rightwall"], "static",{bounce=0})
-	physics.addBody( setupItems["topwall"], "static",{bounce=0})
-	physics.addBody( setupItems["bottomwall"], "static",{bounce=0})
-	while(myData.levelkey[currResc].walls[i] ~= nil) do
-		currwall = "wall"..(myData.levelkey[currResc].walls[i])
-		physics.addBody( setupItems[currwall], "static",{bounce=0})
-		i = i + 1
-	end
-	i = 1
 		
 	--robot
 	physics.addBody(robot,"dynamic",{bounce=0,friction=.8})
@@ -136,6 +137,23 @@ local function setupmap()
 	myrectr = display.newRect( robotX+248, robotY, 1, 1)
 	physics.addBody( myrectr, "static",{bounce=0})
 		
+	--keys
+	if(myData.key[1] ~= nil)then
+		physics.addBody(key, "static",{bounce=0})
+	end
+
+	--walls physics
+	physics.addBody( setupItems["leftwall"], "static",{bounce=0})
+	physics.addBody( setupItems["rightwall"], "static",{bounce=0})
+	physics.addBody( setupItems["topwall"], "static",{bounce=0})
+	physics.addBody( setupItems["bottomwall"], "static",{bounce=0})
+	while(myData.levelkey[currResc].walls[i] ~= nil) do
+		currwall = "wall"..(myData.levelkey[currResc].walls[i])
+		physics.addBody( setupItems[currwall], "static",{bounce=0})
+		i = i + 1
+	end
+	i = 1
+
 	--scientist
 	physics.addBody(science, "static",{bounce=0})
 end 
@@ -441,26 +459,29 @@ local function moverobot()
 	end	
 end
 
-
-
 local function onCollision( event )
 	if ( event.phase == "began" ) then
 		if (event.object2==myrectu or event.object2==myrectd or event.object2==myrectl or event.object2==myrectr) then
 			if ( event.phase == "began" ) then
 				moverobot()
 			end
+		elseif (event.object2==key) then
+			keyscount = keyscount + 1
+			print("keys count: "..keyscount)
+			event.object2:removeSelf()
+			counter = counter - 1
+			moverobot()
+
 		elseif (event.object2==science) then
 			print("Scientist")
 			local options = {
 				effect = "crossFade",
 				time = 500
 			}
-			
 			audio.stop(elevatorMusicplay)
 			audio.pause(backgroundMusicplay)
 			physics.stop()
-
-			if(currResc ~= 3) then
+			if(currResc ~= 4) then
 				for h = 15, 1, -1 do
 					if(picTable[h] ~= nil) then
 						picTable[h]:removeSelf()
@@ -482,7 +503,6 @@ local function onCollision( event )
 				or event.object2==setupItems["leftwall"] or event.object2==setupItems["rightwall"] ) then
 			local options = {
 			isModal = true,
-			
 			params = {
 			sampleVar = "my sample variable"
 				}
@@ -491,14 +511,21 @@ local function onCollision( event )
 			print("why1")
 
 		else
-			while(myData.levelkey.walls[i] ~= nil) do
-				currwall = "wall"..myData.levelkey.walls[i]
+			while(myData.levelkey[currResc].walls[i] ~= nil) do
+				currwall = "wall"..myData.levelkey[currResc].walls[i]
 				if(event.object2==setupItems[currwall]) then
-					local options = {
-					isModal = true
-					}
-					composer.showOverlay( "fail", options )
-					print("why1")
+					if(keyscount > 0)then
+						event.object2:removeSelf()
+						keyscount = keyscount - 1
+						counter = counter - 1
+						moverobot()
+					else
+						local options = {
+						isModal = true
+						}
+						composer.showOverlay( "fail", options )
+						print("why1")
+					end
 				end
 				i = i + 1
 			end
@@ -600,6 +627,7 @@ function scene:create( event )
 	runrescue = 0
 	undoloop = 0
 	emptyloop = 0
+	keyscount = 0
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
