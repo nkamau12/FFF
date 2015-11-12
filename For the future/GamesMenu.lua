@@ -13,22 +13,16 @@ local scene = composer.newScene()
 -- -------------------------------------------------------------------------------
 
 
-local function showLevel()
+local function showSingle()
 	audio.pause(backgroundMusicplay)
 	local options = {
 		effect = "fade",
 		time = 500
 	}
-	composer.gotoScene("GamesMenu",options)
-	--if(myData.rescue == 1) then
-	--	composer.gotoScene("Rescue",options)
-	--	print("Going to Rescue")
-	--else
-	--	composer.gotoScene("Search",options)
-	--end
+	composer.gotoScene("LevelMenu",options)
 end
 
-local function showCredits()
+local function showMulti()
 audio.pause(backgroundMusicplay)
 	local options = {
 		effect = "crossFade",
@@ -37,16 +31,7 @@ audio.pause(backgroundMusicplay)
 composer.gotoScene("Credits",options)
 end
 
-local function showTutorial()
-	audio.pause(backgroundMusicplay)
-	local options = {
-		effect = "crossFade",
-		time = 500
-	}
-		composer.gotoScene("TutorialsMenu",options)
-end
-
-local function showScores()
+local function showBonus()
 	audio.pause(backgroundMusicplay)
 	local options = {
 		effect = "crossFade",
@@ -55,48 +40,12 @@ local function showScores()
 		composer.gotoScene("Credits",options)
 end
 
-local function showStore()
-	audio.pause(backgroundMusicplay)
-	local options = {
-		effect = "crossFade",
-		time = 500
-	}
-		composer.gotoScene("Credits",options)
-end
-
-
-
-function check1()
-    if (dir == nil) then
-        dir = system.DocumentsDirectory;
-    end
-
-    local path = system.pathForFile( "agree.json", dir)
-    local contents = ""
-    local myTable = {}
-    local file = io.open( path, "r" )
-    if file then
-		
-         -- read all contents of file into a string
-         local contents = file:read( "*a" )
-		 
-         myTable = JSON.decode(contents);
-         io.close( file )
-         return myTable 
-    end
-    return nil
-end
-function update()
-    local path = system.pathForFile( "agree.json", system.DocumentsDirectory)
-    local file = io.open(path, "w")
-    if file then
-        local contents = JSON.encode("0")
-        file:write( contents )
-        io.close( file )
-        return true
-    else
-        return false
-    end
+local function gohome( event )
+    local options = {
+            effect = "crossFade",
+            time = 500
+    }
+    composer.gotoScene("MainMenu",options)
 end
 
 
@@ -119,15 +68,6 @@ function scene:show( event )
         -- Called when the scene is still off screen (but is about to come on screen).
 		--local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
 		--background:setFillColor(.3,.1,.8)
-		if (check1()=="1") then
-		
-		else
-		local options = {
-			isModal = true,
-				}
-			
-			composer.showOverlay( "permission", options )
-		end
 		local background = display.newImage("Images/theme_red/splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
@@ -136,55 +76,48 @@ function scene:show( event )
 		background.x= display.contentCenterX
 		background.y=display.contentCenterY
 		sceneGroup:insert(background)
+
+		--home_button
+        homebutton = display.newImage("Images/home.png")
+        homebutton.anchorX=0
+        homebutton.anchorY=0
+        homebutton.x=1700
+        homebutton.y=180
+        homebutton.height=121
+        homebutton.width=121
+        sceneGroup:insert(homebutton)
+		homebutton:addEventListener( "tap", gohome )
 		
+		local play = display.newImage("Images/singleplayer.png")
+		play.height=163
+		play.width=830
+		play.x = display.contentCenterX
+		play.y=display.contentCenterY-180
+		sceneGroup:insert(play)
+		play:addEventListener( "tap", showSingle )
+		
+		local tut = display.newImage("Images/multiplayer.png")
+		tut.height=163
+		tut.width=706
+		tut.x = display.contentCenterX
+		tut.y=display.contentCenterY+20
+		sceneGroup:insert(tut)
+		tut:addEventListener( "tap", showMulti )
+		
+		local credit = display.newImage("Images/bonuslevels.png")
+		credit.height=163
+		credit.width=809
+		credit.x = display.contentCenterX
+		credit.y=display.contentCenterY+240
+		sceneGroup:insert(credit)
+		credit:addEventListener( "tap", showBonus )
+		
+		audio.resume(backgroundMusicplay)
 		
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-        
-
-		local play = display.newImage("Images/Play.png")
-		play.height=180
-		play.width=350
-		play.x = display.contentCenterX
-		play.y=display.contentCenterY-160
-		sceneGroup:insert(play)
-		play:addEventListener( "tap", showLevel )
-		
-		local tut = display.newImage("Images/Tutorial.png")
-		tut.height=163
-		tut.width=528
-		tut.x = display.contentCenterX - 435
-		tut.y=display.contentCenterY+40
-		sceneGroup:insert(tut)
-		tut:addEventListener( "tap", showTutorial )
-		
-		local scores = display.newImage("Images/scores.png")
-		scores.height=163
-		scores.width=416
-		scores.x = display.contentCenterX - 435
-		scores.y=display.contentCenterY+260
-		sceneGroup:insert(scores)
-		scores:addEventListener( "tap", showScores )
-
-		local credit = display.newImage("Images/Credits.png")
-		credit.height=163
-		credit.width=470
-		credit.x = display.contentCenterX + 435
-		credit.y=display.contentCenterY+260
-		sceneGroup:insert(credit)
-		credit:addEventListener( "tap", showCredits )
-
-		local store = display.newImage("Images/store.png")
-		store.height=163
-		store.width=353
-		store.x = display.contentCenterX + 435
-		store.y=display.contentCenterY+40
-		sceneGroup:insert(store)
-		store:addEventListener( "tap", showStore )
-		
-		audio.resume(backgroundMusicplay)
 		
     end
 end
