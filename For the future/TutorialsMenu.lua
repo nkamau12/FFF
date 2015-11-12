@@ -13,72 +13,30 @@ local scene = composer.newScene()
 -- -------------------------------------------------------------------------------
 
 
-local function showLevel()
+local function showSearch()
 	audio.pause(backgroundMusicplay)
 	local options = {
 		effect = "fade",
 		time = 500
 	}
-	composer.gotoScene("GamesMenu",options)
-	--if(myData.rescue == 1) then
-	--	composer.gotoScene("Rescue",options)
-	--	print("Going to Rescue")
-	--else
-	--	composer.gotoScene("Search",options)
-	--end
+	composer.gotoScene("SearchTutorial",options)
 end
 
-local function showCredits()
+local function showRescue()
 audio.pause(backgroundMusicplay)
 	local options = {
 		effect = "crossFade",
 		time = 500
 	}
-composer.gotoScene("Credits",options)
+composer.gotoScene("RescueTutorial",options)
 end
 
-local function showTutorial()
-	audio.pause(backgroundMusicplay)
-	local options = {
-		effect = "crossFade",
-		time = 500
-	}
-		composer.gotoScene("TutorialsMenu",options)
-end
-
-
-
-function check1()
-    if (dir == nil) then
-        dir = system.DocumentsDirectory;
-    end
-
-    local path = system.pathForFile( "agree.json", dir)
-    local contents = ""
-    local myTable = {}
-    local file = io.open( path, "r" )
-    if file then
-		
-         -- read all contents of file into a string
-         local contents = file:read( "*a" )
-		 
-         myTable = JSON.decode(contents);
-         io.close( file )
-         return myTable 
-    end
-    return nil
-end
-function update()
-    local path = system.pathForFile( "agree.json", system.DocumentsDirectory)
-    local file = io.open(path, "w")
-    if file then
-        local contents = JSON.encode("0")
-        file:write( contents )
-        io.close( file )
-        return true
-    else
-        return false
-    end
+local function gohome( event )
+    local options = {
+            effect = "crossFade",
+            time = 500
+    }
+    composer.gotoScene("MainMenu",options)
 end
 
 
@@ -101,15 +59,6 @@ function scene:show( event )
         -- Called when the scene is still off screen (but is about to come on screen).
 		--local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
 		--background:setFillColor(.3,.1,.8)
-		if (check1()=="1") then
-		
-		else
-		local options = {
-			isModal = true,
-				}
-			
-			composer.showOverlay( "permission", options )
-		end
 		local background = display.newImage("Images/theme_red/splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
@@ -118,39 +67,40 @@ function scene:show( event )
 		background.x= display.contentCenterX
 		background.y=display.contentCenterY
 		sceneGroup:insert(background)
+
+		--home_button
+        homebutton = display.newImage("Images/home.png")
+        homebutton.anchorX=0
+        homebutton.anchorY=0
+        homebutton.x=1700
+        homebutton.y=180
+        homebutton.height=121
+        homebutton.width=121
+        sceneGroup:insert(homebutton)
+		homebutton:addEventListener( "tap", gohome )
 		
+		local play = display.newImage("Images/searchtut.png")
+		play.height=163
+		play.width=412
+		play.x = display.contentCenterX - 300
+		play.y=display.contentCenterY
+		sceneGroup:insert(play)
+		play:addEventListener( "tap", showSearch )
+		
+		local tut = display.newImage("Images/rescuetut.png")
+		tut.height=163
+		tut.width=412
+		tut.x = display.contentCenterX + 300
+		tut.y=display.contentCenterY
+		sceneGroup:insert(tut)
+		tut:addEventListener( "tap", showRescue )
+		
+		audio.resume(backgroundMusicplay)
 		
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-        
-
-		local play = display.newImage("Images/Play.png")
-		play.height=180
-		play.width=350
-		play.x = display.contentCenterX
-		play.y=display.contentCenterY-180
-		sceneGroup:insert(play)
-		play:addEventListener( "tap", showLevel )
-		
-		local tut = display.newImage("Images/Tutorial.png")
-		tut.height=180
-		tut.width=520
-		tut.x = display.contentCenterX
-		tut.y=display.contentCenterY+20
-		sceneGroup:insert(tut)
-		tut:addEventListener( "tap", showTutorial )
-		
-		local credit = display.newImage("Images/Credits.png")
-		credit.height=180
-		credit.width=430
-		credit.x = display.contentCenterX
-		credit.y=display.contentCenterY+240
-		sceneGroup:insert(credit)
-		credit:addEventListener( "tap", showCredits )
-		
-		audio.resume(backgroundMusicplay)
 		
     end
 end
