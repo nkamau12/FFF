@@ -159,13 +159,13 @@ local function	popup(x,y,height,width)
 		popupPic = display.newRect(x,y,height,width)
 		popupPic.anchorX = 0
 		popupPic.anchorY = 0	
-		popupPic:setFillColor(grey, 0.5)
+		popupPic:setFillColor(grey, 0.2)
 	elseif(x ~= popupPic.x)then
 		popupPic:removeSelf()
 		popupPic = display.newRect(x,y,height,width)
 		popupPic.anchorX = 0
 		popupPic.anchorY = 0	
-		popupPic:setFillColor(grey, 0.5)
+		popupPic:setFillColor(grey, 0.2)
 	end
 end
 
