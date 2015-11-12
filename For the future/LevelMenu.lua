@@ -152,7 +152,7 @@ function scene:create( event )
 
 		if(maxsrch > 1)then
 			rescue1 = display.newImage("Images/level1.png")
-			rescue1:addEventListener( "tap", showRescue )
+			rescue1:addEventListener( "tap", Rescue1 )
 		else
 			rescue1 = display.newImage("Images/level_locked.png")
 		end
@@ -167,7 +167,7 @@ function scene:create( event )
 		
 		if(maxsrch > 2)then
 			rescue2 = display.newImage("Images/level2.png")
-			rescue2:addEventListener( "tap", showRescue )
+			rescue2:addEventListener( "tap", Rescue2 )
 		else
 			rescue2 = display.newImage("Images/level_locked.png")
 		end
@@ -182,7 +182,7 @@ function scene:create( event )
 		
 		if(maxsrch > 3)then
 			rescue3 = display.newImage("Images/level3.png")
-			rescue3:addEventListener( "tap", showRescue )
+			rescue3:addEventListener( "tap", Rescue3 )
 		else
 			rescue3 = display.newImage("Images/level_locked.png")
 		end
