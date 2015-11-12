@@ -15,9 +15,7 @@ local counter = 1;
 local robot
 local buttonTable = {}
 local picTable = {}
-local pics = 
-{	11,12,13,14,15,21,22,23,24,25,31,32,33,34,35
-}
+local popupPic 
 local setupItems = {}
 local myrectd
 local myrectu
@@ -155,6 +153,22 @@ local function addPicTo(position, name, xVal, yVal)
 	picTable[position].id = name
 end
 
+local function	popup(x,y,height,width)
+	
+	if(popupPic == nil) then
+		popupPic = display.newRect(x,y,height,width)
+		popupPic.anchorX = 0
+		popupPic.anchorY = 0	
+		popupPic:setFillColor(grey, 0.5)
+	elseif(x ~= popupPic.x)then
+		popupPic:removeSelf()
+		popupPic = display.newRect(x,y,height,width)
+		popupPic.anchorX = 0
+		popupPic.anchorY = 0	
+		popupPic:setFillColor(grey, 0.5)
+	end
+end
+
 
 
 local function addPic(xVal,yVal,name,spot)
@@ -198,6 +212,10 @@ local function addPic(xVal,yVal,name,spot)
     	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
 	end
 	picToAdd = ""
+	if(popupPic~=nil)then
+		popupPic:removeSelf()
+		popupPic = nil
+	end
 end
 
 
@@ -326,30 +344,38 @@ end
 
 local function mdtap()
 	picToAdd = "Images/down_arrow.png"
+	popup(myData.downarrow[1], myData.downarrow[2], myData.downarrow[3], myData.downarrow[4])
+	
 end
 
 local function mutap()
 	picToAdd = "Images/up_arrow.png"
+	popup(myData.uparrow[1], myData.uparrow[2], myData.uparrow[3], myData.uparrow[4])
 end
 
 local function mrtap()
 	picToAdd = "Images/right_arrow.png"
+	popup(myData.rightarrow[1], myData.rightarrow[2], myData.rightarrow[3], myData.rightarrow[4])
 end
 
 local function mltap()
 	picToAdd = "Images/left_arrow.png"
+	popup(myData.leftarrow[1], myData.leftarrow[2], myData.leftarrow[3], myData.leftarrow[4])
 end
 
 local function onetap()
 	picToAdd = "Images/one_button_white.png"
+	popup(myData.onebutton[1], myData.onebutton[2], myData.onebutton[3], myData.onebutton[4])
 end
 
 local function twotap()
 	picToAdd = "Images/two_button_white.png"
+	popup(myData.twobutton[1], myData.twobutton[2], myData.twobutton[3], myData.twobutton[4])
 end
 
 local function threetap()
 	picToAdd = "Images/three_button_white.png"
+	popup(myData.threebutton[1], myData.threebutton[2], myData.threebutton[3], myData.threebutton[4])
 end
 
 
@@ -435,10 +461,20 @@ local function onCollision( event )
 			physics.stop()
 
 			if(currResc ~= 3) then
+				for h = 15, 1, -1 do
+					if(picTable[h] ~= nil) then
+						picTable[h]:removeSelf()
+					end
+				end
 				composer.showOverlay("pass_rescue",options)
 				myData.rescueLvl = currResc + 1
 				myData.searchLvl = currResc + 1
 			else
+				for h = 15, 1, -1 do
+					if(picTable[h] ~= nil) then
+						picTable[h]:removeSelf()
+					end
+				end
 				composer.gotoScene("Credits",options)
 			end
 
@@ -795,11 +831,7 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
-        for h = 15, 1, -1 do
-			if(picTable[h] ~= nil) then
-				picTable[h]:removeSelf()
-			end
-		end
+        
 		display.remove( robot)
 		robot=nil
 		display.remove( myrectu)
