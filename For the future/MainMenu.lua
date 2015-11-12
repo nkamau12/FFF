@@ -46,6 +46,24 @@ local function showTutorial()
 		composer.gotoScene("TutorialsMenu",options)
 end
 
+local function showScores()
+	audio.pause(backgroundMusicplay)
+	local options = {
+		effect = "crossFade",
+		time = 500
+	}
+		composer.gotoScene("Credits",options)
+end
+
+local function showStore()
+	audio.pause(backgroundMusicplay)
+	local options = {
+		effect = "crossFade",
+		time = 500
+	}
+		composer.gotoScene("Credits",options)
+end
+
 
 
 function check1()
@@ -130,25 +148,41 @@ function scene:show( event )
 		play.height=180
 		play.width=350
 		play.x = display.contentCenterX
-		play.y=display.contentCenterY-180
+		play.y=display.contentCenterY-160
 		sceneGroup:insert(play)
 		play:addEventListener( "tap", showLevel )
 		
 		local tut = display.newImage("Images/Tutorial.png")
-		tut.height=180
-		tut.width=520
-		tut.x = display.contentCenterX
-		tut.y=display.contentCenterY+20
+		tut.height=163
+		tut.width=528
+		tut.x = display.contentCenterX - 435
+		tut.y=display.contentCenterY+40
 		sceneGroup:insert(tut)
 		tut:addEventListener( "tap", showTutorial )
 		
+		local scores = display.newImage("Images/scores.png")
+		scores.height=163
+		scores.width=416
+		scores.x = display.contentCenterX - 435
+		scores.y=display.contentCenterY+260
+		sceneGroup:insert(scores)
+		scores:addEventListener( "tap", showScores )
+
 		local credit = display.newImage("Images/Credits.png")
-		credit.height=180
-		credit.width=430
-		credit.x = display.contentCenterX
-		credit.y=display.contentCenterY+240
+		credit.height=163
+		credit.width=470
+		credit.x = display.contentCenterX + 435
+		credit.y=display.contentCenterY+260
 		sceneGroup:insert(credit)
 		credit:addEventListener( "tap", showCredits )
+
+		local store = display.newImage("Images/store.png")
+		store.height=163
+		store.width=353
+		store.x = display.contentCenterX + 435
+		store.y=display.contentCenterY+40
+		sceneGroup:insert(store)
+		store:addEventListener( "tap", showStore )
 		
 		audio.resume(backgroundMusicplay)
 		
