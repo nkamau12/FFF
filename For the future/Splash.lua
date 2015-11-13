@@ -1,5 +1,5 @@
 local parse = require( "mod_parse" )
-
+local myData = require( "mydata" )
 local composer = require( "composer" )
 --local parse = require( "mod_parse" )
 local scene = composer.newScene()
@@ -42,7 +42,7 @@ function scene:show( event )
 		--local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
 		--background:setFillColor(.3,.1,.8)
 		
-		local background = display.newImage("Images/theme_red/title_background.png",system.ResourceDirectory)
+		local background = display.newImage("Images/theme_"..myData.theme.."/title_background.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
 		background.height=1080

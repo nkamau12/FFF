@@ -17,6 +17,45 @@ parse.showStatus = false
 --Register when app is opened
 parse:appOpened()
 
+
+local facebook = require( "plugin.facebook.v4" )
+
+
+
+--appWarp code
+
+appWarpClient = require( "AppWarp.WarpClient" ) 
+appWarpClient .initialize("673530f0fd20f8c6ccd4caacea4a220bebfa0fbc44641777fc3031eb979c2c39", 
+"bd3fdd7032da1965f6ddeeff869c065ca4275ec3590fbd4f9b89133ee2555123")  
+
+--user service import statement
+local App42API = require("App42-Lua-API.App42API") 
+
+--create user
+local userName  = "jorgeblah"
+local pwd = "llama"
+local emailId = "garcijo94@gmail.com"
+local App42CallBack = {}
+App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
+  "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
+local userService  = App42API:buildUserService()
+userService:createUser(userName,pwd,emailId,App42CallBack)
+function App42CallBack:onSuccess(object)
+  print("userName is "..object:getUserName())
+  print("emailId is "..object:getEmail())
+end
+function App42CallBack:onException(exception)
+  print("Message is : "..exception:getMessage())
+  print("App Error code is : "..exception:getAppErrorCode())
+  print("Http Error code is "..exception:getHttpErrorCode())
+  print("Detail is : "..exception:getDetails())
+end
+
+
+
+
+
+--local in-game data storage
 local myData = require( "mydata" )
 
 --Save the parse object id for later use
@@ -58,6 +97,7 @@ myData.rescueLvl = 1
 myData.maxsrch = 1
 myData.maxrsc = 1
 myData.rescue = 0
+myData.theme = "green"
 
 
 
@@ -114,10 +154,10 @@ function setObjects()
 
   --outer walls
   myData.grida = {43.01, 41.93, 993.04, 993.04,"Images/rescue_grid.png"}
-  myData.leftwall = {43.01, 41.93, 993.04, 10,"Images/theme_red/left_wall.png"}
-  myData.rightwall = {1026.05, 41.93, 993.04, 10,"Images/theme_red/left_wall.png"}
-  myData.topwall = {43.01, 41.93, 10, 993.04,"Images/theme_red/topbottom_wall.png"}
-  myData.bottomwall = {43.01, 1024.97, 10, 993.04,"Images/theme_red/topbottom_wall.png"}
+  myData.leftwall = {43.01, 41.93, 993.04, 10,"Images/theme_"..myData.theme.."/left_wall.png"}
+  myData.rightwall = {1026.05, 41.93, 993.04, 10,"Images/theme_"..myData.theme.."/left_wall.png"}
+  myData.topwall = {43.01, 41.93, 10, 993.04,"Images/theme_"..myData.theme.."/topbottom_wall.png"}
+  myData.bottomwall = {43.01, 1024.97, 10, 993.04,"Images/theme_"..myData.theme.."/topbottom_wall.png"}
 
   --loop objects
   myData.oneloop = {1063.96, 625, 133, 805,"Images/one_loop.png"}
@@ -136,10 +176,10 @@ function setObjects()
   myData.startbutton = {1542, 332, 122, 320, "Images/run_button.png"}
 
   --robot
-  myData.robot = {109, 819, 140, 140, "Images/robot_potato.png"}
+  myData.robot = {109, 819, 140, 140, "Images/robot_santa.png"}
 
   --scientist
-  myData.science = {nil, nil, 140, 140, "Images/scientist_sadface.png"}
+  myData.science = {nil, nil, 140, 140, "Images/scientist_present.png"}
 
   --key
   myData.key = {nil, nil, 124, 140, "Images/key.png"}
@@ -149,7 +189,8 @@ function setObjects()
     { walls = {'a','b','c','d','f','j',7,8}, scientist = {4, 'x'}, key = {nil,nil}}, -- level 1
     { walls = {8,10},                     scientist = {4, 'z'}, key = {nil,nil}}, -- level 2
     { walls = {},                         scientist = {4, 'w'}, key = {nil,nil}},  -- level 3
-    { walls = {'e','f','g','h','l',9,12}, scientist = {4, 'y'}, key = {3,'y'}}  -- level 4
+    { walls = {'e','f','g','h','l',9,12}, scientist = {4, 'y'}, key = {3,'y'}},  -- level 4
+    { walls = {'b','f',4,5,8}, scientist = {2, 'x'}, key = {3,'z'}}  -- level 5
   }
 end
 

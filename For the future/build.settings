@@ -8,11 +8,12 @@ settings =
 
 	plugins =
 	{
-		["plugin.gameanalytics"]=
-		{
-			publisherId = "com.gameanalytics",
-		},
+		["plugin.facebook.v4"] =
+        {
+            publisherId = "com.coronalabs"
+        },
 	},
+
 	orientation =
 	{
 		-- Supported values for orientation:
@@ -38,7 +39,52 @@ settings =
 		{
 			UIStatusBarHidden = false,
 			UIPrerenderedIcon = true, -- set to false for "shine" overlay
-			--UIApplicationExitsOnSuspend = true, -- uncomment to quit app on suspend
+			UIApplicationExitsOnSuspend = false, -- uncomment to quit app on suspend
+
+			-- Whitelist Facebook Servers for Network Requests
+            NSAppTransportSecurity = 
+            {
+                NSExceptionDomains = 
+                {
+                    ["fbcdn.net"] = 
+                    {
+                        NSIncludesSubdomains = true,
+                        NSExceptionRequiresForwardSecrecy = false,
+                    },
+                    ["facebook.com"] = 
+                    {
+                        NSIncludesSubdomains = true,
+                        NSExceptionRequiresForwardSecrecy = false,
+                    },
+                    ["akamaihd.net"] = 
+                    {
+                        NSIncludesSubdomains = true,
+                        NSExceptionRequiresForwardSecrecy = false,
+                    },
+                },
+            },
+
+            -- Whitelist Facebook Apps
+            LSApplicationQueriesSchemes = 
+            {
+                "fb",
+                "fbapi20130214",
+                "fbapi20130410",
+                "fbapi20140410",
+                "fbapi20140116",
+                "fbapi20150313",
+                "fbapi20150629",
+                "fbauth",
+                "fbauth2",
+                "fb-messenger-api20140430",
+            },
+
+			FacebookAppID = "1115061051839753",  --Facebook App ID
+			CFBundleURLTypes =
+			{
+				{
+					CFBundleURLSchemes = { "fb1115061051839753", } }
+			},
 
 			CFBundleIconFiles =
 			{
@@ -58,20 +104,7 @@ settings =
 				"Icon-Small-40@2x.png",
 				"Icon-Small-50.png",
 				"Icon-Small-50@2x.png",
-			},
-
-			--[[
-			-- iOS app URL schemes:
-			CFBundleURLTypes =
-			{
-				{
-					CFBundleURLSchemes =
-					{
-						"fbXXXXXXXXX",  -- replace XXXXXXXXX with your Facebook appId
-					}
-				}
 			}
-			--]]
 		}
 	},
 	
@@ -80,6 +113,9 @@ settings =
 	--
 	android =
 	{
+
+		facebookAppId = "1115061051839753",
+
 		usesPermissions =
 		{
 			"android.permission.INTERNET",
