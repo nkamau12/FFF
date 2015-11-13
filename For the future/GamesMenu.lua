@@ -68,7 +68,7 @@ function scene:show( event )
         -- Called when the scene is still off screen (but is about to come on screen).
 		--local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
 		--background:setFillColor(.3,.1,.8)
-		local background = display.newImage("Images/theme_red/splash_main.png",system.ResourceDirectory)
+		local background = display.newImage("Images/theme_"..myData.theme.."/splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
 		background.height=1080

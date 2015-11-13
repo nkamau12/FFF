@@ -80,6 +80,7 @@ function check1()
     end
     return nil
 end
+
 function update()
     local path = system.pathForFile( "agree.json", system.DocumentsDirectory)
     local file = io.open(path, "w")
@@ -93,6 +94,13 @@ function update()
     end
 end
 
+local function gosettings( event )
+    local options = {
+            effect = "crossFade",
+            time = 500
+    }
+    composer.gotoScene("Settings",options)
+end
 
 -- "scene:create()"
 function scene:create( event )
@@ -122,7 +130,7 @@ function scene:show( event )
 			
 			composer.showOverlay( "permission", options )
 		end
-		local background = display.newImage("Images/theme_red/splash_main.png",system.ResourceDirectory)
+		local background = display.newImage("Images/theme_"..myData.theme.."/splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
 		background.height=1080
@@ -130,6 +138,17 @@ function scene:show( event )
 		background.x= display.contentCenterX
 		background.y=display.contentCenterY
 		sceneGroup:insert(background)
+
+		--settings_button
+        settingsbutton = display.newImage("Images/Settings.png")
+        settingsbutton.anchorX=0
+        settingsbutton.anchorY=0
+        settingsbutton.x=95
+        settingsbutton.y=170
+        settingsbutton.height=120
+        settingsbutton.width=120
+        sceneGroup:insert(settingsbutton)
+		settingsbutton:addEventListener( "tap", gosettings )
 		
 		
     elseif ( phase == "did" ) then

@@ -11,7 +11,8 @@ local scene = composer.newScene()
 -- local forward references should go here
 
 -- -------------------------------------------------------------------------------
-
+local search = {}
+local rescue = {}
 
 local function showSearch()
 	audio.pause(backgroundMusicplay)
@@ -31,31 +32,19 @@ local function showRescue()
 	composer.gotoScene("Rescue",options)
 end
 
-local function Search1()
-	myData.searchLvl = 1
-	showSearch()
-end
-local function Search2()
-	myData.searchLvl = 2
-	showSearch()
-end
-local function Search3()
-	myData.searchLvl = 3
+local function Searchnum(event)
+	print(event.target.name)
+	myData.searchLvl = event.target.name
 	showSearch()
 end
 
-local function Rescue1()
-	myData.rescueLvl = 1
+
+local function Rescuenum(event)
+	myData.rescueLvl = event.target.name
+	print("Going to rescue "..event.target.name)
 	showRescue()
 end
-local function Rescue2()
-	myData.rescueLvl = 2
-	showRescue()
-end
-local function Rescue3()
-	myData.rescueLvl = 3
-	showRescue()
-end
+
 
 
 local function gohome( event )
@@ -80,6 +69,7 @@ function scene:create( event )
     maxsrch = myData.maxsrch
     maxrsc = myData.maxrsc
 
+
     if(myData.searchLvl > maxsrch) then
     	maxsrch = myData.searchLvl
     end
@@ -87,7 +77,7 @@ function scene:create( event )
     	maxrsc = myData.rescueLvl
     end
 
-    local background = display.newImage("Images/theme_red/levels_menu.png",system.ResourceDirectory)
+    local background = display.newImage("Images/theme_"..myData.theme.."/levels_menu.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
 		background.height=1080
@@ -108,92 +98,73 @@ function scene:create( event )
 		homebutton:addEventListener( "tap", gohome )
 
 
-		search1 = display.newImage("Images/level1.png")
-		search1.anchorX=0
-		search1.anchorY=0
-		search1.height = 153
-		search1.width = 153
-		search1.x = 288
-		search1.y = 453
-		sceneGroup:insert(search1)
-		search1:addEventListener( "tap", Search1 )
+		search[1] = display.newImage("Images/level1.png")
+		search[1].anchorX=0
+		search[1].anchorY=0
+		search[1].height = 153
+		search[1].width = 153
+		search[1].x = 208
+		search[1].y = 433
+		search[1].name = 1
+		sceneGroup:insert(search[1])
+		search[1]:addEventListener( "tap", Searchnum )
 		
-		if(maxrsc > 1)then
-			search2 = display.newImage("Images/level2.png")
-			search2:addEventListener( "tap", Search2 )
-		else
-			search2 = display.newImage("Images/level_locked.png")
+
+		for l=2,12,1 do 
+			m = l - 1
+			if(maxrsc > m)then
+				search[l] = display.newImage("Images/level"..l..".png")
+				search[l]:addEventListener( "tap", Searchnum )
+			else
+				search[l] = display.newImage("Images/level_locked.png")
+			end
+			search[l].anchorX=0
+			search[l].anchorY=0
+			search[l].height = 153
+			search[l].width = 153
+			if(l==2 or l==3 or l==4)then
+				search[l].x = 208 + (m*174)
+				search[l].y = 433
+			elseif(l==5 or l==6 or l==7 or l==8)then
+				search[l].x = 208 + ((l-5)*174)
+				search[l].y = 607
+			else
+				search[l].x = 208 + ((l-9)*174)
+				search[l].y = 781
+			end
+			search[l].name = l
+			sceneGroup:insert(search[l])
 		end
-		search2.anchorX=0
-		search2.anchorY=0
-		search2.height = 153
-		search2.width = 153
-		search2.x = 462
-		search2.y = 453
-		sceneGroup:insert(search2)
+
 		
-		
-		if(maxrsc > 2)then
-			search3 = display.newImage("Images/level3.png")
-			search3:addEventListener( "tap", Search3 )
-		else
-			search3 = display.newImage("Images/level_locked.png")
+		for l=1,12,1 do 
+			if(maxsrch > l)then
+				rescue[l] = display.newImage("Images/level"..l..".png")
+				print("rescuelock: "..rescuelock)
+				rescue[l]:addEventListener( "tap", Rescuenum )
+			else
+				rescue[l] = display.newImage("Images/level_locked.png")
+			end
+			rescue[l].anchorX=0
+			rescue[l].anchorY=0
+			rescue[l].height = 153
+			rescue[l].width = 153
+			if(l==1 or l==2 or l==3 or l==4)then
+				rescue[l].x = 1039 + ((l-1)*174)
+				rescue[l].y = 433
+			elseif(l==5 or l==6 or l==7 or l==8)then
+				rescue[l].x = 1039 + ((l-5)*174)
+				rescue[l].y = 607
+			else
+				rescue[l].x = 1039 + ((l-9)*174)
+				rescue[l].y = 781
+			end
+			rescue[l].name = l
+			sceneGroup:insert(rescue[l])
 		end
-		search3.anchorX=0
-		search3.anchorY=0
-		search3.height = 153
-		search3.width = 153
-		search3.x = 636
-		search3.y = 453
-		sceneGroup:insert(search3)
-		
 
 
 
-		if(maxsrch > 1)then
-			rescue1 = display.newImage("Images/level1.png")
-			rescue1:addEventListener( "tap", Rescue1 )
-		else
-			rescue1 = display.newImage("Images/level_locked.png")
-		end
-		rescue1.anchorX=0
-		rescue1.anchorY=0
-		rescue1.height = 153
-		rescue1.width = 153
-		rescue1.x = 1129
-		rescue1.y = 453
-		sceneGroup:insert(rescue1)
-		
-		
-		if(maxsrch > 2)then
-			rescue2 = display.newImage("Images/level2.png")
-			rescue2:addEventListener( "tap", Rescue2 )
-		else
-			rescue2 = display.newImage("Images/level_locked.png")
-		end
-		rescue2.anchorX=0
-		rescue2.anchorY=0
-		rescue2.height = 153
-		rescue2.width = 153
-		rescue2.x = 1303
-		rescue2.y = 453
-		sceneGroup:insert(rescue2)
-		
-		
-		if(maxsrch > 3)then
-			rescue3 = display.newImage("Images/level3.png")
-			rescue3:addEventListener( "tap", Rescue3 )
-		else
-			rescue3 = display.newImage("Images/level_locked.png")
-		end
-		rescue3.anchorX=0
-		rescue3.anchorY=0
-		rescue3.height = 153
-		rescue3.width = 153
-		rescue3.x = 1477
-		rescue3.y = 453
-		sceneGroup:insert(rescue3)
-		
 		
 		audio.resume(backgroundMusicplay)
 end
@@ -227,7 +198,7 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-        if(search1 == nil) then
+        if(search[1] == nil) then
         --home_button
         homebutton = display.newImage("Images/home.png")
         homebutton.anchorX=0
@@ -240,92 +211,69 @@ function scene:show( event )
 		homebutton:addEventListener( "tap", gohome )
 
 
-		search1 = display.newImage("Images/level1.png")
-		search1.anchorX=0
-		search1.anchorY=0
-		search1.height = 153
-		search1.width = 153
-		search1.x = 288
-		search1.y = 453
-		sceneGroup:insert(search1)
-		search1:addEventListener( "tap", Search1 )
-		
-		if(maxrsc > 1)then
-			search2 = display.newImage("Images/level2.png")
-			search2:addEventListener( "tap", Search2 )
-		else
-			search2 = display.newImage("Images/level_locked.png")
-		end
-		search2.anchorX=0
-		search2.anchorY=0
-		search2.height = 153
-		search2.width = 153
-		search2.x = 462
-		search2.y = 453
-		sceneGroup:insert(search2)
-		
-		
-		if(maxrsc > 2)then
-			search3 = display.newImage("Images/level3.png")
-			search3:addEventListener( "tap", Search3 )
-		else
-			search3 = display.newImage("Images/level_locked.png")
-		end
-		search3.anchorX=0
-		search3.anchorY=0
-		search3.height = 153
-		search3.width = 153
-		search3.x = 636
-		search3.y = 453
-		sceneGroup:insert(search3)
+		search[1] = display.newImage("Images/level1.png")
+		search[1].anchorX=0
+		search[1].anchorY=0
+		search[1].height = 153
+		search[1].width = 153
+		search[1].x = 208
+		search[1].y = 433
+		search[1].name = 1
+		sceneGroup:insert(search[1])
+		search[1]:addEventListener( "tap", Searchnum )
 		
 
+		for l=2,12,1 do 
+			m = l - 1
+			if(maxrsc > m)then
+				search[l] = display.newImage("Images/level"..l..".png")
+				search[l]:addEventListener( "tap", Searchnum )
+			else
+				search[l] = display.newImage("Images/level_locked.png")
+			end
+			search[l].anchorX=0
+			search[l].anchorY=0
+			search[l].height = 153
+			search[l].width = 153
+			if(l==2 or l==3 or l==4)then
+				search[l].x = 208 + (m*174)
+				search[l].y = 433
+			elseif(l==5 or l==6 or l==7 or l==8)then
+				search[l].x = 208 + ((l-5)*174)
+				search[l].y = 607
+			else
+				search[l].x = 208 + ((l-9)*174)
+				search[l].y = 781
+			end
+			search[l].name = l
+			sceneGroup:insert(search[l])
+		end
 
-
-		if(maxsrch > 1)then
-			rescue1 = display.newImage("Images/level1.png")
-			rescue1:addEventListener( "tap", showRescue )
-		else
-			rescue1 = display.newImage("Images/level_locked.png")
+		for l=1,12,1 do 
+			if(maxsrch > l)then
+				rescue[l] = display.newImage("Images/level"..l..".png")
+				print("rescuelock: "..rescuelock)
+				rescue[l]:addEventListener( "tap", Rescuenum )
+			else
+				rescue[l] = display.newImage("Images/level_locked.png")
+			end
+			rescue[l].anchorX=0
+			rescue[l].anchorY=0
+			rescue[l].height = 153
+			rescue[l].width = 153
+			if(l==1 or l==2 or l==3 or l==4)then
+				rescue[l].x = 1039 + ((l-1)*174)
+				rescue[l].y = 433
+			elseif(l==5 or l==6 or l==7 or l==8)then
+				rescue[l].x = 1039 + ((l-5)*174)
+				rescue[l].y = 607
+			else
+				rescue[l].x = 1039 + ((l-9)*174)
+				rescue[l].y = 781
+			end
+			rescue[l].name = l
+			sceneGroup:insert(rescue[l])
 		end
-		rescue1.anchorX=0
-		rescue1.anchorY=0
-		rescue1.height = 153
-		rescue1.width = 153
-		rescue1.x = 1129
-		rescue1.y = 453
-		sceneGroup:insert(rescue1)
-		
-		
-		if(maxsrch > 2)then
-			rescue2 = display.newImage("Images/level2.png")
-			rescue2:addEventListener( "tap", showRescue )
-		else
-			rescue2 = display.newImage("Images/level_locked.png")
-		end
-		rescue2.anchorX=0
-		rescue2.anchorY=0
-		rescue2.height = 153
-		rescue2.width = 153
-		rescue2.x = 1303
-		rescue2.y = 453
-		sceneGroup:insert(rescue2)
-		
-		
-		if(maxsrch > 3)then
-			rescue3 = display.newImage("Images/level3.png")
-			rescue3:addEventListener( "tap", showRescue )
-		else
-			rescue3 = display.newImage("Images/level_locked.png")
-		end
-		rescue3.anchorX=0
-		rescue3.anchorY=0
-		rescue3.height = 153
-		rescue3.width = 153
-		rescue3.x = 1477
-		rescue3.y = 453
-		sceneGroup:insert(rescue3)
-		
 		
 		audio.resume(backgroundMusicplay)
 		end
@@ -344,18 +292,19 @@ function scene:hide( event )
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
     elseif ( phase == "did" ) then
-        display.remove(search1)
-        search1=nil
-        display.remove(search2)
-        search2=nil
-        display.remove(search3)
-        search3=nil
-        display.remove(rescue1)
-        rescue1=nil
-        display.remove(rescue2)
-        rescue2=nil
-        display.remove(rescue3)
-        rescue3=nil
+        i = 1
+        while(rescue[i] ~= nil) do
+			display.remove( rescue[i])
+			rescue[i]=nil
+			i = i + 1
+		end
+		i = 1
+        while(search[i] ~= nil) do
+			display.remove( search[i])
+			search[i]=nil
+			i = i + 1
+		end
+		i = 1
     end
 end
 

@@ -21,7 +21,7 @@ local myrectd
 local myrectu
 local myrectl
 local myrectr
-
+local currResc
 local currwall
 
 local i = 1
@@ -71,7 +71,7 @@ local function setupmap()
 	setupPic("home", myData.homebutton[5], myData.homebutton[1], myData.homebutton[2], myData.homebutton[3], myData.homebutton[4])
 
 	--robot
-	robot = display.newImage("Images/robot_potato.png")
+	robot = display.newImage("Images/robot_santa.png")
 	robot.anchorX=0
 	robot.anchorY=0
 	robot.x=109
@@ -82,7 +82,7 @@ local function setupmap()
 
 	--scientist
 	setscience(currResc)
-	science = display.newImage("Images/scientist_sadface.png")
+	science = display.newImage("Images/scientist_present.png")
 	science.anchorX=0
 	science.anchorY=0
 	science.x=myData.science[1]
@@ -473,32 +473,30 @@ local function onCollision( event )
 			moverobot()
 
 		elseif (event.object2==science) then
-			print("Scientist")
-			local options = {
-				effect = "crossFade",
-				time = 500
-			}
-			audio.stop(elevatorMusicplay)
-			audio.pause(backgroundMusicplay)
-			physics.stop()
-			if(currResc ~= 4) then
-				for h = 15, 1, -1 do
-					if(picTable[h] ~= nil) then
-						picTable[h]:removeSelf()
+				print("Scientist")
+				local options = {
+					effect = "crossFade",
+					time = 500
+				}
+				audio.stop(elevatorMusicplay)
+				audio.pause(backgroundMusicplay)
+				if(currResc ~= 4) then
+					for h = 15, 1, -1 do
+						if(picTable[h] ~= nil) then
+							picTable[h]:removeSelf()
+						end
 					end
-				end
-				composer.showOverlay("pass_rescue",options)
-				myData.rescueLvl = currResc + 1
-				myData.searchLvl = currResc + 1
-			else
-				for h = 15, 1, -1 do
-					if(picTable[h] ~= nil) then
-						picTable[h]:removeSelf()
+					composer.showOverlay("pass_rescue",options)
+					myData.rescueLvl = currResc + 1
+					myData.searchLvl = currResc + 1
+				else
+					for h = 15, 1, -1 do
+						if(picTable[h] ~= nil) then
+							picTable[h]:removeSelf()
+						end
 					end
+					composer.gotoScene("Credits",options)
 				end
-				composer.gotoScene("Credits",options)
-			end
-
 		elseif (event.object2==setupItems["bottomwall"] or event.object2==setupItems["topwall"] 
 				or event.object2==setupItems["leftwall"] or event.object2==setupItems["rightwall"] ) then
 			local options = {
@@ -533,8 +531,6 @@ local function onCollision( event )
 		end
 	end 
 end
-
-
 
 local function merge(tablel)
 	
@@ -593,6 +589,7 @@ local function gohome()
 			composer.gotoScene("MainMenu",optionsh)
 			myData.rescue = 1
 			picTable = {}
+			physics.stop()
 end
 
 
@@ -631,7 +628,7 @@ function scene:create( event )
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-	local background = display.newImage("Images/theme_red/rescue_background.png",system.ResourceDirectory)
+	local background = display.newImage("Images/theme_"..myData.theme.."/rescue_background.png",system.ResourceDirectory)
 	background.anchorX=0.5
 	background.anchorY=0.5
 	background.height=1080
@@ -741,6 +738,7 @@ function scene:show( event )
         -- Called when the scene is still off screen (but is about to come on screen).
 		picTable = {}
     	setObjects()
+    	print(myData.rescueLvl)
     	currResc = myData.rescueLvl
         myData.rescue = 1
         if(robot == nil) then
@@ -748,7 +746,7 @@ function scene:show( event )
 			elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
 
 			--robot
-			robot = display.newImage("Images/robot_potato.png")
+			robot = display.newImage("Images/robot_santa.png")
 			robot.anchorX=0
 			robot.anchorY=0
 			robot.x=109
@@ -759,7 +757,7 @@ function scene:show( event )
 
 			--scientist
 			setscience(currResc)
-			science = display.newImage("Images/scientist_sadface.png")
+			science = display.newImage("Images/scientist_present.png")
 			science.anchorX=0
 			science.anchorY=0
 			science.x=myData.science[1]
@@ -881,9 +879,10 @@ function scene:hide( event )
 			display.remove( setupItems[currwall])
 			setupItems[currwall]=nil
 			i = i + 1
-			end
+		end
 		i = 1
 		physics.stop()
+		currResc = nil
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
 		
