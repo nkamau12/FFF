@@ -6,12 +6,14 @@ local widget = require("widget")
 
 local picToAdd=""
 local buttonTable = {}
-local picTable = {}
+local picTableBonus = {}
 local table1 = {}
 local table2 = {}
 local table3 = {}
 local fintable = {}
-
+local counter = 1;
+local bonuskey ={} 
+local popupPic
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -21,15 +23,6 @@ local fintable = {}
 
 -- -------------------------------------------------------------------------------
 local function setupmap()
-
-        --[[level_map
-        levelmap = display.newImage("Images/search"..currLvl..".png")
-        levelmap.anchorX=0
-        levelmap.anchorY=0
-        levelmap.x=194
-        levelmap.y=583
-        levelmap.height=447
-        levelmap.width=862]]--
 		
 		--oneloop
 		oneloop = display.newImage("Images/one_loop.png")
@@ -94,24 +87,6 @@ local function setupmap()
         blockyellow.height=120
         blockyellow.width=120
         
-        --run_button
-        runbutton = display.newImage("Images/run_button.png")
-        runbutton.anchorX=0
-        runbutton.anchorY=0
-        runbutton.x=1450
-        runbutton.y=887
-        runbutton.height=120
-        runbutton.width=360
-
-        --delete_button
-        deletebutton = display.newImage("Images/delete_button.png")
-        deletebutton.anchorX=0
-        deletebutton.anchorY=0
-        deletebutton.x=1289
-        deletebutton.y=887
-        deletebutton.height=120
-        deletebutton.width=120
-
         --home_button
         homebutton = display.newImage("Images/home.png")
         homebutton.anchorX=0
@@ -121,21 +96,12 @@ local function setupmap()
         homebutton.height=120
         homebutton.width=120
 		
-		--one_ button
-		onebutton = display.newImage("Images/one_button_white.png")
-		onebutton.anchorX=0
-        onebutton.anchorY=0
-        onebutton.x=100
-        onebutton.y=28
-        onebutton.height=120
-        onebutton.width=120
-		
 		--two_ button
 		twobutton = display.newImage("Images/two_button_white.png")
 		twobutton.anchorX=0
         twobutton.anchorY=0
-        twobutton.x=250
-        twobutton.y=28
+        twobutton.x=1426
+        twobutton.y=865
         twobutton.height=120
         twobutton.width=120
 
@@ -143,81 +109,72 @@ local function setupmap()
 		threebutton = display.newImage("Images/three_button_white.png")
 		threebutton.anchorX=0
         threebutton.anchorY=0
-        threebutton.x=400
-        threebutton.y=28
+        threebutton.x=1564
+        threebutton.y=865
         threebutton.height=120
         threebutton.width=120
+		
+		 --run_button
+        runbutton = display.newImage("Images/run_button.png")
+        runbutton.anchorX=0
+        runbutton.anchorY=0
+        runbutton.x=500
+        runbutton.y=50
+        runbutton.height=120
+        runbutton.width=360
 
         
 end 
 
 local function addPicTo(position, name, xVal, yVal)
-	picTable[position] = display.newImage(name)
-	picTable[position].anchorX = 0.5
-	picTable[position].anchorY = 0.5
-	picTable[position].x = xVal
-	picTable[position].y = yVal
-	picTable[position].height = 120
-	picTable[position].width = 120
-	picTable[position].id = name
+	picTableBonus[position] = display.newImage(name)
+	picTableBonus[position].anchorX = 0.5
+	picTableBonus[position].anchorY = 0.5
+	picTableBonus[position].x = xVal
+	picTableBonus[position].y = yVal
+	picTableBonus[position].height = 120
+	picTableBonus[position].width = 120
+	picTableBonus[position].id = name
 end
 
-local function findsize()
-	if (fintable~=nil) then
-	local count =1;
-	while (fintable[count]~=nil) do
-		count=count+1
-	end
-	return count
-	else
-	return 0
+local function	popup(x,y,height,width)
+	
+	if(popupPic == nil) then
+		popupPic = display.newRect(x,y,height,width)
+		popupPic.anchorX = 0
+		popupPic.anchorY = 0	
+		popupPic:setFillColor(grey, 0.2)
+	elseif(x ~= popupPic.x)then
+		popupPic:removeSelf()
+		popupPic = display.newRect(x,y,height,width)
+		popupPic.anchorX = 0
+		popupPic.anchorY = 0	
+		popupPic:setFillColor(grey, 0.2)
 	end
 end
-
 
 local function addPic(xVal,yVal,name,spot)
-	if((picTable[spot]== nil) and (picToAdd == ""))then
+	if((picTableBonus[spot]== nil) and (picToAdd == ""))then
 		
-	elseif(picTable[spot] == nil) then
+	elseif(picTableBonus[spot] == nil) then
 		addPicTo(spot, name, xVal, yVal)
 
 	elseif (picToAdd == "") then
-		picTable[spot]:removeSelf()
-		picTable[spot] = nil
+		picTableBonus[spot]:removeSelf()
+		picTableBonus[spot] = nil
 
 	else
-		picTable[spot]:removeSelf()
+		print("in")
+		print(picTableBonus[spot])
+		picTableBonus[spot]:removeSelf()
 		addPicTo(spot, name, xVal, yVal)
 			
 	end
 	picToAdd = ""
-	--if(popupPic~=nil)then
-		--popupPic:removeSelf()
-		--popupPic = nil
-	--end
-end
-
-local function merge(tablel)
-	
-	for i=1,5,1 do
-		print(tablel[i])
-		if (tablel[i]=="Images/one_button_white.png") then
-			merge(table1)
-		elseif (tablel[i]=="Images/two_button_white.png") then
-			merge(table2)
-		elseif (tablel[i]=="Images/three_button_white.png") then
-			merge(table3)
-		elseif ( tablel[i]=="Images/red_block.png" or tablel[i]=="Images/green_block.png" 
-				or tablel[i]=="Images/blue_block.png" or tablel[i]=="Images/yellow_block.png") then
-			table.insert(fintable,tablel[i])
-		else
-		end
+	if(popupPic~=nil)then
+		popupPic:removeSelf()
+		popupPic = nil
 	end
-end
-
-local function resultPics()
-	merge(table1)
-	
 end
 
 local function handleButtonEvent(event)
@@ -317,32 +274,87 @@ end
 
 local function addred()
 	picToAdd = "Images/red_block.png"
+	popup(1289,729,120,120)
 end
 
 local function addgreen()
-	picToAdd = "Images/green_block.png" 
+	picToAdd = "Images/green_block.png"
+	popup(1426,729,120,120)
 end
 
 local function addblue()
 	picToAdd = "Images/blue_block.png"
+	popup(1564,729,120,120)
 end
 
 local function addyellow()
 	picToAdd = "Images/yellow_block.png"
-end
-
-local function addone()
-	picToAdd = "Images/one_button_white.png"
+	popup(1700,729,120,120)
 end
 
 local function addtwo()
 	picToAdd = "Images/two_button_white.png"
+	popup(1426,865,120,120)
 end
 
 local function addthree()
 	picToAdd = "Images/three_button_white.png"
+	popup(1564,865,120,120)
 end
 
+local function merge(tablel)
+	
+	for i=1,5,1 do
+		if (tablel[i]=="Images/two_button_white.png") then
+			merge(table2)
+		elseif (tablel[i]=="Images/three_button_white.png") then
+			merge(table3)
+		elseif ( tablel[i]=="Images/red_block.png") then
+			table.insert(fintable,tablel[i])
+			table.insert(bonuskey,"red")
+			print(fintable[i])
+		elseif (tablel[i]=="Images/green_block.png") then
+			table.insert(fintable,tablel[i])
+			table.insert(bonuskey,"green")
+			print(fintable[i])
+		elseif (tablel[i]=="Images/blue_block.png") then
+			table.insert(fintable,tablel[i])
+			table.insert(bonuskey,"blue")
+			print(fintable[i])
+		elseif (tablel[i]=="Images/yellow_block.png") then
+			table.insert(fintable,tablel[i])
+			table.insert(bonuskey,"yellow")
+			print(fintable[i])
+		else
+		end
+	end
+end
+
+local function test()
+	
+	merge(table1)
+	for h = 15, 1, -1 do
+		if(picTableBonus[h] ~= nil) then
+			picTableBonus[h]:removeSelf()
+		end
+	end
+	picTableBonus = {}
+	table1 = {}
+	table2 = {}
+	table3 = {}
+	fintable = {}
+	buttonTable = {}
+		
+	
+	myData.bonusKeyBuilt = bonuskey
+	bonuskey = {}
+	local options = {
+		effect = "crossFade",
+		time = 500
+	}
+	local popupPic = nil
+	composer.showOverlay("Test_Build_Search",options)
+end
 
 local function addButton(position, xPos, yPos,idName)
 	buttonTable[position] = widget.newButton
@@ -356,15 +368,12 @@ local function addButton(position, xPos, yPos,idName)
 	}
 end
 
+
+
 -- "scene:create()"
 function scene:create( event )
-
-    currLvl = myData.searchLvl
-    myData.rescue = 0
-
     local sceneGroup = self.view
     
-
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 
@@ -409,15 +418,13 @@ function scene:create( event )
         sceneGroup:insert(blockgreen)
         sceneGroup:insert(blockblue)
         sceneGroup:insert(blockyellow)
-        sceneGroup:insert(runbutton)
-        sceneGroup:insert(deletebutton)
         sceneGroup:insert(homebutton)
 		sceneGroup:insert(oneloop)
 		sceneGroup:insert(twoloop)
 		sceneGroup:insert(threeloop)
-		sceneGroup:insert(onebutton)
 		sceneGroup:insert(twobutton)
 		sceneGroup:insert(threebutton)
+		sceneGroup:insert(runbutton)
 		
 		
 		sceneGroup:insert(buttonTable[11])
@@ -445,12 +452,10 @@ function scene:create( event )
         blockgreen:addEventListener( "tap", addgreen )
         blockblue:addEventListener( "tap", addblue )
         blockyellow:addEventListener( "tap", addyellow )
-		onebutton:addEventListener("tap", addone)
 		twobutton:addEventListener("tap", addtwo)
 		threebutton:addEventListener("tap", addthree)
-        --deletebutton:addEventListener("tap",removelast)
         homebutton:addEventListener("tap",gohome)
-        --runbutton:addEventListener("tap",checkresult)
+		runbutton:addEventListener("tap",test)
   
 end
 
