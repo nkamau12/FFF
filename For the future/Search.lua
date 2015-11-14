@@ -12,14 +12,43 @@ local scene = composer.newScene()
 -- -------------------------------------------------------------------------------
 local function setupmap()
 
-        --level_map
-        levelmap = display.newImage("Images/search"..currLvl..".png")
-        levelmap.anchorX=0
-        levelmap.anchorY=0
-        levelmap.x=194
-        levelmap.y=583
-        levelmap.height=447
-        levelmap.width=862
+        i=1
+        while(myData.searchkey[currLvl].one[i] ~= nil) do
+            currBlock = myData.searchkey[currLvl].one[i]
+            mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
+            mapmain[i].anchorX=0
+            mapmain[i].anchorY=0
+            mapmain[i].x=352 + (i-1)*142
+            mapmain[i].y=595
+            mapmain[i].height=120
+            mapmain[i].width=120
+            i = i + 1
+        end
+        i=1
+        while(myData.searchkey[currLvl].two[i] ~= nil) do
+            currBlock = myData.searchkey[currLvl].two[i]
+            mapone[i] = display.newImage("Images/"..currBlock.."_block.png")
+            mapone[i].anchorX=0
+            mapone[i].anchorY=0
+            mapone[i].x=352 + (i-1)*142
+            mapone[i].y=750
+            mapone[i].height=120
+            mapone[i].width=120
+            i = i + 1
+        end
+        i=1
+        while(myData.searchkey[currLvl].three[i] ~= nil) do
+            currBlock = myData.searchkey[currLvl].three[i]
+            maptwo[i] = display.newImage("Images/"..currBlock.."_block.png")
+            maptwo[i].anchorX=0
+            maptwo[i].anchorY=0
+            maptwo[i].x=352 + (i-1)*142
+            maptwo[i].y=903
+            maptwo[i].height=120
+            maptwo[i].width=120
+            i = i + 1
+        end
+        i=1
 
         --red_block
         blockred = display.newImage("Images/red_block.png")
@@ -268,7 +297,25 @@ local function getKey()
     elseif(currLvl == 2)then
         answerkey = {"green","green","red","yellow","blue","green","green","red"}
     elseif(currLvl == 3)then
+        answerkey = {"green","red","blue","red","blue","yellow","red","blue"}
+    elseif(currLvl == 4)then
+        answerkey = {"red","green","blue","yellow","green","yellow","red","blue"}
+    elseif(currLvl == 5)then
         answerkey = {"yellow","red","yellow","green","blue","yellow"}
+    elseif(currLvl == 6)then
+        answerkey = {"blue","yellow","red","red","green","green"}
+    elseif(currLvl == 7)then
+        answerkey = {"red","blue","blue","red","red","blue","blue"}
+    elseif(currLvl == 8)then
+        answerkey = {"green","yellow","blue","red","green","green","red","yellow"}
+    elseif(currLvl == 9)then
+        answerkey = {"blue","yellow","red","green","blue","yellow","green","green"}
+    elseif(currLvl == 10)then
+        answerkey = {"yellow","red","green","green","blue","green","green","yellow"}
+    elseif(currLvl == 11)then
+        answerkey = {"blue","blue","yellow","blue","blue","yellow","blue","blue"}
+    elseif(currLvl == 12)then
+        answerkey = {"green","red","blue","yellow","green","red","blue","green"}
     end
 end
 
@@ -277,6 +324,10 @@ function scene:create( event )
 
     currLvl = myData.searchLvl
     myData.rescue = 0
+
+    mapmain = {}
+    mapone = {}
+    maptwo = {}
 
     local sceneGroup = self.view
     searchMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
@@ -295,6 +346,10 @@ function scene:create( event )
         background.y=display.contentCenterY
         sceneGroup:insert(background)
         
+        getKey()
+
+
+
         setupmap()
         newblock = {}
         spacecolor = {}
@@ -303,7 +358,7 @@ function scene:create( event )
         homesearch = 0
         runsearch = 0
 
-        getKey()
+        
 
         sceneGroup:insert(blockred)
         sceneGroup:insert(blockgreen)
@@ -312,7 +367,23 @@ function scene:create( event )
         sceneGroup:insert(runbutton)
         sceneGroup:insert(deletebutton)
         sceneGroup:insert(homebutton)
-        sceneGroup:insert(levelmap)
+
+        i=1
+        while(mapmain[i] ~= nil) do
+                sceneGroup:insert(mapmain[i])
+                i = i + 1
+        end
+        i = 1
+        while(mapone[i] ~= nil) do
+                sceneGroup:insert(mapone[i])
+                i = i + 1
+        end
+        i = 1
+        while(maptwo[i] ~= nil) do
+                sceneGroup:insert(maptwo[i])
+                i = i + 1
+        end
+        i = 1
 
 
         blockred:addEventListener( "tap", addred )
@@ -333,32 +404,83 @@ function scene:show( event )
     local sceneGroup = self.view
     local phase = event.phase
 
+    
+
+    currLvl = myData.searchLvl
+
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
-        
-        
-    elseif ( phase == "did" ) then
-        currLvl = myData.searchLvl
         myData.rescue = 0
-        if(levelmap == nil) then
+
+        getKey()
+
+        print("This level: "..currLvl)
+        if(mapmain[1] == nil) then
             undosearch = 0
             homesearch = 0
             runsearch = 0
             searchMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
             searchMusicplay = audio.play( searchMusic, {  fadein = 4000, loops=-1 } )
-            levelmap = display.newImage("Images/search"..currLvl..".png")
-            levelmap.anchorX=0
-            levelmap.anchorY=0
-            levelmap.x=194
-            levelmap.y=583
-            levelmap.height=447
-            levelmap.width=862
 
-            sceneGroup:insert(levelmap)
+            i=1
+            while(myData.searchkey[currLvl].one[i] ~= nil) do
+                currBlock = myData.searchkey[currLvl].one[i]
+                mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
+                mapmain[i].anchorX=0
+                mapmain[i].anchorY=0
+                mapmain[i].x=352 + (i-1)*142
+                mapmain[i].y=595
+                mapmain[i].height=120
+                mapmain[i].width=120
+                i = i + 1
+            end
+            i=1
+            while(myData.searchkey[currLvl].two[i] ~= nil) do
+                currBlock = myData.searchkey[currLvl].two[i]
+                mapone[i] = display.newImage("Images/"..currBlock.."_block.png")
+                mapone[i].anchorX=0
+                mapone[i].anchorY=0
+                mapone[i].x=352 + (i-1)*142
+                mapone[i].y=750
+                mapone[i].height=120
+                mapone[i].width=120
+                i = i + 1
+            end
+            i=1
+            while(myData.searchkey[currLvl].three[i] ~= nil) do
+                currBlock = myData.searchkey[currLvl].three[i]
+                maptwo[i] = display.newImage("Images/"..currBlock.."_block.png")
+                maptwo[i].anchorX=0
+                maptwo[i].anchorY=0
+                maptwo[i].x=352 + (i-1)*142
+                maptwo[i].y=903
+                maptwo[i].height=120
+                maptwo[i].width=120
+                i = i + 1
+            end
+            i=1
+
+            while(mapmain[i] ~= nil) do
+                sceneGroup:insert(mapmain[i])
+                i = i + 1
+            end
+            i = 1
+            while(mapone[i] ~= nil) do
+                sceneGroup:insert(mapone[i])
+                i = i + 1
+            end
+            i = 1
+            while(maptwo[i] ~= nil) do
+                sceneGroup:insert(maptwo[i])
+                i = i + 1
+            end
+            i = 1
         end
         
 
-        getKey()
+        
+        
+    elseif ( phase == "did" ) then
         
     end
 end
@@ -379,14 +501,29 @@ function scene:hide( event )
         do 
             display.remove(newblock[i]) 
         end
+
+        i=1
+        while(mapmain[i] ~= nil) do
+            display.remove(mapmain[i])
+            mapmain[i] = nil
+            i = i + 1
+        end
+        i = 1
+        while(mapone[i] ~= nil) do
+            display.remove(mapone[i])
+            mapone[i] = nil
+            i = i + 1
+        end
+        i = 1
+        while(maptwo[i] ~= nil) do
+            display.remove(maptwo[i])
+            maptwo[i] = nil
+            i = i + 1
+        end
+        i = 1
+        currLvl = nil
     elseif ( phase == "did" ) then
         
-
-        display.remove( levelmap)
-        levelmap=nil
-        
-        currLvl = nil
-
     end
 end
 

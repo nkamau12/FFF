@@ -55,7 +55,7 @@ local function showStore()
 		effect = "crossFade",
 		time = 500
 	}
-		composer.gotoScene("Credits",options)
+		composer.gotoScene("Store",options)
 end
 
 
@@ -150,13 +150,6 @@ function scene:show( event )
         sceneGroup:insert(settingsbutton)
 		settingsbutton:addEventListener( "tap", gosettings )
 		
-		
-    elseif ( phase == "did" ) then
-        -- Called when the scene is now on screen.
-        -- Insert code here to make the scene come alive.
-        -- Example: start timers, begin animation, play audio, etc.
-        
-
 		local play = display.newImage("Images/Play.png")
 		play.height=180
 		play.width=350
@@ -196,6 +189,14 @@ function scene:show( event )
 		store.y=display.contentCenterY+40
 		sceneGroup:insert(store)
 		store:addEventListener( "tap", showStore )
+		
+    elseif ( phase == "did" ) then
+        -- Called when the scene is now on screen.
+        -- Insert code here to make the scene come alive.
+        -- Example: start timers, begin animation, play audio, etc.
+        
+
+		
 		
 		audio.resume(backgroundMusicplay)
 		

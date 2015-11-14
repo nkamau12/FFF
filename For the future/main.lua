@@ -160,18 +160,18 @@ function setObjects()
   myData.bottomwall = {43.01, 1024.97, 10, 993.04,"Images/theme_"..myData.theme.."/topbottom_wall.png"}
 
   --loop objects
-  myData.oneloop = {1063.96, 625, 133, 805,"Images/one_loop.png"}
-  myData.twoloop = {1063.96, 768, 133, 805,"Images/two_loop.png"}
-  myData.threeloop = {1063.96, 910, 133, 805,"Images/three_loop.png"}
+  myData.mainloop = {1063.96, 625, 133, 805,"Images/main_loop.png"}
+  myData.oneloop = {1063.96, 768, 133, 805,"Images/one_loop.png"}
+  myData.twoloop = {1063.96, 910, 133, 805,"Images/two_loop.png"}
 
   --buttons
   myData.uparrow = {1192, 186, 122, 122, "Images/up_arrow.png"}
   myData.downarrow = {1330, 186, 122, 122, "Images/down_arrow.png"}
   myData.leftarrow = {1468, 186, 122, 122, "Images/left_arrow.png"}
   myData.rightarrow = {1606, 186, 122, 122, "Images/right_arrow.png"}
-  myData.onebutton = {1126, 332, 122, 122, "Images/one_button_white.png"}
-  myData.twobutton = {1264, 332, 122, 122, "Images/two_button_white.png"}
-  myData.threebutton = {1403, 332, 122, 122, "Images/three_button_white.png"}
+  myData.mainbutton = {1126, 332, 122, 122, "Images/main_block.png"}
+  myData.onebutton = {1264, 332, 122, 122, "Images/1_block.png"}
+  myData.twobutton = {1403, 332, 122, 122, "Images/2_block.png"}
   myData.homebutton = {1764, 30, 122, 122, "Images/home.png"}
   myData.startbutton = {1542, 332, 122, 320, "Images/run_button.png"}
 
@@ -186,13 +186,36 @@ function setObjects()
 
   --Level keys
   myData.levelkey = {
-    { walls = {'a','b','c','d','f','j',7,8}, scientist = {4, 'x'}, key = {nil,nil}}, -- level 1
-    { walls = {8,10},                     scientist = {4, 'z'}, key = {nil,nil}}, -- level 2
-    { walls = {},                         scientist = {4, 'w'}, key = {nil,nil}},  -- level 3
-    { walls = {'e','f','g','h','l',9,12}, scientist = {4, 'y'}, key = {3,'y'}},  -- level 4
-    { walls = {'b','f',4,5,8}, scientist = {2, 'x'}, key = {3,'z'}}  -- level 5
+    { walls = {'a','b','c','d','f','j',7,8},                   scientist = {4, 'x'}, key = {{nil,nil}}}, -- level 1
+    { walls = {8,10},                                          scientist = {4, 'z'}, key = {{nil,nil}}}, -- level 2
+    { walls = {},                                              scientist = {4, 'w'}, key = {{nil,nil}}},  -- level 3
+    { walls = {'e','b',4},                                     scientist = {1, 'x'}, key = {{nil,nil}}},  -- level 4
+    { walls = {'e','f','g','h','l',9,12},                      scientist = {4, 'y'}, key = {{3, 'y'}}},  -- level 5
+    { walls = {'a','b','c','i','j','k',6,9},                   scientist = {1, 'w'}, key = {{nil,nil}}},  -- level 6
+    { walls = {'b','d','f','g',4,5},                           scientist = {2, 'x'}, key = {{4,'z'}}},  -- level 7
+    { walls = {'e','f','i','j','k',2,5,6,7,8,9},               scientist = {1, 'y'}, key = {{3,'x'},{3,'y'}}},  -- level 8
+    { walls = {'a','b','c','d','e','f','i','j',1,2,3,5,7},     scientist = {2, 'w'}, key = {{2,'x'},{3,'z'}}},  -- level 9
+    { walls = {'c','f','g','h','k',5,6,8,9,11,12},             scientist = {3, 'y'}, key = {{2,'w'},{4,'x'}}},  -- level 10
+    { walls = {'b','c','d','f','k','l',2,3,6,11},              scientist = {4, 'w'}, key = {{1,'w'}}},  -- level 11
+    { walls = {'a','b','c','d','f','i','j','k',1,2,3,4,5,7,9}, scientist = {1, 'w'}, key = {{2,'z'},{3,'y'},{4,'w'},{4,'z'}}}  -- level 12
   }
 end
+
+-- Search setup keys
+myData.searchkey = {
+  { one = {"red",1,"blue",1,"yellow"}, two = {"green",nil,nil,nil,nil}, three = {nil,nil,nil,nil,nil}},                    -- level 1
+  { one = {1,"yellow","blue",1,nil}, two = {"green","green","red",nil,nil}, three = {nil,nil,nil,nil,nil}},                -- level 2
+  { one = {"green",2,2,"yellow",2}, two = {nil,nil,nil,nil,nil}, three = {"red","blue",nil,nil,nil}},                      -- level 3
+  { one = {1,"green","yellow","red","blue"}, two = {"red","green","blue","yellow",nil}, three = {"blue","yellow","red","red",nil}},-- level 4
+  { one = {1,"green","blue",2,nil}, two = {"yellow","red",2,nil,nil}, three = {"yellow",nil,nil,nil,nil}},                 -- level 5
+  { one = {"blue",2,nil,nil,nil}, two = {"red","red","green",nil,nil}, three = {"yellow",1,"green",nil,nil}},              -- level 6
+  { one = {2,1,2,2,1}, two = {"blue","blue",nil,nil,nil}, three = {"red",nil,nil,nil,nil}},                                -- level 7
+  { one = {"green",1,2,"yellow",nil}, two = {"yellow","blue",2,"green","green"}, three = {"red",nil,nil,nil,nil}},         -- level 8
+  { one = {2,"green",1,"green","green"}, two = {"blue","yellow",nil,nil,nil}, three = {1,"red",nil,nil,nil}},              -- level 9
+  { one = {"yellow",1,"yellow",nil,nil}, two = {"red",2,"blue",2,nil}, three = {"green","green",nil,nil,nil}},             -- level 10
+  { one = {2,2,1,1,nil}, two = {"blue",nil,nil,nil,nil}, three = {1,1,"yellow",nil,nil}},                                  -- level 11
+  { one = {2,"yellow",1,2,"green"}, two = {nil,nil,nil,nil,nil}, three = {"green",1,"red","blue",1}}                       -- level 12
+}
 
 function setscience(level)
   lvl = level
@@ -221,7 +244,7 @@ end
 
 function setkey(level)
   lvl = level
-  keyx = myData.levelkey[lvl].key[1]
+  keyx = myData.levelkey[lvl].key[1][1]
   if(keyx == nil) then
     myData.key[1] = nil
   elseif(keyx == 1) then
@@ -234,7 +257,7 @@ function setkey(level)
     myData.key[1] = 843
   end
 
-  keyy = myData.levelkey[lvl].key[2]
+  keyy = myData.levelkey[lvl].key[1][2]
   if(keyy == nil) then
     myData.key[2] = nil
   elseif(keyy == 'w') then

@@ -140,7 +140,6 @@ function scene:create( event )
 		for l=1,12,1 do 
 			if(maxsrch > l)then
 				rescue[l] = display.newImage("Images/level"..l..".png")
-				print("rescuelock: "..rescuelock)
 				rescue[l]:addEventListener( "tap", Rescuenum )
 			else
 				rescue[l] = display.newImage("Images/level_locked.png")
@@ -252,7 +251,6 @@ function scene:show( event )
 		for l=1,12,1 do 
 			if(maxsrch > l)then
 				rescue[l] = display.newImage("Images/level"..l..".png")
-				print("rescuelock: "..rescuelock)
 				rescue[l]:addEventListener( "tap", Rescuenum )
 			else
 				rescue[l] = display.newImage("Images/level_locked.png")

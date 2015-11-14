@@ -55,18 +55,18 @@ local function setupmap()
 	setupPic("bottomwall", myData.bottomwall[5], myData.bottomwall[1], myData.bottomwall[2], myData.bottomwall[3], myData.bottomwall[4])
 
 	--loops
+	setupPic("mainl", myData.mainloop[5], myData.mainloop[1], myData.mainloop[2], myData.mainloop[3], myData.mainloop[4])
 	setupPic("onel", myData.oneloop[5], myData.oneloop[1], myData.oneloop[2], myData.oneloop[3], myData.oneloop[4])
 	setupPic("twol", myData.twoloop[5], myData.twoloop[1], myData.twoloop[2], myData.twoloop[3], myData.twoloop[4])
-	setupPic("threel", myData.threeloop[5], myData.threeloop[1], myData.threeloop[2], myData.threeloop[3], myData.threeloop[4])
 
 	--buttons
 	setupPic("upa", myData.uparrow[5], myData.uparrow[1], myData.uparrow[2], myData.uparrow[3], myData.uparrow[4])
 	setupPic("downa", myData.downarrow[5], myData.downarrow[1], myData.downarrow[2], myData.downarrow[3], myData.downarrow[4])
 	setupPic("lefta", myData.leftarrow[5], myData.leftarrow[1], myData.leftarrow[2], myData.leftarrow[3], myData.leftarrow[4])
 	setupPic("righta", myData.rightarrow[5], myData.rightarrow[1], myData.rightarrow[2], myData.rightarrow[3], myData.rightarrow[4])
+	setupPic("mainb", myData.mainbutton[5], myData.mainbutton[1], myData.mainbutton[2], myData.mainbutton[3], myData.mainbutton[4])
 	setupPic("oneb", myData.onebutton[5], myData.onebutton[1], myData.onebutton[2], myData.onebutton[3], myData.onebutton[4])
 	setupPic("twob", myData.twobutton[5], myData.twobutton[1], myData.twobutton[2], myData.twobutton[3], myData.twobutton[4])
-	setupPic("threeb", myData.threebutton[5], myData.threebutton[1], myData.threebutton[2], myData.threebutton[3], myData.threebutton[4])
 	setupPic("start", myData.startbutton[5], myData.startbutton[1], myData.startbutton[2], myData.startbutton[3], myData.startbutton[4])
 	setupPic("home", myData.homebutton[5], myData.homebutton[1], myData.homebutton[2], myData.homebutton[3], myData.homebutton[4])
 
@@ -241,63 +241,63 @@ end
 local function handleButtonEvent( event )
 	if ( "moved" == event.phase ) then
     elseif ( "ended" == event.phase ) then
-        if(event.target.id == "oneloopBtn1") then
+        if(event.target.id == "mainloopBtn1") then
 			table1[1] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 1)
 		end
-		if(event.target.id == "oneloopBtn2") then
+		if(event.target.id == "mainloopBtn2") then
 			table1[2] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 2)
 		end
-		if(event.target.id == "oneloopBtn3") then
+		if(event.target.id == "mainloopBtn3") then
 			table1[3] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 3)
 		end
-		if(event.target.id == "oneloopBtn4") then
+		if(event.target.id == "mainloopBtn4") then
 			table1[4] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 4)
 		end
-		if(event.target.id == "oneloopBtn5") then
+		if(event.target.id == "mainloopBtn5") then
 			table1[5] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 5)
 		end
-		if(event.target.id == "twoloopBtn1") then
+		if(event.target.id == "oneloopBtn1") then
 			table2[1] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 6)
 		end
-		if(event.target.id == "twoloopBtn2") then
+		if(event.target.id == "oneloopBtn2") then
 			table2[2] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 7)
 		end
-		if(event.target.id == "twoloopBtn3") then
+		if(event.target.id == "oneloopBtn3") then
 			table2[3] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 8)
 		end
-		if(event.target.id == "twoloopBtn4") then
+		if(event.target.id == "oneloopBtn4") then
 			table2[4] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 9)
 		end
-		if(event.target.id == "twoloopBtn5") then
+		if(event.target.id == "oneloopBtn5") then
 			table2[5] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 10)
 		end
-		if(event.target.id == "threeloopBtn1") then
+		if(event.target.id == "twoloopBtn1") then
 			table3[1] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 11)
 		end
-		if(event.target.id == "threeloopBtn2") then
+		if(event.target.id == "twoloopBtn2") then
 			table3[2] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 12)
 		end
-		if(event.target.id == "threeloopBtn3") then
+		if(event.target.id == "twoloopBtn3") then
 			table3[3] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 13)
 		end
-		if(event.target.id == "threeloopBtn4") then
+		if(event.target.id == "twoloopBtn4") then
 			table3[4] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 14)
 		end
-		if(event.target.id == "threeloopBtn5") then
+		if(event.target.id == "twoloopBtn5") then
 			table3[5] = picToAdd
 			addPic(event.target.x, event.target.y,picToAdd, 15)
 		end
@@ -381,19 +381,19 @@ local function mltap()
 	popup(myData.leftarrow[1], myData.leftarrow[2], myData.leftarrow[3], myData.leftarrow[4])
 end
 
+local function maintap()
+	picToAdd = "Images/main_block.png"
+	popup(myData.mainbutton[1], myData.mainbutton[2], myData.mainbutton[3], myData.mainbutton[4])
+end
+
 local function onetap()
-	picToAdd = "Images/one_button_white.png"
+	picToAdd = "Images/1_block.png"
 	popup(myData.onebutton[1], myData.onebutton[2], myData.onebutton[3], myData.onebutton[4])
 end
 
 local function twotap()
-	picToAdd = "Images/two_button_white.png"
+	picToAdd = "Images/2_block.png"
 	popup(myData.twobutton[1], myData.twobutton[2], myData.twobutton[3], myData.twobutton[4])
-end
-
-local function threetap()
-	picToAdd = "Images/three_button_white.png"
-	popup(myData.threebutton[1], myData.threebutton[2], myData.threebutton[3], myData.threebutton[4])
 end
 
 
@@ -536,11 +536,11 @@ local function merge(tablel)
 	
 	for i=1,5,1 do
 		print(tablel[i])
-		if (tablel[i]=="Images/one_button_white.png") then
+		if (tablel[i]=="Images/main_block.png") then
 			merge(table1)
-		elseif (tablel[i]=="Images/two_button_white.png") then
+		elseif (tablel[i]=="Images/1_block.png") then
 			merge(table2)
-		elseif (tablel[i]=="Images/three_button_white.png") then
+		elseif (tablel[i]=="Images/2_block.png") then
 			merge(table3)
 		elseif ( tablel[i]=="Images/up_arrow.png" or tablel[i]=="Images/down_arrow.png" 
 				or tablel[i]=="Images/left_arrow.png" or tablel[i]=="Images/right_arrow.png") then
@@ -640,25 +640,25 @@ function scene:create( event )
 	--buttons
 	
 	--one loop button
-	addButton(11, 1270.21, 690.86, "oneloopBtn1")
-	addButton(12, 1402.21, 690.86, "oneloopBtn2")
-	addButton(13, 1530.21, 690.86, "oneloopBtn3")
-	addButton(14, 1660.21, 690.86, "oneloopBtn4")
-	addButton(15, 1790.21, 690.86, "oneloopBtn5")
+	addButton(11, 1270.21, 690.86, "mainloopBtn1")
+	addButton(12, 1402.21, 690.86, "mainloopBtn2")
+	addButton(13, 1530.21, 690.86, "mainloopBtn3")
+	addButton(14, 1660.21, 690.86, "mainloopBtn4")
+	addButton(15, 1790.21, 690.86, "mainloopBtn5")
 	
 	--two loop buttons
-	addButton(21, 1270.21, 835.86, "twoloopBtn1")
-	addButton(22, 1402.21, 835.86, "twoloopBtn2")
-	addButton(23, 1530.21, 835.86, "twoloopBtn3")
-	addButton(24, 1660.21, 835.86, "twoloopBtn4")
-	addButton(25, 1790.21, 835.86, "twoloopBtn5")
+	addButton(21, 1270.21, 835.86, "oneloopBtn1")
+	addButton(22, 1402.21, 835.86, "oneloopBtn2")
+	addButton(23, 1530.21, 835.86, "oneloopBtn3")
+	addButton(24, 1660.21, 835.86, "oneloopBtn4")
+	addButton(25, 1790.21, 835.86, "oneloopBtn5")
 	
 	--three loop buttons
-	addButton(31, 1270.21, 980.86, "threeloopBtn1")
-	addButton(32, 1402.21, 980.86, "threeloopBtn2")
-	addButton(33, 1530.21, 980.86, "threeloopBtn3")
-	addButton(34, 1660.21, 980.86, "threeloopBtn4")
-	addButton(35, 1790.21, 980.86, "threeloopBtn5")
+	addButton(31, 1270.21, 980.86, "twoloopBtn1")
+	addButton(32, 1402.21, 980.86, "twoloopBtn2")
+	addButton(33, 1530.21, 980.86, "twoloopBtn3")
+	addButton(34, 1660.21, 980.86, "twoloopBtn4")
+	addButton(35, 1790.21, 980.86, "twoloopBtn5")
 	
 	setupmap()
 		
@@ -670,9 +670,9 @@ function scene:create( event )
 	setupItems["downa"]:addEventListener( "tap", mdtap )
 	setupItems["lefta"]:addEventListener( "tap", mltap )
 	setupItems["righta"]:addEventListener( "tap", mrtap )
+	setupItems["mainb"]:addEventListener("tap", maintap)
 	setupItems["oneb"]:addEventListener("tap", onetap)
 	setupItems["twob"]:addEventListener("tap", twotap)
-	setupItems["threeb"]:addEventListener("tap", threetap)
 	setupItems["start"]:addEventListener("tap", pass)
 	setupItems["home"]:addEventListener("tap", gohome)
 	
@@ -697,16 +697,16 @@ function scene:create( event )
 	
 	--add grid
 	sceneGroup:insert(setupItems["grida"])
+	sceneGroup:insert(setupItems["mainl"])
 	sceneGroup:insert(setupItems["onel"])
 	sceneGroup:insert(setupItems["twol"])
-	sceneGroup:insert(setupItems["threel"])
 	sceneGroup:insert(setupItems["upa"])
 	sceneGroup:insert(setupItems["downa"])
 	sceneGroup:insert(setupItems["lefta"])
 	sceneGroup:insert(setupItems["righta"])
+	sceneGroup:insert(setupItems["mainb"])
 	sceneGroup:insert(setupItems["oneb"])
 	sceneGroup:insert(setupItems["twob"])
-	sceneGroup:insert(setupItems["threeb"])
 	sceneGroup:insert(setupItems["start"])
 	sceneGroup:insert(setupItems["home"])
 	
@@ -814,16 +814,16 @@ function scene:show( event )
 
 
 			sceneGroup:insert(setupItems["grida"])
+			sceneGroup:insert(setupItems["mainl"])
 			sceneGroup:insert(setupItems["onel"])
 			sceneGroup:insert(setupItems["twol"])
-			sceneGroup:insert(setupItems["threel"])
 			sceneGroup:insert(setupItems["upa"])
 			sceneGroup:insert(setupItems["downa"])
 			sceneGroup:insert(setupItems["lefta"])
 			sceneGroup:insert(setupItems["righta"])
+			sceneGroup:insert(setupItems["mainb"])
 			sceneGroup:insert(setupItems["oneb"])
 			sceneGroup:insert(setupItems["twob"])
-			sceneGroup:insert(setupItems["threeb"])
 			sceneGroup:insert(setupItems["start"])
 			sceneGroup:insert(setupItems["home"])
 			sceneGroup:insert(robot)
