@@ -1,3 +1,5 @@
+local parse = require( "mod_parse" )
+local myData = require( "mydata" )
 local composer = require( "composer" )
 local scene = composer.newScene()
 
@@ -11,7 +13,7 @@ local scene = composer.newScene()
 local function setupmap()
 
         --level_map
-        levelmap = display.newImage("Images/search1.png")
+        levelmap = display.newImage("Images/search"..currLvl..".png")
         levelmap.anchorX=0
         levelmap.anchorY=0
         levelmap.x=194
@@ -72,6 +74,15 @@ local function setupmap()
         deletebutton.y=887
         deletebutton.height=120
         deletebutton.width=120
+
+        --home_button
+        homebutton = display.newImage("Images/home.png")
+        homebutton.anchorX=0
+        homebutton.anchorY=0
+        homebutton.x=1766
+        homebutton.y=28
+        homebutton.height=120
+        homebutton.width=120
         
 end 
 
@@ -148,12 +159,49 @@ local function addyellow( event )
 end
 
 local function removelast( event )
+    undosearch = undosearch + 1
+
+    local function onUndoSearch( event )
+        if not event.error then
+            print( event.response.updatedAt )
+        end
+    end
+    local dataTable = {["Search"..currLvl] = undosearch }
+    parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
+
     if(countmax > answer)then
         display.remove(newblock[countmax-1])
         countmax = countmax - 1
         spotx = 631 + countmax*130
     else
     end
+end
+
+local function gohome( event )
+    homesearch = homesearch + 1
+
+    local function onUpdateObject( event )
+        if not event.error then
+            print( event.response.updatedAt )
+        end
+    end
+    local dataTable = {["Search"..currLvl] = homesearch }
+    parse:updateObject("HomeCount", myData.homeid, dataTable, onUpdateObject)
+
+    audio.stop(searchMusicplay)
+    audio.dispose( searchMusic )
+    local options = {
+            effect = "crossFade",
+            time = 500
+    }
+    for i=8,0,-1 
+    do 
+        display.remove(newblock[i]) 
+    end
+    answer = 0
+    spotx = 631
+    countmax = 0
+    composer.gotoScene("MainMenu",options)
 end
 
 local function tryagain()
@@ -164,68 +212,130 @@ local function tryagain()
         display.remove(newblock[i]) 
     end
 end
+local setupItems = {}
 
 local function checkresult( event )
+    runsearch = runsearch + 1
+    local function onRunningObject( event )
+        if not event.error then
+            print( event.response.updatedAt )
+        end
+    end
+    local runsearchTable = {["Search"..currLvl] = runsearch }
+    parse:updateObject("RunCount", myData.runid, runsearchTable, onRunningObject)
+
     while answer<5 do
         print(answer)
         if(spacecolor[answer] == answerkey[answer+1])then
-            if(answer == 0)then
-                resultblock[answer]= display.newImage("Images/red_block.png")
-            elseif(answer == 1)then
-                resultblock[answer]= display.newImage("Images/green_block.png")
-            elseif(answer == 2)then
-                resultblock[answer]= display.newImage("Images/blue_block.png")
-            elseif(answer == 3)then
-                resultblock[answer]= display.newImage("Images/green_block.png")
-            elseif(answer == 4)then
-                resultblock[answer]= display.newImage("Images/yellow_block.png")
-            end
-            resultblock[answer].anchorX=0
-            resultblock[answer].anchorY=0
-            resultblock[answer].x= newblock[answer].x
-            resultblock[answer].y= newblock[answer].y + 207
-            resultblock[answer].height=120
-            resultblock[answer].width=120
             answer = answer + 1
         else
+            local options = 
+            {
+                isModal = true
+            }
+            composer.showOverlay( "fail_search", options )
             tryagain()
             answer = 10
         end
     end
     if(answer < 10)then
+        audio.pause(searchMusicplay)
         local options = {
             effect = "crossFade",
             time = 500
         }
-        audio.pause( backgroundMusicplay)
-        composer.gotoScene("Rescue1",options)
+        for i=8,0,-1 
+        do 
+            display.remove(newblock[i]) 
+        end
+        answer = 0
+        spotx = 631
+        spoty = 230
+        countmax = 0
+        local attribute = "Search"..currLvl
+        parse:updateObject("LevelTime", myData.timeid, {[attribute] = endTime})
+        i=1
+        while setupItems[i]~=nil do
+            display.remove( setupItems[i] )
+            i=i+1
+        end
+        setupItems={}
+        composer.showOverlay("pass_tutorial", options)
+        print("Current level: "..myData.searchLvl)
     else
         answer = countmax
     end
 end
 
-function scene:nexttut()
-		composer.gotoScene( "RescueTutorial" )
+local function getKey()
+        answerkey = {"red","green","blue","green","yellow"}
+end
+
+
+local function setupPic(name, pic, xVal, yVal, hVal,wVal,alpha)
+
+    setupItems[name] = display.newImage(pic)
+    setupItems[name].anchorX = 0
+    setupItems[name].anchorY =1
+    setupItems[name].x = xVal
+    setupItems[name].y = yVal
+    setupItems[name].alpha=alpha
+    if(hVal~=nil) then
+        setupItems[name].height = hVal
+    end
+    if(wVal~=nil) then
+        setupItems[name].width= wVal
+    end
+    if(alpha==nil) then
+        setupItems[name].alpha=1
+    end
+end
+
+local function ShowSpeech( CurrSpeech )
+
+    local function nextSpeech( event )
+        myData.SpeechS=myData.SpeechS + 1
+        if(myData.SpeechS>=11) then
+
+            runbutton:addEventListener("tap",checkresult)
+            
+        end
+        ShowSpeech(myData.SpeechS)
+    end
+    i=1
+    while setupItems[i]~=nil do
+        display.remove( setupItems[i] )
+        i=i+1
+    end
+    setupItems={}
+    j=1
+    if (myData.SSImages[CurrSpeech]~=nil) then
+        im=myData.SSImages[CurrSpeech].images
+        while im[j]~=nil do
+            setupPic(j, im[j][1], im[j][2], im[j][3], im[j][4], im[j][5], im[j][6])
+            j=j+1
+        end
+        setupItems[1]:toFront()
+        setupItems[1]:addEventListener( "tap", nextSpeech )
+    end
+
 end
 
 -- "scene:create()"
 function scene:create( event )
 
+    currLvl = myData.searchLvl
+    myData.rescue = 0
+
     local sceneGroup = self.view
-    local backgroundMusic = audio.loadStream( "bensound-slowmotion.mp3")
-    local backgroundMusicplay = audio.play( backgroundMusic, {  fadein = 4000, loops=-1 } )
-    
+    searchMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
+    searchMusicplay = audio.play( searchMusic, {  fadein = 4000, loops=-1 } )
+    ShowSpeech(myData.SpeechS)
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 
-			local options = {
-			isModal = true,
-			}
-			
-			composer.showOverlay( "SearchTutorial1", options )
-
-    local background = display.newImage("Images/search_background_2.png")
+    local background = display.newImage("Images/theme_default/search_background.png")
         background.anchorX=0.5
         background.anchorY=0.5
         background.height=1080
@@ -236,10 +346,13 @@ function scene:create( event )
         
         setupmap()
         newblock = {}
-        resultblock = {}
         spacecolor = {}
         answer = 0
-        answerkey = {"red","green","blue","green","yellow"}
+        undosearch = 0
+        homesearch = 0
+        runsearch = 0
+
+        getKey()
 
         sceneGroup:insert(blockred)
         sceneGroup:insert(blockgreen)
@@ -247,6 +360,7 @@ function scene:create( event )
         sceneGroup:insert(blockyellow)
         sceneGroup:insert(runbutton)
         sceneGroup:insert(deletebutton)
+        sceneGroup:insert(homebutton)
         sceneGroup:insert(levelmap)
 
 
@@ -255,16 +369,16 @@ function scene:create( event )
         blockblue:addEventListener( "tap", addblue )
         blockyellow:addEventListener( "tap", addyellow )
         deletebutton:addEventListener("tap",removelast)
-        runbutton:addEventListener("tap",checkresult)
+        homebutton:addEventListener("tap",gohome)
+        
         spotx = 631
-        spoty = 90
+        spoty = 230
         countmax = 0
 end
 
 
 -- "scene:show()"
 function scene:show( event )
-
     local sceneGroup = self.view
     local phase = event.phase
 
@@ -272,9 +386,28 @@ function scene:show( event )
         -- Called when the scene is still off screen (but is about to come on screen).
         
         
-        
     elseif ( phase == "did" ) then
+        currLvl = myData.searchLvl
+        myData.rescue = 0
+        if(levelmap == nil) then
+            undosearch = 0
+            homesearch = 0
+            runsearch = 0
+            searchMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
+            searchMusicplay = audio.play( searchMusic, {  fadein = 4000, loops=-1 } )
+            levelmap = display.newImage("Images/search"..currLvl..".png")
+            levelmap.anchorX=0
+            levelmap.anchorY=0
+            levelmap.x=194
+            levelmap.y=583
+            levelmap.height=447
+            levelmap.width=862
+
+            sceneGroup:insert(levelmap)
+        end
         
+
+        getKey()
         
     end
 end
@@ -293,11 +426,23 @@ function scene:hide( event )
         -- Example: stop timers, stop animation, stop audio, etc.
         for i=8,0,-1 
         do 
-            display.remove(resultblock[i])
             display.remove(newblock[i]) 
         end
+        i=1
+        while setupItems[i]~=nil do
+            display.remove( setupItems[i] )
+            i=i+1
+        end
+        setupItems={}
+        myData.SpeechS=1
     elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.
+        
+
+        display.remove( levelmap)
+        levelmap=nil
+        
+        currLvl = nil
+
     end
 end
 
@@ -306,7 +451,6 @@ end
 function scene:destroy( event )
 
     local sceneGroup = self.view
-
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.
     -- Example: remove display objects, save state, etc.

@@ -271,6 +271,39 @@ function setkey(level)
   end
 end
 
+myData.SSImages = {
+    {images = {{"Tutorials/tutorial_search_1.png",0,1080,nil,nil,0.8}}},
+    {images = {{"Tutorials/tutorial_search_2.png",0,1080,nil,nil,0.8}}},
+    {images = {{"Tutorials/tutorial_search_3.png",0,1080,nil,nil,0.8}}},
+    {images = {{"Tutorials/tutorial_search_4.png",0,1080,nil,nil,0.8}}},
+    {images = {{"Tutorials/tutorial_search_5.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",194,583+447,449,864,1}}},
+    {images = {{"Tutorials/tutorial_search_6.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",194,583+151,151,864,1}}},
+    {images = {{"Tutorials/tutorial_search_7.png",0,1080,nil,nil,0.8}}},
+    {images = {{"Tutorials/tutorial_search_8.png",0,1080,nil,nil,0.8}}},
+    {images = {{"Tutorials/tutorial_search_9.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",1288,729+121,122,538,1}}},
+    {images = {{"Tutorials/tutorial_search_10.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",1289,887+121,122,122,1},{"Tutorials/alert_arrow.png",1072,887+97,nil,nil,1}}},
+    {images = {{"Tutorials/tutorial_search_11.png",0,1080,nil,nil,0.8}}}
+    }
+myData.SRImages = {
+    {images = {{"Tutorials/tutorial_rescue_2.png",97,819,nil,nil,0.8,0,1}}},
+    {images = {{"Tutorials/tutorial_rescue_3.png",97,819,nil,nil,0.8,0,1}}},
+    {images = {{"Tutorials/tutorial_rescue_4.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",842,347,142,142,1},{"Tutorials/alert_arrow.png",841,347+70,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_5.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",842,347,142,142,1},{"Tutorials/alert_arrow.png",841,347+70,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_6.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow_v.png",172,288+10,nil,nil,1,0.5,0},{"Tutorials/alert_arrow_v.png",359+62,288+11,nil,nil,1,0.5,0},{"Tutorials/alert_arrow_v.png",598+62,288+11,nil,nil,1,0.5,0}}},
+    {images = {{"Tutorials/tutorial_rescue_7.png",97,819,nil,nil,0.8,0,1}}},
+    {images = {{"Tutorials/tutorial_rescue_8.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1120,155,320,750,1},{"Tutorials/alert_arrow.png",1120,155+160,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_9.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1150,170,160,600,1},{"Tutorials/alert_arrow.png",1120,155+80,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_10.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1100,325,150,450,1},{"Tutorials/alert_arrow.png",1100,325+75,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_11.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1120,155+80,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_12.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1200,691.5,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_13.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1064,691.5,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_14.png",97,819,nil,nil,0.8,0,1}}},
+    {images = {{"Tutorials/tutorial_rescue_15.png",97,819,nil,nil,0.8,0,1}}},
+    }
+myData.SpeechS=1
+myData.SpeechR=1
+
+
 setObjects()
 setscience(1)
 setkey(1)

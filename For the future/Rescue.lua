@@ -400,7 +400,11 @@ end
 
 function scene:resetrobot()
 		transition.moveTo( robot, { time=0, x=109, y=819} )
+		fintable=nil
+		fintable={}
+		counter=1
 		timer.performWithDelay(20,restartr)	
+		
 end
 
 
@@ -413,27 +417,15 @@ local function restartr()
 		transition.to( myrectr, { time=16, x=robotX+240, y=robotY} )
 		fintable=nil
 		fintable={}
+		print(table.maxn(fintable))
 		counter=1
 end
 
 
 
-local function findsize()
-	if (fintable~=nil) then
-	local count =1;
-	while (fintable[count]~=nil) do
-		count=count+1
-	end
-	return count
-	else
-	return 0
-	end
-end
-
-
 
 local function moverobot()
-	local max = findsize()
+	local max = table.maxn(fintable)
 	
 	if not (counter>max) then
 		if (fintable[counter]=="Images/up_arrow.png") then
@@ -501,9 +493,7 @@ local function onCollision( event )
 				or event.object2==setupItems["leftwall"] or event.object2==setupItems["rightwall"] ) then
 			local options = {
 			isModal = true,
-			params = {
-			sampleVar = "my sample variable"
-				}
+			
 			}
 			composer.showOverlay( "fail", options )
 			print("why1")
@@ -561,7 +551,7 @@ local function pass()
     end
     local runsearchTable = {["Rescue"..currResc] = runrescue }
     parse:updateObject("RunCount", myData.runid, runsearchTable, onRunningObject)
-
+    counter=1
 	merge(table1)
 	moverobot()
 	
@@ -857,7 +847,13 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
-        
+        restartr()
+        table1=nil
+        table2=nil
+        table3=nil
+        table1={}
+        table2={}
+        table3={}
 		display.remove( robot)
 		robot=nil
 		display.remove( myrectu)
