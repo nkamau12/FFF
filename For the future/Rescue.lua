@@ -767,6 +767,19 @@ function scene:show( event )
 			science.height=140
 			science.width=140
 
+			--keys
+			setkey(currResc)
+			if(myData.key[1] ~= nil)then
+				key = display.newImage("Images/key.png")
+				key.anchorX=0
+				key.anchorY=0
+				key.x=myData.key[1]
+				key.y=myData.key[2]
+				key.height=124
+				key.width=140
+			else
+			end
+
 			setupPic("leftwall", myData.leftwall[5], myData.leftwall[1], myData.leftwall[2], myData.leftwall[3], myData.leftwall[4])
 			setupPic("rightwall", myData.rightwall[5], myData.rightwall[1], myData.rightwall[2], myData.rightwall[3], myData.rightwall[4])
 			setupPic("topwall", myData.topwall[5], myData.topwall[1], myData.topwall[2], myData.topwall[3], myData.topwall[4])
@@ -830,6 +843,7 @@ function scene:show( event )
 			sceneGroup:insert(setupItems["home"])
 			sceneGroup:insert(robot)
 			sceneGroup:insert(science)
+			sceneGroup:insert(key)
 			sceneGroup:insert(setupItems["bottomwall"])
 			sceneGroup:insert(setupItems["topwall"])
 			sceneGroup:insert(setupItems["leftwall"])
@@ -868,6 +882,8 @@ function scene:hide( event )
         table3={}
 		display.remove( robot)
 		robot=nil
+		display.remove( key)
+		key=nil
 		display.remove( myrectu)
 		myrectu=nil
 		display.remove( myrectd)
