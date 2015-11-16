@@ -37,7 +37,7 @@ local function showBonus()
 		effect = "crossFade",
 		time = 500
 	}
-		composer.gotoScene("Credits",options)
+		composer.gotoScene("Build_Search",options)
 end
 
 local function gohome( event )
