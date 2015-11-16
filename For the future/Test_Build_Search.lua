@@ -13,13 +13,43 @@ local scene = composer.newScene()
 local function setupmap()
 
         --level_map
-        --[[levelmap = display.newImage("Images/search"..currLvl..".png")
-        levelmap.anchorX=0
-        levelmap.anchorY=0
-        levelmap.x=194
-        levelmap.y=583
-        levelmap.height=447
-        levelmap.width=862]]--
+		i=1
+        while(myData.bonusShow.one[i] ~= nil) do
+            currBlock = myData.bonusShow.one[i]
+            mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
+            mapmain[i].anchorX=0
+            mapmain[i].anchorY=0
+            mapmain[i].x=352 + (i-1)*142
+            mapmain[i].y=595
+            mapmain[i].height=120
+            mapmain[i].width=120
+            i = i + 1
+        end
+        i=1
+        while(myData.bonusShow.two[i] ~= nil) do
+            currBlock = myData.bonusShow.two[i]
+            mapone[i] = display.newImage("Images/"..currBlock.."_block.png")
+            mapone[i].anchorX=0
+            mapone[i].anchorY=0
+            mapone[i].x=352 + (i-1)*142
+            mapone[i].y=750
+            mapone[i].height=120
+            mapone[i].width=120
+            i = i + 1
+        end
+        i=1
+        while(myData.bonusShow.three[i] ~= nil) do
+            currBlock = myData.bonusShow.three[i]
+            maptwo[i] = display.newImage("Images/"..currBlock.."_block.png")
+            maptwo[i].anchorX=0
+            maptwo[i].anchorY=0
+            maptwo[i].x=352 + (i-1)*142
+            maptwo[i].y=903
+            maptwo[i].height=120
+            maptwo[i].width=120
+            i = i + 1
+        end
+        i=1
 
         --red_block
         blockred = display.newImage("Images/red_block.png")
@@ -232,7 +262,10 @@ function scene:create( event )
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-
+	mapmain = {}
+	mapone = {}
+	maptwo = {}
+	
 	local sceneGroup = self.view
 	
     local background = display.newImage("Images/theme_"..myData.theme.."/search_background.png")
@@ -261,6 +294,23 @@ function scene:create( event )
         sceneGroup:insert(runbutton)
         sceneGroup:insert(deletebutton)
         sceneGroup:insert(homebutton)
+		
+		i=1
+        while(mapmain[i] ~= nil) do
+                sceneGroup:insert(mapmain[i])
+                i = i + 1
+        end
+        i = 1
+        while(mapone[i] ~= nil) do
+                sceneGroup:insert(mapone[i])
+                i = i + 1
+        end
+        i = 1
+        while(maptwo[i] ~= nil) do
+                sceneGroup:insert(maptwo[i])
+                i = i + 1
+        end
+        i = 1
 
 
         blockred:addEventListener( "tap", addred )

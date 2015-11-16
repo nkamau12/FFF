@@ -4,7 +4,8 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require("widget")
 
-local picToAdd=""
+local picToAdd= ""
+local testpic = ""
 local buttonTable = {}
 local picTableBonus = {}
 local table1 = {}
@@ -14,6 +15,9 @@ local fintable = {}
 local counter = 1;
 local bonuskey ={} 
 local popupPic
+local one = {}
+local two = {}
+local three = {}
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -24,32 +28,7 @@ local popupPic
 -- -------------------------------------------------------------------------------
 local function setupmap()
 		
-		--oneloop
-		oneloop = display.newImage("Images/one_loop.png")
-		oneloop.anchorX=0
-        oneloop.anchorY=0
-        oneloop.x=194
-        oneloop.y=583
-        oneloop.height=133
-        oneloop.width=805
 		
-		--two_loop
-		twoloop = display.newImage("Images/two_loop.png")
-		twoloop.anchorX=0
-        twoloop.anchorY=0
-        twoloop.x=194
-        twoloop.y=727
-        twoloop.height=133
-        twoloop.width=805
-		
-		--three_loop
-		threeloop = display.newImage("Images/three_loop.png")
-		threeloop.anchorX=0
-        threeloop.anchorY=0
-        threeloop.x=194
-        threeloop.y=870
-        threeloop.height=133
-        threeloop.width=805
 		
         --red_block
         blockred = display.newImage("Images/red_block.png")
@@ -96,23 +75,23 @@ local function setupmap()
         homebutton.height=120
         homebutton.width=120
 		
+		--one_ button
+		onebutton = display.newImage("Images/1_block.png")
+		onebutton.anchorX=0
+        onebutton.anchorY=0
+        onebutton.x=1426
+        onebutton.y=865
+        onebutton.height=120
+        onebutton.width=120
+
 		--two_ button
-		twobutton = display.newImage("Images/two_button_white.png")
+		twobutton = display.newImage("Images/2_block.png")
 		twobutton.anchorX=0
         twobutton.anchorY=0
-        twobutton.x=1426
+        twobutton.x=1564
         twobutton.y=865
         twobutton.height=120
         twobutton.width=120
-
-		--three_ button
-		threebutton = display.newImage("Images/three_button_white.png")
-		threebutton.anchorX=0
-        threebutton.anchorY=0
-        threebutton.x=1564
-        threebutton.y=865
-        threebutton.height=120
-        threebutton.width=120
 		
 		 --run_button
         runbutton = display.newImage("Images/run_button.png")
@@ -171,6 +150,7 @@ local function addPic(xVal,yVal,name,spot)
 			
 	end
 	picToAdd = ""
+	testpic = ""
 	if(popupPic~=nil)then
 		popupPic:removeSelf()
 		popupPic = nil
@@ -182,62 +162,77 @@ local function handleButtonEvent(event)
     elseif ( "ended" == event.phase ) then
         if(event.target.id == "oneloopBtn1") then
 			table1[1] = picToAdd
+			one[1] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 1)
 		end
 		if(event.target.id == "oneloopBtn2") then
 			table1[2] = picToAdd
+			one[2] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 2)
 		end
 		if(event.target.id == "oneloopBtn3") then
 			table1[3] = picToAdd
+			one[3] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 3)
 		end
 		if(event.target.id == "oneloopBtn4") then
 			table1[4] = picToAdd
+			one[4] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 4)
 		end
 		if(event.target.id == "oneloopBtn5") then
 			table1[5] = picToAdd
+			one[5] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 5)
 		end
 		if(event.target.id == "twoloopBtn1") then
 			table2[1] = picToAdd
+			two[1] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 6)
 		end
 		if(event.target.id == "twoloopBtn2") then
 			table2[2] = picToAdd
+			two[2] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 7)
 		end
 		if(event.target.id == "twoloopBtn3") then
 			table2[3] = picToAdd
+			two[3] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 8)
 		end
 		if(event.target.id == "twoloopBtn4") then
 			table2[4] = picToAdd
+			two[4] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 9)
 		end
 		if(event.target.id == "twoloopBtn5") then
 			table2[5] = picToAdd
+			two[5] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 10)
 		end
 		if(event.target.id == "threeloopBtn1") then
 			table3[1] = picToAdd
+			three[1] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 11)
 		end
 		if(event.target.id == "threeloopBtn2") then
 			table3[2] = picToAdd
+			three[2] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 12)
 		end
 		if(event.target.id == "threeloopBtn3") then
 			table3[3] = picToAdd
+			three[3] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 13)
 		end
 		if(event.target.id == "threeloopBtn4") then
 			table3[4] = picToAdd
+			three[4] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 14)
 		end
 		if(event.target.id == "threeloopBtn5") then
 			table3[5] = picToAdd
+			three[5] = testpic
 			addPic(event.target.x, event.target.y,picToAdd, 15)
 		end
     end
@@ -247,7 +242,7 @@ end
 
 local function gohome( event )
     homesearch = homesearch + 1
-
+	print("in")
     local function onUpdateObject( event )
         if not event.error then
             print( event.response.updatedAt )
@@ -274,40 +269,46 @@ end
 
 local function addred()
 	picToAdd = "Images/red_block.png"
+	testpic = "red"
 	popup(1289,729,120,120)
 end
 
 local function addgreen()
 	picToAdd = "Images/green_block.png"
+	testpic = "green"
 	popup(1426,729,120,120)
 end
 
 local function addblue()
 	picToAdd = "Images/blue_block.png"
+	testpic = "blue"
 	popup(1564,729,120,120)
 end
 
 local function addyellow()
 	picToAdd = "Images/yellow_block.png"
+	testpic = "yellow"
 	popup(1700,729,120,120)
 end
 
 local function addtwo()
-	picToAdd = "Images/two_button_white.png"
+	picToAdd = "Images/1_block.png"
+	testpic = 1
 	popup(1426,865,120,120)
 end
 
 local function addthree()
-	picToAdd = "Images/three_button_white.png"
+	picToAdd = "Images/2_block.png"
+	testpic = 2
 	popup(1564,865,120,120)
 end
 
 local function merge(tablel)
 	
 	for i=1,5,1 do
-		if (tablel[i]=="Images/two_button_white.png") then
+		if (tablel[i]=="Images/1_block.png") then
 			merge(table2)
-		elseif (tablel[i]=="Images/three_button_white.png") then
+		elseif (tablel[i]=="Images/2_block.png") then
 			merge(table3)
 		elseif ( tablel[i]=="Images/red_block.png") then
 			table.insert(fintable,tablel[i])
@@ -344,10 +345,27 @@ local function test()
 	table3 = {}
 	fintable = {}
 	buttonTable = {}
+	
+	local show = {
+		one = {},
+		two = {}, 
+		three = {}
+		}
 		
+	show.one = one
+	show.two = two
+	show.three = three
+	
+	myData.bonusShow = show
+	
+	one = {}
+	two = {}
+	three = {}
+	show = {}
 	
 	myData.bonusKeyBuilt = bonuskey
 	bonuskey = {}
+	
 	local options = {
 		effect = "crossFade",
 		time = 500
@@ -359,8 +377,8 @@ end
 local function addButton(position, xPos, yPos,idName)
 	buttonTable[position] = widget.newButton
 	{
-		width = 120,
-	    height = 120,
+		width = 160,
+	    height = 160,
 		x = xPos ,
 		y = yPos ,
 		id = idName,
@@ -377,7 +395,7 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 
-    local background = display.newImage("Images/theme_red/search_background.png")
+    local background = display.newImage("Images/theme_"..myData.theme.."/search_background.png")
         background.anchorX=0.5
         background.anchorY=0.5
         background.height=1080
@@ -394,23 +412,23 @@ function scene:create( event )
         homesearch = 0
         runsearch = 0
 		--buttons
-		addButton(11,400,650,"oneloopBtn1")
-		addButton(12,532,650,"oneloopBtn2")
-		addButton(13,660,650,"oneloopBtn3")
-		addButton(14,793,650,"oneloopBtn4")
-		addButton(15,928,650,"oneloopBtn5")
+		addButton(11,410,653,"oneloopBtn1")
+		addButton(12,555,653,"oneloopBtn2")
+		addButton(13,695,653,"oneloopBtn3")
+		addButton(14,835,653,"oneloopBtn4")
+		addButton(15,980,653,"oneloopBtn5")
 		
-		addButton(21,400,793,"twoloopBtn1")
-		addButton(22,532,793,"twoloopBtn2")
-		addButton(23,660,793,"twoloopBtn3")
-		addButton(24,793,793,"twoloopBtn4")
-		addButton(25,928,793,"twoloopBtn5")
+		addButton(21,410,810,"twoloopBtn1")
+		addButton(22,555,810,"twoloopBtn2")
+		addButton(23,695,810,"twoloopBtn3")
+		addButton(24,835,810,"twoloopBtn4")
+		addButton(25,980,810,"twoloopBtn5")
 		
-		addButton(31,400,936,"threeloopBtn1")
-		addButton(32,532,936,"threeloopBtn2")
-		addButton(33,664,936,"threeloopBtn3")
-		addButton(34,793,936,"threeloopBtn4")
-		addButton(35,928,936,"threeloopBtn5")
+		addButton(31,410,960,"threeloopBtn1")
+		addButton(32,555,960,"threeloopBtn2")
+		addButton(33,695,960,"threeloopBtn3")
+		addButton(34,835,960,"threeloopBtn4")
+		addButton(35,980,960,"threeloopBtn5")
 		
 		
 
@@ -419,11 +437,8 @@ function scene:create( event )
         sceneGroup:insert(blockblue)
         sceneGroup:insert(blockyellow)
         sceneGroup:insert(homebutton)
-		sceneGroup:insert(oneloop)
-		sceneGroup:insert(twoloop)
-		sceneGroup:insert(threeloop)
+		sceneGroup:insert(onebutton)
 		sceneGroup:insert(twobutton)
-		sceneGroup:insert(threebutton)
 		sceneGroup:insert(runbutton)
 		
 		
@@ -445,15 +460,14 @@ function scene:create( event )
 		sceneGroup:insert(buttonTable[34])
 		sceneGroup:insert(buttonTable[35])
 		
-        --sceneGroup:insert(levelmap)
 
 
         blockred:addEventListener( "tap", addred )
         blockgreen:addEventListener( "tap", addgreen )
         blockblue:addEventListener( "tap", addblue )
         blockyellow:addEventListener( "tap", addyellow )
-		twobutton:addEventListener("tap", addtwo)
-		threebutton:addEventListener("tap", addthree)
+		onebutton:addEventListener("tap", addtwo)
+		twobutton:addEventListener("tap", addthree)
         homebutton:addEventListener("tap",gohome)
 		runbutton:addEventListener("tap",test)
   
@@ -467,8 +481,6 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
-        
-        
         
     end
 end
