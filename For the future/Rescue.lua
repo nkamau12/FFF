@@ -4,6 +4,8 @@ local composer = require( "composer" )
 local physics = require("physics")
 local scene = composer.newScene()
 local widget = require("widget")
+local JSON = require ("json")
+local loadsave = require( "loadsave" ) 
 
 local picToAdd=""
 
@@ -71,7 +73,7 @@ local function setupmap()
 	setupPic("home", myData.homebutton[5], myData.homebutton[1], myData.homebutton[2], myData.homebutton[3], myData.homebutton[4])
 
 	--robot
-	robot = display.newImage("Images/robot_santa.png")
+	robot = display.newImage("Images/robot_"..myData.roboSprite..".png")
 	robot.anchorX=0
 	robot.anchorY=0
 	robot.x=109
@@ -82,7 +84,7 @@ local function setupmap()
 
 	--scientist
 	setscience(currResc)
-	science = display.newImage("Images/scientist_present.png")
+	science = display.newImage("Images/scientist_"..myData.scienceSprite..".png")
 	science.anchorX=0
 	science.anchorY=0
 	science.x=myData.science[1]
@@ -472,15 +474,25 @@ local function onCollision( event )
 				}
 				audio.stop(elevatorMusicplay)
 				audio.pause(backgroundMusicplay)
-				if(currResc ~= 4) then
+				if(currResc ~= 12) then
 					for h = 15, 1, -1 do
 						if(picTable[h] ~= nil) then
 							picTable[h]:removeSelf()
 						end
 					end
 					composer.showOverlay("pass_rescue",options)
-					myData.rescueLvl = currResc + 1
-					myData.searchLvl = currResc + 1
+
+        			myData.rescueLvl = currResc + 1
+
+        			local userSettings = {
+        			user = myData.user,
+        			search = myData.searchLvl,
+        			rescue = myData.rescueLvl,
+        			theme = myData.theme,
+        			robot = myData.roboSprite,
+        			science = myData.scienceSprite
+        			}
+        			loadsave.saveTable( userSettings, "user.json" )
 				else
 					for h = 15, 1, -1 do
 						if(picTable[h] ~= nil) then
@@ -736,7 +748,7 @@ function scene:show( event )
 			elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
 
 			--robot
-			robot = display.newImage("Images/robot_santa.png")
+			robot = display.newImage("Images/robot_"..myData.roboSprite..".png")
 			robot.anchorX=0
 			robot.anchorY=0
 			robot.x=109
@@ -747,7 +759,7 @@ function scene:show( event )
 
 			--scientist
 			setscience(currResc)
-			science = display.newImage("Images/scientist_present.png")
+			science = display.newImage("Images/scientist_"..myData.scienceSprite..".png")
 			science.anchorX=0
 			science.anchorY=0
 			science.x=myData.science[1]

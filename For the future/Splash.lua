@@ -3,6 +3,9 @@ local myData = require( "mydata" )
 local composer = require( "composer" )
 --local parse = require( "mod_parse" )
 local scene = composer.newScene()
+local JSON = require ("json")
+local loadsave = require( "loadsave" ) 
+
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -14,10 +17,11 @@ local scene = composer.newScene()
 
 local function showMain()
 	local options = {
+        isModal = true,
 		effect = "fade",
 		time = 500
 	}
-		composer.gotoScene("MainMenu",options)
+		  composer.gotoScene("MainMenu",options)
 end
 -- "scene:create()"
 function scene:create( event )
@@ -28,6 +32,7 @@ function scene:create( event )
 	
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
+    
 end
 
 
@@ -53,10 +58,7 @@ function scene:show( event )
 		background:addEventListener( "touch", showMain )
 		
     elseif ( phase == "did" ) then
-        -- Called when the scene is now on screen.
-        -- Insert code here to make the scene come alive.
-        -- Example: start timers, begin animation, play audio, etc.
-		
+
     end
 end
 
@@ -68,9 +70,8 @@ function scene:hide( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-        -- Called when the scene is on screen (but is about to go off screen).
-        -- Insert code here to "pause" the scene.
-        -- Example: stop timers, stop animation, stop audio, etc.
+        
+
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
     end

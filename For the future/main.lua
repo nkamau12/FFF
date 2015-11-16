@@ -18,9 +18,28 @@ parse.showStatus = false
 parse:appOpened()
 
 
+
+-- code to read if there is an existent user logged into the game
+local JSON = require ("json")
+local loadsave = require( "loadsave" ) 
+--default no user settings
+--local userSettings = {
+  --user = nil,
+  --search = 1,
+  --rescue = 0,
+  --theme = "default",
+  --robot = "default",
+  --science = "default"
+--}
+--loadsave.saveTable( userSettings, "user.json" )
+local loadedUser = loadsave.loadTable( "user.json" )
+print(loadedUser.user)
+print("search: "..loadedUser.search)
+print("rescue: "..loadedUser.rescue)
+
+
+
 local facebook = require( "plugin.facebook.v4" )
-
-
 
 --appWarp code
 
@@ -28,31 +47,18 @@ appWarpClient = require( "AppWarp.WarpClient" )
 appWarpClient .initialize("673530f0fd20f8c6ccd4caacea4a220bebfa0fbc44641777fc3031eb979c2c39", 
 "bd3fdd7032da1965f6ddeeff869c065ca4275ec3590fbd4f9b89133ee2555123")  
 
---user service import statement
-local App42API = require("App42-Lua-API.App42API") 
-
---create user
-local userName  = "jorgeblah"
-local pwd = "llama"
-local emailId = "garcijo94@gmail.com"
-local App42CallBack = {}
+require("App42-Lua-API.Operator")
+require("App42-Lua-API.Permission")
+require("App42-Lua-API.GeoOperator")
+require("App42-Lua-API.OrderByType")
+require("App42-Lua-API.Operator")
+local JSON = require("App42-Lua-API.JSON") 
+local queryBuilder = require("App42-Lua-API.QueryBuilder")
+local App42API = require("App42-Lua-API.App42API")
+local ACL = require("App42-Lua-API.ACL")
 App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
-  "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
-local userService  = App42API:buildUserService()
-userService:createUser(userName,pwd,emailId,App42CallBack)
-function App42CallBack:onSuccess(object)
-  print("userName is "..object:getUserName())
-  print("emailId is "..object:getEmail())
-end
-function App42CallBack:onException(exception)
-  print("Message is : "..exception:getMessage())
-  print("App Error code is : "..exception:getAppErrorCode())
-  print("Http Error code is "..exception:getHttpErrorCode())
-  print("Detail is : "..exception:getDetails())
-end
-
-
-
+    "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
+local storageService = App42API:buildStorageService()  
 
 
 --local in-game data storage
@@ -92,14 +98,49 @@ parse:createObject("UndoCount", datatable, saveUndo)
 parse:createObject("HomeCount", datatable, saveHome)
 parse:createObject("RunCount", datatable, saveRun)
 parse:createObject("EmptyCount", datatable, saveEmpty)
+
+--loading values
 myData.searchLvl = 1
 myData.rescueLvl = 1
-myData.maxsrch = 1
-myData.maxrsc = 1
 myData.rescue = 0
-myData.theme = "green"
 
 
+
+
+--load user
+local dbName  = "USERS"
+local collectionName = "GameInfo"
+local key = "user"
+local value
+if(loadedUser.user == nil)then
+  value = "nil"
+  myData.user = nil
+else
+  value = loadedUser.user
+  myData.user = loadedUser.user
+end
+local App42CallBack = {}
+local jsonDoc = {}
+storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42CallBack)
+
+function App42CallBack:onSuccess(object)
+  print("dbName is "..object:getDbName())
+  for i=1,table.getn(object:getJsonDocList()) do
+    print("DocId is "..object:getJsonDocList()[i]:getDocId())
+    print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
+    jsonDoc.user = object:getJsonDocList()[i]:getJsonDoc().user
+    jsonDoc.search = object:getJsonDocList()[i]:getJsonDoc().search
+    jsonDoc.rescue = object:getJsonDocList()[i]:getJsonDoc().rescue
+    jsonDoc.theme = object:getJsonDocList()[i]:getJsonDoc().theme
+    jsonDoc.robot = object:getJsonDocList()[i]:getJsonDoc().robot
+    jsonDoc.scientist = object:getJsonDocList()[i]:getJsonDoc().scientist
+  end
+
+myData.maxsrch = jsonDoc.search
+myData.maxrsc = jsonDoc.rescue
+myData.theme = jsonDoc.theme
+myData.roboSprite = jsonDoc.robot
+myData.scienceSprite = jsonDoc.scientist
 
 
 
@@ -176,10 +217,10 @@ function setObjects()
   myData.startbutton = {1542, 332, 122, 320, "Images/run_button.png"}
 
   --robot
-  myData.robot = {109, 819, 140, 140, "Images/robot_santa.png"}
+  myData.robot = {109, 819, 140, 140, "Images/robot_"..myData.roboSprite..".png"}
 
   --scientist
-  myData.science = {nil, nil, 140, 140, "Images/scientist_present.png"}
+  myData.science = {nil, nil, 140, 140, "Images/scientist_"..myData.scienceSprite..".png"}
 
   --key
   myData.key = {nil, nil, 124, 140, "Images/key.png"}
@@ -311,8 +352,38 @@ setkey(1)
 
 -- require the composer library
 local composer = require "composer"
-
+local options = {
+        isModal = true,
+    effect = "fade",
+    time = 500
+  }
 composer.gotoScene( "Splash" )
+
+print(jsonDoc.theme)
+end
+
+
+function App42CallBack:onException(exception)
+  print("Message is : "..exception:getMessage())
+  print("App Error code is : "..exception:getAppErrorCode())
+  print("Http Error code is "..exception:getHttpErrorCode())
+  print("Detail is : "..exception:getDetails())
+
+  myData.maxsrch = loadedUser.search
+  myData.maxrsc = loadedUser.rescue
+  myData.user = loadedUser.user
+  myData.theme = loadedUser.theme
+  myData.roboSprite = loadedUser.robot
+  myData.scienceSprite = loadedUser.science
+
+  local composer = require "composer"
+  local options = {
+        isModal = true,
+    effect = "fade",
+    time = 500
+  }
+  composer.gotoScene( "Splash" )
+end
 
 
 

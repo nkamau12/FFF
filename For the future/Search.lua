@@ -1,6 +1,8 @@
 local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local composer = require( "composer" )
+local JSON = require ("json")
+local loadsave = require( "loadsave" ) 
 local scene = composer.newScene()
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -285,6 +287,16 @@ local function checkresult( event )
 		composer.showOverlay("pass_search", options)
         myData.searchLvl = currLvl + 1
         myData.rescueLvl = currLvl
+
+        local userSettings = {
+        user = myData.user,
+        search = myData.searchLvl,
+        rescue = myData.rescueLvl,
+        theme = myData.theme,
+        robot = myData.roboSprite,
+        science = myData.scienceSprite
+        }
+        loadsave.saveTable( userSettings, "user.json" )
         print("Current level: "..myData.searchLvl)
     else
         answer = countmax

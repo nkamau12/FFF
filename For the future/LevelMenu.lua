@@ -4,6 +4,19 @@ local composer = require( "composer" )
 local JSON = require ("json")
 local scene = composer.newScene()
 
+local App42API = require("App42-Lua-API.App42API") 
+App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
+    "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
+require("App42-Lua-API.Operator")
+require("App42-Lua-API.Permission")
+require("App42-Lua-API.GeoOperator")
+require("App42-Lua-API.OrderByType")
+require("App42-Lua-API.Operator")
+local JSON = require("App42-Lua-API.JSON") 
+local queryBuilder = require("App42-Lua-API.QueryBuilder")
+local ACL = require("App42-Lua-API.ACL")
+local storageService = App42API:buildStorageService()  
+
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
@@ -43,6 +56,7 @@ local function Rescuenum(event)
 	myData.rescueLvl = event.target.name
 	print("Going to rescue "..event.target.name)
 	showRescue()
+	myData.searchLvl = myData.rescueLvl + 1
 end
 
 
@@ -138,7 +152,7 @@ function scene:create( event )
 
 		
 		for l=1,12,1 do 
-			if(maxsrch > l)then
+			if(maxsrch > l or maxsrch == 12)then
 				rescue[l] = display.newImage("Images/level"..l..".png")
 				rescue[l]:addEventListener( "tap", Rescuenum )
 			else
@@ -177,6 +191,9 @@ function scene:show( event )
     maxsrch = myData.maxsrch
     maxrsc = myData.maxrsc
 
+    print("maxsrch "..maxsrch)
+    print("maxrsc "..maxrsc)
+
     if(myData.searchLvl > maxsrch) then
     	maxsrch = myData.searchLvl
     end
@@ -186,6 +203,39 @@ function scene:show( event )
 	
     local sceneGroup = self.view
     local phase = event.phase
+
+
+    local dbName  = "USERS"
+    local collectionName = "GameInfo"
+    local key = "user"
+    local value = myData.user
+    local jsonDoc = {}
+  	jsonDoc.user = myData.user
+    jsonDoc.search = maxsrch
+    jsonDoc.rescue = maxrsc
+    jsonDoc.theme = myData.theme
+    jsonDoc.robot = myData.roboSprite
+    jsonDoc.scientist = myData.scienceSprite
+
+    local App42CallBack = {}
+    storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)
+    function App42CallBack:onSuccess(object)
+        print("dbName is "..object:getDbName())
+        for i=1,table.getn(object:getJsonDocList()) do
+            print("DocId is "..object:getJsonDocList()[i]:getDocId())
+            print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
+            print("UpdatedAt is "..object:getJsonDocList()[i]:getUpdatedAt())
+            print("jsonDoc is "..JSON:encode(object:getJsonDocList()[i]:getJsonDoc())); 
+        end
+    end
+    function App42CallBack:onException(exception)
+        print("Message is : "..exception:getMessage())
+        print("App Error code is : "..exception:getAppErrorCode())
+        print("Http Error code is "..exception:getHttpErrorCode())
+        print("Detail is : "..exception:getDetails())
+    end
+
+
 	
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
@@ -249,7 +299,7 @@ function scene:show( event )
 		end
 
 		for l=1,12,1 do 
-			if(maxsrch > l)then
+			if(maxsrch > l or maxsrch == 12)then
 				rescue[l] = display.newImage("Images/level"..l..".png")
 				rescue[l]:addEventListener( "tap", Rescuenum )
 			else

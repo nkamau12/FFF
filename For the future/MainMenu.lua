@@ -2,6 +2,7 @@ local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local composer = require( "composer" )
 local JSON = require ("json")
+local loadsave = require( "loadsave" )
 local scene = composer.newScene()
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -139,6 +140,15 @@ function scene:show( event )
 		background.y=display.contentCenterY
 		sceneGroup:insert(background)
 
+		local options = {
+			isModal = true,
+            effect = "crossFade",
+            time = 500
+        }
+		if (myData.user == nil)then
+			composer.showOverlay("start_user", options)
+		else
+
 		--settings_button
         settingsbutton = display.newImage("Images/Settings.png")
         settingsbutton.anchorX=0
@@ -189,7 +199,8 @@ function scene:show( event )
 		store.y=display.contentCenterY+40
 		sceneGroup:insert(store)
 		store:addEventListener( "tap", showStore )
-		
+		end
+
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
