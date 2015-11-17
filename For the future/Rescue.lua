@@ -25,6 +25,8 @@ local myrectl
 local myrectr
 local currResc
 local currwall
+local keyset = {}
+local numkeys
 
 local i = 1
 
@@ -93,17 +95,28 @@ local function setupmap()
 	science.width=140
 
 	--keys
-	setkey(currResc)
-	if(myData.key[1] ~= nil)then
-		key = display.newImage("Images/key.png")
-		key.anchorX=0
-		key.anchorY=0
-		key.x=myData.key[1]
-		key.y=myData.key[2]
-		key.height=124
-		key.width=140
-	else
+	i = 1
+	while(myData.levelkey[currResc].key[i] ~= nil) do
+		setkey(currResc, i)
+		i = i + 1
 	end
+	i = 1
+	while(myData.levelkey[currResc].key[i] ~= nil)do
+		if(myData.key[i][1] ~= 0) then
+			keyset[i] = display.newImage("Images/key.png")
+			keyset[i].anchorX=0
+			keyset[i].anchorY=0
+			keyset[i].x=myData.key[i][1]
+			keyset[i].y=myData.key[i][2]
+			keyset[i].height=124
+			keyset[i].width=140
+			keyset[i].name="key"
+			numkeys = i
+		end
+		i = i + 1
+	end
+	i = 1
+	
 
 	--walls
 	i = 1
@@ -140,8 +153,11 @@ local function setupmap()
 	physics.addBody( myrectr, "static",{bounce=0})
 		
 	--keys
-	if(myData.key[1] ~= nil)then
-		physics.addBody(key, "static",{bounce=0})
+	i = 1
+	while(keyset[i] ~= nil) do
+		print("keyphys "..i)
+		physics.addBody(keyset[i], "static",{ isSensor=true })
+		i = i + 1
 	end
 
 	--walls physics
@@ -149,6 +165,8 @@ local function setupmap()
 	physics.addBody( setupItems["rightwall"], "static",{bounce=0})
 	physics.addBody( setupItems["topwall"], "static",{bounce=0})
 	physics.addBody( setupItems["bottomwall"], "static",{bounce=0})
+
+	i = 1
 	while(myData.levelkey[currResc].walls[i] ~= nil) do
 		currwall = "wall"..(myData.levelkey[currResc].walls[i])
 		physics.addBody( setupItems[currwall], "static",{bounce=0})
@@ -320,6 +338,14 @@ local function moveup()
 		transition.to( myrectu, { time=16, x=robotX, y=robotY-250} )
 		timer.performWithDelay(20,moveu)
 end
+local function moveuphalf()
+		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
+		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
+		
+		local robotX, robotY = robot:localToContent( 0, -70 )
+		transition.to( myrectu, { time=16, x=robotX, y=robotY-200} )
+		timer.performWithDelay(20,moveu)
+end
 
 
 local function moveri()
@@ -331,6 +357,13 @@ local function mover()
 		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
 		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectr, { time=16, x=robotX+320, y=robotY} )
+		timer.performWithDelay(20,moveri)
+end
+local function moverhalf()
+		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
+		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
+		local robotX, robotY = robot:localToContent( 0, -70 )
+		transition.to( myrectr, { time=16, x=robotX+270, y=robotY} )
 		timer.performWithDelay(20,moveri)
 end
 
@@ -346,6 +379,13 @@ local function moved()
 		transition.to( myrectd, { time=16, x=robotX, y=robotY+390} )
 		timer.performWithDelay(20,movedo)	
 end
+local function movedhalf()
+		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
+		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
+		local robotX, robotY = robot:localToContent( 0, -70 )
+		transition.to( myrectd, { time=16, x=robotX, y=robotY+320} )
+		timer.performWithDelay(20,movedo)	
+end
 
 
 local function movele()
@@ -357,6 +397,13 @@ local function movel()
 		local robotMusicplay = audio.play( robotMusic, { loops=0 } )
 		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectl, { time=16, x=robotX-320, y=robotY} )
+		timer.performWithDelay(20,movele)	
+end
+local function movelhalf()
+		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
+		local robotMusicplay = audio.play( robotMusic, { loops=0 } )
+		local robotX, robotY = robot:localToContent( 0, -70 )
+		transition.to( myrectl, { time=16, x=robotX-270, y=robotY} )
 		timer.performWithDelay(20,movele)	
 end
 
@@ -423,9 +470,6 @@ local function restartr()
 		counter=1
 end
 
-
-
-
 local function moverobot()
 	local max = table.maxn(fintable)
 	
@@ -453,19 +497,28 @@ local function moverobot()
 	end	
 end
 
+local function movehalf()
+	if (fintable[counter]=="Images/up_arrow.png") then
+		moveuphalf()
+	elseif (fintable[counter]=="Images/down_arrow.png") then
+		movedhalf()
+	elseif (fintable[counter]=="Images/left_arrow.png") then
+		movelhalf()
+	elseif (fintable[counter]=="Images/right_arrow.png") then
+		moverhalf()
+	end	
+end
+
 local function onCollision( event )
 	if ( event.phase == "began" ) then
 		if (event.object2==myrectu or event.object2==myrectd or event.object2==myrectl or event.object2==myrectr) then
 			if ( event.phase == "began" ) then
 				moverobot()
 			end
-		elseif (event.object2==key) then
+		elseif (event.object2 == keyset[1] or event.object2 ==keyset[2] or event.object2 ==keyset[3] or event.object2 ==keyset[4]) then
 			keyscount = keyscount + 1
 			print("keys count: "..keyscount)
 			event.object2:removeSelf()
-			counter = counter - 1
-			moverobot()
-
 		elseif (event.object2==science) then
 				print("Scientist")
 				local options = {
@@ -509,16 +562,23 @@ local function onCollision( event )
 			}
 			composer.showOverlay( "fail", options )
 			print("why1")
-
 		else
+			i = 1
 			while(myData.levelkey[currResc].walls[i] ~= nil) do
 				currwall = "wall"..myData.levelkey[currResc].walls[i]
+				print("currwall "..currwall)
 				if(event.object2==setupItems[currwall]) then
 					if(keyscount > 0)then
 						event.object2:removeSelf()
 						keyscount = keyscount - 1
 						counter = counter - 1
-						moverobot()
+						print("keyscount "..keyscount)
+						print("counter "..counter)
+						movehalf()
+						--timer.performWithDelay(10,movehalf)
+						counter = counter + 1
+						--timer.performWithDelay(100,moverobot)
+						
 					else
 						local options = {
 						isModal = true
@@ -590,6 +650,11 @@ local function gohome()
 			audio.pause(backgroundMusicplay)
 			composer.gotoScene("MainMenu",optionsh)
 			myData.rescue = 1
+			for h = 15, 1, -1 do
+				if(picTable[h] ~= nil) then
+					picTable[h]:removeSelf()
+				end
+			end
 			picTable = {}
 			physics.stop()
 end
@@ -614,8 +679,11 @@ end
 function scene:create( event )
 	currResc = myData.rescueLvl
 	myData.rescue = 1
+	keyset = {}
 
 	setscience(currResc)
+
+	
 
     local sceneGroup = self.view
     elevatorMusic = audio.loadStream( "Music/bensound-theelevatorbossanova.mp3")
@@ -715,12 +783,19 @@ function scene:create( event )
 	--add character
 	sceneGroup:insert(robot)
 	sceneGroup:insert(science)
+	i = 1
+	while(keyset[i] ~= nil) do
+		sceneGroup:insert(keyset[i])
+		i = i + 1
+	end
+	
 	
 	--add walls
 	sceneGroup:insert(setupItems["bottomwall"])
 	sceneGroup:insert(setupItems["topwall"])
 	sceneGroup:insert(setupItems["leftwall"])
 	sceneGroup:insert(setupItems["rightwall"])
+	i = 1
 	while(myData.levelkey[currResc].walls[i] ~= nil) do
 		currwall = "wall"..myData.levelkey[currResc].walls[i]
 		sceneGroup:insert(setupItems[currwall])
@@ -739,10 +814,16 @@ function scene:show( event )
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
 		picTable = {}
+		
     	setObjects()
     	print(myData.rescueLvl)
     	currResc = myData.rescueLvl
         myData.rescue = 1
+        
+        
+        
+
+		
         if(robot == nil) then
 			elevatorMusic = audio.loadStream( "Music/bensound-theelevatorbossanova.mp3")
 			elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
@@ -768,22 +849,33 @@ function scene:show( event )
 			science.width=140
 
 			--keys
-			setkey(currResc)
-			if(myData.key[1] ~= nil)then
-				key = display.newImage("Images/key.png")
-				key.anchorX=0
-				key.anchorY=0
-				key.x=myData.key[1]
-				key.y=myData.key[2]
-				key.height=124
-				key.width=140
-			else
+			i = 1
+			while(myData.levelkey[currResc].key[i] ~= nil) do
+				setkey(currResc, i)
+				i = i + 1
 			end
+			i = 1
+			while(myData.levelkey[currResc].key[i] ~= nil)do
+				if(myData.key[i][1] ~= 0) then
+					keyset[i] = display.newImage("Images/key.png")
+					keyset[i].anchorX=0
+					keyset[i].anchorY=0
+					keyset[i].x=myData.key[i][1]
+					keyset[i].y=myData.key[i][2]
+					keyset[i].height=124
+					keyset[i].width=140
+					keyset[i].name="key"
+					numkeys = i
+				end
+				i = i + 1
+			end
+			i = 1
 
 			setupPic("leftwall", myData.leftwall[5], myData.leftwall[1], myData.leftwall[2], myData.leftwall[3], myData.leftwall[4])
 			setupPic("rightwall", myData.rightwall[5], myData.rightwall[1], myData.rightwall[2], myData.rightwall[3], myData.rightwall[4])
 			setupPic("topwall", myData.topwall[5], myData.topwall[1], myData.topwall[2], myData.topwall[3], myData.topwall[4])
 			setupPic("bottomwall", myData.bottomwall[5], myData.bottomwall[1], myData.bottomwall[2], myData.bottomwall[3], myData.bottomwall[4])
+			i = 1
 			while(myData.levelkey[currResc].walls[i] ~= nil) do
 				currwall = "wall"..myData.levelkey[currResc].walls[i]
 				print(currwall)
@@ -802,12 +894,8 @@ function scene:show( event )
 			physics.addBody( setupItems["rightwall"], "static",{bounce=0})
 			physics.addBody( setupItems["topwall"], "static",{bounce=0})
 			physics.addBody( setupItems["bottomwall"], "static",{bounce=0})
-			while(myData.levelkey[currResc].walls[i] ~= nil) do
-				currwall = "wall"..myData.levelkey[currResc].walls[i]
-				physics.addBody( setupItems[currwall], "static",{bounce=0})
-				i = i + 1
-			end
-			i = 1
+
+			
 		
 			--robot
 			physics.addBody(robot,"dynamic",{bounce=0,friction=.8})
@@ -824,6 +912,21 @@ function scene:show( event )
 			myrectr = display.newRect( robotX+248, robotY, 1, 1)
 			physics.addBody( myrectr, "static",{bounce=0})
 		
+			--keys
+			i = 1
+			while(keyset[i] ~= nil) do
+				physics.addBody(keyset[i], "static",{ isSensor=true })
+				i = i + 1
+			end
+
+			i = 1
+			while(myData.levelkey[currResc].walls[i] ~= nil) do
+				currwall = "wall"..myData.levelkey[currResc].walls[i]
+				physics.addBody( setupItems[currwall], "static",{bounce=0})
+				i = i + 1
+			end
+			i = 1
+
 			--scientist
 			physics.addBody(science, "static",{bounce=0})
 
@@ -843,11 +946,19 @@ function scene:show( event )
 			sceneGroup:insert(setupItems["home"])
 			sceneGroup:insert(robot)
 			sceneGroup:insert(science)
-			sceneGroup:insert(key)
+
+			i = 1
+			while(keyset[i] ~= nil) do
+				sceneGroup:insert(keyset[i])
+				i = i + 1
+			end
+
 			sceneGroup:insert(setupItems["bottomwall"])
 			sceneGroup:insert(setupItems["topwall"])
 			sceneGroup:insert(setupItems["leftwall"])
 			sceneGroup:insert(setupItems["rightwall"])
+
+			i = 1
 			while(myData.levelkey[currResc].walls[i] ~= nil) do
 				currwall = "wall"..myData.levelkey[currResc].walls[i]
 				sceneGroup:insert(setupItems[currwall])
@@ -882,8 +993,13 @@ function scene:hide( event )
         table3={}
 		display.remove( robot)
 		robot=nil
-		display.remove( key)
-		key=nil
+		i = 1
+		while(keyset[i] ~= nil) do
+			display.remove( keyset[i])
+			keyset[i]=nil
+			i = i + 1
+		end
+		i = 1
 		display.remove( myrectu)
 		myrectu=nil
 		display.remove( myrectd)
@@ -898,6 +1014,8 @@ function scene:hide( event )
 		display.remove( setupItems["rightwall"])
 		display.remove( setupItems["topwall"])
 		display.remove( setupItems["bottomwall"])
+
+		i = 1
 		while(myData.levelkey[currResc].walls[i] ~= nil) do
 			currwall = "wall"..myData.levelkey[currResc].walls[i]
 			display.remove( setupItems[currwall])

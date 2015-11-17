@@ -141,7 +141,7 @@ myData.maxrsc = jsonDoc.rescue
 myData.theme = jsonDoc.theme
 myData.roboSprite = jsonDoc.robot
 myData.scienceSprite = jsonDoc.scientist
-
+myData.key = {}
 
 
 --RESCUE OBJECTS:
@@ -165,6 +165,7 @@ local sciencey
 --       |_____|_____|_____|_____|
 --              bottomwall
 function setObjects()
+  
   --horizontal walls
   myData.walla = {110, 288, 10, 124, "Images/locked_door_horizontal.png"}
   myData.wallb = {359, 288, 11, 124, "Images/locked_door_horizontal.png"}
@@ -223,16 +224,16 @@ function setObjects()
   myData.science = {nil, nil, 140, 140, "Images/scientist_"..myData.scienceSprite..".png"}
 
   --key
-  myData.key = {nil, nil, 124, 140, "Images/key.png"}
-
+  myData.keybase = {nil, nil, 124, 140, "Images/key.png"}
+  myData.key = {{},{},{},{}}
   --Level keys
   myData.levelkey = {
-    { walls = {'a','b','c','d','f','j',7,8},                   scientist = {4, 'x'}, key = {{nil,nil}}}, -- level 1
-    { walls = {8,10},                                          scientist = {4, 'z'}, key = {{nil,nil}}}, -- level 2
-    { walls = {},                                              scientist = {4, 'w'}, key = {{nil,nil}}},  -- level 3
-    { walls = {'e','b',4},                                     scientist = {1, 'x'}, key = {{nil,nil}}},  -- level 4
+    { walls = {'a','b','c','d','f','j',7,8},                   scientist = {4, 'x'}, key = {{0,0}}}, -- level 1
+    { walls = {8,10},                                          scientist = {4, 'z'}, key = {{0,0}}}, -- level 2
+    { walls = {},                                              scientist = {4, 'w'}, key = {{0,0}}},  -- level 3
+    { walls = {'e','b',4},                                     scientist = {1, 'x'}, key = {{0,0}}},  -- level 4
     { walls = {'e','f','g','h','l',9,12},                      scientist = {4, 'y'}, key = {{3, 'y'}}},  -- level 5
-    { walls = {'a','b','c','i','j','k',6,9},                   scientist = {1, 'w'}, key = {{nil,nil}}},  -- level 6
+    { walls = {'a','b','c','i','j','k',6,9},                   scientist = {1, 'w'}, key = {{0,0}}},  -- level 6
     { walls = {'b','d','f','g',4,5},                           scientist = {2, 'x'}, key = {{4,'z'}}},  -- level 7
     { walls = {'e','f','i','j','k',2,5,6,7,8,9},               scientist = {1, 'y'}, key = {{3,'x'},{3,'y'}}},  -- level 8
     { walls = {'a','b','c','d','e','f','i','j',1,2,3,5,7},     scientist = {2, 'w'}, key = {{2,'x'},{3,'z'}}},  -- level 9
@@ -283,32 +284,37 @@ function setscience(level)
   end
 end
 
-function setkey(level)
+function setkey(level,index)
   lvl = level
-  keyx = myData.levelkey[lvl].key[1][1]
-  if(keyx == nil) then
-    myData.key[1] = nil
-  elseif(keyx == 1) then
-    myData.key[1] = 100
-  elseif(keyx == 2) then
-    myData.key[1] = 347
-  elseif(keyx == 3) then
-    myData.key[1] = 595
-  elseif(keyx == 4) then
-    myData.key[1] = 843
+  ind = index
+  if(myData.levelkey[lvl].key[ind] ~= nil)then
+    keyx = myData.levelkey[lvl].key[ind][1]
+    if(keyx == 0) then
+      myData.key[ind][1] = 0
+    elseif(keyx == 1) then
+      myData.key[ind][1] = 100
+    elseif(keyx == 2) then
+      myData.key[ind][1] = 347
+    elseif(keyx == 3) then
+      myData.key[ind][1] = 595
+    elseif(keyx == 4) then
+      myData.key[ind][1] = 843
+    end
   end
 
-  keyy = myData.levelkey[lvl].key[1][2]
-  if(keyy == nil) then
-    myData.key[2] = nil
-  elseif(keyy == 'w') then
-    myData.key[2] = 100
-  elseif(keyy == 'x') then
-    myData.key[2] = 348
-  elseif(keyy == 'y') then
-    myData.key[2] = 596
-  elseif(keyy == 'z') then
-    myData.key[2] = 840
+  if(myData.levelkey[lvl].key[ind] ~= nil)then
+    keyy = myData.levelkey[lvl].key[ind][2]
+    if(keyy == 0) then
+      myData.key[ind][2] = 0
+    elseif(keyy == 'w') then
+      myData.key[ind][2] = 100
+    elseif(keyy == 'x') then
+      myData.key[ind][2] = 348
+    elseif(keyy == 'y') then
+      myData.key[ind][2] = 596
+    elseif(keyy == 'z') then
+      myData.key[ind][2] = 840
+    end
   end
 end
 
