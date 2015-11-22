@@ -1,9 +1,8 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
-local App42API = require("App42-Lua-API.App42API") 
 local scene = composer.newScene()
 
-
+--Sends user to the login screen
 local function gologin(event)
 	local options = {
 		isModal = true,
@@ -13,6 +12,7 @@ local function gologin(event)
 	composer.showOverlay("log_user", options)
 end
 
+--Sends user to the registration screen
 local function goregister(event)
 	local options = {
 		isModal = true,
@@ -26,9 +26,11 @@ end
 function scene:create( event )
 
     local sceneGroup = self.view
-	local background = display.newRect(display.contentCenterX, display.contentCenterY,1920-888,1080-500)
+
+	local background = display.newRect(display.contentCenterX, display.contentCenterY + 20,1920-888,1080-500)
 	background:setFillColor(grey,0.5)
 	sceneGroup:insert(background)
+
 	local optionsText = 
 	{
     	--parent = textGroup,

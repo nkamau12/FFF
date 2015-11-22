@@ -8,6 +8,7 @@
 display.setStatusBar( display.HiddenStatusBar )
 
 local parse = require( "mod_parse" )
+
 parse:init({ 
   appId = "YZIbu9ERjYD4h8OdtdJ3fknrWIwjMUZGjUSrZOQe", 
   apiKey = "WTmSOin1ChKS2l0CXkenSNaSwMEMy2ytEwyaBesn"
@@ -16,6 +17,12 @@ parse:init({
 parse.showStatus = false
 --Register when app is opened
 parse:appOpened()
+
+
+
+
+
+
 
 
 
@@ -33,20 +40,26 @@ local loadsave = require( "loadsave" )
 --}
 --loadsave.saveTable( userSettings, "user.json" )
 local loadedUser = loadsave.loadTable( "user.json" )
+if(loadedUser == nil) then
+  local userSettings = {
+    user = nil,
+    search = 1,
+    rescue = 0,
+    theme = "default",
+    robot = "default",
+    science = "default"
+  }
+  loadsave.saveTable( userSettings, "user.json" )
+  loadedUser = loadsave.loadTable( "user.json" )
+end
 print(loadedUser.user)
 print("search: "..loadedUser.search)
 print("rescue: "..loadedUser.rescue)
 
 
 
-local facebook = require( "plugin.facebook.v4" )
 
 --appWarp code
-
-appWarpClient = require( "AppWarp.WarpClient" ) 
-appWarpClient .initialize("673530f0fd20f8c6ccd4caacea4a220bebfa0fbc44641777fc3031eb979c2c39", 
-"bd3fdd7032da1965f6ddeeff869c065ca4275ec3590fbd4f9b89133ee2555123")  
-
 require("App42-Lua-API.Operator")
 require("App42-Lua-API.Permission")
 require("App42-Lua-API.GeoOperator")
@@ -59,6 +72,15 @@ local ACL = require("App42-Lua-API.ACL")
 App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
     "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
 local storageService = App42API:buildStorageService()  
+
+
+
+
+
+
+local facebook = require( "plugin.facebook.v4" )
+
+
 
 
 --local in-game data storage
@@ -106,7 +128,6 @@ myData.rescue = 0
 
 
 
-
 --load user
 local dbName  = "USERS"
 local collectionName = "GameInfo"
@@ -119,9 +140,11 @@ else
   value = loadedUser.user
   myData.user = loadedUser.user
 end
+
 local App42CallBack = {}
 local jsonDoc = {}
 storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42CallBack)
+
 
 function App42CallBack:onSuccess(object)
   print("dbName is "..object:getDbName())
@@ -136,236 +159,241 @@ function App42CallBack:onSuccess(object)
     jsonDoc.scientist = object:getJsonDocList()[i]:getJsonDoc().scientist
   end
 
-myData.maxsrch = jsonDoc.search
-myData.maxrsc = jsonDoc.rescue
-myData.theme = jsonDoc.theme
-myData.roboSprite = jsonDoc.robot
-myData.scienceSprite = jsonDoc.scientist
-myData.key = {}
+  myData.maxsrch = jsonDoc.search
+  myData.maxrsc = jsonDoc.rescue
+  myData.theme = jsonDoc.theme
+  myData.roboSprite = jsonDoc.robot
+  myData.scienceSprite = jsonDoc.scientist
+  myData.key = {}
 
 
---RESCUE OBJECTS:
-local sciencex
-local sciencey
+  --RESCUE OBJECTS:
+  local sciencex
+  local sciencey
 
--- myData.objectname = {xVal, yVal, hVal, wVal, imageFile}
---         (1)   (2)   (3)   (4)
---        _____ __topwall__ _____
---       |     |     |     |     |
---  (w)  |     |1    |2    |3    |r
---      l|__A__|__B__|__C__|__D__|i
---      e|     |     |     |     |g
---  (x) f|     |4    |5    |6    |h
---      t|__E__|__F__|__G__|__H__|t
---      w|     |     |     |     |w
---  (y) a|     |7    |8    |9    |a
---      l|__I__|__J__|__K__|__L__|l
---      l|     |     |     |     |l
---  (z)  |     |10   |11   |12   |
---       |_____|_____|_____|_____|
---              bottomwall
-function setObjects()
-  
-  --horizontal walls
-  myData.walla = {110, 288, 10, 124, "Images/locked_door_horizontal.png"}
-  myData.wallb = {359, 288, 11, 124, "Images/locked_door_horizontal.png"}
-  myData.wallc = {598, 288, 11, 124, "Images/locked_door_horizontal.png"}
-  myData.walld = {839, 288, 11, 124, "Images/locked_door_horizontal.png"}
-  myData.walle = {110, 533, 11, 124, "Images/locked_door_horizontal.png"}
-  myData.wallf = {359, 533, 11, 124, "Images/locked_door_horizontal.png"}
-  myData.wallg = {598, 533, 11, 124, "Images/locked_door_horizontal.png"}
-  myData.wallh = {839, 533, 11, 124, "Images/locked_door_horizontal.png"}
-  myData.walli = {110, 777, 11, 124, "Images/locked_door_horizontal.png"}
-  myData.wallj = {359, 777, 11, 124, "Images/locked_door_horizontal.png"}
-  myData.wallk = {598, 777, 11, 124, "Images/locked_door_horizontal.png"}
-  myData.walll = {839, 777, 11, 124, "Images/locked_door_horizontal.png"}
+  -- myData.objectname = {xVal, yVal, hVal, wVal, imageFile}
+  --         (1)   (2)   (3)   (4)
+  --        _____ __topwall__ _____
+  --       |     |     |     |     |
+  --  (w)  |     |1    |2    |3    |r
+  --      l|__A__|__B__|__C__|__D__|i
+  --      e|     |     |     |     |g
+  --  (x) f|     |4    |5    |6    |h
+  --      t|__E__|__F__|__G__|__H__|t
+  --      w|     |     |     |     |w
+  --  (y) a|     |7    |8    |9    |a
+  --      l|__I__|__J__|__K__|__L__|l
+  --      l|     |     |     |     |l
+  --  (z)  |     |10   |11   |12   |
+  --       |_____|_____|_____|_____|
+  --              bottomwall
+  function setObjects()
+    
+    --horizontal walls
+    myData.walla = {110, 288, 10, 124, "Images/locked_door_horizontal.png"}
+    myData.wallb = {359, 288, 11, 124, "Images/locked_door_horizontal.png"}
+    myData.wallc = {598, 288, 11, 124, "Images/locked_door_horizontal.png"}
+    myData.walld = {839, 288, 11, 124, "Images/locked_door_horizontal.png"}
+    myData.walle = {110, 533, 11, 124, "Images/locked_door_horizontal.png"}
+    myData.wallf = {359, 533, 11, 124, "Images/locked_door_horizontal.png"}
+    myData.wallg = {598, 533, 11, 124, "Images/locked_door_horizontal.png"}
+    myData.wallh = {839, 533, 11, 124, "Images/locked_door_horizontal.png"}
+    myData.walli = {110, 777, 11, 124, "Images/locked_door_horizontal.png"}
+    myData.wallj = {359, 777, 11, 124, "Images/locked_door_horizontal.png"}
+    myData.wallk = {598, 777, 11, 124, "Images/locked_door_horizontal.png"}
+    myData.walll = {839, 777, 11, 124, "Images/locked_door_horizontal.png"}
 
-  --vertical walls
-  myData.wall1 = {290, 108, 124, 11, "Images/locked_door_horizontal.png"}
-  myData.wall2 = {534, 108, 124, 11, "Images/locked_door_horizontal.png"}
-  myData.wall3 = {778, 108, 124, 11, "Images/locked_door_horizontal.png"}
-  myData.wall4 = {290, 355, 124, 11, "Images/locked_door_horizontal.png"}
-  myData.wall5 = {534, 355, 124, 11, "Images/locked_door_horizontal.png"}
-  myData.wall6 = {778, 355, 124, 11, "Images/locked_door_horizontal.png"}
-  myData.wall7 = {290, 602, 124, 11, "Images/locked_door_horizontal.png"}
-  myData.wall8 = {534, 602, 124, 11, "Images/locked_door_horizontal.png"}
-  myData.wall9 = {778, 602, 124, 11, "Images/locked_door_horizontal.png"}
-  myData.wall10 = {290, 848, 124, 11, "Images/locked_door_horizontal.png"}
-  myData.wall11 = {534, 848, 124, 11, "Images/locked_door_horizontal.png"}
-  myData.wall12 = {778, 848, 124, 11, "Images/locked_door_horizontal.png"}
+    --vertical walls
+    myData.wall1 = {290, 108, 124, 11, "Images/locked_door_horizontal.png"}
+    myData.wall2 = {534, 108, 124, 11, "Images/locked_door_horizontal.png"}
+    myData.wall3 = {778, 108, 124, 11, "Images/locked_door_horizontal.png"}
+    myData.wall4 = {290, 355, 124, 11, "Images/locked_door_horizontal.png"}
+    myData.wall5 = {534, 355, 124, 11, "Images/locked_door_horizontal.png"}
+    myData.wall6 = {778, 355, 124, 11, "Images/locked_door_horizontal.png"}
+    myData.wall7 = {290, 602, 124, 11, "Images/locked_door_horizontal.png"}
+    myData.wall8 = {534, 602, 124, 11, "Images/locked_door_horizontal.png"}
+    myData.wall9 = {778, 602, 124, 11, "Images/locked_door_horizontal.png"}
+    myData.wall10 = {290, 848, 124, 11, "Images/locked_door_horizontal.png"}
+    myData.wall11 = {534, 848, 124, 11, "Images/locked_door_horizontal.png"}
+    myData.wall12 = {778, 848, 124, 11, "Images/locked_door_horizontal.png"}
 
-  --outer walls
-  myData.grida = {43.01, 41.93, 993.04, 993.04,"Images/rescue_grid.png"}
-  myData.leftwall = {43.01, 41.93, 993.04, 10,"Images/theme_"..myData.theme.."/left_wall.png"}
-  myData.rightwall = {1026.05, 41.93, 993.04, 10,"Images/theme_"..myData.theme.."/left_wall.png"}
-  myData.topwall = {43.01, 41.93, 10, 993.04,"Images/theme_"..myData.theme.."/topbottom_wall.png"}
-  myData.bottomwall = {43.01, 1024.97, 10, 993.04,"Images/theme_"..myData.theme.."/topbottom_wall.png"}
+    --outer walls
+    myData.grida = {43.01, 41.93, 993.04, 993.04,"Images/rescue_grid.png"}
+    myData.leftwall = {43.01, 41.93, 993.04, 10,"Images/theme_"..myData.theme.."/left_wall.png"}
+    myData.rightwall = {1026.05, 41.93, 993.04, 10,"Images/theme_"..myData.theme.."/left_wall.png"}
+    myData.topwall = {43.01, 41.93, 10, 993.04,"Images/theme_"..myData.theme.."/topbottom_wall.png"}
+    myData.bottomwall = {43.01, 1024.97, 10, 993.04,"Images/theme_"..myData.theme.."/topbottom_wall.png"}
 
-  --loop objects
-  myData.mainloop = {1063.96, 625, 133, 805,"Images/main_loop.png"}
-  myData.oneloop = {1063.96, 768, 133, 805,"Images/one_loop.png"}
-  myData.twoloop = {1063.96, 910, 133, 805,"Images/two_loop.png"}
+    --loop objects
+    myData.mainloop = {1063.96, 625, 133, 805,"Images/main_loop.png"}
+    myData.oneloop = {1063.96, 768, 133, 805,"Images/one_loop.png"}
+    myData.twoloop = {1063.96, 910, 133, 805,"Images/two_loop.png"}
 
-  --buttons
-  myData.uparrow = {1192, 186, 122, 122, "Images/up_arrow.png"}
-  myData.downarrow = {1330, 186, 122, 122, "Images/down_arrow.png"}
-  myData.leftarrow = {1468, 186, 122, 122, "Images/left_arrow.png"}
-  myData.rightarrow = {1606, 186, 122, 122, "Images/right_arrow.png"}
-  myData.mainbutton = {1126, 332, 122, 122, "Images/main_block.png"}
-  myData.onebutton = {1264, 332, 122, 122, "Images/1_block.png"}
-  myData.twobutton = {1403, 332, 122, 122, "Images/2_block.png"}
-  myData.homebutton = {1764, 30, 122, 122, "Images/home.png"}
-  myData.startbutton = {1542, 332, 122, 320, "Images/run_button.png"}
+    --buttons
+    myData.uparrow = {1192, 186, 122, 122, "Images/up_arrow.png"}
+    myData.downarrow = {1330, 186, 122, 122, "Images/down_arrow.png"}
+    myData.leftarrow = {1468, 186, 122, 122, "Images/left_arrow.png"}
+    myData.rightarrow = {1606, 186, 122, 122, "Images/right_arrow.png"}
+    myData.mainbutton = {1126, 332, 122, 122, "Images/main_block.png"}
+    myData.onebutton = {1264, 332, 122, 122, "Images/1_block.png"}
+    myData.twobutton = {1403, 332, 122, 122, "Images/2_block.png"}
+    myData.homebutton = {1764, 30, 122, 122, "Images/home.png"}
+    myData.startbutton = {1542, 332, 122, 320, "Images/run_button.png"}
 
-  --robot
-  myData.robot = {109, 819, 140, 140, "Images/robot_"..myData.roboSprite..".png"}
+    --robot
+    myData.robot = {109, 819, 140, 140, "Images/robot_"..myData.roboSprite..".png"}
 
-  --scientist
-  myData.science = {nil, nil, 140, 140, "Images/scientist_"..myData.scienceSprite..".png"}
+    --scientist
+    myData.science = {nil, nil, 140, 140, "Images/scientist_"..myData.scienceSprite..".png"}
 
-  --key
-  myData.keybase = {nil, nil, 124, 140, "Images/key.png"}
-  myData.key = {{},{},{},{}}
-  --Level keys
-  myData.levelkey = {
-    { walls = {'a','b','c','d','f','j',7,8},                   scientist = {4, 'x'}, key = {{0,0}}}, -- level 1
-    { walls = {8,10},                                          scientist = {4, 'z'}, key = {{0,0}}}, -- level 2
-    { walls = {},                                              scientist = {4, 'w'}, key = {{0,0}}},  -- level 3
-    { walls = {'e','b',4},                                     scientist = {1, 'x'}, key = {{0,0}}},  -- level 4
-    { walls = {'e','f','g','h','l',9,12},                      scientist = {4, 'y'}, key = {{3, 'y'}}},  -- level 5
-    { walls = {'a','b','c','i','j','k',6,9},                   scientist = {1, 'w'}, key = {{0,0}}},  -- level 6
-    { walls = {'b','d','f','g',4,5},                           scientist = {2, 'x'}, key = {{4,'z'}}},  -- level 7
-    { walls = {'e','f','i','j','k',2,5,6,7,8,9},               scientist = {1, 'y'}, key = {{3,'x'},{3,'y'}}},  -- level 8
-    { walls = {'a','b','c','d','e','f','i','j',1,2,3,5,7},     scientist = {2, 'w'}, key = {{2,'x'},{3,'z'}}},  -- level 9
-    { walls = {'c','f','g','h','k',5,6,8,9,11,12},             scientist = {3, 'y'}, key = {{2,'w'},{4,'x'}}},  -- level 10
-    { walls = {'b','c','d','f','k','l',2,3,6,11},              scientist = {4, 'w'}, key = {{1,'w'}}},  -- level 11
-    { walls = {'a','b','c','d','f','i','j','k',1,2,3,4,5,7,9}, scientist = {1, 'w'}, key = {{2,'z'},{3,'y'},{4,'w'},{4,'z'}}}  -- level 12
+    --key
+    myData.keybase = {nil, nil, 124, 140, "Images/key.png"}
+    myData.key = {{},{},{},{}}
+    --Level keys
+    myData.levelkey = {
+      { walls = {'a','b','c','d','f','j',7,8},                   scientist = {4, 'x'}, key = {{0,0}}}, -- level 1
+      { walls = {8,10},                                          scientist = {4, 'z'}, key = {{0,0}}}, -- level 2
+      { walls = {},                                              scientist = {4, 'w'}, key = {{0,0}}},  -- level 3
+      { walls = {'e','b',4},                                     scientist = {1, 'x'}, key = {{0,0}}},  -- level 4
+      { walls = {'e','f','g','h','l',9,12},                      scientist = {4, 'y'}, key = {{3, 'y'}}},  -- level 5
+      { walls = {'a','b','c','i','j','k',6,9},                   scientist = {1, 'w'}, key = {{0,0}}},  -- level 6
+      { walls = {'b','d','f','g',4,5},                           scientist = {2, 'x'}, key = {{4,'z'}}},  -- level 7
+      { walls = {'e','f','i','j','k',2,5,6,7,8,9},               scientist = {1, 'y'}, key = {{3,'x'},{3,'y'}}},  -- level 8
+      { walls = {'a','b','c','d','e','f','i','j',1,2,3,5,7},     scientist = {2, 'w'}, key = {{2,'x'},{3,'z'}}},  -- level 9
+      { walls = {'c','f','g','h','k',5,6,8,9,11,12},             scientist = {3, 'y'}, key = {{2,'w'},{4,'x'}}},  -- level 10
+      { walls = {'b','c','d','f','k','l',2,3,6,11},              scientist = {4, 'w'}, key = {{1,'w'}}},  -- level 11
+      { walls = {'a','b','c','d','f','i','j','k',1,2,3,4,5,7,9}, scientist = {1, 'w'}, key = {{2,'z'},{3,'y'},{4,'w'},{4,'z'}}}  -- level 12
+    }
+  end
+
+  myData.blockred = {1289, 729, 120, 120, "Images/red_block.png"}
+  myData.blockgreen = {1426, 729, 120, 120, "Images/green_block.png"}
+  myData.blockblue = {1564, 729, 120, 120, "Images/blue_block.png"}
+  myData.blockyellow = {1700, 729, 120, 120, "Images/yellow_block.png"}
+
+  -- Search setup keys
+  myData.searchkey = {
+    { one = {"red",1,"blue",1,"yellow"}, two = {"green",nil,nil,nil,nil}, three = {nil,nil,nil,nil,nil}},                    -- level 1
+    { one = {1,"yellow","blue",1,nil}, two = {"green","green","red",nil,nil}, three = {nil,nil,nil,nil,nil}},                -- level 2
+    { one = {"green",2,2,"yellow",2}, two = {nil,nil,nil,nil,nil}, three = {"red","blue",nil,nil,nil}},                      -- level 3
+    { one = {1,"green","yellow","red","blue"}, two = {"red","green","blue","yellow",nil}, three = {"blue","yellow","red","red",nil}},-- level 4
+    { one = {1,"green","blue",2,nil}, two = {"yellow","red",2,nil,nil}, three = {"yellow",nil,nil,nil,nil}},                 -- level 5
+    { one = {"blue",2,nil,nil,nil}, two = {"red","red","green",nil,nil}, three = {"yellow",1,"green",nil,nil}},              -- level 6
+    { one = {2,1,2,2,1}, two = {"blue","blue",nil,nil,nil}, three = {"red",nil,nil,nil,nil}},                                -- level 7
+    { one = {"green",1,2,"yellow",nil}, two = {"yellow","blue",2,"green","green"}, three = {"red",nil,nil,nil,nil}},         -- level 8
+    { one = {2,"green",1,"green","green"}, two = {"blue","yellow",nil,nil,nil}, three = {1,"red",nil,nil,nil}},              -- level 9
+    { one = {"yellow",1,"yellow",nil,nil}, two = {"red",2,"blue",2,nil}, three = {"green","green",nil,nil,nil}},             -- level 10
+    { one = {2,2,1,1,nil}, two = {"blue",nil,nil,nil,nil}, three = {1,1,"yellow",nil,nil}},                                  -- level 11
+    { one = {2,"yellow",1,2,"green"}, two = {nil,nil,nil,nil,nil}, three = {"green",1,"red","blue",1}}                       -- level 12
   }
-end
 
--- Search setup keys
-myData.searchkey = {
-  { one = {"red",1,"blue",1,"yellow"}, two = {"green",nil,nil,nil,nil}, three = {nil,nil,nil,nil,nil}},                    -- level 1
-  { one = {1,"yellow","blue",1,nil}, two = {"green","green","red",nil,nil}, three = {nil,nil,nil,nil,nil}},                -- level 2
-  { one = {"green",2,2,"yellow",2}, two = {nil,nil,nil,nil,nil}, three = {"red","blue",nil,nil,nil}},                      -- level 3
-  { one = {1,"green","yellow","red","blue"}, two = {"red","green","blue","yellow",nil}, three = {"blue","yellow","red","red",nil}},-- level 4
-  { one = {1,"green","blue",2,nil}, two = {"yellow","red",2,nil,nil}, three = {"yellow",nil,nil,nil,nil}},                 -- level 5
-  { one = {"blue",2,nil,nil,nil}, two = {"red","red","green",nil,nil}, three = {"yellow",1,"green",nil,nil}},              -- level 6
-  { one = {2,1,2,2,1}, two = {"blue","blue",nil,nil,nil}, three = {"red",nil,nil,nil,nil}},                                -- level 7
-  { one = {"green",1,2,"yellow",nil}, two = {"yellow","blue",2,"green","green"}, three = {"red",nil,nil,nil,nil}},         -- level 8
-  { one = {2,"green",1,"green","green"}, two = {"blue","yellow",nil,nil,nil}, three = {1,"red",nil,nil,nil}},              -- level 9
-  { one = {"yellow",1,"yellow",nil,nil}, two = {"red",2,"blue",2,nil}, three = {"green","green",nil,nil,nil}},             -- level 10
-  { one = {2,2,1,1,nil}, two = {"blue",nil,nil,nil,nil}, three = {1,1,"yellow",nil,nil}},                                  -- level 11
-  { one = {2,"yellow",1,2,"green"}, two = {nil,nil,nil,nil,nil}, three = {"green",1,"red","blue",1}}                       -- level 12
-}
+  function setscience(level)
+    lvl = level
+    sciencex = myData.levelkey[lvl].scientist[1]
+    if(sciencex == 1) then
+      myData.science[1] = 100
+    elseif(sciencex == 2) then
+      myData.science[1] = 347
+    elseif(sciencex == 3) then
+      myData.science[1] = 595
+    elseif(sciencex == 4) then
+      myData.science[1] = 843
+    end
 
-function setscience(level)
-  lvl = level
-  sciencex = myData.levelkey[lvl].scientist[1]
-  if(sciencex == 1) then
-    myData.science[1] = 100
-  elseif(sciencex == 2) then
-    myData.science[1] = 347
-  elseif(sciencex == 3) then
-    myData.science[1] = 595
-  elseif(sciencex == 4) then
-    myData.science[1] = 843
-  end
-
-  sciencey = myData.levelkey[lvl].scientist[2]
-  if(sciencey == 'w') then
-    myData.science[2] = 100
-  elseif(sciencey == 'x') then
-    myData.science[2] = 348
-  elseif(sciencey == 'y') then
-    myData.science[2] = 596
-  elseif(sciencey == 'z') then
-    myData.science[2] = 840
-  end
-end
-
-function setkey(level,index)
-  lvl = level
-  ind = index
-  if(myData.levelkey[lvl].key[ind] ~= nil)then
-    keyx = myData.levelkey[lvl].key[ind][1]
-    if(keyx == 0) then
-      myData.key[ind][1] = 0
-    elseif(keyx == 1) then
-      myData.key[ind][1] = 100
-    elseif(keyx == 2) then
-      myData.key[ind][1] = 347
-    elseif(keyx == 3) then
-      myData.key[ind][1] = 595
-    elseif(keyx == 4) then
-      myData.key[ind][1] = 843
+    sciencey = myData.levelkey[lvl].scientist[2]
+    if(sciencey == 'w') then
+      myData.science[2] = 100
+    elseif(sciencey == 'x') then
+      myData.science[2] = 348
+    elseif(sciencey == 'y') then
+      myData.science[2] = 596
+    elseif(sciencey == 'z') then
+      myData.science[2] = 840
     end
   end
 
-  if(myData.levelkey[lvl].key[ind] ~= nil)then
-    keyy = myData.levelkey[lvl].key[ind][2]
-    if(keyy == 0) then
-      myData.key[ind][2] = 0
-    elseif(keyy == 'w') then
-      myData.key[ind][2] = 100
-    elseif(keyy == 'x') then
-      myData.key[ind][2] = 348
-    elseif(keyy == 'y') then
-      myData.key[ind][2] = 596
-    elseif(keyy == 'z') then
-      myData.key[ind][2] = 840
+  function setkey(level,index)
+    lvl = level
+    ind = index
+    if(myData.levelkey[lvl].key[ind] ~= nil)then
+      keyx = myData.levelkey[lvl].key[ind][1]
+      if(keyx == 0) then
+        myData.key[ind][1] = 0
+      elseif(keyx == 1) then
+        myData.key[ind][1] = 100
+      elseif(keyx == 2) then
+        myData.key[ind][1] = 347
+      elseif(keyx == 3) then
+        myData.key[ind][1] = 595
+      elseif(keyx == 4) then
+        myData.key[ind][1] = 843
+      end
+    end
+
+    if(myData.levelkey[lvl].key[ind] ~= nil)then
+      keyy = myData.levelkey[lvl].key[ind][2]
+      if(keyy == 0) then
+        myData.key[ind][2] = 0
+      elseif(keyy == 'w') then
+        myData.key[ind][2] = 100
+      elseif(keyy == 'x') then
+        myData.key[ind][2] = 348
+      elseif(keyy == 'y') then
+        myData.key[ind][2] = 596
+      elseif(keyy == 'z') then
+        myData.key[ind][2] = 840
+      end
     end
   end
-end
 
-myData.SSImages = {
-    {images = {{"Tutorials/tutorial_search_1.png",0,1080,nil,nil,0.8}}},
-    {images = {{"Tutorials/tutorial_search_2.png",0,1080,nil,nil,0.8}}},
-    {images = {{"Tutorials/tutorial_search_3.png",0,1080,nil,nil,0.8}}},
-    {images = {{"Tutorials/tutorial_search_4.png",0,1080,nil,nil,0.8}}},
-    {images = {{"Tutorials/tutorial_search_5.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",194,583+447,449,864,1}}},
-    {images = {{"Tutorials/tutorial_search_6.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",194,583+151,151,864,1}}},
-    {images = {{"Tutorials/tutorial_search_7.png",0,1080,nil,nil,0.8}}},
-    {images = {{"Tutorials/tutorial_search_8.png",0,1080,nil,nil,0.8}}},
-    {images = {{"Tutorials/tutorial_search_9.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",1288,729+121,122,538,1}}},
-    {images = {{"Tutorials/tutorial_search_10.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",1289,887+121,122,122,1},{"Tutorials/alert_arrow.png",1072,887+97,nil,nil,1}}},
-    {images = {{"Tutorials/tutorial_search_11.png",0,1080,nil,nil,0.8}}}
+  myData.SSImages = {
+      {images = {{"Tutorials/tutorial_search_1.png",0,1080,nil,nil,0.8}}},
+      {images = {{"Tutorials/tutorial_search_2.png",0,1080,nil,nil,0.8}}},
+      {images = {{"Tutorials/tutorial_search_3.png",0,1080,nil,nil,0.8}}},
+      {images = {{"Tutorials/tutorial_search_4.png",0,1080,nil,nil,0.8}}},
+      {images = {{"Tutorials/tutorial_search_5.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",194,583+447,449,864,1}}},
+      {images = {{"Tutorials/tutorial_search_6.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",194,583+151,151,864,1}}},
+      {images = {{"Tutorials/tutorial_search_7.png",0,1080,nil,nil,0.8}}},
+      {images = {{"Tutorials/tutorial_search_8.png",0,1080,nil,nil,0.8}}},
+      {images = {{"Tutorials/tutorial_search_9.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",1288,729+121,122,538,1}}},
+      {images = {{"Tutorials/tutorial_search_10.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",1289,887+121,122,122,1},{"Tutorials/alert_arrow.png",1072,887+97,nil,nil,1}}},
+      {images = {{"Tutorials/tutorial_search_11.png",0,1080,nil,nil,0.8}}}
+      }
+  myData.SRImages = {
+      {images = {{"Tutorials/tutorial_rescue_2.png",97,819,nil,nil,0.8,0,1}}},
+      {images = {{"Tutorials/tutorial_rescue_3.png",97,819,nil,nil,0.8,0,1}}},
+      {images = {{"Tutorials/tutorial_rescue_4.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",842,347,142,142,1},{"Tutorials/alert_arrow.png",841,347+70,nil,nil,1,1,0.5}}},
+      {images = {{"Tutorials/tutorial_rescue_5.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",842,347,142,142,1},{"Tutorials/alert_arrow.png",841,347+70,nil,nil,1,1,0.5}}},
+      {images = {{"Tutorials/tutorial_rescue_6.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow_v.png",172,288+10,nil,nil,1,0.5,0},{"Tutorials/alert_arrow_v.png",359+62,288+11,nil,nil,1,0.5,0},{"Tutorials/alert_arrow_v.png",598+62,288+11,nil,nil,1,0.5,0}}},
+      {images = {{"Tutorials/tutorial_rescue_7.png",97,819,nil,nil,0.8,0,1}}},
+      {images = {{"Tutorials/tutorial_rescue_8.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1120,155,320,750,1},{"Tutorials/alert_arrow.png",1120,155+160,nil,nil,1,1,0.5}}},
+      {images = {{"Tutorials/tutorial_rescue_9.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1150,170,160,600,1},{"Tutorials/alert_arrow.png",1120,155+80,nil,nil,1,1,0.5}}},
+      {images = {{"Tutorials/tutorial_rescue_10.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1100,325,150,450,1},{"Tutorials/alert_arrow.png",1100,325+75,nil,nil,1,1,0.5}}},
+      {images = {{"Tutorials/tutorial_rescue_11.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1120,155+80,nil,nil,1,1,0.5}}},
+      {images = {{"Tutorials/tutorial_rescue_12.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1200,691.5,nil,nil,1,1,0.5}}},
+      {images = {{"Tutorials/tutorial_rescue_13.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1064,691.5,nil,nil,1,1,0.5}}},
+      {images = {{"Tutorials/tutorial_rescue_14.png",97,819,nil,nil,0.8,0,1}}},
+      {images = {{"Tutorials/tutorial_rescue_15.png",97,819,nil,nil,0.8,0,1}}},
+      }
+  myData.SpeechS=1
+  myData.SpeechR=1
+
+
+  setObjects()
+  setscience(1)
+  setkey(1)
+
+
+  -- require the composer library
+  local composer = require "composer"
+  local options = {
+          isModal = true,
+      effect = "fade",
+      time = 500
     }
-myData.SRImages = {
-    {images = {{"Tutorials/tutorial_rescue_2.png",97,819,nil,nil,0.8,0,1}}},
-    {images = {{"Tutorials/tutorial_rescue_3.png",97,819,nil,nil,0.8,0,1}}},
-    {images = {{"Tutorials/tutorial_rescue_4.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",842,347,142,142,1},{"Tutorials/alert_arrow.png",841,347+70,nil,nil,1,1,0.5}}},
-    {images = {{"Tutorials/tutorial_rescue_5.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",842,347,142,142,1},{"Tutorials/alert_arrow.png",841,347+70,nil,nil,1,1,0.5}}},
-    {images = {{"Tutorials/tutorial_rescue_6.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow_v.png",172,288+10,nil,nil,1,0.5,0},{"Tutorials/alert_arrow_v.png",359+62,288+11,nil,nil,1,0.5,0},{"Tutorials/alert_arrow_v.png",598+62,288+11,nil,nil,1,0.5,0}}},
-    {images = {{"Tutorials/tutorial_rescue_7.png",97,819,nil,nil,0.8,0,1}}},
-    {images = {{"Tutorials/tutorial_rescue_8.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1120,155,320,750,1},{"Tutorials/alert_arrow.png",1120,155+160,nil,nil,1,1,0.5}}},
-    {images = {{"Tutorials/tutorial_rescue_9.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1150,170,160,600,1},{"Tutorials/alert_arrow.png",1120,155+80,nil,nil,1,1,0.5}}},
-    {images = {{"Tutorials/tutorial_rescue_10.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1100,325,150,450,1},{"Tutorials/alert_arrow.png",1100,325+75,nil,nil,1,1,0.5}}},
-    {images = {{"Tutorials/tutorial_rescue_11.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1120,155+80,nil,nil,1,1,0.5}}},
-    {images = {{"Tutorials/tutorial_rescue_12.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1200,691.5,nil,nil,1,1,0.5}}},
-    {images = {{"Tutorials/tutorial_rescue_13.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1064,691.5,nil,nil,1,1,0.5}}},
-    {images = {{"Tutorials/tutorial_rescue_14.png",97,819,nil,nil,0.8,0,1}}},
-    {images = {{"Tutorials/tutorial_rescue_15.png",97,819,nil,nil,0.8,0,1}}},
-    }
-myData.SpeechS=1
-myData.SpeechR=1
+  composer.gotoScene( "Splash" )
 
-
-setObjects()
-setscience(1)
-setkey(1)
-
-
--- require the composer library
-local composer = require "composer"
-local options = {
-        isModal = true,
-    effect = "fade",
-    time = 500
-  }
-composer.gotoScene( "Splash" )
-
-print(jsonDoc.theme)
+  print(jsonDoc.theme)
 end
 
 

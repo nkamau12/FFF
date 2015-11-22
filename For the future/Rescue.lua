@@ -30,6 +30,27 @@ local numkeys
 
 local i = 1
 
+local secondsLeft
+local clockText
+local countDownTimer
+
+local JSON = require("App42-Lua-API.JSON") 
+local App42API = require("App42-Lua-API.App42API")
+local gameName = "For The Future"
+local userName = myData.user
+local gameScore = nil
+local dbName = "USERS"  
+local collectionName = "Scores"   
+local jsonDoc = {}  
+jsonDoc.name =  myData.user
+jsonDoc.level = nil 
+local App42CallBack = {}
+App42API:setDbName(dbName)
+
+App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
+    "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
+local scoreBoardService = App42API.buildScoreBoardService() 
+
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
@@ -535,6 +556,31 @@ local function onCollision( event )
 					end
 					composer.showOverlay("pass_rescue",options)
 
+					timer.pause(countDownTimer)
+			        print("Finished with "..secondsLeft.." seconds left")
+			        print("Finished with "..counter.." moves")
+			        gameScore = secondsLeft * 10 + (1500 - (counter-1)*100)
+			        print("Score: "..gameScore)
+
+			        jsonDoc.level = "Rescue"..currResc
+			        scoreBoardService:addJSONObject( collectionName, jsonDoc)
+			        scoreBoardService:saveUserScore(gameName,userName,gameScore,App42CallBack)
+			        function App42CallBack:onSuccess(object)
+			            print("Game name is "..object:getName())
+			            print("userName is : "..object:getScoreList():getUserName())
+			            print("score is : "..object:getScoreList():getValue())
+			            print("scoreId is : "..object:getScoreList():getScoreId())
+			            print("GetCreatedAt is : "..object:getScoreList():getJsonDocList():getCreatedAt())  
+			            print("Doc ID is : "..object:getScoreList():getJsonDocList():getDocId())  
+			            print("GetJsonDoc is : "..JSON:encode(object:getScoreList():getJsonDocList():getJsonDoc()))  
+			        end
+			        function App42CallBack:onException(exception)
+			            print("Message is : "..exception:getMessage())
+			            print("App Error code is : "..exception:getAppErrorCode())
+			            print("Http Error code is "..exception:getHttpErrorCode())
+			            print("Detail is : "..exception:getDetails())
+			        end
+
         			myData.rescueLvl = currResc + 1
 
         			local userSettings = {
@@ -560,6 +606,8 @@ local function onCollision( event )
 			isModal = true,
 			
 			}
+			timer.pause(countDownTimer)
+            print(secondsLeft)
 			composer.showOverlay( "fail", options )
 			print("why1")
 		else
@@ -583,6 +631,8 @@ local function onCollision( event )
 						local options = {
 						isModal = true
 						}
+						timer.pause(countDownTimer)
+            			print(secondsLeft)
 						composer.showOverlay( "fail", options )
 						print("why1")
 					end
@@ -673,7 +723,30 @@ local function addButton(position, xPos, yPos,idName)
 	}
 end
 
+local function updateTime(event)
+    -- decrement the number of seconds
+    secondsLeft = secondsLeft - 1
 
+    -- time is tracked in seconds.  We need to convert it to minutes and seconds
+    local minutes = math.floor( secondsLeft / 60 )
+    local seconds = secondsLeft % 60
+
+    -- make it a string using string format.  
+    local timeDisplay = string.format( "%02d:%02d", minutes, seconds )
+    if(clockText == nil) then
+        timer.cancel( event.source )
+    else
+        clockText.text = timeDisplay
+    end
+
+end
+
+-- Custom function for resuming the game (from pause state)
+function scene:resumeGame()
+    --code to resume game
+    secondsLeft = secondsLeft - 9
+    timer.resume(countDownTimer)
+end
 
 -- "scene:create()"
 function scene:create( event )
@@ -966,6 +1039,15 @@ function scene:show( event )
 			end
 			i = 1
 		end	
+
+		--time: minutes * seconds
+        secondsLeft = 2 * 60 
+
+        clockText = display.newText("2:00", 175, 992, native.systemFontBold, 70)
+        clockText:setFillColor( 1, 1, 1 )
+        sceneGroup:insert(clockText)
+        -- run them timer
+        countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
 		
     elseif ( phase == "did" ) then
     	
@@ -1025,11 +1107,12 @@ function scene:hide( event )
 		i = 1
 		physics.stop()
 		currResc = nil
-    elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.
-		
 
-		
+		display.remove(clockText)
+        countDownTimer = nil
+        clockText = nil
+    elseif ( phase == "did" ) then
+        -- Called immediately after scene goes off screen.	
     end
 end
 

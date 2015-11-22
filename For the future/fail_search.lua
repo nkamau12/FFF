@@ -1,7 +1,7 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
-
 local scene = composer.newScene()
+
 local function tryagain(event)
 	composer.hideOverlay( "fade", 400 )
 end
@@ -41,6 +41,7 @@ function scene:hide( event )
     if ( phase == "will" ) then
         -- Call the "resumeGame()" function in the parent scene
         --parent:tryagain()
+        parent:resumeGame()
 		
     end
 end

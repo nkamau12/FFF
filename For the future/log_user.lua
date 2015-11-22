@@ -8,7 +8,8 @@ local App42API = require("App42-Lua-API.App42API")
 App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
   	"4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
 local userService  = App42API:buildUserService()  
-local storageService = App42API:buildStorageService()  
+local storageService = App42API:buildStorageService() 
+local socialService  = App42API:buildSocialService() 
 
 
 local App42CallBack = {}
@@ -19,6 +20,7 @@ local newPass
 local userField
 local passField
 
+local fbAppID = "1115061051839753"  --replace with your Facebook App ID
 
 local function trylogin(event)
 	newUser = userField.text
@@ -81,9 +83,13 @@ local function trylogin(event)
         effect = "crossFade",
         time = 500
       }
-      composer.showOverlay("userlog_error",options)
+      myData.textmessage = "Your username and/or password is incorrect"
+      myData.buttonlabel = "Try Again"
+      myData.newscreen = "log_user"
+      composer.showOverlay("reglog_error",options)
 	end
 end
+
 
 function loaduserinfo()
 	local userSettings = {
@@ -103,13 +109,14 @@ function loaduserinfo()
 end
 
 
-local function textListener( event )
+local function userListener( event )
     if ( event.phase == "began" ) then
         -- user begins editing defaultField
         print( event.text )
-    elseif ( event.phase == "ended" or event.phase == "submitted" ) then
-        -- do something with defaultField text
-        print( event.target.text )
+    elseif ( event.phase == "ended") then
+      native.setKeyboardFocus( nil )
+    elseif ( event.phase == "submitted" ) then
+      native.setKeyboardFocus( passField )
     elseif ( event.phase == "editing" ) then
         print( event.newCharacters )
         print( event.oldText )
@@ -118,18 +125,37 @@ local function textListener( event )
     end
 end
 
+local function passListener( event )
+    if ( event.phase == "began" ) then
+        -- user begins editing defaultField
+        print( event.text )
+    elseif ( event.phase == "ended" or event.phase == "submitted" ) then
+        native.setKeyboardFocus( nil )
+    elseif ( event.phase == "editing" ) then
+        print( event.newCharacters )
+        print( event.oldText )
+        print( event.startPosition )
+        print( event.text )
+    end
+end
+
+local function hideKb( event )
+  native.setKeyboardFocus( nil )
+end
+
 
 function scene:create( event )
 
     local sceneGroup = self.view
-	local background = display.newRect(display.contentCenterX, display.contentCenterY,1920-888,1080-500)
+	local background = display.newRect(display.contentCenterX, display.contentCenterY + 20,1920-888,1080-500)
 	background:setFillColor(grey,0.5)
+  background:addEventListener( "tap", hideKb )
 	sceneGroup:insert(background)
 
 	local titleText = {
     	text = "Log In",     
     	x = display.contentCenterX,
-    	y = display.contentCenterY - 230,
+    	y = display.contentCenterY - 210,
     	width = 900,     --required for multi-line and alignment
     	font = native.systemFontBold,   
     	fontSize = 92,
@@ -138,11 +164,12 @@ function scene:create( event )
 	local title=display.newText(titleText)
 	sceneGroup:insert(title)	
 
+  
 
 	local userText = {
     	text = "Username: ",     
     	x = display.contentCenterX - 200,
-    	y = display.contentCenterY - 130,
+    	y = display.contentCenterY - 80,
     	width = 1920-940,     --required for multi-line and alignment
     	font = native.systemFontBold,   
     	fontSize = 48,
@@ -151,15 +178,18 @@ function scene:create( event )
 	local trial=display.newText(userText)
 	sceneGroup:insert(trial)
 
-	userField = native.newTextField( display.contentCenterX + 200, display.contentCenterY - 130, 300, 30 )
-	userField:addEventListener( "userInput", textListener )
+	userField = native.newTextField( display.contentCenterX + 200, display.contentCenterY - 80, 330, 55 )
+  userField.size = nil
+  userField:resizeFontToFitHeight()
+  userField:setReturnKey( "next" )
+	userField:addEventListener( "userInput", userListener )
 	sceneGroup:insert(userField)
 
 
 	local passText = {
     	text = "Password: ",     
     	x = display.contentCenterX - 200,
-    	y = display.contentCenterY - 60,
+    	y = display.contentCenterY + 20,
     	width = 1920-940,     --required for multi-line and alignment
     	font = native.systemFontBold,   
     	fontSize = 48,
@@ -168,11 +198,13 @@ function scene:create( event )
 	local trial=display.newText(passText)
 	sceneGroup:insert(trial)
 
-	passField = native.newTextField( display.contentCenterX + 200, display.contentCenterY - 60, 300, 30 )
+	passField = native.newTextField( display.contentCenterX + 200, display.contentCenterY + 20, 330, 55 )
 	passField.isSecure = true
-	passField:addEventListener( "userInput", textListener )
+  passField.size = nil
+  passField:resizeFontToFitHeight()
+  passField:setReturnKey( "done" )
+	passField:addEventListener( "userInput", passListener )
 	sceneGroup:insert(passField)
-
 
 	
 	local createAcc = widget.newButton{
@@ -188,7 +220,7 @@ function scene:create( event )
 		shape="roundedRect"
 	}	
 	sceneGroup:insert(createAcc)
-	createAcc.x=display.contentCenterX
+	createAcc.x=display.contentCenterX 
 	createAcc.y=display.contentCenterY+200
 end
 

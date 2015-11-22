@@ -35,6 +35,54 @@ checkPass = nil
 checkEmail = nil
 
 
+
+function fblogin()
+  facebook.login( fbAppID, facebookListener, { "public_profile", "user_friends", "email" } )
+end
+
+
+local function facebookListener( event )
+    print( "event.name:" .. event.name )  --"fbconnect"
+    print( "isError: " .. tostring( event.isError ) )
+    print( "didComplete: " .. tostring( event.didComplete ) )
+    print( "event.type:" .. event.type )  --"session", "request", or "dialog"
+    --"session" events cover various login/logout events
+    --"request" events handle calls to various Graph API calls
+    --"dialog" events are standard popup boxes that can be displayed
+    if ( "session" == event.type ) then
+        --options are "login", "loginFailed", "loginCancelled", or "logout"
+        if ( "login" == event.phase ) then
+            local access_token = event.token
+            local userName = myData.user
+            local App42CallBack = {}
+            socialService:linkUserFacebookAccount(userName, access_token, App42CallBack)
+            
+            function App42CallBack:onSuccess(object)
+              print("userName is " ..object:getUserName());    
+              print("facebookAccessToken is "..object:getFacebookAccessToken());  
+            end
+            function App42CallBack:onException(exception)
+              print("Message is : "..exception:getMessage())
+              print("App Error code is : "..exception:getAppErrorCode())
+              print("Http Error code is "..exception:getHttpErrorCode())
+              print("Detail is : "..exception:getDetails())
+            end
+
+        end
+    elseif ( "request" == event.type ) then
+        print("facebook request")
+        if ( not event.isError ) then
+            local response = json.decode( event.response )
+            --process response data here
+        end
+    elseif ( "dialog" == event.type ) then
+        print( "dialog", event.response )
+        --handle dialog results here
+    end
+end
+
+
+
 local function tryregister(event)
 	--"[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?" email regex
 	-- pass min 8
@@ -51,7 +99,11 @@ local function tryregister(event)
     	effect = "crossFade",
         time = 500
     	}
-		composer.showOverlay("pass_error",options)
+    myData.textmessage = "Your password is too short!"
+    myData.buttonlabel = "Ok"
+    myData.newscreen = "register_user"
+    composer.showOverlay("reglog_error",options)
+		
 
 	elseif not (newEmail:match("[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?")) then
     	local options = {
@@ -59,7 +111,11 @@ local function tryregister(event)
     	effect = "crossFade",
         time = 500
     	}
-		composer.showOverlay("email_error",options)
+    myData.textmessage = "Please enter a valid e-mail address!"
+    myData.buttonlabel = "Ok"
+    myData.newscreen = "register_user"
+    composer.showOverlay("reglog_error",options)
+		
     else
 
 		userService:getUser(newUser,App42CallBack)
@@ -73,7 +129,11 @@ local function tryregister(event)
     			effect = "crossFade",
         		time = 500
     		}
-			composer.showOverlay("userreg_error",options)
+      myData.textmessage = "The username you selected already exists!"
+      myData.buttonlabel = "Ok"
+      myData.newscreen = "register_user"
+      composer.showOverlay("reglog_error",options)
+			
 		end
 
 		function App42CallBack:onException(exception)
@@ -186,6 +246,8 @@ function scene:create( event )
 	sceneGroup:insert(trial)
 
 	userField = native.newTextField( display.contentCenterX + 200, display.contentCenterY - 130, 300, 30 )
+  userField:resizeFontToFitHeight()
+  userField:setReturnKey( "next" )
 	userField:addEventListener( "userInput", textListener )
 	sceneGroup:insert(userField)
 
@@ -204,6 +266,8 @@ function scene:create( event )
 
 	passField = native.newTextField( display.contentCenterX + 200, display.contentCenterY - 60, 300, 30 )
 	passField.isSecure = true
+  passField:resizeFontToFitHeight()
+  passField:setReturnKey( "next" )
 	passField:addEventListener( "userInput", textListener )
 	sceneGroup:insert(passField)
 
@@ -221,6 +285,8 @@ function scene:create( event )
 	sceneGroup:insert(trial)
 
 	emailField = native.newTextField( display.contentCenterX + 200, display.contentCenterY + 10, 300, 30 )
+  emailField:resizeFontToFitHeight()
+  emailField:setReturnKey( "next" )
 	emailField:addEventListener( "userInput", textListener )
 	sceneGroup:insert(emailField)
 

@@ -1,17 +1,24 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
+local myData = require( "mydata" )
 
 local scene = composer.newScene()
-local function tryagain(event)
-	composer.hideOverlay( "fade", 400 )
-end
-function scene:create( event )
 
+local function oops(event)
+	local options = {
+		isModal = true,
+    	effect = "crossFade",
+        time = 500
+    }
+	composer.showOverlay(myData.newscreen,options)
+end
+
+function scene:create( event )
     local sceneGroup = self.view
 	local background = display.newRect(display.contentCenterX, display.contentCenterY,1920-888,1080-500)
 	background:setFillColor(grey,0.5)
 	sceneGroup:insert(background)
-	local trial=display.newText("Sorry that path is blocked",display.contentCenterX,display.contentCenterY)
+	local trial=display.newText(myData.textmessage,display.contentCenterX,display.contentCenterY)
 	sceneGroup:insert(trial)	
 	local try = widget.newButton
 	{
@@ -19,8 +26,8 @@ function scene:create( event )
 		height = 100,
 		defaultFile = "buttonDefault.png",
 		overFile = "buttonOver.png",
-		label = "TryAgain",
-		onEvent = tryagain,
+		label = myData.buttonlabel,
+		onEvent = oops,
 		labelColor = { default={255,255,255}, over={255,255,255} },
 		fontSize=40,
 		fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
@@ -40,8 +47,8 @@ function scene:hide( event )
 
     if ( phase == "will" ) then
         -- Call the "resumeGame()" function in the parent scene
-        parent:resetrobot()
-		parent:resumeGame()
+        --parent:tryagain()
+		
     end
 end
 

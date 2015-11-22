@@ -9,11 +9,7 @@ local scene = composer.newScene()
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
 
--- local forward references should go here
-
--- -------------------------------------------------------------------------------
-
-
+--Sends user to the games menu screen
 local function showLevel()
 	audio.pause(backgroundMusicplay)
 	local options = {
@@ -23,6 +19,7 @@ local function showLevel()
 	composer.gotoScene("GamesMenu",options)
 end
 
+--Sends user to the credits screen
 local function showCredits()
 audio.pause(backgroundMusicplay)
 	local options = {
@@ -32,6 +29,7 @@ audio.pause(backgroundMusicplay)
 composer.gotoScene("Credits",options)
 end
 
+--Sends user to the tutorials menu screen
 local function showTutorial()
 	audio.pause(backgroundMusicplay)
 	local options = {
@@ -41,6 +39,7 @@ local function showTutorial()
 		composer.gotoScene("TutorialsMenu",options)
 end
 
+--Sends user to the leaderboard screen
 local function showScores()
 	audio.pause(backgroundMusicplay)
 	local options = {
@@ -50,6 +49,7 @@ local function showScores()
 		composer.gotoScene("Credits",options)
 end
 
+--Sends user to the game store screen
 local function showStore()
 	audio.pause(backgroundMusicplay)
 	local options = {
@@ -59,6 +59,14 @@ local function showStore()
 		composer.gotoScene("Store",options)
 end
 
+--Sends user to the settings screen
+local function gosettings( event )
+    local options = {
+            effect = "crossFade",
+            time = 500
+    }
+    composer.gotoScene("Settings",options)
+end
 
 
 function check1()
@@ -95,15 +103,9 @@ function update()
     end
 end
 
-local function gosettings( event )
-    local options = {
-            effect = "crossFade",
-            time = 500
-    }
-    composer.gotoScene("Settings",options)
-end
 
--- "scene:create()"
+
+
 function scene:create( event )
 	
 	--update()
@@ -131,6 +133,8 @@ function scene:show( event )
 			
 			composer.showOverlay( "permission", options )
 		end
+
+		--background image
 		local background = display.newImage("Images/theme_"..myData.theme.."/splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
@@ -140,6 +144,7 @@ function scene:show( event )
 		background.y=display.contentCenterY
 		sceneGroup:insert(background)
 
+		--if no user is logged in, this opens the login/registration overlay
 		local options = {
 			isModal = true,
             effect = "crossFade",
@@ -160,6 +165,7 @@ function scene:show( event )
         sceneGroup:insert(settingsbutton)
 		settingsbutton:addEventListener( "tap", gosettings )
 		
+		--play_button
 		local play = display.newImage("Images/Play.png")
 		play.height=180
 		play.width=350
@@ -168,6 +174,7 @@ function scene:show( event )
 		sceneGroup:insert(play)
 		play:addEventListener( "tap", showLevel )
 		
+		--tutorials_button
 		local tut = display.newImage("Images/Tutorial.png")
 		tut.height=163
 		tut.width=528
@@ -176,6 +183,7 @@ function scene:show( event )
 		sceneGroup:insert(tut)
 		tut:addEventListener( "tap", showTutorial )
 		
+		--scores_button
 		local scores = display.newImage("Images/scores.png")
 		scores.height=163
 		scores.width=416
@@ -184,6 +192,7 @@ function scene:show( event )
 		sceneGroup:insert(scores)
 		scores:addEventListener( "tap", showScores )
 
+		--credits_button
 		local credit = display.newImage("Images/Credits.png")
 		credit.height=163
 		credit.width=470
@@ -192,6 +201,7 @@ function scene:show( event )
 		sceneGroup:insert(credit)
 		credit:addEventListener( "tap", showCredits )
 
+		--store_button
 		local store = display.newImage("Images/store.png")
 		store.height=163
 		store.width=353
@@ -205,10 +215,6 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-        
-
-		
-		
 		audio.resume(backgroundMusicplay)
 		
     end

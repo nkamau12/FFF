@@ -5,6 +5,28 @@ local JSON = require ("json")
 local loadsave = require( "loadsave" ) 
 local scene = composer.newScene()
 
+local secondsLeft
+local clockText
+local countDownTimer
+
+local JSON = require("App42-Lua-API.JSON") 
+local App42API = require("App42-Lua-API.App42API")
+local gameName = "For The Future"
+local userName = myData.user
+local gameScore = nil
+local dbName = "USERS"  
+local collectionName = "Scores"   
+local jsonDoc = {}  
+jsonDoc.name =  myData.user
+jsonDoc.level = nil 
+local App42CallBack = {}
+App42API:setDbName(dbName)
+
+App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
+    "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
+local scoreBoardService = App42API.buildScoreBoardService() 
+
+
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
@@ -12,109 +34,121 @@ local scene = composer.newScene()
 -- local forward references should go here
 
 -- -------------------------------------------------------------------------------
+local function setupPic(name, pic, xVal, yVal, hVal,wVal)
+
+    setupItems[name] = display.newImage(pic)
+    setupItems[name].anchorX = 0
+    setupItems[name].anchorY =0
+    setupItems[name].x = xVal
+    setupItems[name].y = yVal
+    setupItems[name].height = hVal
+    setupItems[name].width= wVal
+
+end
+
+
 local function setupmap()
+    i=1
+    while(myData.searchkey[currLvl].one[i] ~= nil) do
+        currBlock = myData.searchkey[currLvl].one[i]
+        mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
+        mapmain[i].anchorX=0
+        mapmain[i].anchorY=0
+        mapmain[i].x=352 + (i-1)*142
+        mapmain[i].y=595
+        mapmain[i].height=120
+        mapmain[i].width=120
+        i = i + 1
+    end
 
-        i=1
-        while(myData.searchkey[currLvl].one[i] ~= nil) do
-            currBlock = myData.searchkey[currLvl].one[i]
-            mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
-            mapmain[i].anchorX=0
-            mapmain[i].anchorY=0
-            mapmain[i].x=352 + (i-1)*142
-            mapmain[i].y=595
-            mapmain[i].height=120
-            mapmain[i].width=120
-            i = i + 1
-        end
-        i=1
-        while(myData.searchkey[currLvl].two[i] ~= nil) do
-            currBlock = myData.searchkey[currLvl].two[i]
-            mapone[i] = display.newImage("Images/"..currBlock.."_block.png")
-            mapone[i].anchorX=0
-            mapone[i].anchorY=0
-            mapone[i].x=352 + (i-1)*142
-            mapone[i].y=750
-            mapone[i].height=120
-            mapone[i].width=120
-            i = i + 1
-        end
-        i=1
-        while(myData.searchkey[currLvl].three[i] ~= nil) do
-            currBlock = myData.searchkey[currLvl].three[i]
-            maptwo[i] = display.newImage("Images/"..currBlock.."_block.png")
-            maptwo[i].anchorX=0
-            maptwo[i].anchorY=0
-            maptwo[i].x=352 + (i-1)*142
-            maptwo[i].y=903
-            maptwo[i].height=120
-            maptwo[i].width=120
-            i = i + 1
-        end
-        i=1
+    i=1
+    while(myData.searchkey[currLvl].two[i] ~= nil) do
+        currBlock = myData.searchkey[currLvl].two[i]
+        mapone[i] = display.newImage("Images/"..currBlock.."_block.png")
+        mapone[i].anchorX=0
+        mapone[i].anchorY=0
+        mapone[i].x=352 + (i-1)*142
+        mapone[i].y=750
+        mapone[i].height=120
+        mapone[i].width=120
+        i = i + 1
+    end
+    i=1
+    while(myData.searchkey[currLvl].three[i] ~= nil) do
+        currBlock = myData.searchkey[currLvl].three[i]
+        maptwo[i] = display.newImage("Images/"..currBlock.."_block.png")
+        maptwo[i].anchorX=0
+        maptwo[i].anchorY=0
+        maptwo[i].x=352 + (i-1)*142
+        maptwo[i].y=903
+        maptwo[i].height=120
+        maptwo[i].width=120
+        i = i + 1
+    end
+    i=1
 
-        --red_block
-        blockred = display.newImage("Images/red_block.png")
-        blockred.anchorX=0
-        blockred.anchorY=0
-        blockred.x=1289
-        blockred.y=729
-        blockred.height=120
-        blockred.width=120
+    --red_block
+    blockred = display.newImage("Images/red_block.png")
+    blockred.anchorX=0
+    blockred.anchorY=0
+    blockred.x=1289
+    blockred.y=729
+    blockred.height=120
+    blockred.width=120
 
-        --green_block
-        blockgreen = display.newImage("Images/green_block.png")
-        blockgreen.anchorX=0
-        blockgreen.anchorY=0
-        blockgreen.x=1426
-        blockgreen.y=729
-        blockgreen.height=120
-        blockgreen.width=120
+    --green_block
+    blockgreen = display.newImage("Images/green_block.png")
+    blockgreen.anchorX=0
+    blockgreen.anchorY=0
+    blockgreen.x=1426
+    blockgreen.y=729
+    blockgreen.height=120
+    blockgreen.width=120
 
-        --blue_block
-        blockblue = display.newImage("Images/blue_block.png")
-        blockblue.anchorX=0
-        blockblue.anchorY=0
-        blockblue.x=1564
-        blockblue.y=729
-        blockblue.height=120
-        blockblue.width=120
-        
-        --yellow_block
-        blockyellow = display.newImage("Images/yellow_block.png")
-        blockyellow.anchorX=0
-        blockyellow.anchorY=0
-        blockyellow.x=1700
-        blockyellow.y=729
-        blockyellow.height=120
-        blockyellow.width=120
-        
-        --run_button
-        runbutton = display.newImage("Images/run_button.png")
-        runbutton.anchorX=0
-        runbutton.anchorY=0
-        runbutton.x=1450
-        runbutton.y=887
-        runbutton.height=120
-        runbutton.width=360
+    --blue_block
+    blockblue = display.newImage("Images/blue_block.png")
+    blockblue.anchorX=0
+    blockblue.anchorY=0
+    blockblue.x=1564
+    blockblue.y=729
+    blockblue.height=120
+    blockblue.width=120
+    
+    --yellow_block
+    blockyellow = display.newImage("Images/yellow_block.png")
+    blockyellow.anchorX=0
+    blockyellow.anchorY=0
+    blockyellow.x=1700
+    blockyellow.y=729
+    blockyellow.height=120
+    blockyellow.width=120
+    
+    --run_button
+    runbutton = display.newImage("Images/run_button.png")
+    runbutton.anchorX=0
+    runbutton.anchorY=0
+    runbutton.x=1450
+    runbutton.y=887
+    runbutton.height=120
+    runbutton.width=360
 
-        --delete_button
-        deletebutton = display.newImage("Images/delete_button.png")
-        deletebutton.anchorX=0
-        deletebutton.anchorY=0
-        deletebutton.x=1289
-        deletebutton.y=887
-        deletebutton.height=120
-        deletebutton.width=120
+    --delete_button
+    deletebutton = display.newImage("Images/delete_button.png")
+    deletebutton.anchorX=0
+    deletebutton.anchorY=0
+    deletebutton.x=1289
+    deletebutton.y=887
+    deletebutton.height=120
+    deletebutton.width=120
 
-        --home_button
-        homebutton = display.newImage("Images/home.png")
-        homebutton.anchorX=0
-        homebutton.anchorY=0
-        homebutton.x=1766
-        homebutton.y=28
-        homebutton.height=120
-        homebutton.width=120
-        
+    --home_button
+    homebutton = display.newImage("Images/home.png")
+    homebutton.anchorX=0
+    homebutton.anchorY=0
+    homebutton.x=1766
+    homebutton.y=28
+    homebutton.height=120
+    homebutton.width=120  
 end 
 
 local function addred( event )
@@ -131,7 +165,6 @@ local function addred( event )
 
         spotx = spotx + 130
         countmax = countmax + 1
-    else
     end
 end
 
@@ -149,7 +182,6 @@ local function addgreen( event )
 
         spotx = spotx + 130
         countmax = countmax + 1
-    else
     end
 end
 
@@ -167,7 +199,6 @@ local function addblue( event )
 
         spotx = spotx + 130
         countmax = countmax + 1
-    else
     end
 end
 
@@ -185,7 +216,6 @@ local function addyellow( event )
 
         spotx = spotx + 130
         countmax = countmax + 1
-    else
     end
 end
 
@@ -204,18 +234,18 @@ local function removelast( event )
         display.remove(newblock[countmax-1])
         countmax = countmax - 1
         spotx = 631 + countmax*130
-    else
     end
 end
 
 local function gohome( event )
-    homesearch = homesearch + 1
+homesearch = homesearch + 1
 
     local function onUpdateObject( event )
         if not event.error then
             print( event.response.updatedAt )
         end
     end
+
     local dataTable = {["Search"..currLvl] = homesearch }
     parse:updateObject("HomeCount", myData.homeid, dataTable, onUpdateObject)
 
@@ -225,8 +255,7 @@ local function gohome( event )
             effect = "crossFade",
             time = 500
     }
-    for i=8,0,-1 
-    do 
+    for i=8,0,-1 do 
         display.remove(newblock[i]) 
     end
     answer = 0
@@ -238,19 +267,22 @@ end
 local function tryagain()
     countmax=answer
     spotx = 631 + answer*130
-    for i=8,answer,-1 
-    do 
+    for i=8,answer,-1 do 
         display.remove(newblock[i]) 
-    end
+    end  
 end
+
 
 local function checkresult( event )
     runsearch = runsearch + 1
+    
+
     local function onRunningObject( event )
         if not event.error then
             print( event.response.updatedAt )
         end
     end
+
     local runsearchTable = {["Search"..currLvl] = runsearch }
     parse:updateObject("RunCount", myData.runid, runsearchTable, onRunningObject)
 
@@ -259,48 +291,76 @@ local function checkresult( event )
         if(spacecolor[answer] == answerkey[answer+1])then
             answer = answer + 1
         else
-			local options = 
-			{
-				isModal = true
-			}
+            timer.pause(countDownTimer)
+            print(secondsLeft)
+    		local options = {
+    			isModal = true }
             composer.showOverlay( "fail_search", options )
-			tryagain()
+    		tryagain()
             answer = 10
         end
+
     end
+
     if(answer < 10)then
         audio.pause(searchMusicplay)
         local options = {
             effect = "crossFade",
             time = 500
         }
-        for i=8,0,-1 
-        do 
+        for i=8,0,-1 do 
             display.remove(newblock[i]) 
         end
+
         answer = 0
         spotx = 631
         spoty = 230
         countmax = 0
+
         local attribute = "Search"..currLvl
         parse:updateObject("LevelTime", myData.timeid, {[attribute] = endTime})
-		composer.showOverlay("pass_search", options)
+    	composer.showOverlay("pass_search", options)
+
+        timer.pause(countDownTimer)
+        print("Finished with "..secondsLeft.." seconds left")
+        gameScore = secondsLeft * 10
+        print("Score: "..gameScore)
+
+        jsonDoc.level = "Search"..currLvl
+        scoreBoardService:addJSONObject( collectionName, jsonDoc)
+        scoreBoardService:saveUserScore(gameName,userName,gameScore,App42CallBack)
+        function App42CallBack:onSuccess(object)
+            print("Game name is "..object:getName())
+            print("userName is : "..object:getScoreList():getUserName())
+            print("score is : "..object:getScoreList():getValue())
+            print("scoreId is : "..object:getScoreList():getScoreId())
+            print("GetCreatedAt is : "..object:getScoreList():getJsonDocList():getCreatedAt())  
+            print("Doc ID is : "..object:getScoreList():getJsonDocList():getDocId())  
+            print("GetJsonDoc is : "..JSON:encode(object:getScoreList():getJsonDocList():getJsonDoc()))  
+        end
+        function App42CallBack:onException(exception)
+            print("Message is : "..exception:getMessage())
+            print("App Error code is : "..exception:getAppErrorCode())
+            print("Http Error code is "..exception:getHttpErrorCode())
+            print("Detail is : "..exception:getDetails())
+        end
+
         myData.searchLvl = currLvl + 1
         myData.rescueLvl = currLvl
 
         local userSettings = {
-        user = myData.user,
-        search = myData.searchLvl,
-        rescue = myData.rescueLvl,
-        theme = myData.theme,
-        robot = myData.roboSprite,
-        science = myData.scienceSprite
-        }
+            user = myData.user,
+            search = myData.searchLvl,
+            rescue = myData.rescueLvl,
+            theme = myData.theme,
+            robot = myData.roboSprite,
+            science = myData.scienceSprite }
         loadsave.saveTable( userSettings, "user.json" )
         print("Current level: "..myData.searchLvl)
     else
         answer = countmax
     end
+    
 end
 
 local function getKey()
@@ -331,6 +391,32 @@ local function getKey()
     end
 end
 
+local function updateTime(event)
+    -- decrement the number of seconds
+    secondsLeft = secondsLeft - 1
+
+    -- time is tracked in seconds.  We need to convert it to minutes and seconds
+    local minutes = math.floor( secondsLeft / 60 )
+    local seconds = secondsLeft % 60
+
+    -- make it a string using string format.  
+    local timeDisplay = string.format( "%02d:%02d", minutes, seconds )
+    if(clockText == nil) then
+        timer.cancel( event.source )
+    else
+        clockText.text = timeDisplay
+    end
+
+end
+
+-- Custom function for resuming the game (from pause state)
+function scene:resumeGame()
+    --code to resume game
+    secondsLeft = secondsLeft - 9
+    timer.resume(countDownTimer)
+end
+
+
 -- "scene:create()"
 function scene:create( event )
 
@@ -344,7 +430,7 @@ function scene:create( event )
     local sceneGroup = self.view
     searchMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
     searchMusicplay = audio.play( searchMusic, {  fadein = 4000, loops=-1 } )
-    
+
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -358,56 +444,58 @@ function scene:create( event )
         background.y=display.contentCenterY
         sceneGroup:insert(background)
         
-        getKey()
+
+    getKey()
 
 
+    setupmap()
+    newblock = {}
+    spacecolor = {}
+    answer = 0
+    undosearch = 0
+    homesearch = 0
+    runsearch = 0
+    
 
-        setupmap()
-        newblock = {}
-        spacecolor = {}
-        answer = 0
-        undosearch = 0
-        homesearch = 0
-        runsearch = 0
+    sceneGroup:insert(blockred)
+    sceneGroup:insert(blockgreen)
+    sceneGroup:insert(blockblue)
+    sceneGroup:insert(blockyellow)
+    sceneGroup:insert(runbutton)
+    sceneGroup:insert(deletebutton)
+    sceneGroup:insert(homebutton)
+    
 
-        
+    i=1
+    while(mapmain[i] ~= nil) do
+        sceneGroup:insert(mapmain[i])
+        i = i + 1
+    end
 
-        sceneGroup:insert(blockred)
-        sceneGroup:insert(blockgreen)
-        sceneGroup:insert(blockblue)
-        sceneGroup:insert(blockyellow)
-        sceneGroup:insert(runbutton)
-        sceneGroup:insert(deletebutton)
-        sceneGroup:insert(homebutton)
+    i = 1
+    while(mapone[i] ~= nil) do
+        sceneGroup:insert(mapone[i])
+        i = i + 1
+    end
 
-        i=1
-        while(mapmain[i] ~= nil) do
-                sceneGroup:insert(mapmain[i])
-                i = i + 1
-        end
-        i = 1
-        while(mapone[i] ~= nil) do
-                sceneGroup:insert(mapone[i])
-                i = i + 1
-        end
-        i = 1
-        while(maptwo[i] ~= nil) do
-                sceneGroup:insert(maptwo[i])
-                i = i + 1
-        end
-        i = 1
+    i = 1
+    while(maptwo[i] ~= nil) do
+        sceneGroup:insert(maptwo[i])
+        i = i + 1
+    end
+    i = 1
 
 
-        blockred:addEventListener( "tap", addred )
-        blockgreen:addEventListener( "tap", addgreen )
-        blockblue:addEventListener( "tap", addblue )
-        blockyellow:addEventListener( "tap", addyellow )
-        deletebutton:addEventListener("tap",removelast)
-        homebutton:addEventListener("tap",gohome)
-        runbutton:addEventListener("tap",checkresult)
-        spotx = 631
-        spoty = 230
-        countmax = 0
+    blockred:addEventListener( "tap", addred )
+    blockgreen:addEventListener( "tap", addgreen )
+    blockblue:addEventListener( "tap", addblue )
+    blockyellow:addEventListener( "tap", addyellow )
+    deletebutton:addEventListener("tap",removelast)
+    homebutton:addEventListener("tap",gohome)
+    runbutton:addEventListener("tap",checkresult)
+    spotx = 631
+    spoty = 230
+    countmax = 0
 end
 
 
@@ -416,7 +504,6 @@ function scene:show( event )
     local sceneGroup = self.view
     local phase = event.phase
 
-    
 
     currLvl = myData.searchLvl
 
@@ -446,6 +533,7 @@ function scene:show( event )
                 mapmain[i].width=120
                 i = i + 1
             end
+
             i=1
             while(myData.searchkey[currLvl].two[i] ~= nil) do
                 currBlock = myData.searchkey[currLvl].two[i]
@@ -458,6 +546,7 @@ function scene:show( event )
                 mapone[i].width=120
                 i = i + 1
             end
+
             i=1
             while(myData.searchkey[currLvl].three[i] ~= nil) do
                 currBlock = myData.searchkey[currLvl].three[i]
@@ -470,17 +559,20 @@ function scene:show( event )
                 maptwo[i].width=120
                 i = i + 1
             end
+
             i=1
 
             while(mapmain[i] ~= nil) do
                 sceneGroup:insert(mapmain[i])
                 i = i + 1
             end
+
             i = 1
             while(mapone[i] ~= nil) do
                 sceneGroup:insert(mapone[i])
                 i = i + 1
             end
+
             i = 1
             while(maptwo[i] ~= nil) do
                 sceneGroup:insert(maptwo[i])
@@ -488,11 +580,20 @@ function scene:show( event )
             end
             i = 1
         end
-        
 
+        --time: minutes * seconds
+        secondsLeft = 2 * 60 
+
+        clockText = display.newText("2:00", display.contentCenterX, 80, native.systemFontBold, 80)
+        clockText:setFillColor( 1, 1, 1 )
+        sceneGroup:insert(clockText)
+        -- run them timer
+        countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
+        
         
         
     elseif ( phase == "did" ) then
+
         
     end
 end
@@ -502,15 +603,12 @@ end
 -- "scene:hide()"
 function scene:hide( event )
 
-    local sceneGroup = self.view
-    local phase = event.phase
+local sceneGroup = self.view
+local phase = event.phase
 
     if ( phase == "will" ) then
-        -- Called when the scene is on screen (but is about to go off screen).
-        -- Insert code here to "pause" the scene.
-        -- Example: stop timers, stop animation, stop audio, etc.
-        for i=8,0,-1 
-        do 
+
+        for i=8,0,-1 do 
             display.remove(newblock[i]) 
         end
 
@@ -520,22 +618,30 @@ function scene:hide( event )
             mapmain[i] = nil
             i = i + 1
         end
+
         i = 1
         while(mapone[i] ~= nil) do
             display.remove(mapone[i])
             mapone[i] = nil
             i = i + 1
         end
+
         i = 1
         while(maptwo[i] ~= nil) do
             display.remove(maptwo[i])
             maptwo[i] = nil
             i = i + 1
         end
+
         i = 1
         currLvl = nil
-    elseif ( phase == "did" ) then
-        
+
+        display.remove(clockText)
+        countDownTimer = nil
+        clockText = nil
+
+
+    elseif ( phase == "did" ) then 
     end
 end
 
@@ -543,10 +649,10 @@ end
 -- "scene:destroy()"
 function scene:destroy( event )
 
-    local sceneGroup = self.view
-    -- Called prior to the removal of scene's view ("sceneGroup").
-    -- Insert code here to clean up the scene.
-    -- Example: remove display objects, save state, etc.
+local sceneGroup = self.view
+-- Called prior to the removal of scene's view ("sceneGroup").
+-- Insert code here to clean up the scene.
+-- Example: remove display objects, save state, etc.
 end
 
 -- -------------------------------------------------------------------------------

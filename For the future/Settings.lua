@@ -2,8 +2,19 @@ local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local widget = require( "widget" )
 local composer = require( "composer" )
-local JSON = require ("json")
 local scene = composer.newScene()
+local JSON = require ("json")
+local loadsave = require( "loadsave" ) 
+local App42API = require("App42-Lua-API.App42API") 
+App42API:initialize("1115061051839753", "ceb665dfcdccce67e201ad66ebc741f3")
+local userService  = App42API:buildUserService()  
+local storageService = App42API:buildStorageService()  
+local socialService  = App42API:buildSocialService() 
+local fbAppID = "1115061051839753"  --replace with your Facebook App ID
+local App42CallBack = {}
+local facebook = require( "plugin.facebook.v4" )
+local showButton = 1
+local accessToken
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -21,21 +32,80 @@ local function gohome( event )
 end
 
 local function logout(event)
-	myData.user = nil
+	local userSettings = {
+	  	user = nil,
+	  	name = nil,
+	  	search = 1,
+	  	rescue = 0,
+	  	theme = "default",
+	  	robot = "default",
+	  	science = "default"
+	}
+	loadsave.saveTable( userSettings, "user.json" )
 	myData.theme = "default"
+	myData.user = nil
+	myData.roboSprite = "default"
+	myData.scienceSprite = "default"
 
 	local options = {
     		isModal = true,
             effect = "crossFade",
             time = 500
     }
-    composer.gotoScene("Splash",options)
+    composer.gotoScene("Splash",options) 
 end
+
+
+function fblogin()
+  if ( facebook.isActive ) then
+    accessToken = facebook.getCurrentAccessToken()
+    facebook.login( fbAppID, facebookListener, { "public_profile", "user_friends", "email" } )
+	App42CallBack = {}
+	App42API:initialize("1115061051839753", "ceb665dfcdccce67e201ad66ebc741f3")
+	socialService:linkUserFacebookAccount(myData.user, accessToken.token, App42CallBack)
+	function App42CallBack:onSuccess(object)
+	  print("userName is " ..object:getUserName()) 
+	  print("facebookAccessToken is "..object:getFacebookAccessToken()) 
+	end
+	function App42CallBack:onException(exception)
+	  print("Message is : "..exception:getMessage())
+	  print("App Error code is : "..exception:getAppErrorCode())
+	  print("Http Error code is "..exception:getHttpErrorCode())
+	  print("Detail is : "..exception:getDetails())
+	end
+  end
+end
+
+
+local function facebookListener( event )
+    print( "event.name:" .. event.name )  --"fbconnect"
+    print( "isError: " .. tostring( event.isError ) )
+    print( "didComplete: " .. tostring( event.didComplete ) )
+    print( "event.type:" .. event.type )  --"session", "request", or "dialog"
+    --"session" events cover various login/logout events
+    --"request" events handle calls to various Graph API calls
+    --"dialog" events are standard popup boxes that can be displayed
+    if ( "session" == event.type ) then
+        --options are "login", "loginFailed", "loginCancelled", or "logout"
+        if ( "login" == event.phase ) then
+            accessToken = event.token
+        end
+    elseif ( "request" == event.type ) then
+        print("facebook request")
+        if ( not event.isError ) then
+            local response = json.decode( event.response )
+            --process response data here
+        end
+    elseif ( "dialog" == event.type ) then
+        print( "dialog", event.response )
+        --handle dialog results here
+    end
+end
+
 
 -- "scene:create()"
 function scene:create( event )
 end
-
 
 -- "scene:show()"
 function scene:show( event )
@@ -90,8 +160,25 @@ function scene:show( event )
 			shape="roundedRect"
 		}	
 		sceneGroup:insert(logBut)
-		logBut.x=display.contentCenterX
+		logBut.x=display.contentCenterX - 200
 		logBut.y=display.contentCenterY+300
+
+		if ( facebook.isActive ) then
+		    accessToken = facebook.getCurrentAccessToken()
+		    if not ( accessToken ) then
+		    	local facebookBtn = widget.newButton{
+				    width = 374.4,
+				    height = 80.6,
+				    defaultFile = "facebook.png",
+				    overFile = "facebook.png",
+				    onRelease = fblogin,
+				    labelColor = { default={255,255,255}, over={255,255,255} },
+				} 
+			  	sceneGroup:insert(facebookBtn)
+			  	facebookBtn.x=display.contentCenterX + 200
+			  	facebookBtn.y=display.contentCenterY + 300
+		    end
+		end
 
 		
     elseif ( phase == "did" ) then
