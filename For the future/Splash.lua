@@ -28,7 +28,8 @@ function scene:create( event )
 
     local sceneGroup = self.view
 	local backgroundMusic = audio.loadStream( "Music/bensound-scifi.mp3")
-	local backgroundMusicplay = audio.play( backgroundMusic, {  loops=-1 } )
+	local backgroundMusicplay = audio.play( backgroundMusic, {  channel = 1, loops=-1 } )
+	
 	
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -46,6 +47,9 @@ function scene:show( event )
         -- Called when the scene is still off screen (but is about to come on screen).
 		--local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
 		--background:setFillColor(.3,.1,.8)
+
+		local vol = myData.musicVol / 100
+		audio.setVolume(vol, {channel = 1})
 		
 		local background = display.newImage("Images/theme_"..myData.theme.."/title_background.png",system.ResourceDirectory)
 		background.anchorX=0.5

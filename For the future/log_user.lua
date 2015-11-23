@@ -57,12 +57,16 @@ local function trylogin(event)
           jsonDoc.search = object:getJsonDocList()[i]:getJsonDoc().search
           jsonDoc.rescue = object:getJsonDocList()[i]:getJsonDoc().rescue
           jsonDoc.theme = object:getJsonDocList()[i]:getJsonDoc().theme
+          jsonDoc.volume = object:getJsonDocList()[i]:getJsonDoc().volume
+          jsonDoc.sfx = object:getJsonDocList()[i]:getJsonDoc().sfx
           jsonDoc.robot = object:getJsonDocList()[i]:getJsonDoc().robot
           jsonDoc.scientist = object:getJsonDocList()[i]:getJsonDoc().scientist
 
           myData.maxsrch = jsonDoc.search
           myData.maxrsc = jsonDoc.rescue
           myData.theme = jsonDoc.theme
+          myData.musicVol = jsonDoc.volume
+          myData.sfx = jsonDoc.sfx
           myData.roboSprite = jsonDoc.robot
           myData.scienceSprite = jsonDoc.scientist
         end
@@ -97,6 +101,8 @@ function loaduserinfo()
   	name = nil,
   	search = 1,
   	rescue = 0,
+    volume = 100,
+    sfx = 100,
   	theme = "default",
   	robot = "default",
   	science = "default"
@@ -104,6 +110,8 @@ function loaduserinfo()
 	loadsave.saveTable( userSettings, "user.json" )
 	myData.theme = "default"
 	myData.user = newUser
+  myData.musicVol = 100
+  myData.sfx = 100
 	myData.roboSprite = "default"
 	myData.scienceSprite = "default"
 end

@@ -81,6 +81,60 @@ local function facebookListener( event )
     end
 end
 
+local function createScores(user,name,number)
+  local lvlName = name
+  local lvlNum = number
+  local gameName = "For The Future"
+  local userName = user
+  local gameScore = 0
+  local dbName = "USERS"
+  local collectionName = "Scores" 
+  local jsonDoc = {}
+  jsonDoc.name = userName
+  jsonDoc.level = lvlName..lvlNum
+  jsonDoc.score = gameScore
+  App42CallBack = {}
+  App42API:setDbName(dbName);
+  local scoreBoardService = App42API.buildScoreBoardService() 
+  scoreBoardService:addJSONObject( collectionName, jsonDoc)
+  scoreBoardService:saveUserScore(gameName,userName,gameScore,App42CallBack)
+  function App42CallBack:onSuccess(object)
+    print("Game name is "..object:getName())
+    print("userName is : "..object:getScoreList():getUserName())
+    print("score is : "..object:getScoreList():getValue())
+    print("scoreId is : "..object:getScoreList():getScoreId())
+    print("GetCreatedAt is : "..object:getScoreList():getJsonDocList():getCreatedAt())
+    print("Doc ID is : "..object:getScoreList():getJsonDocList():getDocId())
+    print("getUpdatedAt is : "..object:getScoreList():getJsonDocList():getUpdatedAt() )
+    print("GetJsonDoc is : "..JSON:encode(object:getScoreList():getJsonDocList():getJsonDoc()))
+  end
+  function App42CallBack:onException(exception)
+    print("Message is : "..exception:getMessage())
+    print("App Error code is : "..exception:getAppErrorCode())
+    print("Http Error code is "..exception:getHttpErrorCode())
+    print("Detail is : "..exception:getDetails())
+  end
+end
+
+local function createMax(user)
+  local gameName = "Max Scores"
+  local gameScore = 0
+  local userName = user
+  App42CallBack = {}
+  scoreBoardService:saveUserScore(gameName,userName,gameScore,App42CallBack)
+  function App42CallBack:onSuccess(object)
+    print("Game name is "..object:getName())
+    print("userName is : "..object:getScoreList():getUserName())
+    print("score is : "..object:getScoreList():getValue())
+    print("scoreId is : "..object:getScoreList():getScoreId())
+  end
+  function App42CallBack:onException(exception)
+    print("Message is : "..exception:getMessage())
+    print("App Error code is : "..exception:getAppErrorCode())
+    print("Http Error code is "..exception:getHttpErrorCode())
+    print("Detail is : "..exception:getDetails())
+  end
+end
 
 
 local function tryregister(event)
@@ -156,7 +210,7 @@ local function tryregister(event)
 
           local dbName  = "USERS"
           local collectionName = "GameInfo"
-          local json2 = "{\"user\":"..newUser",\"search\":1,\"rescue\":1,\"theme\":\"default\",\"robot\":\"default\",\"scientist\":\"default\"}"
+          local json2 = "{\"user\":"..newUser..",\"search\":1,\"rescue\":1,\"volume\":100,\"sfx\":100,\"theme\":\"default\",\"robot\":\"default\",\"scientist\":\"default\"}"
           local App42CallBack = {}
           local storageService = App42API:buildStorageService()
           storageService:insertJSONDocument(dbName, collectionName, json2,App42CallBack)
@@ -166,6 +220,13 @@ local function tryregister(event)
               print("DocId is "..object:getJsonDocList():getDocId())
               print("Created At is "..object:getJsonDocList():getCreatedAt())
             print("Updated At is "..object:getJsonDocList():getUpdatedAt())
+            for i=1, 12, 1 do
+              createScores(newUser,"Search",i)
+            end
+            for i=1, 12, 1 do
+              createScores(newUser,"Rescue",i)
+            end
+            createMax(newUser)
           end
           function App42CallBack:onException(exception)
             print("Message is : "..exception:getMessage())
@@ -182,9 +243,10 @@ end
 function loaduserinfo()
 	local userSettings = {
   	user = newUser,
-  	name = nil,
   	search = 1,
   	rescue = 0,
+    volume = 100,
+    sfx = 100,
   	theme = "default",
   	robot = "default",
   	science = "default"
@@ -192,6 +254,8 @@ function loaduserinfo()
 	loadsave.saveTable( userSettings, "user.json" )
 	myData.theme = "default"
 	myData.user = newUser
+  myData.musicVol = 100
+  myData.sfx = 100
 	myData.roboSprite = "default"
 	myData.scienceSprite = "default"
 end

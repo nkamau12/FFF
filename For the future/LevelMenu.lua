@@ -214,6 +214,8 @@ function scene:show( event )
     jsonDoc.search = maxsrch
     jsonDoc.rescue = maxrsc
     jsonDoc.theme = myData.theme
+    jsonDoc.volume = myData.musicVol
+    jsonDoc.sfx = myData.sfx
     jsonDoc.robot = myData.roboSprite
     jsonDoc.scientist = myData.scienceSprite
 

@@ -51,6 +51,20 @@ App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5c
     "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
 local scoreBoardService = App42API.buildScoreBoardService() 
 
+local scoreKey
+local jdocKey
+require("App42-Lua-API.Operator")
+require("App42-Lua-API.Permission")
+require("App42-Lua-API.GeoOperator")
+require("App42-Lua-API.OrderByType")
+require("App42-Lua-API.Operator")
+local queryBuilder = require("App42-Lua-API.QueryBuilder")
+local ACL = require("App42-Lua-API.ACL")
+
+local newmax
+local oldscore
+local globalscore
+
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
@@ -353,7 +367,7 @@ end
 
 local function moveup()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
-		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
+		local robotMusicplay = audio.play( robotMusic, {  channel = 2, loops=0 } )
 		
 		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectu, { time=16, x=robotX, y=robotY-250} )
@@ -361,7 +375,7 @@ local function moveup()
 end
 local function moveuphalf()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
-		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
+		local robotMusicplay = audio.play( robotMusic, {  channel = 2, loops=0 } )
 		
 		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectu, { time=16, x=robotX, y=robotY-200} )
@@ -375,14 +389,14 @@ end
 
 local function mover()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
-		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
+		local robotMusicplay = audio.play( robotMusic, {  channel = 2, loops=0 } )
 		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectr, { time=16, x=robotX+320, y=robotY} )
 		timer.performWithDelay(20,moveri)
 end
 local function moverhalf()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
-		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
+		local robotMusicplay = audio.play( robotMusic, {  channel = 2, loops=0 } )
 		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectr, { time=16, x=robotX+270, y=robotY} )
 		timer.performWithDelay(20,moveri)
@@ -395,14 +409,14 @@ end
 
 local function moved()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
-		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
+		local robotMusicplay = audio.play( robotMusic, {  channel = 2, loops=0 } )
 		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectd, { time=16, x=robotX, y=robotY+390} )
 		timer.performWithDelay(20,movedo)	
 end
 local function movedhalf()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
-		local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
+		local robotMusicplay = audio.play( robotMusic, {  channel = 2, loops=0 } )
 		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectd, { time=16, x=robotX, y=robotY+320} )
 		timer.performWithDelay(20,movedo)	
@@ -415,14 +429,14 @@ end
 
 local function movel()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
-		local robotMusicplay = audio.play( robotMusic, { loops=0 } )
+		local robotMusicplay = audio.play( robotMusic, { channel = 2, loops=0 } )
 		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectl, { time=16, x=robotX-320, y=robotY} )
 		timer.performWithDelay(20,movele)	
 end
 local function movelhalf()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
-		local robotMusicplay = audio.play( robotMusic, { loops=0 } )
+		local robotMusicplay = audio.play( robotMusic, { channel = 2, loops=0 } )
 		local robotX, robotY = robot:localToContent( 0, -70 )
 		transition.to( myrectl, { time=16, x=robotX-270, y=robotY} )
 		timer.performWithDelay(20,movele)	
@@ -546,7 +560,8 @@ local function onCollision( event )
 					effect = "crossFade",
 					time = 500
 				}
-				audio.stop(elevatorMusicplay)
+				audio.stop(1)
+				audio.stop(2)
 				audio.pause(backgroundMusicplay)
 				if(currResc ~= 12) then
 					for h = 15, 1, -1 do
@@ -562,24 +577,69 @@ local function onCollision( event )
 			        gameScore = secondsLeft * 10 + (1500 - (counter-1)*100)
 			        print("Score: "..gameScore)
 
-			        jsonDoc.level = "Rescue"..currResc
-			        scoreBoardService:addJSONObject( collectionName, jsonDoc)
-			        scoreBoardService:saveUserScore(gameName,userName,gameScore,App42CallBack)
-			        function App42CallBack:onSuccess(object)
-			            print("Game name is "..object:getName())
-			            print("userName is : "..object:getScoreList():getUserName())
-			            print("score is : "..object:getScoreList():getValue())
-			            print("scoreId is : "..object:getScoreList():getScoreId())
-			            print("GetCreatedAt is : "..object:getScoreList():getJsonDocList():getCreatedAt())  
-			            print("Doc ID is : "..object:getScoreList():getJsonDocList():getDocId())  
-			            print("GetJsonDoc is : "..JSON:encode(object:getScoreList():getJsonDocList():getJsonDoc()))  
+			        if(gameScore >= oldscore) then
+			            --update score
+			            local scoreId = scoreKey
+			            gameScore = secondsLeft * 10 + (1500 - (counter-1)*100)
+			            newmax = gameScore - oldscore
+			            App42CallBack = {}
+			            scoreBoardService:editScoreValueById(scoreId,gameScore,App42CallBack)
+			            function App42CallBack:onSuccess(object)
+			                print("Game name is "..object:getName())
+			                print("userName is : "..object:getScoreList():getUserName())
+			                print("score is : "..object:getScoreList():getValue())
+			                print("scoreId is : "..object:getScoreList():getScoreId())
+			            end
+			            function App42CallBack:onException(exception)
+			                print("Message is : "..exception:getMessage())
+			                print("Detail is : "..exception:getDetails())
+			            end
+			            --update score json
+			            local docId = jdocKey
+			            local jsonDoc = {}
+			            jsonDoc.name = myData.user
+			            jsonDoc.level = "Rescue"..currResc
+			            jsonDoc.score = gameScore
+			            jsonDoc["_$scoreId"] = scoreKey
+			            App42CallBack = {}
+			            storageService:updateDocumentByDocId(dbName,collectionName,docId,jsonDoc,App42CallBack)
+			            function App42CallBack:onSuccess(object)
+			                    for i=1,table.getn(object:getJsonDocList()) do
+			                        print("DocId is "..object:getJsonDocList()[i]:getDocId())
+			                    end
+			            end
+			            function App42CallBack:onException(exception)
+			                print("Message is : "..exception:getMessage())
+			                print("Detail is : "..exception:getDetails())
+			            end
+
+			        	-- update max score
+			            local gameName = "Max Scores"
+			            local upscore = newmax + globalscore
+			            App42CallBack = {}
+			            scoreBoardService:getLastScoreByUser(gameName,userName,App42CallBack)
+			            function App42CallBack:onSuccess(object)
+			                print("userName is : "..object:getScoreList():getUserName())
+			                print("score is : "..object:getScoreList():getValue())
+			                print("scoreId is : "..object:getScoreList():getScoreId())
+			                local scoreId = object:getScoreList():getScoreId()
+			                local gameScore = newmax + globalscore
+			                App42CallBack = {}
+			                scoreBoardService:editScoreValueById(scoreId,gameScore,App42CallBack)
+			                function App42CallBack:onSuccess(object)
+			                    print("success")
+			                end
+			                function App42CallBack:onException(exception)
+			                    print("Message is : "..exception:getMessage())
+			                    print("Detail is : "..exception:getDetails())
+			                end
+			            end
+			            function App42CallBack:onException(exception)
+			                print("Message is : "..exception:getMessage())
+			                print("Detail is : "..exception:getDetails())
+			            end
 			        end
-			        function App42CallBack:onException(exception)
-			            print("Message is : "..exception:getMessage())
-			            print("App Error code is : "..exception:getAppErrorCode())
-			            print("Http Error code is "..exception:getHttpErrorCode())
-			            print("Detail is : "..exception:getDetails())
-			        end
+
 
         			myData.rescueLvl = currResc + 1
 
@@ -588,6 +648,8 @@ local function onCollision( event )
         			search = myData.searchLvl,
         			rescue = myData.rescueLvl,
         			theme = myData.theme,
+        			volume = myData.musicVol,
+        			sfx = myData.sfx,
         			robot = myData.roboSprite,
         			science = myData.scienceSprite
         			}
@@ -693,10 +755,12 @@ local function gohome()
     parse:updateObject("HomeCount", myData.homeid, dataTable, onUpdateObject)
 
     local options = {
+    			isModal = true,
 				effect = "crossFade",
 				time = 500
 			}
-			audio.stop(elevatorMusicplay)
+			audio.stop(1)
+			audio.stop(2)
 			audio.pause(backgroundMusicplay)
 			composer.gotoScene("MainMenu",optionsh)
 			myData.rescue = 1
@@ -706,7 +770,7 @@ local function gohome()
 				end
 			end
 			picTable = {}
-			physics.stop()
+			
 end
 
 
@@ -741,6 +805,53 @@ local function updateTime(event)
 
 end
 
+
+local function getScoreDoc()
+    local key = "name"
+    local value = myData.user
+    local key1 = "level"
+    local varname = "_$scoreId"
+    local value1 = "Rescue"..currResc
+    print("curr level "..currResc)
+    local q1 = queryBuilder:build(key, value, Operator.EQUALS)   
+    local q2 = queryBuilder:build(key1, value1, Operator.EQUALS)      
+    local query = queryBuilder:compoundOperator(q1,Operator.AND, q2)
+    App42CallBack = {}
+    storageService = App42API:buildStorageService()
+    storageService:findDocumentsByQuery(dbName, collectionName,query,App42CallBack)
+    function App42CallBack:onSuccess(object)
+            for i=1,table.getn(object:getJsonDocList()) do
+                scoreKey = object:getJsonDocList()[i]:getJsonDoc()["_$scoreId"]
+                jdocKey = object:getJsonDocList()[i]:getDocId()
+                oldscore = object:getJsonDocList()[i]:getJsonDoc().score
+                print("DocId is "..object:getJsonDocList()[i]:getDocId())
+                print("Level is "..object:getJsonDocList()[i]:getJsonDoc().level)
+                print("ScoreId is "..object:getJsonDocList()[i]:getJsonDoc()["_$scoreId"])
+            end
+    end
+    function App42CallBack:onException(exception)
+        print("Message is : "..exception:getMessage())
+        print("Detail is : "..exception:getDetails())
+    end
+
+    local gameName = "Max Scores"
+    App42CallBack = {}
+    scoreBoardService:getLastScoreByUser(gameName,userName,App42CallBack)
+    function App42CallBack:onSuccess(object)
+        print("Game name is "..object:getName())
+        print("userName is : "..object:getScoreList():getUserName())
+        print("score is : "..object:getScoreList():getValue())
+        globalscore = object:getScoreList():getValue()
+        print("scoreId is : "..object:getScoreList():getScoreId())
+    end
+    function App42CallBack:onException(exception)
+        print("Message is : "..exception:getMessage())
+        print("Detail is : "..exception:getDetails())
+    end
+end
+
+
+
 -- Custom function for resuming the game (from pause state)
 function scene:resumeGame()
     --code to resume game
@@ -753,14 +864,13 @@ function scene:create( event )
 	currResc = myData.rescueLvl
 	myData.rescue = 1
 	keyset = {}
-
 	setscience(currResc)
 
 	
 
     local sceneGroup = self.view
     elevatorMusic = audio.loadStream( "Music/bensound-theelevatorbossanova.mp3")
-	elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
+	elevatorMusicplay = audio.play( elevatorMusic, {  channel = 1, fadein = 4000, loops=-1 } )
     
 	picTable = {}
 	homerescue = 0
@@ -892,14 +1002,10 @@ function scene:show( event )
     	print(myData.rescueLvl)
     	currResc = myData.rescueLvl
         myData.rescue = 1
-        
-        
-        
-
 		
         if(robot == nil) then
 			elevatorMusic = audio.loadStream( "Music/bensound-theelevatorbossanova.mp3")
-			elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
+			elevatorMusicplay = audio.play( elevatorMusic, {  channel = 1, fadein = 4000, loops=-1 } )
 
 			--robot
 			robot = display.newImage("Images/robot_"..myData.roboSprite..".png")
@@ -1049,6 +1155,7 @@ function scene:show( event )
         -- run them timer
         countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
 		
+		getScoreDoc()
     elseif ( phase == "did" ) then
     	
     end
@@ -1066,6 +1173,9 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
+        
+
+
         restartr()
         table1=nil
         table2=nil
@@ -1111,6 +1221,8 @@ function scene:hide( event )
 		display.remove(clockText)
         countDownTimer = nil
         clockText = nil
+
+
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.	
     end

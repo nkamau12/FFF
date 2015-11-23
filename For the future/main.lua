@@ -20,12 +20,6 @@ parse:appOpened()
 
 
 
-
-
-
-
-
-
 -- code to read if there is an existent user logged into the game
 local JSON = require ("json")
 local loadsave = require( "loadsave" ) 
@@ -40,11 +34,13 @@ local loadsave = require( "loadsave" )
 --}
 --loadsave.saveTable( userSettings, "user.json" )
 local loadedUser = loadsave.loadTable( "user.json" )
-if(loadedUser == nil) then
+if (loadedUser == nil) then
   local userSettings = {
     user = nil,
     search = 1,
     rescue = 0,
+    volume = 100,
+    sfx = 100,
     theme = "default",
     robot = "default",
     science = "default"
@@ -53,8 +49,6 @@ if(loadedUser == nil) then
   loadedUser = loadsave.loadTable( "user.json" )
 end
 print(loadedUser.user)
-print("search: "..loadedUser.search)
-print("rescue: "..loadedUser.rescue)
 
 
 
@@ -128,6 +122,7 @@ myData.rescue = 0
 
 
 
+
 --load user
 local dbName  = "USERS"
 local collectionName = "GameInfo"
@@ -136,9 +131,13 @@ local value
 if(loadedUser.user == nil)then
   value = "nil"
   myData.user = nil
+  myData.musicVol = 100
+  myData.sfx = 100
 else
   value = loadedUser.user
   myData.user = loadedUser.user
+  myData.musicVol = loadedUser.volume
+  myData.sfx = loadedUser.sfx
 end
 
 local App42CallBack = {}
@@ -156,6 +155,8 @@ function App42CallBack:onSuccess(object)
     jsonDoc.rescue = object:getJsonDocList()[i]:getJsonDoc().rescue
     jsonDoc.theme = object:getJsonDocList()[i]:getJsonDoc().theme
     jsonDoc.robot = object:getJsonDocList()[i]:getJsonDoc().robot
+    jsonDoc.volume = object:getJsonDocList()[i]:getJsonDoc().volume
+    jsonDoc.sfx = object:getJsonDocList()[i]:getJsonDoc().sfx
     jsonDoc.scientist = object:getJsonDocList()[i]:getJsonDoc().scientist
   end
 
@@ -163,6 +164,8 @@ function App42CallBack:onSuccess(object)
   myData.maxrsc = jsonDoc.rescue
   myData.theme = jsonDoc.theme
   myData.roboSprite = jsonDoc.robot
+  myData.musicVol = jsonDoc.volume
+  myData.sfx = jsonDoc.sfx
   myData.scienceSprite = jsonDoc.scientist
   myData.key = {}
 
@@ -409,6 +412,8 @@ function App42CallBack:onException(exception)
   myData.theme = loadedUser.theme
   myData.roboSprite = loadedUser.robot
   myData.scienceSprite = loadedUser.science
+  myData.musicVol = loadedUser.volume
+  myData.sfx = jsonDoc.sfx
 
   local composer = require "composer"
   local options = {

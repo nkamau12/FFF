@@ -26,6 +26,21 @@ App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5c
     "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
 local scoreBoardService = App42API.buildScoreBoardService() 
 
+local scoreKey
+local jdocKey
+require("App42-Lua-API.Operator")
+require("App42-Lua-API.Permission")
+require("App42-Lua-API.GeoOperator")
+require("App42-Lua-API.OrderByType")
+require("App42-Lua-API.Operator")
+local queryBuilder = require("App42-Lua-API.QueryBuilder")
+local ACL = require("App42-Lua-API.ACL")
+
+local newmax
+local oldscore
+local globalscore
+
+
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -325,24 +340,70 @@ local function checkresult( event )
         print("Finished with "..secondsLeft.." seconds left")
         gameScore = secondsLeft * 10
         print("Score: "..gameScore)
+        
 
-        jsonDoc.level = "Search"..currLvl
-        scoreBoardService:addJSONObject( collectionName, jsonDoc)
-        scoreBoardService:saveUserScore(gameName,userName,gameScore,App42CallBack)
-        function App42CallBack:onSuccess(object)
-            print("Game name is "..object:getName())
-            print("userName is : "..object:getScoreList():getUserName())
-            print("score is : "..object:getScoreList():getValue())
-            print("scoreId is : "..object:getScoreList():getScoreId())
-            print("GetCreatedAt is : "..object:getScoreList():getJsonDocList():getCreatedAt())  
-            print("Doc ID is : "..object:getScoreList():getJsonDocList():getDocId())  
-            print("GetJsonDoc is : "..JSON:encode(object:getScoreList():getJsonDocList():getJsonDoc()))  
-        end
-        function App42CallBack:onException(exception)
-            print("Message is : "..exception:getMessage())
-            print("App Error code is : "..exception:getAppErrorCode())
-            print("Http Error code is "..exception:getHttpErrorCode())
-            print("Detail is : "..exception:getDetails())
+        if(gameScore >= oldscore) then
+            --update score
+            local scoreId = scoreKey
+            gameScore = secondsLeft * 10
+            newmax = gameScore - oldscore
+            App42CallBack = {}
+            scoreBoardService:editScoreValueById(scoreId,gameScore,App42CallBack)
+            function App42CallBack:onSuccess(object)
+                print("Game name is "..object:getName())
+                print("userName is : "..object:getScoreList():getUserName())
+                print("score is : "..object:getScoreList():getValue())
+                print("scoreId is : "..object:getScoreList():getScoreId())
+            end
+            function App42CallBack:onException(exception)
+                print("Message is : "..exception:getMessage())
+                print("Detail is : "..exception:getDetails())
+            end
+            --update score json
+            local docId = jdocKey
+            local jsonDoc = {}
+            jsonDoc.name = myData.user
+            jsonDoc.level = "Search"..currLvl
+            jsonDoc.score = gameScore
+            jsonDoc["_$scoreId"] = scoreKey
+            App42CallBack = {}
+            storageService:updateDocumentByDocId(dbName,collectionName,docId,jsonDoc,App42CallBack)
+            function App42CallBack:onSuccess(object)
+                    for i=1,table.getn(object:getJsonDocList()) do
+                        print("DocId is "..object:getJsonDocList()[i]:getDocId())
+                    end
+            end
+            function App42CallBack:onException(exception)
+                print("Message is : "..exception:getMessage())
+                print("Detail is : "..exception:getDetails())
+            end
+
+            -- update max score
+            local gameName = "Max Scores"
+            local upscore = newmax + globalscore
+            App42CallBack = {}
+            scoreBoardService:getLastScoreByUser(gameName,userName,App42CallBack)
+            function App42CallBack:onSuccess(object)
+                print("userName is : "..object:getScoreList():getUserName())
+                print("score is : "..object:getScoreList():getValue())
+                print("scoreId is : "..object:getScoreList():getScoreId())
+                local scoreId = object:getScoreList():getScoreId()
+                local gameScore = newmax + globalscore
+                App42CallBack = {}
+                scoreBoardService:editScoreValueById(scoreId,gameScore,App42CallBack)
+                function App42CallBack:onSuccess(object)
+                    print("success")
+                end
+                function App42CallBack:onException(exception)
+                    print("Message is : "..exception:getMessage())
+                    print("Detail is : "..exception:getDetails())
+                end
+            end
+            function App42CallBack:onException(exception)
+                print("Message is : "..exception:getMessage())
+                print("Detail is : "..exception:getDetails())
+            end
+
         end
 
         myData.searchLvl = currLvl + 1
@@ -353,6 +414,8 @@ local function checkresult( event )
             search = myData.searchLvl,
             rescue = myData.rescueLvl,
             theme = myData.theme,
+            volume = myData.musicVol,
+            sfx = myData.sfx,
             robot = myData.roboSprite,
             science = myData.scienceSprite }
         loadsave.saveTable( userSettings, "user.json" )
@@ -409,6 +472,53 @@ local function updateTime(event)
 
 end
 
+
+local function getScoreDoc()
+    local key = "name"
+    local value = myData.user
+    local key1 = "level"
+    local varname = "_$scoreId"
+    local value1 = "Search"..currLvl
+    print("curr level "..currLvl)
+    local q1 = queryBuilder:build(key, value, Operator.EQUALS)   
+    local q2 = queryBuilder:build(key1, value1, Operator.EQUALS)      
+    local query = queryBuilder:compoundOperator(q1,Operator.AND, q2)
+    App42CallBack = {}
+    storageService = App42API:buildStorageService()
+    storageService:findDocumentsByQuery(dbName, collectionName,query,App42CallBack)
+    function App42CallBack:onSuccess(object)
+            for i=1,table.getn(object:getJsonDocList()) do
+                scoreKey = object:getJsonDocList()[i]:getJsonDoc()["_$scoreId"]
+                jdocKey = object:getJsonDocList()[i]:getDocId()
+                oldscore = object:getJsonDocList()[i]:getJsonDoc().score
+                print("DocId is "..object:getJsonDocList()[i]:getDocId())
+                print("Level is "..object:getJsonDocList()[i]:getJsonDoc().level)
+                print("ScoreId is "..object:getJsonDocList()[i]:getJsonDoc()["_$scoreId"])
+            end
+    end
+    function App42CallBack:onException(exception)
+        print("Message is : "..exception:getMessage())
+        print("Detail is : "..exception:getDetails())
+    end
+
+    local gameName = "Max Scores"
+    App42CallBack = {}
+    scoreBoardService:getLastScoreByUser(gameName,userName,App42CallBack)
+    function App42CallBack:onSuccess(object)
+        print("Game name is "..object:getName())
+        print("userName is : "..object:getScoreList():getUserName())
+        print("score is : "..object:getScoreList():getValue())
+        globalscore = object:getScoreList():getValue()
+        print("scoreId is : "..object:getScoreList():getScoreId())
+    end
+    function App42CallBack:onException(exception)
+        print("Message is : "..exception:getMessage())
+        print("Detail is : "..exception:getDetails())
+    end
+
+end
+
+
 -- Custom function for resuming the game (from pause state)
 function scene:resumeGame()
     --code to resume game
@@ -429,7 +539,7 @@ function scene:create( event )
 
     local sceneGroup = self.view
     searchMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
-    searchMusicplay = audio.play( searchMusic, {  fadein = 4000, loops=-1 } )
+    searchMusicplay = audio.play( searchMusic, {  channel = 1, fadein = 4000, loops=-1 } )
 
 
     -- Initialize the scene here.
@@ -519,7 +629,7 @@ function scene:show( event )
             homesearch = 0
             runsearch = 0
             searchMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
-            searchMusicplay = audio.play( searchMusic, {  fadein = 4000, loops=-1 } )
+            searchMusicplay = audio.play( searchMusic, {  channel = 1, fadein = 4000, loops=-1 } )
 
             i=1
             while(myData.searchkey[currLvl].one[i] ~= nil) do
@@ -590,7 +700,7 @@ function scene:show( event )
         -- run them timer
         countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
         
-        
+        getScoreDoc()
         
     elseif ( phase == "did" ) then
 

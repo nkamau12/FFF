@@ -5,6 +5,13 @@ local JSON = require ("json")
 local loadsave = require( "loadsave" )
 local scene = composer.newScene()
 
+local play
+local tut
+local scores
+local credit
+local store
+
+
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
@@ -13,6 +20,7 @@ local scene = composer.newScene()
 local function showLevel()
 	audio.pause(backgroundMusicplay)
 	local options = {
+		isModal = true,
 		effect = "fade",
 		time = 500
 	}
@@ -23,6 +31,7 @@ end
 local function showCredits()
 audio.pause(backgroundMusicplay)
 	local options = {
+		isModal = true,
 		effect = "crossFade",
 		time = 500
 	}
@@ -33,6 +42,7 @@ end
 local function showTutorial()
 	audio.pause(backgroundMusicplay)
 	local options = {
+		isModal = true,
 		effect = "crossFade",
 		time = 500
 	}
@@ -43,16 +53,18 @@ end
 local function showScores()
 	audio.pause(backgroundMusicplay)
 	local options = {
+		isModal = true,
 		effect = "crossFade",
 		time = 500
 	}
-		composer.gotoScene("Credits",options)
+		composer.gotoScene("Leaderboard",options)
 end
 
 --Sends user to the game store screen
 local function showStore()
 	audio.pause(backgroundMusicplay)
 	local options = {
+		isModal = true,
 		effect = "crossFade",
 		time = 500
 	}
@@ -62,6 +74,7 @@ end
 --Sends user to the settings screen
 local function gosettings( event )
     local options = {
+    		isModal = true,
             effect = "crossFade",
             time = 500
     }
@@ -166,7 +179,7 @@ function scene:show( event )
 		settingsbutton:addEventListener( "tap", gosettings )
 		
 		--play_button
-		local play = display.newImage("Images/Play.png")
+		play = display.newImage("Images/Play.png")
 		play.height=180
 		play.width=350
 		play.x = display.contentCenterX
@@ -175,7 +188,7 @@ function scene:show( event )
 		play:addEventListener( "tap", showLevel )
 		
 		--tutorials_button
-		local tut = display.newImage("Images/Tutorial.png")
+		tut = display.newImage("Images/Tutorial.png")
 		tut.height=163
 		tut.width=528
 		tut.x = display.contentCenterX - 435
@@ -184,7 +197,7 @@ function scene:show( event )
 		tut:addEventListener( "tap", showTutorial )
 		
 		--scores_button
-		local scores = display.newImage("Images/scores.png")
+		scores = display.newImage("Images/scores.png")
 		scores.height=163
 		scores.width=416
 		scores.x = display.contentCenterX - 435
@@ -193,7 +206,7 @@ function scene:show( event )
 		scores:addEventListener( "tap", showScores )
 
 		--credits_button
-		local credit = display.newImage("Images/Credits.png")
+		credit = display.newImage("Images/Credits.png")
 		credit.height=163
 		credit.width=470
 		credit.x = display.contentCenterX + 435
@@ -202,7 +215,7 @@ function scene:show( event )
 		credit:addEventListener( "tap", showCredits )
 
 		--store_button
-		local store = display.newImage("Images/store.png")
+		store = display.newImage("Images/store.png")
 		store.height=163
 		store.width=353
 		store.x = display.contentCenterX + 435
@@ -228,9 +241,12 @@ function scene:hide( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-        -- Called when the scene is on screen (but is about to go off screen).
-        -- Insert code here to "pause" the scene.
-        -- Example: stop timers, stop animation, stop audio, etc.
+        store:removeEventListener( "tap", showStore )
+        credit:removeEventListener( "tap", showCredits )
+        tut:removeEventListener( "tap", showTutorial )
+        play:removeEventListener( "tap", showLevel )
+        settingsbutton:removeEventListener( "tap", gosettings )
+        scores:removeEventListener( "tap", showScores )
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
     end
