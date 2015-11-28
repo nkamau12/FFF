@@ -1,17 +1,28 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
-
+local myData = require("mydata")
+local errorcount = myData.error1_count
 local scene = composer.newScene()
 local function tryagain(event)
 	composer.hideOverlay( "fade", 400 )
 end
+
 function scene:create( event )
 
     local sceneGroup = self.view
-	local background = display.newRect(display.contentCenterX, display.contentCenterY,1920-888,1080-500)
+	local background = display.newRect(display.contentCenterX, display.contentCenterY,1920-200,1080)
 	background:setFillColor(grey,0.5)
 	sceneGroup:insert(background)
-	local trial=display.newText("Sorry that path is blocked",display.contentCenterX,display.contentCenterY)
+	
+	
+	print("error count")
+	print(errorcount)
+	local trial
+	if(errorcount > 1) then
+		trial = display.newText( myData.errorText1a ,display.contentCenterX,display.contentCenterY)
+	else
+		trial=display.newText("Sorry that path is blocked",display.contentCenterX,display.contentCenterY)
+	end
 	sceneGroup:insert(trial)	
 	local try = widget.newButton
 	{

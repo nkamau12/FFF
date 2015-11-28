@@ -311,6 +311,7 @@ local function checkresult( event )
     		local options = {
     			isModal = true }
             composer.showOverlay( "fail_search", options )
+			myData.error2_count = myData.error2_count + 1
     		tryagain()
             answer = 10
         end

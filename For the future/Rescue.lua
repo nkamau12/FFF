@@ -27,6 +27,7 @@ local currResc
 local currwall
 local keyset = {}
 local numkeys
+local hasKey = false
 
 local i = 1
 
@@ -132,6 +133,7 @@ local function setupmap()
 	--keys
 	i = 1
 	while(myData.levelkey[currResc].key[i] ~= nil) do
+		hasKey = true
 		setkey(currResc, i)
 		i = i + 1
 	end
@@ -213,8 +215,6 @@ local function setupmap()
 	physics.addBody(science, "static",{bounce=0})
 end 
 
-
-
 local function addPicTo(position, name, xVal, yVal)
 	picTable[position] = display.newImage(name)
 	picTable[position].anchorX = 0.5
@@ -241,8 +241,6 @@ local function	popup(x,y,height,width)
 		popupPic:setFillColor(grey, 0.2)
 	end
 end
-
-
 
 local function addPic(xVal,yVal,name,spot)
 	if((picTable[spot]== nil) and (picToAdd == ""))then
@@ -290,8 +288,6 @@ local function addPic(xVal,yVal,name,spot)
 		popupPic = nil
 	end
 end
-
-
 
 local function handleButtonEvent( event )
 	if ( "moved" == event.phase ) then
@@ -359,8 +355,6 @@ local function handleButtonEvent( event )
     end
 end
 
-
-
 local function moveu()
 		robot:applyForce( 0, -200, robot.x+300, robot.y+70 )
 end
@@ -373,6 +367,7 @@ local function moveup()
 		transition.to( myrectu, { time=16, x=robotX, y=robotY-250} )
 		timer.performWithDelay(20,moveu)
 end
+
 local function moveuphalf()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, {  channel = 2, loops=0 } )
@@ -381,7 +376,6 @@ local function moveuphalf()
 		transition.to( myrectu, { time=16, x=robotX, y=robotY-200} )
 		timer.performWithDelay(20,moveu)
 end
-
 
 local function moveri()
 		robot:applyForce( 200, 0, robot.x+70, robot.y+70 )	
@@ -394,6 +388,7 @@ local function mover()
 		transition.to( myrectr, { time=16, x=robotX+320, y=robotY} )
 		timer.performWithDelay(20,moveri)
 end
+
 local function moverhalf()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, {  channel = 2, loops=0 } )
@@ -401,7 +396,6 @@ local function moverhalf()
 		transition.to( myrectr, { time=16, x=robotX+270, y=robotY} )
 		timer.performWithDelay(20,moveri)
 end
-
 
 local function movedo()
 		robot:applyForce( 0, 200, robot.x+70, robot.y+70 )
@@ -414,6 +408,7 @@ local function moved()
 		transition.to( myrectd, { time=16, x=robotX, y=robotY+390} )
 		timer.performWithDelay(20,movedo)	
 end
+
 local function movedhalf()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, {  channel = 2, loops=0 } )
@@ -421,7 +416,6 @@ local function movedhalf()
 		transition.to( myrectd, { time=16, x=robotX, y=robotY+320} )
 		timer.performWithDelay(20,movedo)	
 end
-
 
 local function movele()
 		robot:applyForce( -200, 0, robot.x+70, robot.y+70 )
@@ -434,6 +428,7 @@ local function movel()
 		transition.to( myrectl, { time=16, x=robotX-320, y=robotY} )
 		timer.performWithDelay(20,movele)	
 end
+
 local function movelhalf()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, { channel = 2, loops=0 } )
@@ -441,8 +436,6 @@ local function movelhalf()
 		transition.to( myrectl, { time=16, x=robotX-270, y=robotY} )
 		timer.performWithDelay(20,movele)	
 end
-
-
 
 local function mdtap()
 	picToAdd = "Images/down_arrow.png"
@@ -480,8 +473,6 @@ local function twotap()
 	popup(myData.twobutton[1], myData.twobutton[2], myData.twobutton[3], myData.twobutton[4])
 end
 
-
-
 function scene:resetrobot()
 		transition.moveTo( robot, { time=0, x=109, y=819} )
 		fintable=nil
@@ -490,8 +481,6 @@ function scene:resetrobot()
 		timer.performWithDelay(20,restartr)	
 		
 end
-
-
 
 local function restartr()
 		local robotX, robotY = robot:localToContent( -70, -70 )
@@ -522,13 +511,20 @@ local function moverobot()
 			isModal = true
 			}
 			composer.showOverlay( "fail_rescue_scientist", options )
+			myData.error2_count = myData.error2_count + 1
 		end
 		counter=counter+1
 	else
+	print("in")
+	print(myData.error1_count)
 		local options = {
 			isModal = true
-			}
-			composer.showOverlay( "fail_rescue_path", options )
+		}
+		composer.showOverlay( "fail_rescue_path", options )
+		myData.error1_count = myData.error1_count + 1
+		if(hasKey) then
+			myData.error3_count = myData.error3_count + 1
+		end
 	end	
 end
 
@@ -570,7 +566,15 @@ local function onCollision( event )
 						end
 					end
 					composer.showOverlay("pass_rescue",options)
-
+					if(myData.error1_count > 2) then
+						myData.error1_count = 2
+					end
+					if(myData.error2_count > 2) then
+						myData.error2_count = 2
+					end
+					if(myData.error3_count > 2) then
+						myData.error3_count = 2
+					end
 					timer.pause(countDownTimer)
 			        print("Finished with "..secondsLeft.." seconds left")
 			        print("Finished with "..counter.." moves")
@@ -670,7 +674,11 @@ local function onCollision( event )
 			}
 			timer.pause(countDownTimer)
             print(secondsLeft)
-			composer.showOverlay( "fail", options )
+			composer.showOverlay( "fail_rescue_path", options )
+			myData.error1_count = myData.error1_count + 1
+			if(hasKey) then
+				myData.error3_count = myData.error3_count + 1
+			end
 			print("why1")
 		else
 			i = 1
@@ -695,7 +703,11 @@ local function onCollision( event )
 						}
 						timer.pause(countDownTimer)
             			print(secondsLeft)
-						composer.showOverlay( "fail", options )
+						composer.showOverlay( "fail_rescue_path", options )
+						myData.error1_count = myData.error1_count + 1
+						if(hasKey) then
+							myData.error3_count = myData.error3_count + 1
+						end
 						print("why1")
 					end
 				end

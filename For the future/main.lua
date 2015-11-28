@@ -168,6 +168,10 @@ function App42CallBack:onSuccess(object)
   myData.sfx = jsonDoc.sfx
   myData.scienceSprite = jsonDoc.scientist
   myData.key = {}
+  
+  myData.error1_count = 0
+  myData.errorText1 = "Remeber to use method 1 and 2 to get all the commands you need"
+	
 
 
   --RESCUE OBJECTS:
@@ -385,6 +389,21 @@ function App42CallBack:onSuccess(object)
   setObjects()
   setscience(1)
   setkey(1)
+  
+ --error
+	--Use of multiple function
+	myData.error1_count = 0
+	myData.errorText1a = "Remember function 1 and 2 are used to get all the commands needed"
+	myData.errorText1b = "Remember commands are spread between all the function"
+	--not reaching scientist or not getting all 
+	myData.error2_count = 0
+	myData.errorText2a = "Remember once a function is complete it \n goes back to the function it was called from"
+	myData.errorText2b = "Remember to get to function 1 and 2 they must be called in the Main (M) function"
+	--key error
+	myData.error3_count = 0
+	myData.errorText3a = "Remember each key only clears one wall"
+	myData.errorText3b = "Remember go to the key first before going to wall"
+	
 
 
   -- require the composer library
@@ -394,7 +413,7 @@ function App42CallBack:onSuccess(object)
       effect = "fade",
       time = 500
     }
-  composer.gotoScene( "Splash" )
+  composer.gotoScene( "Search" )
 
   print(jsonDoc.theme)
 end
@@ -421,7 +440,7 @@ function App42CallBack:onException(exception)
     effect = "fade",
     time = 500
   }
-  composer.gotoScene( "Splash" )
+  composer.gotoScene( "Rescue" )
 end
 
 
