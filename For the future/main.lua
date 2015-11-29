@@ -413,7 +413,7 @@ function App42CallBack:onSuccess(object)
       effect = "fade",
       time = 500
     }
-  composer.gotoScene( "Rescue" )
+  composer.gotoScene( "Splash" )
 
   print(jsonDoc.theme)
 end
