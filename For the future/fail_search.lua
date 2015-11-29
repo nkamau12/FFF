@@ -15,8 +15,17 @@ function scene:create( event )
 	background:setFillColor(grey,0.5)
 	sceneGroup:insert(background)
 	local trial
-	if(errorcount == 1) then
-		trial = display.newText( myData.errorText2 ,display.contentCenterX,display.contentCenterY)
+	if(errorcount1 > 0 or errorcount2 > 0) then
+		local errorNum = math.random(1,3)
+		if(errorNum == 1)then
+			trial = display.newText(myData.errorText1 ,display.contentCenterX,display.contentCenterY)
+		end
+		if(errorNum == 2)then
+			trial = display.newText(myData.errorText2 ,display.contentCenterX,display.contentCenterY)
+		end
+		if(errorNum == 3)then
+			trial = display.newText(myData.errorText3 ,display.contentCenterX,display.contentCenterY)
+		end
 	else
 		 trial=display.newText("Input error!",display.contentCenterX,display.contentCenterY)
 	end

@@ -1,7 +1,9 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
 local myData = require("mydata")
-local errorcount = myData.error1_count
+local errorcount1 = myData.error1_count
+local errorcount2 = myData.error2_count
+local errorcount3 = myData.error3_count
 local scene = composer.newScene()
 local function tryagain(event)
 	composer.hideOverlay( "fade", 400 )
@@ -14,12 +16,26 @@ function scene:create( event )
 	background:setFillColor(grey,0.5)
 	sceneGroup:insert(background)
 	
-	
-	print("error count")
-	print(errorcount)
 	local trial
-	if(errorcount > 1) then
-		trial = display.newText( myData.errorText1a ,display.contentCenterX,display.contentCenterY)
+	if(errorcount1 > 2 or errorcount2 > 2 or errorcount3 > 2) then
+		local errorNum 
+		if (errorcount3 > 0) then
+			errorNum = math.random(1,4)
+		else
+			errorNum = math.random(1,3)
+		end
+		
+		if(errorNum == 1)then
+			trial = display.newText(myData.errorText1 ,display.contentCenterX,display.contentCenterY)
+		elseif(errorNum == 2)then
+			trial = display.newText(myData.errorText2 ,display.contentCenterX,display.contentCenterY)
+		elseif(errorNum == 3)then
+			trial = display.newText(myData.errorText3 ,display.contentCenterX,display.contentCenterY)
+		elseif(errorNum == 4)then
+			trial = display.newText(myData.errorText3 ,display.contentCenterX,display.contentCenterY)
+		else
+			trial = display.newText(myData.errorText3 ,display.contentCenterX,display.contentCenterY)
+		end
 	else
 		trial=display.newText("Sorry that path is blocked",display.contentCenterX,display.contentCenterY)
 	end

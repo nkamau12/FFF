@@ -507,20 +507,19 @@ local function moverobot()
 		elseif (fintable[counter]=="Images/right_arrow.png") then
 			mover()
 		else
-			local options = {
+			--[[local options = {
 			isModal = true
 			}
 			composer.showOverlay( "fail_rescue_scientist", options )
-			myData.error2_count = myData.error2_count + 1
+			myData.error2_count = myData.error2_count + 1]]--
 		end
 		counter=counter+1
 	else
-	print("in")
-	print(myData.error1_count)
 		local options = {
 			isModal = true
 		}
-		composer.showOverlay( "fail_rescue_path", options )
+		print("in move robot")
+		composer.showOverlay( "fail_rescue_scientist", options )
 		myData.error1_count = myData.error1_count + 1
 		if(hasKey) then
 			myData.error3_count = myData.error3_count + 1
@@ -675,10 +674,6 @@ local function onCollision( event )
 			timer.pause(countDownTimer)
             print(secondsLeft)
 			composer.showOverlay( "fail_rescue_path", options )
-			myData.error1_count = myData.error1_count + 1
-			if(hasKey) then
-				myData.error3_count = myData.error3_count + 1
-			end
 			print("why1")
 		else
 			i = 1
@@ -705,6 +700,7 @@ local function onCollision( event )
             			print(secondsLeft)
 						composer.showOverlay( "fail_rescue_path", options )
 						myData.error1_count = myData.error1_count + 1
+						myData.error2_count = myData.error2_count + 1
 						if(hasKey) then
 							myData.error3_count = myData.error3_count + 1
 						end
@@ -736,8 +732,6 @@ local function merge(tablel)
 	end
 end
 
-
-
 local function pass()
 	runrescue = runrescue + 1
     local function onRunningObject( event )
@@ -752,8 +746,6 @@ local function pass()
 	moverobot()
 	
 end
-
-
 
 local function gohome()
 	homerescue = homerescue + 1
@@ -785,8 +777,6 @@ local function gohome()
 			
 end
 
-
-
 local function addButton(position, xPos, yPos,idName)
 	buttonTable[position] = widget.newButton
 	{
@@ -816,7 +806,6 @@ local function updateTime(event)
     end
 
 end
-
 
 local function getScoreDoc()
     local key = "name"
@@ -861,8 +850,6 @@ local function getScoreDoc()
         print("Detail is : "..exception:getDetails())
     end
 end
-
-
 
 -- Custom function for resuming the game (from pause state)
 function scene:resumeGame()
@@ -998,7 +985,6 @@ function scene:create( event )
 	end
 	i = 1
 end
-
 
 -- "scene:show()"
 function scene:show( event )
@@ -1173,8 +1159,6 @@ function scene:show( event )
     end
 end
 
-
-
 -- "scene:hide()"
 function scene:hide( event )
 
@@ -1239,7 +1223,6 @@ function scene:hide( event )
         -- Called immediately after scene goes off screen.	
     end
 end
-
 
 -- "scene:destroy()"
 function scene:destroy( event )
