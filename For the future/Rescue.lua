@@ -519,6 +519,7 @@ local function moverobot()
 			isModal = true
 		}
 		print("in move robot")
+		timer.pause(countDownTimer)
 		composer.showOverlay( "fail_rescue_scientist", options )
 		myData.error1_count = myData.error1_count + 1
 		if(hasKey) then
