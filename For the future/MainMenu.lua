@@ -268,12 +268,12 @@ function scene:hide( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-        store:removeEventListener( "tap", showStore )
+        --[[store:removeEventListener( "tap", showStore )
         credit:removeEventListener( "tap", showCredits )
         tut:removeEventListener( "tap", showTutorial )
         play:removeEventListener( "tap", showLevel )
         settingsbutton:removeEventListener( "tap", gosettings )
-        scores:removeEventListener( "tap", showScores )
+        scores:removeEventListener( "tap", showScores )]]
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
     end

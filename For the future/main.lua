@@ -129,7 +129,7 @@ local dbName  = "USERS"
 local collectionName = "GameInfo"
 local key = "user"
 local value
-if(loadedUser.user == nil)then
+if(loadedUser == nil)then
   value = "nil"
   myData.user = nil
   myData.musicVol = 100
@@ -137,7 +137,6 @@ if(loadedUser.user == nil)then
   myData.credits = 0
 else
   value = loadedUser.user
-  myData.user = loadedUser.user
   myData.musicVol = loadedUser.volume
   myData.sfx = loadedUser.sfx
   myData.credits = loadedUser.credits
@@ -277,7 +276,7 @@ function App42CallBack:onSuccess(object)
       { walls = {'a','b','c','d','f','i','j','k',1,2,3,4,5,7,9}, scientist = {1, 'w'}, key = {{2,'z'},{3,'y'},{4,'w'},{4,'z'}}}  -- level 12
     }
   end
-
+  setObjects()
   myData.blockred = {1289, 729, 120, 120, "Images/red_block.png"}
   myData.blockgreen = {1426, 729, 120, 120, "Images/green_block.png"}
   myData.blockblue = {1564, 729, 120, 120, "Images/blue_block.png"}
