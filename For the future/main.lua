@@ -199,7 +199,7 @@ function App42CallBack:onSuccess(object)
   --       |_____|_____|_____|_____|
   --              bottomwall
   function setObjects()
-    
+     myData.background = {0, 0, 1080, 1920,"Images/theme_"..myData.theme.."/rescue_background.png"}
     --horizontal walls
     myData.walla = {110, 288, 10, 124, "Images/locked_door_horizontal.png"}
     myData.wallb = {359, 288, 11, 124, "Images/locked_door_horizontal.png"}
@@ -261,6 +261,7 @@ function App42CallBack:onSuccess(object)
     myData.keybase = {nil, nil, 124, 140, "Images/key.png"}
     myData.key = {{},{},{},{}}
     --Level keys
+    myData.Build_Rescue={ walls = {}, scientist = {nil,nil}, key = {{nil,nil},{nil,nil},{nil,nil}}}
     myData.levelkey = {
       { walls = {'a','b','c','d','f','j',7,8},                   scientist = {4, 'x'}, key = {{0,0}}}, -- level 1
       { walls = {8,10},                                          scientist = {4, 'z'}, key = {{0,0}}}, -- level 2
