@@ -393,16 +393,16 @@ function App42CallBack:onSuccess(object)
  --error
 	--Use of multiple function
 	myData.error1_count = 0
-	myData.errorText1a = "Remember function 1 and 2 are used to get all the commands needed"
-	myData.errorText1b = "Remember commands are spread between all the function"
+	myData.errorText1 = "Remember function 1 and 2 are used to get all the commands needed"
+	--myData.errorText1b = "Remember commands are spread between all the function"
 	--not reaching scientist or not getting all 
 	myData.error2_count = 0
-	myData.errorText2a = "Remember once a function is complete it \n goes back to the function it was called from"
-	myData.errorText2b = "Remember to get to function 1 and 2 they must be called in the Main (M) function"
+	myData.errorText2 = "Remember once a function is complete it \n goes back to the function it was called from"
+	myData.errorText3 = "Remember to get to function 1 and 2 they \n must be called in the Main (M) function"
 	--key error
 	myData.error3_count = 0
-	myData.errorText3a = "Remember each key only clears one wall"
-	myData.errorText3b = "Remember go to the key first before going to wall"
+	myData.errorText4 = "Remember each key only clears one wall"
+	myData.errorText5 = "Remember go to the key first before going to wall"
 	
 
 
@@ -413,7 +413,7 @@ function App42CallBack:onSuccess(object)
       effect = "fade",
       time = 500
     }
-  composer.gotoScene( "Search" )
+  composer.gotoScene( "Rescue" )
 
   print(jsonDoc.theme)
 end
