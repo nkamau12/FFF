@@ -13,6 +13,7 @@ local scene = composer.newScene()
 
 function bye()
     local options = {
+            isModal = true,
             effect = "crossFade",
             time = 500
         }

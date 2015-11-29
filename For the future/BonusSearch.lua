@@ -11,20 +11,17 @@ local countDownTimer
 
 local JSON = require("App42-Lua-API.JSON") 
 local App42API = require("App42-Lua-API.App42API")
-local gameName = "For The Future"
 local userName = myData.user
 local gameScore = nil
 local dbName = "USERS"  
-local collectionName = "Scores"   
 local jsonDoc = {}  
 jsonDoc.name =  myData.user
 jsonDoc.level = nil 
 local App42CallBack = {}
-App42API:setDbName(dbName)
 
 App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
     "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
-local scoreBoardService = App42API.buildScoreBoardService() 
+local storageService = App42API:buildStorageService()  
 
 local scoreKey
 local jdocKey
@@ -64,8 +61,8 @@ end
 
 local function setupmap()
     i=1
-    while(myData.searchkey[currLvl].one[i] ~= nil) do
-        currBlock = myData.searchkey[currLvl].one[i]
+    while(myData.bonusSearchLvlOne[i] ~= nil) do
+        currBlock = myData.bonusSearchLvlOne[i]
         mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
         mapmain[i].anchorX=0
         mapmain[i].anchorY=0
@@ -77,8 +74,8 @@ local function setupmap()
     end
 
     i=1
-    while(myData.searchkey[currLvl].two[i] ~= nil) do
-        currBlock = myData.searchkey[currLvl].two[i]
+    while(myData.bonusSearchLvlTwo[i] ~= nil) do
+        currBlock = myData.bonusSearchLvlTwo[i]
         mapone[i] = display.newImage("Images/"..currBlock.."_block.png")
         mapone[i].anchorX=0
         mapone[i].anchorY=0
@@ -89,8 +86,8 @@ local function setupmap()
         i = i + 1
     end
     i=1
-    while(myData.searchkey[currLvl].three[i] ~= nil) do
-        currBlock = myData.searchkey[currLvl].three[i]
+    while(myData.bonusSearchLvlThree[i] ~= nil) do
+        currBlock = myData.bonusSearchLvlThree[i]
         maptwo[i] = display.newImage("Images/"..currBlock.."_block.png")
         maptwo[i].anchorX=0
         maptwo[i].anchorY=0
@@ -343,8 +340,6 @@ local function checkresult( event )
     		local options = {
     			isModal = true }
             composer.showOverlay( "fail_search", options )
-			myData.error1_count = myData.error1_count + 1
-			myData.error2_count = myData.error2_count + 1
     		tryagain()
             answer = 10
         end
@@ -371,90 +366,13 @@ local function checkresult( event )
         myData.currTokens = myData.currScore / 100
         local attribute = "Search"..currLvl
         parse:updateObject("LevelTime", myData.timeid, {[attribute] = endTime})
-    	composer.showOverlay("pass_search", options)
+    	composer.showOverlay("pass_bonus_search", options)
 
         timer.pause(countDownTimer)
         print("Finished with "..secondsLeft.." seconds left")
         gameScore = secondsLeft * 10
         print("Score: "..gameScore)
         
-
-        if(gameScore >= oldscore) then
-            --update score
-            local scoreId = scoreKey
-            gameScore = secondsLeft * 10
-            newmax = gameScore - oldscore
-            App42CallBack = {}
-            scoreBoardService:editScoreValueById(scoreId,gameScore,App42CallBack)
-            function App42CallBack:onSuccess(object)
-                print("Game name is "..object:getName())
-                print("userName is : "..object:getScoreList():getUserName())
-                print("score is : "..object:getScoreList():getValue())
-                print("scoreId is : "..object:getScoreList():getScoreId())
-            end
-            function App42CallBack:onException(exception)
-                print("Error!")
-            end
-            --update score json
-            local docId = jdocKey
-            local jsonDoc = {}
-            jsonDoc.name = myData.user
-            jsonDoc.level = "Search"..currLvl
-            jsonDoc.score = gameScore
-            jsonDoc["_$scoreId"] = scoreKey
-            App42CallBack = {}
-            storageService:updateDocumentByDocId(dbName,collectionName,docId,jsonDoc,App42CallBack)
-            function App42CallBack:onSuccess(object)
-                for i=1,table.getn(object:getJsonDocList()) do
-                    print("DocId is "..object:getJsonDocList()[i]:getDocId())
-                end
-            end
-            function App42CallBack:onException(exception)
-                print("Error!")
-            end
-
-            -- update max score
-            local gameName = "Max Scores"
-            local upscore = newmax + globalscore
-            App42CallBack = {}
-            scoreBoardService:getLastScoreByUser(gameName,userName,App42CallBack)
-            function App42CallBack:onSuccess(object)
-                print("userName is : "..object:getScoreList():getUserName())
-                print("score is : "..object:getScoreList():getValue())
-                print("scoreId is : "..object:getScoreList():getScoreId())
-                local scoreId = object:getScoreList():getScoreId()
-                local gameScore = newmax + globalscore
-                App42CallBack = {}
-                scoreBoardService:editScoreValueById(scoreId,gameScore,App42CallBack)
-                function App42CallBack:onSuccess(object)
-                    print("success")
-                end
-                function App42CallBack:onException(exception)
-                    print("Message is : "..exception:getMessage())
-                    print("Detail is : "..exception:getDetails())
-                end
-            end
-            function App42CallBack:onException(exception)
-                print("Message is : "..exception:getMessage())
-                print("Detail is : "..exception:getDetails())
-            end
-
-        end
-
-        myData.searchLvl = currLvl + 1
-        myData.rescueLvl = currLvl
-
-        local userSettings = {
-            user = myData.user,
-            search = myData.searchLvl,
-            rescue = myData.rescueLvl,
-            theme = myData.theme,
-            volume = myData.musicVol,
-            sfx = myData.sfx,
-            robot = myData.roboSprite,
-            science = myData.scienceSprite }
-        loadsave.saveTable( userSettings, "user.json" )
-        print("Current level: "..myData.searchLvl)
     else
         answer = countmax
     end
@@ -462,31 +380,7 @@ local function checkresult( event )
 end
 
 local function getKey()
-    if(currLvl == 1)then
-        answerkey = {"red","green","blue","green","yellow"}
-    elseif(currLvl == 2)then
-        answerkey = {"green","green","red","yellow","blue","green","green","red"}
-    elseif(currLvl == 3)then
-        answerkey = {"green","red","blue","red","blue","yellow","red","blue"}
-    elseif(currLvl == 4)then
-        answerkey = {"red","green","blue","yellow","green","yellow","red","blue"}
-    elseif(currLvl == 5)then
-        answerkey = {"yellow","red","yellow","green","blue","yellow"}
-    elseif(currLvl == 6)then
-        answerkey = {"blue","yellow","red","red","green","green"}
-    elseif(currLvl == 7)then
-        answerkey = {"red","blue","blue","red","red","blue","blue"}
-    elseif(currLvl == 8)then
-        answerkey = {"green","yellow","blue","red","green","green","red","yellow"}
-    elseif(currLvl == 9)then
-        answerkey = {"blue","yellow","red","green","blue","yellow","green","green"}
-    elseif(currLvl == 10)then
-        answerkey = {"yellow","red","green","green","blue","green","green","yellow"}
-    elseif(currLvl == 11)then
-        answerkey = {"blue","blue","yellow","blue","blue","yellow","blue","blue"}
-    elseif(currLvl == 12)then
-        answerkey = {"green","red","blue","yellow","green","red","blue","green"}
-    end
+    answerkey = myData.bonusSearchLvlKey
 end
 
 local function updateTime(event)
@@ -508,52 +402,6 @@ local function updateTime(event)
 end
 
 
-local function getScoreDoc()
-    local key = "name"
-    local value = myData.user
-    local key1 = "level"
-    local varname = "_$scoreId"
-    local value1 = "Search"..currLvl
-    print("curr level "..currLvl)
-    local q1 = queryBuilder:build(key, value, Operator.EQUALS)   
-    local q2 = queryBuilder:build(key1, value1, Operator.EQUALS)      
-    local query = queryBuilder:compoundOperator(q1,Operator.AND, q2)
-    App42CallBack = {}
-    storageService = App42API:buildStorageService()
-    storageService:findDocumentsByQuery(dbName, collectionName,query,App42CallBack)
-    function App42CallBack:onSuccess(object)
-            for i=1,table.getn(object:getJsonDocList()) do
-                scoreKey = object:getJsonDocList()[i]:getJsonDoc()["_$scoreId"]
-                jdocKey = object:getJsonDocList()[i]:getDocId()
-                oldscore = object:getJsonDocList()[i]:getJsonDoc().score
-                print("DocId is "..object:getJsonDocList()[i]:getDocId())
-                print("Level is "..object:getJsonDocList()[i]:getJsonDoc().level)
-                print("ScoreId is "..object:getJsonDocList()[i]:getJsonDoc()["_$scoreId"])
-            end
-    end
-    function App42CallBack:onException(exception)
-        print("Message is : "..exception:getMessage())
-        print("Detail is : "..exception:getDetails())
-    end
-
-    local gameName = "Max Scores"
-    App42CallBack = {}
-    scoreBoardService:getLastScoreByUser(gameName,userName,App42CallBack)
-    function App42CallBack:onSuccess(object)
-        print("Game name is "..object:getName())
-        print("userName is : "..object:getScoreList():getUserName())
-        print("score is : "..object:getScoreList():getValue())
-        globalscore = object:getScoreList():getValue()
-        print("scoreId is : "..object:getScoreList():getScoreId())
-    end
-    function App42CallBack:onException(exception)
-        print("Message is : "..exception:getMessage())
-        print("Detail is : "..exception:getDetails())
-    end
-
-end
-
-
 -- Custom function for resuming the game (from pause state)
 function scene:resumeGame()
     --code to resume game
@@ -565,8 +413,7 @@ end
 -- "scene:create()"
 function scene:create( event )
 
-    currLvl = myData.searchLvl
-    myData.rescue = 0
+    currLvl = myData.bonusSearchLvl
 
     mapmain = {}
     mapone = {}
@@ -650,15 +497,13 @@ function scene:show( event )
     local phase = event.phase
 
 
-    currLvl = myData.searchLvl
+    currLvl = myData.bonusSearchLvl
 
     if ( phase == "will" ) then
-        -- Called when the scene is still off screen (but is about to come on screen).
-        myData.rescue = 0
 
         getKey()
 
-        print("This level: "..currLvl)
+        print("This level: Bonus "..currLvl)
         if(mapmain[1] == nil) then
             undosearch = 0
             homesearch = 0
@@ -667,8 +512,8 @@ function scene:show( event )
             searchMusicplay = audio.play( searchMusic, {  channel = 1, fadein = 4000, loops=-1 } )
 
             i=1
-            while(myData.searchkey[currLvl].one[i] ~= nil) do
-                currBlock = myData.searchkey[currLvl].one[i]
+            while(myData.bonusSearchLvlOne[i] ~= nil) do
+                currBlock = myData.bonusSearchLvlOne[i]
                 mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
                 mapmain[i].anchorX=0
                 mapmain[i].anchorY=0
@@ -680,8 +525,8 @@ function scene:show( event )
             end
 
             i=1
-            while(myData.searchkey[currLvl].two[i] ~= nil) do
-                currBlock = myData.searchkey[currLvl].two[i]
+            while(myData.bonusSearchLvlTwo[i] ~= nil) do
+                currBlock = myData.bonusSearchLvlTwo[i]
                 mapone[i] = display.newImage("Images/"..currBlock.."_block.png")
                 mapone[i].anchorX=0
                 mapone[i].anchorY=0
@@ -691,10 +536,9 @@ function scene:show( event )
                 mapone[i].width=120
                 i = i + 1
             end
-
             i=1
-            while(myData.searchkey[currLvl].three[i] ~= nil) do
-                currBlock = myData.searchkey[currLvl].three[i]
+            while(myData.bonusSearchLvlThree[i] ~= nil) do
+                currBlock = myData.bonusSearchLvlThree[i]
                 maptwo[i] = display.newImage("Images/"..currBlock.."_block.png")
                 maptwo[i].anchorX=0
                 maptwo[i].anchorY=0
@@ -704,7 +548,6 @@ function scene:show( event )
                 maptwo[i].width=120
                 i = i + 1
             end
-
             i=1
 
             while(mapmain[i] ~= nil) do
@@ -734,9 +577,7 @@ function scene:show( event )
         sceneGroup:insert(clockText)
         -- run them timer
         countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
-        
-        getScoreDoc()
-        
+                
     elseif ( phase == "did" ) then
 
         

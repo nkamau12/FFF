@@ -18,6 +18,7 @@ local JSON = require("App42-Lua-API.JSON")
 local queryBuilder = require("App42-Lua-API.QueryBuilder")
 local ACL = require("App42-Lua-API.ACL")
 local storageService = App42API:buildStorageService()  
+local scoreBoardService
 
 
 local App42CallBack = {}
@@ -121,6 +122,7 @@ local function createMax(user)
   local gameScore = 0
   local userName = user
   App42CallBack = {}
+  local scoreBoardService = App42API.buildScoreBoardService() 
   scoreBoardService:saveUserScore(gameName,userName,gameScore,App42CallBack)
   function App42CallBack:onSuccess(object)
     print("Game name is "..object:getName())
@@ -210,7 +212,7 @@ local function tryregister(event)
 
           local dbName  = "USERS"
           local collectionName = "GameInfo"
-          local json2 = "{\"user\":"..newUser..",\"search\":1,\"rescue\":1,\"volume\":100,\"sfx\":100,\"theme\":\"default\",\"robot\":\"default\",\"scientist\":\"default\"}"
+          local json2 = "{\"user\":"..newUser..",\"credits\":0,\"search\":1,\"rescue\":1,\"volume\":100,\"sfx\":100,\"theme\":\"default\",\"robot\":\"default\",\"scientist\":\"default\"}"
           local App42CallBack = {}
           local storageService = App42API:buildStorageService()
           storageService:insertJSONDocument(dbName, collectionName, json2,App42CallBack)
@@ -247,6 +249,7 @@ function loaduserinfo()
   	rescue = 0,
     volume = 100,
     sfx = 100,
+    credits = 0,
   	theme = "default",
   	robot = "default",
   	science = "default"
@@ -256,6 +259,7 @@ function loaduserinfo()
 	myData.user = newUser
   myData.musicVol = 100
   myData.sfx = 100
+  myData.credits = 0
 	myData.roboSprite = "default"
 	myData.scienceSprite = "default"
 end

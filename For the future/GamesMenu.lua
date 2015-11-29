@@ -3,6 +3,14 @@ local myData = require( "mydata" )
 local composer = require( "composer" )
 local JSON = require ("json")
 local scene = composer.newScene()
+local App42API = require("App42-Lua-API.App42API")  
+App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
+    "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
+local scoreBoardService = App42API.buildScoreBoardService() 
+local App42CallBack = {}
+
+local bonus
+local play
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -13,37 +21,43 @@ local scene = composer.newScene()
 -- -------------------------------------------------------------------------------
 
 
-local function showSingle()
+local function showSingle( event )
+	if ( event.phase == "ended" ) then
+		audio.pause(backgroundMusicplay)
+		local options = {
+			isModal = true,
+			effect = "crossFade",
+			time = 500
+		}
+		composer.gotoScene("LevelMenu",options)
+	end
+end
+
+local function normalMenu()
 	audio.pause(backgroundMusicplay)
 	local options = {
+		isModal = true,
+		effect = "crossFade",
+		time = 500
+	}
+	composer.gotoScene("BonusMenu",options)
+end
+
+local function bestMenu()
+	local options = {
+		isModal = true,
 		effect = "fade",
-		time = 500
+		time = 400
 	}
-	composer.gotoScene("LevelMenu",options)
-end
-
-local function showMulti()
-audio.pause(backgroundMusicplay)
-	local options = {
-		effect = "crossFade",
-		time = 500
-	}
-composer.gotoScene("Credits",options)
-end
-
-local function showBonus()
-	audio.pause(backgroundMusicplay)
-	local options = {
-		effect = "crossFade",
-		time = 500
-	}
-		composer.gotoScene("Build_Search",options)
+	print("hi")
+	composer.showOverlay("bonus_menu",options)
 end
 
 local function gohome( event )
     local options = {
-            effect = "crossFade",
-            time = 500
+    	isModal = true,
+        effect = "crossFade",
+        time = 500
     }
     composer.gotoScene("MainMenu",options)
 end
@@ -51,23 +65,22 @@ end
 
 -- "scene:create()"
 function scene:create( event )
-	
-	--update()
-    -- Initialize the scene here.
-    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-end
 
+end
 
 -- "scene:show()"
 function scene:show( event )
 	
     local sceneGroup = self.view
     local phase = event.phase
+
+
 	
     if ( phase == "will" ) then
-        -- Called when the scene is still off screen (but is about to come on screen).
-		--local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
-		--background:setFillColor(.3,.1,.8)
+    	print(" ")
+        print("start GamesMenu")
+		
+
 		local background = display.newImage("Images/theme_"..myData.theme.."/splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
@@ -88,29 +101,26 @@ function scene:show( event )
         sceneGroup:insert(homebutton)
 		homebutton:addEventListener( "tap", gohome )
 		
-		local play = display.newImage("Images/singleplayer.png")
+		play = display.newImage("Images/singleplayer.png")
 		play.height=163
 		play.width=830
 		play.x = display.contentCenterX
-		play.y=display.contentCenterY-180
+		play.y=display.contentCenterY-120
 		sceneGroup:insert(play)
-		play:addEventListener( "tap", showSingle )
+		play:addEventListener( "touch", showSingle )
 		
-		local tut = display.newImage("Images/multiplayer.png")
-		tut.height=163
-		tut.width=706
-		tut.x = display.contentCenterX
-		tut.y=display.contentCenterY+20
-		sceneGroup:insert(tut)
-		tut:addEventListener( "tap", showMulti )
+		bonus = display.newImage("Images/bonuslevels.png")
+		bonus.height=163
+		bonus.width=809
+		bonus.x = display.contentCenterX
+		bonus.y=display.contentCenterY+180
+		sceneGroup:insert(bonus)
+		if(myData.isLeader == 1) then
+			bonus:addEventListener( "tap", bestMenu )
+		elseif(myData.isLeader == 0) then
+			bonus:addEventListener( "tap", normalMenu )
+		end
 		
-		local credit = display.newImage("Images/bonuslevels.png")
-		credit.height=163
-		credit.width=809
-		credit.x = display.contentCenterX
-		credit.y=display.contentCenterY+240
-		sceneGroup:insert(credit)
-		credit:addEventListener( "tap", showBonus )
 		
 		audio.resume(backgroundMusicplay)
 		
@@ -133,6 +143,13 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
+        homebutton:removeEventListener( "tap", gohome )
+
+        if(myData.isLeader == 1) then
+			bonus:removeEventListener( "tap", bestMenu )
+		elseif(myData.isLeader == 0) then
+			bonus:removeEventListener( "tap", normalMenu )
+		end
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
     end
@@ -157,6 +174,7 @@ scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
+
 
 -- -------------------------------------------------------------------------------
 

@@ -1,32 +1,33 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
+local myData = require( "mydata" )
 
 local scene = composer.newScene()
-
-local function oopsie(event)
-	local options = {
-		isModal = true,
-    	effect = "crossFade",
-        time = 500
-    }
-	composer.showOverlay("log_user",options)
+local function nextlevel(event)
+	composer.gotoScene("BonusMenu",options)
 end
-
 function scene:create( event )
+
     local sceneGroup = self.view
 	local background = display.newRect(display.contentCenterX, display.contentCenterY,1920-888,1080-500)
 	background:setFillColor(grey,0.5)
 	sceneGroup:insert(background)
-	local trial=display.newText("Your username and/or password is incorrect",display.contentCenterX,display.contentCenterY)
-	sceneGroup:insert(trial)	
+
+	local success=display.newText("Level Completed!",display.contentCenterX,display.contentCenterY - 100)
+	sceneGroup:insert(success)	
+	local scoreprint=display.newText("Your score: "..myData.currScore,display.contentCenterX,display.contentCenterY)
+	sceneGroup:insert(scoreprint)	
+	local tokensprint=display.newText("Tokens earned: "..myData.currTokens,display.contentCenterX,display.contentCenterY + 75)
+	sceneGroup:insert(tokensprint)	
+
 	local try = widget.newButton
 	{
 		width = 200,
 		height = 100,
 		defaultFile = "buttonDefault.png",
 		overFile = "buttonOver.png",
-		label = "Try Again",
-		onEvent = oopsie,
+		label = "Play More",
+		onEvent = nextlevel,
 		labelColor = { default={255,255,255}, over={255,255,255} },
 		fontSize=40,
 		fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
@@ -35,8 +36,7 @@ function scene:create( event )
 	}	
 	sceneGroup:insert(try)
 	try.x=display.contentCenterX
-	try.y=display.contentCenterY+150
-	--try:addEventListener( "tap", tryagain )
+	try.y=display.contentCenterY+225
 end
 
 function scene:hide( event )

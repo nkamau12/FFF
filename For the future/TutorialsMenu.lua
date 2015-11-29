@@ -56,9 +56,9 @@ function scene:show( event )
     local phase = event.phase
 	
     if ( phase == "will" ) then
-        -- Called when the scene is still off screen (but is about to come on screen).
-		--local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
-		--background:setFillColor(.3,.1,.8)
+        print(" ")
+	    print("start TutorialsMenu")
+
 		local background = display.newImage("Images/theme_"..myData.theme.."/splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5

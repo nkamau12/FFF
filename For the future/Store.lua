@@ -16,6 +16,7 @@ local scene = composer.newScene()
 
 local function gohome( event )
     local options = {
+            isModal = true,
             effect = "crossFade",
             time = 500
     }
@@ -85,6 +86,31 @@ function scene:show( event )
         homebutton.width=120
         sceneGroup:insert(homebutton)
 		homebutton:addEventListener( "tap", gohome )
+
+        local optionsText = {
+            text = "Your tokens: "..myData.credits,     
+            x = display.contentCenterX - 600,
+            y = display.contentCenterY - 350,
+            width = 1920-940,     --required for multi-line and alignment
+            font = native.systemFontBold,   
+            fontSize = 48,
+            align = "center"  --new alignment parameter
+        }
+        trial=display.newText(optionsText)
+        sceneGroup:insert(trial)    
+
+
+        mx = 0
+        scores = {}
+        rankbox = {}
+        userbox = {}
+        scorebox = {}
+        tempuser = nil
+        ranknum = {}
+        userranked = {}
+        rankscore = {}
+        App42CallBack = {}
+        myData.leader = 0
 		
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.

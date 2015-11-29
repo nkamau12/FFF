@@ -236,6 +236,7 @@ local function checkresult( event )
     end
     if(answer < 10)then
         local options = {
+            isModal = true,
             effect = "crossFade",
             time = 500
         }
@@ -247,7 +248,10 @@ local function checkresult( event )
         spotx = 631
         spoty = 230
         countmax = 0
-		composer.gotoScene("Credits", options)
+
+        myData.newSearchkey = answerkey
+        myData.newType = "Search"
+		composer.showOverlay("save_game", options)
     else
         answer = countmax
     end

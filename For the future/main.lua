@@ -41,6 +41,7 @@ if (loadedUser == nil) then
     rescue = 0,
     volume = 100,
     sfx = 100,
+    credits = 0,
     theme = "default",
     robot = "default",
     science = "default"
@@ -133,11 +134,13 @@ if(loadedUser.user == nil)then
   myData.user = nil
   myData.musicVol = 100
   myData.sfx = 100
+  myData.credits = 0
 else
   value = loadedUser.user
   myData.user = loadedUser.user
   myData.musicVol = loadedUser.volume
   myData.sfx = loadedUser.sfx
+  myData.credits = loadedUser.credits
 end
 
 local App42CallBack = {}
@@ -154,6 +157,7 @@ function App42CallBack:onSuccess(object)
     jsonDoc.search = object:getJsonDocList()[i]:getJsonDoc().search
     jsonDoc.rescue = object:getJsonDocList()[i]:getJsonDoc().rescue
     jsonDoc.theme = object:getJsonDocList()[i]:getJsonDoc().theme
+    jsonDoc.credits = object:getJsonDocList()[i]:getJsonDoc().credits
     jsonDoc.robot = object:getJsonDocList()[i]:getJsonDoc().robot
     jsonDoc.volume = object:getJsonDocList()[i]:getJsonDoc().volume
     jsonDoc.sfx = object:getJsonDocList()[i]:getJsonDoc().sfx
@@ -166,6 +170,7 @@ function App42CallBack:onSuccess(object)
   myData.roboSprite = jsonDoc.robot
   myData.musicVol = jsonDoc.volume
   myData.sfx = jsonDoc.sfx
+  myData.credits = jsonDoc.credits
   myData.scienceSprite = jsonDoc.scientist
   myData.key = {}
   
@@ -429,6 +434,7 @@ function App42CallBack:onException(exception)
   myData.maxrsc = loadedUser.rescue
   myData.user = loadedUser.user
   myData.theme = loadedUser.theme
+  myData.credits = loadedUser.credits
   myData.roboSprite = loadedUser.robot
   myData.scienceSprite = loadedUser.science
   myData.musicVol = loadedUser.volume

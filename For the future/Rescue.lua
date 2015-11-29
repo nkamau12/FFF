@@ -539,6 +539,38 @@ local function movehalf()
 	end	
 end
 
+local function addTokens()
+    local dbName  = "USERS"
+    local collectionName = "GameInfo"
+    local key = "user"
+    local value = myData.user
+    local jsonDoc = {}
+
+    jsonDoc.user = myData.user
+    jsonDoc.search = myData.maxsrch
+    jsonDoc.rescue = myData.maxrsc
+    jsonDoc.theme = myData.theme
+    jsonDoc.volume = myData.musicVol
+    local tokens = myData.currScore / 100
+    myData.credits = myData.credits + tokens
+    jsonDoc.credits = myData.credits
+    jsonDoc.sfx = myData.sfx
+    jsonDoc.robot = myData.roboSprite
+    jsonDoc.scientist = myData.scienceSprite
+
+    local App42CallBack = {}
+    storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)
+    function App42CallBack:onSuccess(object)
+        print("dbName is "..object:getDbName())
+        for i=1,table.getn(object:getJsonDocList()) do
+            print("Succesful connection")
+        end
+    end
+    function App42CallBack:onException(exception)
+        print("Message is : "..exception:getMessage())
+    end
+end
+
 local function onCollision( event )
 	if ( event.phase == "began" ) then
 		if (event.object2==myrectu or event.object2==myrectd or event.object2==myrectl or event.object2==myrectr) then
@@ -564,6 +596,10 @@ local function onCollision( event )
 							picTable[h]:removeSelf()
 						end
 					end
+					myData.currScore = secondsLeft * 10 + (1500 - (counter-1)*100)
+        			addTokens()
+        			myData.currTokens = myData.currScore / 100
+
 					composer.showOverlay("pass_rescue",options)
 					if(myData.error1_count > 2) then
 						myData.error1_count = 2

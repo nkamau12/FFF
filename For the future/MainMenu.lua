@@ -4,6 +4,7 @@ local composer = require( "composer" )
 local JSON = require ("json")
 local loadsave = require( "loadsave" )
 local scene = composer.newScene()
+local App42API = require("App42-Lua-API.App42API")  
 
 local play
 local tut
@@ -21,7 +22,7 @@ local function showLevel()
 	audio.pause(backgroundMusicplay)
 	local options = {
 		isModal = true,
-		effect = "fade",
+		effect = "crossFade",
 		time = 500
 	}
 	composer.gotoScene("GamesMenu",options)
@@ -46,7 +47,7 @@ local function showTutorial()
 		effect = "crossFade",
 		time = 500
 	}
-		composer.gotoScene("TutorialsMenu",options)
+composer.gotoScene("TutorialsMenu",options)
 end
 
 --Sends user to the leaderboard screen
@@ -116,6 +117,31 @@ function update()
     end
 end
 
+local function checkTop()
+	local gameName = "Max Scores"
+	local max = 1
+	local App42CallBack = {}
+	App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
+    "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
+	local scoreBoardService = App42API.buildScoreBoardService() 
+	scoreBoardService:getTopNRankings(gameName,max,App42CallBack)
+	function App42CallBack:onSuccess(object)
+		print("Game name is "..object:getName())
+		print("userName is : "..object:getScoreList():getUserName())
+		if(myData.user == object:getScoreList():getUserName()) then
+			myData.isLeader = 1
+		else
+			myData.isLeader = 0
+		end
+		print("score is : "..object:getScoreList():getValue())
+		print("scoreId is : "..object:getScoreList():getScoreId())
+		print("isLeader is "..myData.isLeader)
+	end
+	function App42CallBack:onException(exception)
+		print("Message is : "..exception:getMessage())
+	end
+end
+
 
 
 
@@ -134,9 +160,8 @@ function scene:show( event )
     local phase = event.phase
 	
     if ( phase == "will" ) then
-        -- Called when the scene is still off screen (but is about to come on screen).
-		--local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
-		--background:setFillColor(.3,.1,.8)
+    	print(" ")
+        print("start MainMenu")
 		if (check1()=="1") then
 		
 		else
@@ -223,6 +248,8 @@ function scene:show( event )
 		sceneGroup:insert(store)
 		store:addEventListener( "tap", showStore )
 		end
+
+		checkTop()
 
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.

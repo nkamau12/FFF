@@ -1,5 +1,6 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
+local myData = require( "mydata" )
 
 local scene = composer.newScene()
 local function nextlevel(event)
@@ -11,8 +12,14 @@ function scene:create( event )
 	local background = display.newRect(display.contentCenterX, display.contentCenterY,1920-888,1080-500)
 	background:setFillColor(grey,0.5)
 	sceneGroup:insert(background)
-	local trial=display.newText("Success!",display.contentCenterX,display.contentCenterY)
-	sceneGroup:insert(trial)	
+
+	local success=display.newText("Level Completed!",display.contentCenterX,display.contentCenterY - 100)
+	sceneGroup:insert(success)	
+	local scoreprint=display.newText("Your score: "..myData.currScore,display.contentCenterX,display.contentCenterY)
+	sceneGroup:insert(scoreprint)	
+	local tokensprint=display.newText("Tokens earned: "..myData.currTokens,display.contentCenterX,display.contentCenterY + 75)
+	sceneGroup:insert(tokensprint)	
+
 	local try = widget.newButton
 	{
 		width = 200,
@@ -29,7 +36,7 @@ function scene:create( event )
 	}	
 	sceneGroup:insert(try)
 	try.x=display.contentCenterX
-	try.y=display.contentCenterY+150
+	try.y=display.contentCenterY+225
 end
 
 function scene:hide( event )

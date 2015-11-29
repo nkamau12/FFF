@@ -14,10 +14,10 @@ end
 
 function scene:create( event )
     local sceneGroup = self.view
-	local background = display.newRect(display.contentCenterX, display.contentCenterY,1920-888,1080-500)
+	local background = display.newRect(display.contentCenterX, display.contentCenterY,1200,300)
 	background:setFillColor(grey,0.5)
 	sceneGroup:insert(background)
-	local trial=display.newText("Congratulations! Your account has been created!",display.contentCenterX,display.contentCenterY)
+	local trial=display.newText("Congratulations! Your account has been created!",display.contentCenterX,display.contentCenterY - 75)
 	sceneGroup:insert(trial)	
 	local try = widget.newButton
 	{
@@ -35,7 +35,7 @@ function scene:create( event )
 	}	
 	sceneGroup:insert(try)
 	try.x=display.contentCenterX
-	try.y=display.contentCenterY+150
+	try.y=display.contentCenterY+75
 	--try:addEventListener( "tap", tryagain )
 end
 

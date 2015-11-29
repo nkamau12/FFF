@@ -46,7 +46,7 @@ end
 local function printRanks()
 	mx = table.getn(scores)
 	print("scores size is "..mx)
-	for i=1, mx, 1 do
+	for i=1, 5, 1 do
 		ranknum = {
     		text = '\t\t'..i,    
     		x = display.contentCenterX,
@@ -58,7 +58,7 @@ local function printRanks()
 		}
 		rankbox[i] = display.newText(ranknum)	
 	end
-	for i=1, mx, 1 do
+	for i=1, 5, 1 do
 		userranked = {
     		text = scores[i][1],    
     		x = display.contentCenterX + 450,
@@ -70,7 +70,7 @@ local function printRanks()
 		}
 		userbox[i] = display.newText(userranked)	
 	end
-	for i=1, mx, 1 do
+	for i=1, 5, 1 do
 		rankscore = {
     		text = scores[i][2],    
     		x = display.contentCenterX + 900,
@@ -82,6 +82,40 @@ local function printRanks()
 		}
 		scorebox[i] = display.newText(rankscore)	
 	end
+	if(myData.leader == 2) then
+		--local num = table.indexOf( scores, 9 ) )
+		ranknum = {
+    		text = '\t\t'..mx,    
+    		x = display.contentCenterX,
+    		y = display.contentCenterY - 60 + (6-1)*80,
+    		width = 1200,     --required for multi-line and alignment
+    		font = native.systemFontBold,   
+    		fontSize = 48,
+    		align = "left"  --new alignment parameter
+		}
+		rankbox[6] = display.newText(ranknum)	
+		userranked = {
+    		text = scores[mx][1],    
+    		x = display.contentCenterX + 450,
+    		y = display.contentCenterY - 60 + (6-1)*80,
+    		width = 1200,     --required for multi-line and alignment
+    		font = native.systemFontBold,   
+    		fontSize = 48,
+    		align = "left"  --new alignment parameter
+		}
+		userbox[6] = display.newText(userranked)
+		rankscore = {
+    		text = scores[mx][2],    
+    		x = display.contentCenterX + 900,
+    		y = display.contentCenterY - 60 + (6-1)*80,
+    		width = 1200,     --required for multi-line and alignment
+    		font = native.systemFontBold,   
+    		fontSize = 48,
+    		align = "left"  --new alignment parameter
+		}
+		scorebox[6] = display.newText(rankscore)
+	end
+
 end
 
 function getRanks()
@@ -89,7 +123,10 @@ function getRanks()
 	local gameName = "Max Scores"
 	local max = 5
 	App42CallBack = {} 
-	scoreBoardService:getTopNRankings(gameName,max,App42CallBack)
+	App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
+    "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
+	scoreBoardService = App42API.buildScoreBoardService()
+	scoreBoardService:getTopRankings(gameName,App42CallBack)  
 	function App42CallBack:onSuccess(object)
 		print("Game name is "..object:getName())
 		print("table size is "..table.getn(object:getScoreList()))
@@ -97,11 +134,19 @@ function getRanks()
 			for i=1,table.getn(object:getScoreList()),1 do
 				print("i is "..i)
 				print("userName is : "..object:getScoreList()[i]:getUserName())
+				if(object:getScoreList()[i]:getUserName() == myData.user) then
+					myData.leader = i
+				end
+				print("user is leader: "..myData.leader)
 				print("score is : "..object:getScoreList()[i]:getValue())
 				tempuser = {object:getScoreList()[i]:getUserName(),object:getScoreList()[i]:getValue()}
 				table.insert( scores, tempuser )
 				print("score updating size is : "..table.getn(scores))
 				print("scoreId is : "..object:getScoreList()[i]:getScoreId())
+				if(myData.leader >1) then
+					myData.leader = 2
+					break
+				end
 			end
 		else
 			print("userName is : "..object:getScoreList():getUserName())
@@ -112,6 +157,8 @@ function getRanks()
 			print("scoreId is : "..object:getScoreList():getScoreId())
 		end
 		printRanks()
+		
+
 	end
 	function App42CallBack:onException(exception)
 		print("Message is : "..exception:getMessage())
@@ -178,6 +225,7 @@ function scene:show( event )
 		userranked = {}
 		rankscore = {}
 		App42CallBack = {}
+		myData.leader = 0
 
 		
 

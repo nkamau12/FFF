@@ -25,6 +25,9 @@ local showButton = 1
 local accessToken
 local volumeValue
 local sfxValue
+local homebutton
+
+local saveBut
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -47,6 +50,7 @@ local function logout(event)
 	  	name = nil,
 	  	search = 1,
 	  	rescue = 0,
+	  	credits = 0,
 	  	volume = 100,
 	  	sfx = 100,
 	  	theme = "default",
@@ -58,6 +62,7 @@ local function logout(event)
 	myData.user = nil
 	myData.musicVol = 100
 	myData.sfx = 100
+	myData.credits = 0
 	myData.roboSprite = "default"
 	myData.scienceSprite = "default"
 
@@ -77,6 +82,7 @@ local function saveUser(event)
 	  	rescue = maxrsc,
 	    volume = myData.musicVol,
 	    sfx = myData.sfx,
+	    credits = myData.credits,
 	  	theme = myData.theme,
 	  	robot = myData.roboSprite,
 	  	science = myData.scienceSprite
@@ -91,6 +97,7 @@ local function saveUser(event)
   	jsonDoc.user = myData.user
     jsonDoc.search = myData.maxsrch
     jsonDoc.rescue = myData.maxrsc
+    jsonDoc.credits = myData.credits
     jsonDoc.theme = myData.theme
     jsonDoc.volume = myData.musicVol
     jsonDoc.sfx = myData.sfx
@@ -177,6 +184,7 @@ local function sliderListener( event )
         volumeValue.text = event.value.."%"
     end
 end
+
 local function sfxSliderListener( event )
     print( "Slider at " .. event.value .. "%" )
     sfxvol = event.value / 100
@@ -251,7 +259,7 @@ function scene:show( event )
 		logBut.x=display.contentCenterX - 400
 		logBut.y=display.contentCenterY+375
 
-		local saveBut = widget.newButton{
+		saveBut = widget.newButton{
 			width = 300,
 			height = 80.6,
 			defaultFile = "buttonDefault.png",
@@ -296,6 +304,7 @@ function scene:show( event )
 		}
 		local trial=display.newText(volumeText)
 		sceneGroup:insert(trial)	
+
 		local slider = widget.newSlider
 		{
 		    x = 1100,
@@ -350,6 +359,7 @@ function scene:hide( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
+    	homebutton:removeEventListener( "tap", gohome )
     elseif ( phase == "did" ) then
     end
 end

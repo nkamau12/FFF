@@ -6,6 +6,8 @@ local scene = composer.newScene()
 local JSON = require ("json")
 local loadsave = require( "loadsave" ) 
 
+local background
+
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -18,7 +20,7 @@ local loadsave = require( "loadsave" )
 local function showMain()
 	local options = {
         isModal = true,
-		effect = "fade",
+		effect = "crossFade",
 		time = 500
 	}
 		  composer.gotoScene("MainMenu",options)
@@ -44,14 +46,13 @@ function scene:show( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-        -- Called when the scene is still off screen (but is about to come on screen).
-		--local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
-		--background:setFillColor(.3,.1,.8)
+        print("")
+	    print("start Splash")
 
 		local vol = myData.musicVol / 100
 		audio.setVolume(vol, {channel = 1})
 		
-		local background = display.newImage("Images/theme_"..myData.theme.."/title_background.png",system.ResourceDirectory)
+		background = display.newImage("Images/theme_"..myData.theme.."/title_background.png",system.ResourceDirectory)
 		background.anchorX=0.5
 		background.anchorY=0.5
 		background.height=1080
@@ -74,7 +75,7 @@ function scene:hide( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-        
+    background:removeEventListener( "touch", showMain )
 
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.

@@ -94,10 +94,9 @@ local function setupmap()
         twobutton.width=120
 		
 		 --run_button
-        runbutton = display.newImage("Images/run_button.png")
-        runbutton.anchorX=0
+        runbutton = display.newImage("Images/test_button.png")
         runbutton.anchorY=0
-        runbutton.x=500
+        runbutton.x=display.contentCenterX
         runbutton.y=50
         runbutton.height=120
         runbutton.width=360
@@ -251,8 +250,9 @@ local function gohome( event )
     --local dataTable = {["Search"..currLvl] = homesearch }
 
     local options = {
-            effect = "crossFade",
-            time = 500
+    	isModal = true,
+        effect = "crossFade",
+        time = 500
     }
     
     composer.gotoScene("MainMenu",options)
@@ -367,6 +367,7 @@ local function test()
 	bonuskey = {}
 	
 	local options = {
+		isModal = true,
 		effect = "crossFade",
 		time = 500
 	}
