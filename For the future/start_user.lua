@@ -22,10 +22,28 @@ local function goregister(event)
 	composer.showOverlay("register_user",options)
 end
 
+--Sends user back to the main menu screen
+local function gohome( event )
+	if ( "ended" == event.phase ) then
+		local options = {
+			isModal = true,
+	    	effect = "crossFade",
+	        time = 500
+	    }
+		composer.gotoScene( "Splash", options )
+	end
+end
+
 
 function scene:create( event )
 
     local sceneGroup = self.view
+
+    --home button
+	local home = display.newRect(display.contentCenterX, display.contentCenterY,display.contentWidth,display.contentHeight)
+	home:setFillColor(white, 0.01)
+	sceneGroup:insert(home)
+	home:addEventListener("touch", gohome)
 
 	local background = display.newRect(display.contentCenterX, display.contentCenterY + 20,1920-888,1080-500)
 	background:setFillColor(grey,0.5)

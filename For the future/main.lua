@@ -389,7 +389,7 @@ function App42CallBack:onException(exception)
   myData.roboSprite = loadedUser.robot
   myData.scienceSprite = loadedUser.science
   myData.musicVol = loadedUser.volume
-  myData.sfx = jsonDoc.sfx
+  myData.sfx = loadedUser.sfx
 
   local composer = require "composer"
   local options = {
