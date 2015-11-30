@@ -7,18 +7,6 @@
 -- hide the status bar
 display.setStatusBar( display.HiddenStatusBar )
 
-local parse = require( "mod_parse" )
-
-parse:init({ 
-  appId = "YZIbu9ERjYD4h8OdtdJ3fknrWIwjMUZGjUSrZOQe", 
-  apiKey = "WTmSOin1ChKS2l0CXkenSNaSwMEMy2ytEwyaBesn"
-})
-
-parse.showStatus = false
---Register when app is opened
-parse:appOpened()
-
-
 
 -- code to read if there is an existent user logged into the game
 local JSON = require ("json")
@@ -34,9 +22,10 @@ local loadsave = require( "loadsave" )
 --}
 --loadsave.saveTable( userSettings, "user.json" )
 local loadedUser = loadsave.loadTable( "user.json" )
+print(loadedUser)
 if (loadedUser == nil) then
   local userSettings = {
-    user = nil,
+    user = "nil",
     search = 1,
     rescue = 0,
     volume = 100,
@@ -49,12 +38,8 @@ if (loadedUser == nil) then
   loadsave.saveTable( userSettings, "user.json" )
   loadedUser = loadsave.loadTable( "user.json" )
 end
-print(loadedUser.user)
 
-
-
-
---appWarp code
+--app42 API code
 require("App42-Lua-API.Operator")
 require("App42-Lua-API.Permission")
 require("App42-Lua-API.GeoOperator")
@@ -69,66 +54,22 @@ App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5c
 local storageService = App42API:buildStorageService()  
 
 
-
-
-
-
-local facebook = require( "plugin.facebook.v4" )
-
-
-
-
 --local in-game data storage
 local myData = require( "mydata" )
-
---Save the parse object id for later use
-local function saveTime(event)
-  if not event.error then
-    myData.timeid = event.response.objectId
-  end
-end
-local function saveUndo(event)
-  if not event.error then
-    myData.undoid = event.response.objectId
-  end
-end
-local function saveHome(event)
-  if not event.error then
-    myData.homeid = event.response.objectId
-  end
-end
-local function saveRun(event)
-  if not event.error then
-    myData.runid = event.response.objectId
-  end
-end
-local function saveEmpty(event)
-  if not event.error then
-    myData.emptyid = event.response.objectId
-  end
-end
-
---Generate parse object
-local datatable = {}
-parse:createObject("LevelTime", datatable, saveTime)
-parse:createObject("UndoCount", datatable, saveUndo)
-parse:createObject("HomeCount", datatable, saveHome)
-parse:createObject("RunCount", datatable, saveRun)
-parse:createObject("EmptyCount", datatable, saveEmpty)
 
 --loading values
 myData.searchLvl = 1
 myData.rescueLvl = 1
 myData.rescue = 0
 
-
-
-
 --load user
 local dbName  = "USERS"
 local collectionName = "GameInfo"
 local key = "user"
 local value
+--this checks if there is any content in user.json 
+  --If not, it loads the default values so the game can run. 
+  --This only serves as a callback while the app retrieves the actual data from the users database.
 if(loadedUser == nil)then
   value = "nil"
   myData.user = nil
@@ -137,16 +78,20 @@ if(loadedUser == nil)then
   myData.credits = 0
 else
   value = loadedUser.user
+  print("value ")
   myData.musicVol = loadedUser.volume
   myData.sfx = loadedUser.sfx
   myData.credits = loadedUser.credits
 end
-
+if(value == nil)then
+  value = "nil"
+end
 local App42CallBack = {}
 local jsonDoc = {}
+--this connects to App42's Api and looks for the user information stored in the database.
 storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42CallBack)
 
-
+--if this function is called, it means the user was found in the database and all their content will be downloaded.
 function App42CallBack:onSuccess(object)
   print("dbName is "..object:getDbName())
   for i=1,table.getn(object:getJsonDocList()) do
@@ -163,6 +108,11 @@ function App42CallBack:onSuccess(object)
     jsonDoc.scientist = object:getJsonDocList()[i]:getJsonDoc().scientist
   end
 
+  if(value == nil)then
+    myData.user = nil
+  else
+    myData.user = jsonDoc.user
+  end
   myData.maxsrch = jsonDoc.search
   myData.maxrsc = jsonDoc.rescue
   myData.theme = jsonDoc.theme
@@ -175,7 +125,6 @@ function App42CallBack:onSuccess(object)
   
   myData.error1_count = 0
   myData.errorText1 = "Remeber to use method 1 and 2 to get all the commands you need"
-	
 
 
   --RESCUE OBJECTS:
@@ -213,7 +162,6 @@ function App42CallBack:onSuccess(object)
     myData.wallj = {359, 777, 11, 124, "Images/locked_door_horizontal.png"}
     myData.wallk = {598, 777, 11, 124, "Images/locked_door_horizontal.png"}
     myData.walll = {839, 777, 11, 124, "Images/locked_door_horizontal.png"}
-
     --vertical walls
     myData.wall1 = {290, 108, 124, 11, "Images/locked_door_horizontal.png"}
     myData.wall2 = {534, 108, 124, 11, "Images/locked_door_horizontal.png"}
@@ -227,19 +175,16 @@ function App42CallBack:onSuccess(object)
     myData.wall10 = {290, 848, 124, 11, "Images/locked_door_horizontal.png"}
     myData.wall11 = {534, 848, 124, 11, "Images/locked_door_horizontal.png"}
     myData.wall12 = {778, 848, 124, 11, "Images/locked_door_horizontal.png"}
-
     --outer walls
     myData.grida = {43.01, 41.93, 993.04, 993.04,"Images/rescue_grid.png"}
     myData.leftwall = {43.01, 41.93, 993.04, 10,"Images/theme_"..myData.theme.."/left_wall.png"}
     myData.rightwall = {1026.05, 41.93, 993.04, 10,"Images/theme_"..myData.theme.."/left_wall.png"}
     myData.topwall = {43.01, 41.93, 10, 993.04,"Images/theme_"..myData.theme.."/topbottom_wall.png"}
     myData.bottomwall = {43.01, 1024.97, 10, 993.04,"Images/theme_"..myData.theme.."/topbottom_wall.png"}
-
     --loop objects
     myData.mainloop = {1063.96, 625, 133, 805,"Images/main_loop.png"}
     myData.oneloop = {1063.96, 768, 133, 805,"Images/one_loop.png"}
     myData.twoloop = {1063.96, 910, 133, 805,"Images/two_loop.png"}
-
     --buttons
     myData.uparrow = {1192, 186, 122, 122, "Images/up_arrow.png"}
     myData.downarrow = {1330, 186, 122, 122, "Images/down_arrow.png"}
@@ -250,13 +195,10 @@ function App42CallBack:onSuccess(object)
     myData.twobutton = {1403, 332, 122, 122, "Images/2_block.png"}
     myData.homebutton = {1764, 30, 122, 122, "Images/home.png"}
     myData.startbutton = {1542, 332, 122, 320, "Images/run_button.png"}
-
     --robot
     myData.robot = {109, 819, 140, 140, "Images/robot_"..myData.roboSprite..".png"}
-
     --scientist
     myData.science = {nil, nil, 140, 140, "Images/scientist_"..myData.scienceSprite..".png"}
-
     --key
     myData.keybase = {nil, nil, 124, 140, "Images/key.png"}
     myData.key = {{},{},{},{}}
@@ -277,28 +219,11 @@ function App42CallBack:onSuccess(object)
       { walls = {'a','b','c','d','f','i','j','k',1,2,3,4,5,7,9}, scientist = {1, 'w'}, key = {{2,'z'},{3,'y'},{4,'w'},{4,'z'}}}  -- level 12
     }
   end
+
+  --Load rescue objects
   setObjects()
-  myData.blockred = {1289, 729, 120, 120, "Images/red_block.png"}
-  myData.blockgreen = {1426, 729, 120, 120, "Images/green_block.png"}
-  myData.blockblue = {1564, 729, 120, 120, "Images/blue_block.png"}
-  myData.blockyellow = {1700, 729, 120, 120, "Images/yellow_block.png"}
 
-  -- Search setup keys
-  myData.searchkey = {
-    { one = {"red",1,"blue",1,"yellow"}, two = {"green",nil,nil,nil,nil}, three = {nil,nil,nil,nil,nil}},                    -- level 1
-    { one = {1,"yellow","blue",1,nil}, two = {"green","green","red",nil,nil}, three = {nil,nil,nil,nil,nil}},                -- level 2
-    { one = {"green",2,2,"yellow",2}, two = {nil,nil,nil,nil,nil}, three = {"red","blue",nil,nil,nil}},                      -- level 3
-    { one = {1,"green","yellow","red","blue"}, two = {"red","green","blue","yellow",nil}, three = {"blue","yellow","red","red",nil}},-- level 4
-    { one = {1,"green","blue",2,nil}, two = {"yellow","red",2,nil,nil}, three = {"yellow",nil,nil,nil,nil}},                 -- level 5
-    { one = {"blue",2,nil,nil,nil}, two = {"red","red","green",nil,nil}, three = {"yellow",1,"green",nil,nil}},              -- level 6
-    { one = {2,1,2,2,1}, two = {"blue","blue",nil,nil,nil}, three = {"red",nil,nil,nil,nil}},                                -- level 7
-    { one = {"green",1,2,"yellow",nil}, two = {"yellow","blue",2,"green","green"}, three = {"red",nil,nil,nil,nil}},         -- level 8
-    { one = {2,"green",1,"green","green"}, two = {"blue","yellow",nil,nil,nil}, three = {1,"red",nil,nil,nil}},              -- level 9
-    { one = {"yellow",1,"yellow",nil,nil}, two = {"red",2,"blue",2,nil}, three = {"green","green",nil,nil,nil}},             -- level 10
-    { one = {2,2,1,1,nil}, two = {"blue",nil,nil,nil,nil}, three = {1,1,"yellow",nil,nil}},                                  -- level 11
-    { one = {2,"yellow",1,2,"green"}, two = {nil,nil,nil,nil,nil}, three = {"green",1,"red","blue",1}}                       -- level 12
-  }
-
+  --Set scientist's location in the grid
   function setscience(level)
     lvl = level
     sciencex = myData.levelkey[lvl].scientist[1]
@@ -324,6 +249,7 @@ function App42CallBack:onSuccess(object)
     end
   end
 
+  --Set keys' location(s) in the grid
   function setkey(level,index)
     lvl = level
     ind = index
@@ -358,43 +284,71 @@ function App42CallBack:onSuccess(object)
     end
   end
 
+
+  --SEARCH OBJECTS:
+  myData.blockred = {1289, 729, 120, 120, "Images/red_block.png"}
+  myData.blockgreen = {1426, 729, 120, 120, "Images/green_block.png"}
+  myData.blockblue = {1564, 729, 120, 120, "Images/blue_block.png"}
+  myData.blockyellow = {1700, 729, 120, 120, "Images/yellow_block.png"}
+  -- Search setup keys. Each array corresponds to a function, so one = Main function, two = one function, and three = two Function
+  myData.searchkey = {
+    { one = {"red",1,"blue",1,"yellow"}, two = {"green",nil,nil,nil,nil}, three = {nil,nil,nil,nil,nil}},                    -- level 1
+    { one = {1,"yellow","blue",1,nil}, two = {"green","green","red",nil,nil}, three = {nil,nil,nil,nil,nil}},                -- level 2
+    { one = {"green",2,2,"yellow",2}, two = {nil,nil,nil,nil,nil}, three = {"red","blue",nil,nil,nil}},                      -- level 3
+    { one = {1,"green","yellow","red","blue"}, two = {"red","green","blue","yellow",nil}, three = {"blue","yellow","red","red",nil}},-- level 4
+    { one = {1,"green","blue",2,nil}, two = {"yellow","red",2,nil,nil}, three = {"yellow",nil,nil,nil,nil}},                 -- level 5
+    { one = {"blue",2,nil,nil,nil}, two = {"red","red","green",nil,nil}, three = {"yellow",1,"green",nil,nil}},              -- level 6
+    { one = {2,1,2,2,1}, two = {"blue","blue",nil,nil,nil}, three = {"red",nil,nil,nil,nil}},                                -- level 7
+    { one = {"green",1,2,"yellow",nil}, two = {"yellow","blue",2,"green","green"}, three = {"red",nil,nil,nil,nil}},         -- level 8
+    { one = {2,"green",1,"green","green"}, two = {"blue","yellow",nil,nil,nil}, three = {1,"red",nil,nil,nil}},              -- level 9
+    { one = {"yellow",1,"yellow",nil,nil}, two = {"red",2,"blue",2,nil}, three = {"green","green",nil,nil,nil}},             -- level 10
+    { one = {2,2,1,1,nil}, two = {"blue",nil,nil,nil,nil}, three = {1,1,"yellow",nil,nil}},                                  -- level 11
+    { one = {2,"yellow",1,2,"green"}, two = {nil,nil,nil,nil,nil}, three = {"green",1,"red","blue",1}}                       -- level 12
+  }
+  
+
+  --TUTORIAL OBJECTS:
+  --Search Tutorial objects
   myData.SSImages = {
-      {images = {{"Tutorials/tutorial_search_1.png",0,1080,nil,nil,0.8}}},
-      {images = {{"Tutorials/tutorial_search_2.png",0,1080,nil,nil,0.8}}},
-      {images = {{"Tutorials/tutorial_search_3.png",0,1080,nil,nil,0.8}}},
-      {images = {{"Tutorials/tutorial_search_4.png",0,1080,nil,nil,0.8}}},
-      {images = {{"Tutorials/tutorial_search_5.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",194,583+447,449,864,1}}},
-      {images = {{"Tutorials/tutorial_search_6.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",194,583+151,151,864,1}}},
-      {images = {{"Tutorials/tutorial_search_7.png",0,1080,nil,nil,0.8}}},
-      {images = {{"Tutorials/tutorial_search_8.png",0,1080,nil,nil,0.8}}},
-      {images = {{"Tutorials/tutorial_search_9.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",1288,729+121,122,538,1}}},
-      {images = {{"Tutorials/tutorial_search_10.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",1289,887+121,122,122,1},{"Tutorials/alert_arrow.png",1072,887+97,nil,nil,1}}},
-      {images = {{"Tutorials/tutorial_search_11.png",0,1080,nil,nil,0.8}}}
-      }
+    {images = {{"Tutorials/tutorial_search_1.png",0,1080,nil,nil,0.8}}},
+    {images = {{"Tutorials/tutorial_search_2.png",0,1080,nil,nil,0.8}}},
+    {images = {{"Tutorials/tutorial_search_3.png",0,1080,nil,nil,0.8}}},
+    {images = {{"Tutorials/tutorial_search_4.png",0,1080,nil,nil,0.8}}},
+    {images = {{"Tutorials/tutorial_search_5.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",194,583+447,449,864,1}}},
+    {images = {{"Tutorials/tutorial_search_6.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",194,583+151,151,864,1}}},
+    {images = {{"Tutorials/tutorial_search_7.png",0,1080,nil,nil,0.8}}},
+    {images = {{"Tutorials/tutorial_search_8.png",0,1080,nil,nil,0.8}}},
+    {images = {{"Tutorials/tutorial_search_9.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",1288,729+121,122,538,1}}},
+    {images = {{"Tutorials/tutorial_search_10.png",0,1080,nil,nil,0.8},{"Tutorials/red_outline.png",1289,887+121,122,122,1},{"Tutorials/alert_arrow.png",1072,887+97,nil,nil,1}}},
+    {images = {{"Tutorials/tutorial_search_11.png",0,1080,nil,nil,0.8}}}
+  }
+  --Rescue Tutorial objects
   myData.SRImages = {
-      {images = {{"Tutorials/tutorial_rescue_2.png",97,819,nil,nil,0.8,0,1}}},
-      {images = {{"Tutorials/tutorial_rescue_3.png",97,819,nil,nil,0.8,0,1}}},
-      {images = {{"Tutorials/tutorial_rescue_4.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",842,347,142,142,1},{"Tutorials/alert_arrow.png",841,347+70,nil,nil,1,1,0.5}}},
-      {images = {{"Tutorials/tutorial_rescue_5.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",842,347,142,142,1},{"Tutorials/alert_arrow.png",841,347+70,nil,nil,1,1,0.5}}},
-      {images = {{"Tutorials/tutorial_rescue_6.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow_v.png",172,288+10,nil,nil,1,0.5,0},{"Tutorials/alert_arrow_v.png",359+62,288+11,nil,nil,1,0.5,0},{"Tutorials/alert_arrow_v.png",598+62,288+11,nil,nil,1,0.5,0}}},
-      {images = {{"Tutorials/tutorial_rescue_7.png",97,819,nil,nil,0.8,0,1}}},
-      {images = {{"Tutorials/tutorial_rescue_8.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1120,155,320,750,1},{"Tutorials/alert_arrow.png",1120,155+160,nil,nil,1,1,0.5}}},
-      {images = {{"Tutorials/tutorial_rescue_9.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1150,170,160,600,1},{"Tutorials/alert_arrow.png",1120,155+80,nil,nil,1,1,0.5}}},
-      {images = {{"Tutorials/tutorial_rescue_10.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1100,325,150,450,1},{"Tutorials/alert_arrow.png",1100,325+75,nil,nil,1,1,0.5}}},
-      {images = {{"Tutorials/tutorial_rescue_11.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1120,155+80,nil,nil,1,1,0.5}}},
-      {images = {{"Tutorials/tutorial_rescue_12.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1200,691.5,nil,nil,1,1,0.5}}},
-      {images = {{"Tutorials/tutorial_rescue_13.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1064,691.5,nil,nil,1,1,0.5}}},
-      {images = {{"Tutorials/tutorial_rescue_14.png",97,819,nil,nil,0.8,0,1}}},
-      {images = {{"Tutorials/tutorial_rescue_15.png",97,819,nil,nil,0.8,0,1}}},
-      }
+    {images = {{"Tutorials/tutorial_rescue_2.png",97,819,nil,nil,0.8,0,1}}},
+    {images = {{"Tutorials/tutorial_rescue_3.png",97,819,nil,nil,0.8,0,1}}},
+    {images = {{"Tutorials/tutorial_rescue_4.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",842,347,142,142,1},{"Tutorials/alert_arrow.png",841,347+70,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_5.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",842,347,142,142,1},{"Tutorials/alert_arrow.png",841,347+70,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_6.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow_v.png",172,288+10,nil,nil,1,0.5,0},{"Tutorials/alert_arrow_v.png",359+62,288+11,nil,nil,1,0.5,0},{"Tutorials/alert_arrow_v.png",598+62,288+11,nil,nil,1,0.5,0}}},
+    {images = {{"Tutorials/tutorial_rescue_7.png",97,819,nil,nil,0.8,0,1}}},
+    {images = {{"Tutorials/tutorial_rescue_8.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1120,155,320,750,1},{"Tutorials/alert_arrow.png",1120,155+160,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_9.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1150,170,160,600,1},{"Tutorials/alert_arrow.png",1120,155+80,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_10.png",97,819,nil,nil,0.8,0,1},{"Tutorials/red_outline.png",1100,325,150,450,1},{"Tutorials/alert_arrow.png",1100,325+75,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_11.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1120,155+80,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_12.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1200,691.5,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_13.png",97,819,nil,nil,0.8,0,1},{"Tutorials/alert_arrow.png",1064,691.5,nil,nil,1,1,0.5}}},
+    {images = {{"Tutorials/tutorial_rescue_14.png",97,819,nil,nil,0.8,0,1}}},
+    {images = {{"Tutorials/tutorial_rescue_15.png",97,819,nil,nil,0.8,0,1}}},
+  }
   myData.SpeechS=1
   myData.SpeechR=1
 
 
+  --Pre-load content for Rescue 1
   setObjects()
   setscience(1)
   setkey(1)
   
+
  --error
 	--Use of multiple function
 	myData.error1_count = 0
@@ -410,20 +364,17 @@ function App42CallBack:onSuccess(object)
 	myData.errorText5 = "Remember go to the key first before going to wall"
 	
 
-
   -- require the composer library
   local composer = require "composer"
   local options = {
-          isModal = true,
-      effect = "fade",
-      time = 500
-    }
+    isModal = true,
+    effect = "fade",
+    time = 500
+  }
   composer.gotoScene( "Splash" )
-
-  print(jsonDoc.theme)
 end
 
-
+--this function runs if for any reason the game is unable to connect to the API. Then the default data will be pre-loaded in the game.
 function App42CallBack:onException(exception)
   print("Message is : "..exception:getMessage())
   print("App Error code is : "..exception:getAppErrorCode())
@@ -446,11 +397,5 @@ function App42CallBack:onException(exception)
     effect = "fade",
     time = 500
   }
-  composer.gotoScene( "Rescue" )
+  composer.gotoScene( "Splash" )
 end
-
-
-
-
--- Add any objects that should appear on all scenes below (e.g. tab bar, hud, etc)
-

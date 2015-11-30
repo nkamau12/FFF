@@ -1,4 +1,3 @@
-local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local composer = require( "composer" )
 local physics = require("physics")
@@ -248,8 +247,6 @@ local function addPic(xVal,yVal,name,spot)
             	print( event.response.updatedAt )
         	end
     	end
-    	local dataTable = {["Rescue"..currResc] = emptyloop }
-    	parse:updateObject("EmptyCount", myData.emptyid, dataTable, onEmptyRescue)
 
 	elseif(picTable[spot] == nil) then
 		addPicTo(spot, name, xVal, yVal)
@@ -263,10 +260,7 @@ local function addPic(xVal,yVal,name,spot)
         	if not event.error then
             	print( event.response.updatedAt )
         	end
-    	end
-    	local dataTable = {["Rescue"..currResc] = undoloop }
-    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
-		
+    	end		
 	else
 		picTable[spot]:removeSelf()
 		addPicTo(spot, name, xVal, yVal)
@@ -277,8 +271,6 @@ local function addPic(xVal,yVal,name,spot)
             	print( event.response.updatedAt )
         	end
     	end
-    	local dataTable = {["Rescue"..currResc] = undoloop }
-    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
 	end
 	picToAdd = ""
 	if(popupPic~=nil)then
@@ -598,8 +590,6 @@ local function pass()
             print( event.response.updatedAt )
         end
     end
-    local runsearchTable = {["Rescue"..currResc] = runrescue }
-    parse:updateObject("RunCount", myData.runid, runsearchTable, onRunningObject)
     counter=1
 	merge(table1)
 	moverobot()
@@ -616,8 +606,6 @@ local function gohome()
             print( event.response.updatedAt )
         end
     end
-    local dataTable = {["Rescue"..currResc] = homerescue }
-    parse:updateObject("HomeCount", myData.homeid, dataTable, onUpdateObject)
 
     local options = {
 				effect = "crossFade",

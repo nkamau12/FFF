@@ -1,4 +1,3 @@
-local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local composer = require( "composer" )
 local physics = require("physics")
@@ -69,12 +68,9 @@ local globalscore
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
-
 -- local forward references should go here
-
 -- -------------------------------------------------------------------------------
 local function setupPic(name, pic, xVal, yVal, hVal,wVal)
-
 	setupItems[name] = display.newImage(pic)
 	setupItems[name].anchorX = 0
 	setupItems[name].anchorY =0
@@ -82,23 +78,19 @@ local function setupPic(name, pic, xVal, yVal, hVal,wVal)
 	setupItems[name].y = yVal
 	setupItems[name].height = hVal
 	setupItems[name].width= wVal
-
 end
 
 local function setupmap()
-
 	--grid & outer walls
 	setupPic("grida", myData.grida[5], myData.grida[1], myData.grida[2], myData.grida[3], myData.grida[4])
 	setupPic("leftwall", myData.leftwall[5], myData.leftwall[1], myData.leftwall[2], myData.leftwall[3], myData.leftwall[4])
 	setupPic("rightwall", myData.rightwall[5], myData.rightwall[1], myData.rightwall[2], myData.rightwall[3], myData.rightwall[4])
 	setupPic("topwall", myData.topwall[5], myData.topwall[1], myData.topwall[2], myData.topwall[3], myData.topwall[4])
 	setupPic("bottomwall", myData.bottomwall[5], myData.bottomwall[1], myData.bottomwall[2], myData.bottomwall[3], myData.bottomwall[4])
-
 	--loops
 	setupPic("mainl", myData.mainloop[5], myData.mainloop[1], myData.mainloop[2], myData.mainloop[3], myData.mainloop[4])
 	setupPic("onel", myData.oneloop[5], myData.oneloop[1], myData.oneloop[2], myData.oneloop[3], myData.oneloop[4])
 	setupPic("twol", myData.twoloop[5], myData.twoloop[1], myData.twoloop[2], myData.twoloop[3], myData.twoloop[4])
-
 	--buttons
 	setupPic("upa", myData.uparrow[5], myData.uparrow[1], myData.uparrow[2], myData.uparrow[3], myData.uparrow[4])
 	setupPic("downa", myData.downarrow[5], myData.downarrow[1], myData.downarrow[2], myData.downarrow[3], myData.downarrow[4])
@@ -109,7 +101,6 @@ local function setupmap()
 	setupPic("twob", myData.twobutton[5], myData.twobutton[1], myData.twobutton[2], myData.twobutton[3], myData.twobutton[4])
 	setupPic("start", myData.startbutton[5], myData.startbutton[1], myData.startbutton[2], myData.startbutton[3], myData.startbutton[4])
 	setupPic("home", myData.homebutton[5], myData.homebutton[1], myData.homebutton[2], myData.homebutton[3], myData.homebutton[4])
-
 	--robot
 	robot = display.newImage("Images/robot_"..myData.roboSprite..".png")
 	robot.anchorX=0
@@ -119,7 +110,6 @@ local function setupmap()
 	robot.height=140
 	robot.width=140
 	robot.myName="robot"
-
 	--scientist
 	setscience(currResc)
 	science = display.newImage("Images/scientist_"..myData.scienceSprite..".png")
@@ -129,7 +119,6 @@ local function setupmap()
 	science.y=myData.science[2]
 	science.height=140
 	science.width=140
-
 	--keys
 	i = 1
 	while(myData.levelkey[currResc].key[i] ~= nil) do
@@ -152,9 +141,6 @@ local function setupmap()
 		end
 		i = i + 1
 	end
-	i = 1
-	
-
 	--walls
 	i = 1
 	while(myData.levelkey[currResc].walls[i] ~= nil) do
@@ -167,42 +153,40 @@ local function setupmap()
 	end
 	i = 1
 
-		
-
 	--PHYSICS:
 	--physics add bodies
 	physics.start()
 	physics.setGravity( 0, 0 )
-		
 	--robot
 	physics.addBody(robot,"dynamic",{bounce=0,friction=.8})
 	robot.isFixedRotation = true
-		
 	--Misc
 	local robotX, robotY = robot:localToContent( -70, -70 )
 	myrectu = display.newRect( robotX, robotY-248, 1, 1)
+	myrectu:setFillColor( 0.5 , 0.01 )
 	physics.addBody( myrectu, "static",{bounce=0})
 	myrectd = display.newRect( robotX, robotY+248, 1, 1)
+	myrectd:setFillColor( 0.5 , 0.01 )
 	physics.addBody( myrectd, "static",{bounce=0})
 	myrectl = display.newRect( robotX-248, robotY, 1, 1)
+	myrectl:setFillColor( 0.5 , 0.01 )
 	physics.addBody( myrectl, "static",{bounce=0})
 	myrectr = display.newRect( robotX+248, robotY, 1, 1)
+	myrectr:setFillColor( 0.5 , 0.01 )
 	physics.addBody( myrectr, "static",{bounce=0})
-		
-	--keys
+	--keys physics
 	i = 1
 	while(keyset[i] ~= nil) do
 		print("keyphys "..i)
 		physics.addBody(keyset[i], "static",{ isSensor=true })
 		i = i + 1
 	end
-
-	--walls physics
+	--outer walls physics
 	physics.addBody( setupItems["leftwall"], "static",{bounce=0})
 	physics.addBody( setupItems["rightwall"], "static",{bounce=0})
 	physics.addBody( setupItems["topwall"], "static",{bounce=0})
 	physics.addBody( setupItems["bottomwall"], "static",{bounce=0})
-
+	--inner walls physics
 	i = 1
 	while(myData.levelkey[currResc].walls[i] ~= nil) do
 		currwall = "wall"..(myData.levelkey[currResc].walls[i])
@@ -210,7 +194,6 @@ local function setupmap()
 		i = i + 1
 	end
 	i = 1
-
 	--scientist
 	physics.addBody(science, "static",{bounce=0})
 end 
@@ -227,7 +210,6 @@ local function addPicTo(position, name, xVal, yVal)
 end
 
 local function	popup(x,y,height,width)
-	
 	if(popupPic == nil) then
 		popupPic = display.newRect(x,y,height,width)
 		popupPic.anchorX = 0
@@ -245,13 +227,6 @@ end
 local function addPic(xVal,yVal,name,spot)
 	if((picTable[spot]== nil) and (picToAdd == ""))then
 		emptyloop = emptyloop + 1
-		local function onEmptyRescue( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
-    	local dataTable = {["Rescue"..currResc] = emptyloop }
-    	parse:updateObject("EmptyCount", myData.emptyid, dataTable, onEmptyRescue)
 
 	elseif(picTable[spot] == nil) then
 		addPicTo(spot, name, xVal, yVal)
@@ -261,26 +236,12 @@ local function addPic(xVal,yVal,name,spot)
 		picTable[spot] = nil
 
 		undoloop = undoloop + 1
-		local function onUndoSearch( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
-    	local dataTable = {["Rescue"..currResc] = undoloop }
-    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
 		
 	else
 		picTable[spot]:removeSelf()
 		addPicTo(spot, name, xVal, yVal)
 			
 		undoloop = undoloop + 1
-		local function onUndoSearch( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
-    	local dataTable = {["Rescue"..currResc] = undoloop }
-    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
 	end
 	picToAdd = ""
 	if(popupPic~=nil)then
@@ -771,13 +732,6 @@ end
 
 local function pass()
 	runrescue = runrescue + 1
-    local function onRunningObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
-    local runsearchTable = {["Rescue"..currResc] = runrescue }
-    parse:updateObject("RunCount", myData.runid, runsearchTable, onRunningObject)
     counter=1
 	merge(table1)
 	moverobot()
@@ -786,14 +740,6 @@ end
 
 local function gohome()
 	homerescue = homerescue + 1
-
-    local function onUpdateObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
-    local dataTable = {["Rescue"..currResc] = homerescue }
-    parse:updateObject("HomeCount", myData.homeid, dataTable, onUpdateObject)
 
     local options = {
     			isModal = true,
@@ -1265,21 +1211,15 @@ end
 function scene:destroy( event )
 
     local sceneGroup = self.view
-
-    -- Called prior to the removal of scene's view ("sceneGroup").
-    -- Insert code here to clean up the scene.
-    -- Example: remove display objects, save state, etc.
 end
 
 
 -- -------------------------------------------------------------------------------
-
 -- Listener setup
 scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
-
 -- -------------------------------------------------------------------------------
 
 return scene

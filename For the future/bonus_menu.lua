@@ -2,6 +2,7 @@ local composer = require( "composer" )
 local widget = require( "widget" )
 local scene = composer.newScene()
 
+--Sends user to the bonus menu screen
 local function adieu(event)
 	if ( "ended" == event.phase ) then
 		local options = {
@@ -13,6 +14,7 @@ local function adieu(event)
 	end
 end
 
+--Opens a new overlay to prompt the user whether they want to create a new search or rescue level
 local function pickType(event)
 	if ( "ended" == event.phase ) then
 		local options = {
@@ -24,6 +26,7 @@ local function pickType(event)
 	end
 end
 
+--Sends user back to the main menu screen
 local function gohome( event )
 	if ( "ended" == event.phase ) then
 		composer.hideOverlay( "fade", 400 )
@@ -31,9 +34,9 @@ local function gohome( event )
 end
 
 function scene:create( event )
-
     local sceneGroup = self.view
 
+    --home button
 	local home = display.newRect(display.contentCenterX, display.contentCenterY,display.contentWidth,display.contentHeight)
 	home:setFillColor(white, 0.01)
 	sceneGroup:insert(home)
@@ -46,6 +49,7 @@ function scene:create( event )
 	local text=display.newText("Select an option",display.contentCenterX,display.contentCenterY - 75)
 	sceneGroup:insert(text)	
 
+	--play button
 	local play = widget.newButton
 	{
 		width = 250,
@@ -64,6 +68,7 @@ function scene:create( event )
 	play.x=display.contentCenterX - 200
 	play.y=display.contentCenterY + 50
 
+	--create button
 	local create = widget.newButton
 	{
 		width = 250,
@@ -89,12 +94,8 @@ function scene:hide( event )
     local parent = event.parent  --reference to the parent scene object
 
     if ( phase == "will" ) then
-        -- Call the "resumeGame()" function in the parent scene
-		
     end
 end
-
-
 
 scene:addEventListener( "create", scene )
 scene:addEventListener( "hide", scene )

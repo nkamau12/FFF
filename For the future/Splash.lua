@@ -1,7 +1,5 @@
-local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local composer = require( "composer" )
---local parse = require( "mod_parse" )
 local scene = composer.newScene()
 local JSON = require ("json")
 local loadsave = require( "loadsave" ) 
@@ -25,30 +23,24 @@ local function showMain()
 	}
 		  composer.gotoScene("MainMenu",options)
 end
--- "scene:create()"
+
 function scene:create( event )
 
     local sceneGroup = self.view
 	local backgroundMusic = audio.loadStream( "Music/bensound-scifi.mp3")
 	local backgroundMusicplay = audio.play( backgroundMusic, {  channel = 1, loops=-1 } )
-	
-	
-    -- Initialize the scene here.
-    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-    
 end
 
 
--- "scene:show()"
 function scene:show( event )
-
     local sceneGroup = self.view
     local phase = event.phase
 
     if ( phase == "will" ) then
-        print("")
+        print(" ")
 	    print("start Splash")
 
+	    --sets volume level according to the user settings
 		local vol = myData.musicVol / 100
 		audio.setVolume(vol, {channel = 1})
 		
@@ -63,12 +55,10 @@ function scene:show( event )
 		background:addEventListener( "touch", showMain )
 		
     elseif ( phase == "did" ) then
-
     end
 end
 
 
--- "scene:hide()"
 function scene:hide( event )
 
     local sceneGroup = self.view
@@ -76,32 +66,22 @@ function scene:hide( event )
 
     if ( phase == "will" ) then
     background:removeEventListener( "touch", showMain )
-
     elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.
     end
 end
 
 
--- "scene:destroy()"
 function scene:destroy( event )
-
     local sceneGroup = self.view
-
-    -- Called prior to the removal of scene's view ("sceneGroup").
-    -- Insert code here to clean up the scene.
-    -- Example: remove display objects, save state, etc.
 end
 
 
 -- -------------------------------------------------------------------------------
-
 -- Listener setup
 scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
-
 -- -------------------------------------------------------------------------------
 
 return scene

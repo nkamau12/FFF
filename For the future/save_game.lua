@@ -17,7 +17,8 @@ local queryBuilder = require("App42-Lua-API.QueryBuilder")
 local ACL = require("App42-Lua-API.ACL")
 local storageService = App42API:buildStorageService()  
 
---Sends user to the login screen
+--Connects to App42's database and saves a JSON with the new level's information
+	--The JSON will contain: username, level name, level type(Search/Rescue), answer key, main function, one function, two function, and play count
 local function submitLvl(event)
 	if ( event.phase == "ended") then
 		local dbName  = "USERS"
@@ -34,17 +35,11 @@ local function submitLvl(event)
 		local App42CallBack = {}
 		storageService:insertJSONDocument(dbName, collectionName, json,App42CallBack)
 		function App42CallBack:onSuccess(object)
-			print("dbName is "..object:getDbName())
-			print("collectionName is "..object:getCollectionName())
 			print("DocId is "..object:getJsonDocList():getDocId())
 			print("Created At is "..object:getJsonDocList():getCreatedAt())
-			print("Updated At is "..object:getJsonDocList():getUpdatedAt())
 		end
 		function App42CallBack:onException(exception)
 			print("Message is : "..exception:getMessage())
-			print("App Error code is : "..exception:getAppErrorCode())
-			print("Http Error code is "..exception:getHttpErrorCode())
-			print("Detail is : "..exception:getDetails())
 		end
 	end
 end

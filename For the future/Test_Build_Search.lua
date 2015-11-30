@@ -1,4 +1,3 @@
-local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local composer = require( "composer" )
 local scene = composer.newScene()

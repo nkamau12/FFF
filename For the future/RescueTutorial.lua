@@ -1,4 +1,3 @@
-local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local composer = require( "composer" )
 local physics = require("physics")
@@ -209,13 +208,6 @@ end
 local function addPic(xVal,yVal,name,spot)
 	if((picTable[spot]== nil) and (picToAdd == ""))then
 		emptyloop = emptyloop + 1
-		local function onEmptyRescue( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
-    	local dataTable = {["Rescue"..currResc] = emptyloop }
-    	parse:updateObject("EmptyCount", myData.emptyid, dataTable, onEmptyRescue)
 
 	elseif(picTable[spot] == nil) then
 		addPicTo(spot, name, xVal, yVal)
@@ -225,26 +217,12 @@ local function addPic(xVal,yVal,name,spot)
 		picTable[spot] = nil
 
 		undoloop = undoloop + 1
-		local function onUndoSearch( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
-    	local dataTable = {["Rescue"..currResc] = undoloop }
-    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
 		
 	else
 		picTable[spot]:removeSelf()
 		addPicTo(spot, name, xVal, yVal)
 			
 		undoloop = undoloop + 1
-		local function onUndoSearch( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
-    	local dataTable = {["Rescue"..currResc] = undoloop }
-    	parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
 	end
 	picToAdd = ""
 	if(popupPic~=nil)then
@@ -484,6 +462,7 @@ local function onCollision( event )
 		elseif (event.object2==science) then
 				print("Scientist")
 				local options = {
+					isModal = true,
 					effect = "crossFade",
 					time = 500
 				}
@@ -560,13 +539,7 @@ end
 
 local function pass()
 	runrescue = runrescue + 1
-    local function onRunningObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
-    local runsearchTable = {["Rescue"..currResc] = runrescue }
-    parse:updateObject("RunCount", myData.runid, runsearchTable, onRunningObject)
+
     counter=1
 	merge(table1)
 	moverobot()
@@ -578,23 +551,16 @@ end
 local function gohome()
 	homerescue = homerescue + 1
 
-    local function onUpdateObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
-    local dataTable = {["Rescue"..currResc] = homerescue }
-    parse:updateObject("HomeCount", myData.homeid, dataTable, onUpdateObject)
-
     local options = {
-				effect = "crossFade",
-				time = 500
-			}
-			audio.stop(elevatorMusicplay)
-			audio.pause(backgroundMusicplay)
-			composer.gotoScene("MainMenu",optionsh)
-			picTable = {}
-			physics.stop()
+		isModal = true,
+		effect = "crossFade",
+		time = 500
+	}
+	audio.stop(elevatorMusicplay)
+	audio.pause(backgroundMusicplay)
+	composer.gotoScene("MainMenu",optionsh)
+	picTable = {}
+	physics.stop()
 end
 
 
@@ -800,6 +766,7 @@ function scene:show( event )
 			setupPic("rightwall", myData.rightwall[5], myData.rightwall[1], myData.rightwall[2], myData.rightwall[3], myData.rightwall[4])
 			setupPic("topwall", myData.topwall[5], myData.topwall[1], myData.topwall[2], myData.topwall[3], myData.topwall[4])
 			setupPic("bottomwall", myData.bottomwall[5], myData.bottomwall[1], myData.bottomwall[2], myData.bottomwall[3], myData.bottomwall[4])
+			i=1
 			while(myData.levelkey[currResc].walls[i] ~= nil) do
 				currwall = "wall"..myData.levelkey[currResc].walls[i]
 				print(currwall)
@@ -844,19 +811,19 @@ function scene:show( event )
 			physics.addBody(science, "static",{bounce=0})
 
 
-			sceneGroup:insert(setupItems["grida"])
-			sceneGroup:insert(setupItems["mainl"])
-			sceneGroup:insert(setupItems["onel"])
-			sceneGroup:insert(setupItems["twol"])
-			sceneGroup:insert(setupItems["upa"])
-			sceneGroup:insert(setupItems["downa"])
-			sceneGroup:insert(setupItems["lefta"])
-			sceneGroup:insert(setupItems["righta"])
-			sceneGroup:insert(setupItems["mainb"])
-			sceneGroup:insert(setupItems["oneb"])
-			sceneGroup:insert(setupItems["twob"])
-			sceneGroup:insert(setupItems["start"])
-			sceneGroup:insert(setupItems["home"])
+			--sceneGroup:insert(setupItems["grida"])
+			--sceneGroup:insert(setupItems["mainl"])
+			--sceneGroup:insert(setupItems["onel"])
+			--sceneGroup:insert(setupItems["twol"])
+			--sceneGroup:insert(setupItems["upa"])
+			--sceneGroup:insert(setupItems["downa"])
+			--sceneGroup:insert(setupItems["lefta"])
+			--sceneGroup:insert(setupItems["righta"])
+			--sceneGroup:insert(setupItems["mainb"])
+			--sceneGroup:insert(setupItems["oneb"])
+			--sceneGroup:insert(setupItems["twob"])
+			--sceneGroup:insert(setupItems["start"])
+			--sceneGroup:insert(setupItems["home"])
 			sceneGroup:insert(robot)
 			sceneGroup:insert(science)
 			sceneGroup:insert(setupItems["bottomwall"])
@@ -925,6 +892,7 @@ function scene:hide( event )
     		display.remove( setupItems["speech"..i] )
     		i=i+1
 		end
+		setupItems={}
 		myData.SpeechR=1
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.

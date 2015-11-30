@@ -1,4 +1,3 @@
-local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local composer = require( "composer" )
 local JSON = require ("json")
@@ -237,14 +236,6 @@ end
 local function removelast( event )
     undosearch = undosearch + 1
 
-    local function onUndoSearch( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
-    local dataTable = {["Search"..currLvl] = undosearch }
-    parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
-
     if(countmax > answer)then
         display.remove(newblock[countmax-1])
         countmax = countmax - 1
@@ -253,16 +244,7 @@ local function removelast( event )
 end
 
 local function gohome( event )
-homesearch = homesearch + 1
-
-    local function onUpdateObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
-
-    local dataTable = {["Search"..currLvl] = homesearch }
-    parse:updateObject("HomeCount", myData.homeid, dataTable, onUpdateObject)
+    homesearch = homesearch + 1
 
     audio.stop(searchMusicplay)
     audio.dispose( searchMusic )
@@ -322,16 +304,6 @@ end
 
 local function checkresult( event )
     runsearch = runsearch + 1
-    
-
-    local function onRunningObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
-
-    local runsearchTable = {["Search"..currLvl] = runsearch }
-    parse:updateObject("RunCount", myData.runid, runsearchTable, onRunningObject)
 
     while answer<5 do
         print(answer)
@@ -370,7 +342,6 @@ local function checkresult( event )
         addTokens()
         myData.currTokens = myData.currScore / 100
         local attribute = "Search"..currLvl
-        parse:updateObject("LevelTime", myData.timeid, {[attribute] = endTime})
     	composer.showOverlay("pass_search", options)
 
         timer.pause(countDownTimer)
@@ -795,20 +766,14 @@ end
 function scene:destroy( event )
 
 local sceneGroup = self.view
--- Called prior to the removal of scene's view ("sceneGroup").
--- Insert code here to clean up the scene.
--- Example: remove display objects, save state, etc.
 end
 
 -- -------------------------------------------------------------------------------
-
 -- Listener setup
 scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
-
-
 -- -------------------------------------------------------------------------------
 
 return scene

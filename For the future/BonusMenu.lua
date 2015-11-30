@@ -1,4 +1,3 @@
-local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local widget = require( "widget" )
 local composer = require( "composer" )
@@ -69,10 +68,14 @@ local function playLevel( event )
         time = 500
     }
     myData.bonusSearchLvl = event.target.id
+    myData.bonusTitle = levels[myData.bonusSearchLvl][1]
+    myData.bonusCount = levels[myData.bonusSearchLvl][3]
     myData.bonusSearchLvlKey = bonuskeys[myData.bonusSearchLvl]
     myData.bonusSearchLvlOne = bonusone[myData.bonusSearchLvl]
     myData.bonusSearchLvlTwo = bonustwo[myData.bonusSearchLvl]
     myData.bonusSearchLvlThree = bonusthree[myData.bonusSearchLvl]
+    print("level name is "..myData.bonusTitle)
+    print("play count is "..myData.bonusCount)
     print(myData.bonusSearchLvlKey)
     composer.gotoScene("BonusSearch",options)
     

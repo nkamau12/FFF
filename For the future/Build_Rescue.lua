@@ -1,5 +1,4 @@
 local composer = require( "composer" )
-local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local physics = require("physics")
 local widget = require("widget")
@@ -21,9 +20,7 @@ local wall_buttons={
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
-
 -- local forward references should go here
-
 -- -------------------------------------------------------------------------------
 local function setupPic(name, pic, xVal, yVal, hVal,wVal,alpha,xpos,ypos)
 

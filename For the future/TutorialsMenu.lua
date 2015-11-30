@@ -1,4 +1,3 @@
-local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local composer = require( "composer" )
 local JSON = require ("json")
@@ -7,16 +6,15 @@ local scene = composer.newScene()
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
-
 -- local forward references should go here
-
 -- -------------------------------------------------------------------------------
 
 
 local function showSearch()
 	audio.pause(backgroundMusicplay)
 	local options = {
-		effect = "fade",
+		isModal = true,
+		effect = "crossFade",
 		time = 500
 	}
 	composer.gotoScene("SearchTutorial",options)
@@ -25,6 +23,7 @@ end
 local function showRescue()
 audio.pause(backgroundMusicplay)
 	local options = {
+		isModal = true,
 		effect = "crossFade",
 		time = 500
 	}
@@ -33,8 +32,9 @@ end
 
 local function gohome( event )
     local options = {
-            effect = "crossFade",
-            time = 500
+    	isModal = true,
+        effect = "crossFade",
+        time = 500
     }
     composer.gotoScene("MainMenu",options)
 end

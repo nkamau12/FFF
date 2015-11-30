@@ -1,4 +1,3 @@
-local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local composer = require( "composer" )
 local JSON = require ("json")
@@ -172,14 +171,11 @@ local function addred( event )
         newblock[countmax].y= spoty
         newblock[countmax].height=120
         newblock[countmax].width=120
-
         spacecolor[countmax] = "red"
-
         spotx = spotx + 130
         countmax = countmax + 1
     end
 end
-
 local function addgreen( event )
     if (countmax < 8) then
         newblock[countmax] = display.newImage("Images/green_block.png")
@@ -189,14 +185,11 @@ local function addgreen( event )
         newblock[countmax].y= spoty
         newblock[countmax].height=120
         newblock[countmax].width=120
-
         spacecolor[countmax] = "green"
-
         spotx = spotx + 130
         countmax = countmax + 1
     end
 end
-
 local function addblue( event )
     if (countmax < 8) then
         newblock[countmax] = display.newImage("Images/blue_block.png")
@@ -206,14 +199,11 @@ local function addblue( event )
         newblock[countmax].y= spoty
         newblock[countmax].height=120
         newblock[countmax].width=120
-
         spacecolor[countmax] = "blue"
-
         spotx = spotx + 130
         countmax = countmax + 1
     end
 end
-
 local function addyellow( event )
     if (countmax < 8) then
         newblock[countmax] = display.newImage("Images/yellow_block.png")
@@ -223,9 +213,7 @@ local function addyellow( event )
         newblock[countmax].y= spoty
         newblock[countmax].height=120
         newblock[countmax].width=120
-
         spacecolor[countmax] = "yellow"
-
         spotx = spotx + 130
         countmax = countmax + 1
     end
@@ -233,14 +221,6 @@ end
 
 local function removelast( event )
     undosearch = undosearch + 1
-
-    local function onUndoSearch( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
-    local dataTable = {["Search"..currLvl] = undosearch }
-    parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
 
     if(countmax > answer)then
         display.remove(newblock[countmax-1])
@@ -250,22 +230,14 @@ local function removelast( event )
 end
 
 local function gohome( event )
-homesearch = homesearch + 1
-
-    local function onUpdateObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
-
-    local dataTable = {["Search"..currLvl] = homesearch }
-    parse:updateObject("HomeCount", myData.homeid, dataTable, onUpdateObject)
+    homesearch = homesearch + 1
 
     audio.stop(searchMusicplay)
     audio.dispose( searchMusic )
     local options = {
-            effect = "crossFade",
-            time = 500
+        isModal = true,
+        effect = "crossFade",
+        time = 500
     }
     for i=8,0,-1 do 
         display.remove(newblock[i]) 
@@ -316,6 +288,36 @@ local function addTokens()
     end
 end
 
+local function updateCount()
+    local dbName  = "USERS"
+    local collectionName = "Bonus Levels"
+    local key = "level"
+    local value = myData.bonusTitle
+    local jsonDoc = {}
+
+    jsonDoc.user = myData.user
+    jsonDoc.level = myData.bonusTitle
+    jsonDoc.type = "Search"
+    jsonDoc.key = myData.bonusSearchLvlKey
+    jsonDoc.keyone = myData.bonusSearchLvlOne
+    jsonDoc.keytwo = myData.bonusSearchLvlTwo
+    jsonDoc.keythree = myData.bonusSearchLvlThree
+    jsonDoc.playcount = myData.bonusCount + 1
+
+    App42CallBack = {}
+    storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)
+    function App42CallBack:onSuccess(object)
+        print("dbName is "..object:getDbName())
+        for i=1,table.getn(object:getJsonDocList()) do
+            print("Success!")
+            print("New count is "..object:getJsonDocList()[i]:getJsonDoc().playcount)
+        end
+    end
+    function App42CallBack:onException(exception)
+        print("Message is : "..exception:getMessage())
+    end
+end
+
 
 local function checkresult( event )
     runsearch = runsearch + 1
@@ -326,9 +328,6 @@ local function checkresult( event )
             print( event.response.updatedAt )
         end
     end
-
-    local runsearchTable = {["Search"..currLvl] = runsearch }
-    parse:updateObject("RunCount", myData.runid, runsearchTable, onRunningObject)
 
     while answer<5 do
         print(answer)
@@ -365,9 +364,8 @@ local function checkresult( event )
         addTokens()
         myData.currTokens = myData.currScore / 100
         local attribute = "Search"..currLvl
-        parse:updateObject("LevelTime", myData.timeid, {[attribute] = endTime})
     	composer.showOverlay("pass_bonus_search", options)
-
+        updateCount()
         timer.pause(countDownTimer)
         print("Finished with "..secondsLeft.." seconds left")
         gameScore = secondsLeft * 10

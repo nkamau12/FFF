@@ -1,4 +1,3 @@
-local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local composer = require( "composer" )
 local scene = composer.newScene()
@@ -161,14 +160,6 @@ end
 local function removelast( event )
     undosearch = undosearch + 1
 
-    local function onUndoSearch( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
-    local dataTable = {["Search"..currLvl] = undosearch }
-    parse:updateObject("UndoCount", myData.undoid, dataTable, onUndoSearch)
-
     if(countmax > answer)then
         display.remove(newblock[countmax-1])
         countmax = countmax - 1
@@ -180,17 +171,10 @@ end
 local function gohome( event )
     homesearch = homesearch + 1
 
-    local function onUpdateObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
-    local dataTable = {["Search"..currLvl] = homesearch }
-    parse:updateObject("HomeCount", myData.homeid, dataTable, onUpdateObject)
-
     audio.stop(searchMusicplay)
     audio.dispose( searchMusic )
     local options = {
+        isModal = true,
             effect = "crossFade",
             time = 500
     }
@@ -216,13 +200,6 @@ local setupItems = {}
 
 local function checkresult( event )
     runsearch = runsearch + 1
-    local function onRunningObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
-    local runsearchTable = {["Search"..currLvl] = runsearch }
-    parse:updateObject("RunCount", myData.runid, runsearchTable, onRunningObject)
 
     while answer<5 do
         print(answer)
@@ -241,6 +218,7 @@ local function checkresult( event )
     if(answer < 10)then
         audio.pause(searchMusicplay)
         local options = {
+            isModal = true,
             effect = "crossFade",
             time = 500
         }
@@ -253,7 +231,6 @@ local function checkresult( event )
         spoty = 230
         countmax = 0
         local attribute = "Search"..currLvl
-        parse:updateObject("LevelTime", myData.timeid, {[attribute] = endTime})
         i=1
         while setupItems[i]~=nil do
             display.remove( setupItems[i] )

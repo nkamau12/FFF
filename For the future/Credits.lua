@@ -6,18 +6,16 @@ local scene = composer.newScene()
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
-
 -- local forward references should go here
-
 -- -------------------------------------------------------------------------------
 
 function bye()
+    audio.pause(backgroundMusicplay)
     local options = {
             isModal = true,
             effect = "crossFade",
             time = 500
         }
-
     timer.performWithDelay( 5000, composer.gotoScene("MainMenu",options))
 end
 
@@ -26,8 +24,6 @@ function scene:create( event )
 
     local sceneGroup = self.view
     
-    -- Initialize the scene here.
-    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
     creds = display.newImage("Images/theme_"..myData.theme.."/credits_screen.png",system.ResourceDirectory)
         creds.anchorX=0
         creds.anchorY=1
@@ -37,8 +33,9 @@ function scene:create( event )
         creds.y=2448.6
         sceneGroup:insert(creds)
 	creds:addEventListener( "tap", bye )
+
     local backgroundMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
-    local backgroundMusicplay = audio.play( backgroundMusic, {  fadein = 4000, loops=-1 } )
+    local backgroundMusicplay = audio.play( backgroundMusic, {  channel = 1, fadein = 4000, loops=-1 } )
 
     timer.performWithDelay( 9000, transition.moveTo(creds, { x=0, y=1080, time=20000 } ))
     
@@ -52,17 +49,11 @@ function scene:show( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-        -- Called when the scene is still off screen (but is about to come on screen).
-        --local background=display.newRect(display.contentCenterX,display.contentCenterY,1080,720)
-        --background:setFillColor(.3,.1,.8)
+        print(" ")
+        print("start Credits")
         
         
     elseif ( phase == "did" ) then
-        -- Called when the scene is now on screen.
-        -- Insert code here to make the scene come alive.
-        -- Example: start timers, begin animation, play audio, etc.
-
-
     end
 end
 
@@ -74,12 +65,7 @@ function scene:hide( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-        -- Called when the scene is on screen (but is about to go off screen).
-        -- Insert code here to "pause" the scene.
-        -- Example: stop timers, stop animation, stop audio, etc.
-
     elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.
     end
 end
 
@@ -88,10 +74,6 @@ end
 function scene:destroy( event )
 
     local sceneGroup = self.view
-
-    -- Called prior to the removal of scene's view ("sceneGroup").
-    -- Insert code here to clean up the scene.
-    -- Example: remove display objects, save state, etc.
 end
 
 

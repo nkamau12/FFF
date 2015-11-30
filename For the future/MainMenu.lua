@@ -1,4 +1,3 @@
-local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local composer = require( "composer" )
 local JSON = require ("json")
@@ -117,6 +116,7 @@ function update()
     end
 end
 
+--Checks if the current user is the top player. This is later used in GamesMenu to determine if the user is allowed to create new content.
 local function checkTop()
 	local gameName = "Max Scores"
 	local max = 1
@@ -143,17 +143,10 @@ local function checkTop()
 end
 
 
-
-
 function scene:create( event )
-	
-	--update()
-    -- Initialize the scene here.
-    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end
 
 
--- "scene:show()"
 function scene:show( event )
 	
     local sceneGroup = self.view
@@ -163,12 +156,10 @@ function scene:show( event )
     	print(" ")
         print("start MainMenu")
 		if (check1()=="1") then
-		
 		else
-		local options = {
-			isModal = true,
-				}
-			
+			local options = {
+				isModal = true,
+			}
 			composer.showOverlay( "permission", options )
 		end
 
@@ -188,117 +179,117 @@ function scene:show( event )
             effect = "crossFade",
             time = 500
         }
-		if (myData.user == nil)then
+		if (myData.user == nil or myData.user == "nil")then
 			composer.showOverlay("start_user", options)
+
+		--if a logged user is found, the normal main menu is then loaded
 		else
+			--settings_button
+	        settingsbutton = display.newImage("Images/Settings.png")
+	        settingsbutton.anchorX=0
+	        settingsbutton.anchorY=0
+	        settingsbutton.x=95
+	        settingsbutton.y=170
+	        settingsbutton.height=120
+	        settingsbutton.width=120
+	        sceneGroup:insert(settingsbutton)
+			settingsbutton:addEventListener( "tap", gosettings )
+			
+			--play_button
+			play = display.newImage("Images/Play.png")
+			play.height=180
+			play.width=350
+			play.x = display.contentCenterX
+			play.y=display.contentCenterY-160
+			sceneGroup:insert(play)
+			play:addEventListener( "tap", showLevel )
+			
+			--tutorials_button
+			tut = display.newImage("Images/Tutorial.png")
+			tut.height=163
+			tut.width=528
+			tut.x = display.contentCenterX - 435
+			tut.y=display.contentCenterY+40
+			sceneGroup:insert(tut)
+			tut:addEventListener( "tap", showTutorial )
+			
+			--scores_button
+			scores = display.newImage("Images/scores.png")
+			scores.height=163
+			scores.width=416
+			scores.x = display.contentCenterX - 435
+			scores.y=display.contentCenterY+260
+			sceneGroup:insert(scores)
+			scores:addEventListener( "tap", showScores )
 
-		--settings_button
-        settingsbutton = display.newImage("Images/Settings.png")
-        settingsbutton.anchorX=0
-        settingsbutton.anchorY=0
-        settingsbutton.x=95
-        settingsbutton.y=170
-        settingsbutton.height=120
-        settingsbutton.width=120
-        sceneGroup:insert(settingsbutton)
-		settingsbutton:addEventListener( "tap", gosettings )
-		
-		--play_button
-		play = display.newImage("Images/Play.png")
-		play.height=180
-		play.width=350
-		play.x = display.contentCenterX
-		play.y=display.contentCenterY-160
-		sceneGroup:insert(play)
-		play:addEventListener( "tap", showLevel )
-		
-		--tutorials_button
-		tut = display.newImage("Images/Tutorial.png")
-		tut.height=163
-		tut.width=528
-		tut.x = display.contentCenterX - 435
-		tut.y=display.contentCenterY+40
-		sceneGroup:insert(tut)
-		tut:addEventListener( "tap", showTutorial )
-		
-		--scores_button
-		scores = display.newImage("Images/scores.png")
-		scores.height=163
-		scores.width=416
-		scores.x = display.contentCenterX - 435
-		scores.y=display.contentCenterY+260
-		sceneGroup:insert(scores)
-		scores:addEventListener( "tap", showScores )
+			--credits_button
+			credit = display.newImage("Images/Credits.png")
+			credit.height=163
+			credit.width=470
+			credit.x = display.contentCenterX + 435
+			credit.y=display.contentCenterY+260
+			sceneGroup:insert(credit)
+			credit:addEventListener( "tap", showCredits )
 
-		--credits_button
-		credit = display.newImage("Images/Credits.png")
-		credit.height=163
-		credit.width=470
-		credit.x = display.contentCenterX + 435
-		credit.y=display.contentCenterY+260
-		sceneGroup:insert(credit)
-		credit:addEventListener( "tap", showCredits )
-
-		--store_button
-		store = display.newImage("Images/store.png")
-		store.height=163
-		store.width=353
-		store.x = display.contentCenterX + 435
-		store.y=display.contentCenterY+40
-		sceneGroup:insert(store)
-		store:addEventListener( "tap", showStore )
+			--store_button
+			store = display.newImage("Images/store.png")
+			store.height=163
+			store.width=353
+			store.x = display.contentCenterX + 435
+			store.y=display.contentCenterY+40
+			sceneGroup:insert(store)
+			store:addEventListener( "tap", showStore )
 		end
 
 		checkTop()
 
     elseif ( phase == "did" ) then
-        -- Called when the scene is now on screen.
-        -- Insert code here to make the scene come alive.
-        -- Example: start timers, begin animation, play audio, etc.
 		audio.resume(backgroundMusicplay)
-		
     end
 end
 
 
--- "scene:hide()"
 function scene:hide( event )
 
     local sceneGroup = self.view
     local phase = event.phase
 
     if ( phase == "will" ) then
-        --[[store:removeEventListener( "tap", showStore )
-        credit:removeEventListener( "tap", showCredits )
-        tut:removeEventListener( "tap", showTutorial )
-        play:removeEventListener( "tap", showLevel )
-        settingsbutton:removeEventListener( "tap", gosettings )
-        scores:removeEventListener( "tap", showScores )]]
+    	if(store ~= nil) then
+        	store:removeEventListener( "tap", showStore )
+        end
+        if(credit ~= nil) then
+        	credit:removeEventListener( "tap", showCredits )
+        end
+        if(tut ~= nil) then
+        	tut:removeEventListener( "tap", showTutorial )
+        end
+        if(play ~= nil) then
+        	play:removeEventListener( "tap", showLevel )
+        end
+        if(settingsbutton ~= nil) then
+        	settingsbutton:removeEventListener( "tap", gosettings )
+        end
+        if(scores ~= nil) then
+        	scores:removeEventListener( "tap", showScores )
+        end
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
     end
 end
 
 
--- "scene:destroy()"
 function scene:destroy( event )
-
     local sceneGroup = self.view
-
-    -- Called prior to the removal of scene's view ("sceneGroup").
-    -- Insert code here to clean up the scene.
-    -- Example: remove display objects, save state, etc.
 end
 
 
 -- -------------------------------------------------------------------------------
-
 -- Listener setup
 scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
-
 -- -------------------------------------------------------------------------------
 
 return scene

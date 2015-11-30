@@ -2,6 +2,7 @@ local composer = require( "composer" )
 local widget = require( "widget" )
 local scene = composer.newScene()
 
+--Sends user to the build search screen
 local function createSearch(event)
 	if ( "ended" == event.phase ) then
 		local options = {
@@ -12,6 +13,8 @@ local function createSearch(event)
 		composer.gotoScene("Build_Search",options)
 	end
 end
+
+--Sends user to the build rescue screen
 local function createRescue(event)
 	if ( "ended" == event.phase ) then
 		local options = {
@@ -23,6 +26,7 @@ local function createRescue(event)
 	end
 end
 
+--Sends user back to the main menu screen
 local function gohome( event )
 	if ( "ended" == event.phase ) then
 		composer.hideOverlay( "fade", 400 )
@@ -88,11 +92,8 @@ function scene:hide( event )
     local parent = event.parent  --reference to the parent scene object
 
     if ( phase == "will" ) then
-        -- Call the "resumeGame()" function in the parent scene
-		
     end
 end
-
 
 
 scene:addEventListener( "create", scene )
