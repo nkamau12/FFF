@@ -82,7 +82,7 @@ local function printRanks()
 		}
 		scorebox[i] = display.newText(rankscore)	
 	end
-	if(myData.leader == 2) then
+	if(myData.leader == 6) then
 		--local num = table.indexOf( scores, 9 ) )
 		ranknum = {
     		text = '\t\t'..mx,    
@@ -143,8 +143,8 @@ function getRanks()
 				table.insert( scores, tempuser )
 				print("score updating size is : "..table.getn(scores))
 				print("scoreId is : "..object:getScoreList()[i]:getScoreId())
-				if(myData.leader >1) then
-					myData.leader = 2
+				if(myData.leader >5) then
+					myData.leader = 6
 					break
 				end
 			end

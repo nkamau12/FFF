@@ -69,6 +69,7 @@ local function playLevel( event )
     }
     myData.bonusSearchLvl = event.target.id
     myData.bonusTitle = levels[myData.bonusSearchLvl][1]
+    myData.bonusUser = levels[myData.bonusSearchLvl][2]
     myData.bonusCount = levels[myData.bonusSearchLvl][3]
     myData.bonusSearchLvlKey = bonuskeys[myData.bonusSearchLvl]
     myData.bonusSearchLvlOne = bonusone[myData.bonusSearchLvl]
@@ -171,6 +172,30 @@ function getSearch()
 	end
 end
 
+function getRescue()
+	print("start")
+	local dbName  = "USERS"
+	local collectionName = "Bonus Levels"
+	App42CallBack = {} 
+	local key = "type"
+	local value = "Rescue"
+	storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42CallBack)
+	function App42CallBack:onSuccess(object)
+		print("dbName is "..object:getDbName())
+		for i=1,table.getn(object:getJsonDocList()) do
+			print("DocId is "..object:getJsonDocList()[i]:getDocId())
+			print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
+			templevel = {object:getJsonDocList()[i]:getJsonDoc().level,object:getJsonDocList()[i]:getJsonDoc().user,object:getJsonDocList()[i]:getJsonDoc().playcount,
+			object:getJsonDocList()[i]:getJsonDoc().walls,object:getJsonDocList()[i]:getJsonDoc().scientist,object:getJsonDocList()[i]:getJsonDoc().key}
+			table.insert( levels, templevel )
+		end
+		printRanks()
+	end
+	function App42CallBack:onException(exception)
+		print("Error!")
+	end
+end
+
 local function showSearchBonus( event )
 	if(event.phase == "ended") then
 		gamemode.text = "Search"
@@ -181,6 +206,8 @@ end
 
 local function showRescueBonus()
 	gamemode.text = "Rescue"
+	getRescue()
+	event.target:setEnabled(false)
 end
 
 -- "scene:create()"

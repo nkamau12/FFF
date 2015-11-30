@@ -295,7 +295,7 @@ local function updateCount()
     local value = myData.bonusTitle
     local jsonDoc = {}
 
-    jsonDoc.user = myData.user
+    jsonDoc.user = myData.bonusUser
     jsonDoc.level = myData.bonusTitle
     jsonDoc.type = "Search"
     jsonDoc.key = myData.bonusSearchLvlKey
