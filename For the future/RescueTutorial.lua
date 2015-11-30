@@ -106,18 +106,7 @@ local function setupmap()
 	science.height=140
 	science.width=140
 
-	--keys
-	setkey(currResc)
-	if(myData.key[1] ~= nil)then
-		key = display.newImage("Images/key.png")
-		key.anchorX=0
-		key.anchorY=0
-		key.x=myData.key[1]
-		key.y=myData.key[2]
-		key.height=124
-		key.width=140
-	else
-	end
+
 
 	--walls
 	i = 1
@@ -152,12 +141,6 @@ local function setupmap()
 	physics.addBody( myrectl, "static",{bounce=0})
 	myrectr = display.newRect( robotX+248, robotY, 1, 1)
 	physics.addBody( myrectr, "static",{bounce=0})
-		
-	--keys
-	if(myData.key[1] ~= nil)then
-		physics.addBody(key, "static",{bounce=0})
-	end
-
 	--walls physics
 	physics.addBody( setupItems["leftwall"], "static",{bounce=0})
 	physics.addBody( setupItems["rightwall"], "static",{bounce=0})
@@ -446,18 +429,14 @@ local function moverobot()
 	end	
 end
 
+function scene:resumeGame()
+end
 local function onCollision( event )
 	if ( event.phase == "began" ) then
 		if (event.object2==myrectu or event.object2==myrectd or event.object2==myrectl or event.object2==myrectr) then
 			if ( event.phase == "began" ) then
 				moverobot()
 			end
-		elseif (event.object2==key) then
-			keyscount = keyscount + 1
-			print("keys count: "..keyscount)
-			event.object2:removeSelf()
-			counter = counter - 1
-			moverobot()
 
 		elseif (event.object2==science) then
 				print("Scientist")
@@ -497,18 +476,13 @@ local function onCollision( event )
 			while(myData.levelkey[currResc].walls[i] ~= nil) do
 				currwall = "wall"..myData.levelkey[currResc].walls[i]
 				if(event.object2==setupItems[currwall]) then
-					if(keyscount > 0)then
-						event.object2:removeSelf()
-						keyscount = keyscount - 1
-						counter = counter - 1
-						moverobot()
-					else
+					
 						local options = {
 						isModal = true
 						}
 						composer.showOverlay( "fail", options )
 						print("why1")
-					end
+					
 				end
 				i = i + 1
 			end
