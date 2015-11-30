@@ -416,6 +416,7 @@ function scene:create( event )
     mapmain = {}
     mapone = {}
     maptwo = {}
+    answerkey = {}
 
     local sceneGroup = self.view
     searchMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
@@ -623,6 +624,8 @@ local phase = event.phase
         display.remove(clockText)
         countDownTimer = nil
         clockText = nil
+
+        answerkey = {}
 
 
     elseif ( phase == "did" ) then 
