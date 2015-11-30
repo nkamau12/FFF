@@ -136,6 +136,7 @@ function scene:hide( event )
     		--so this removes all listeners as soon as the user exits the scene
 
         homebutton:removeEventListener( "tap", gohome )
+        play:removeEventListener( "touch", showSingle )
         if(myData.isLeader == 1) then
 			bonus:removeEventListener( "tap", bestMenu )
 		elseif(myData.isLeader == 0) then

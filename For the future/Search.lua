@@ -249,8 +249,9 @@ local function gohome( event )
     audio.stop(searchMusicplay)
     audio.dispose( searchMusic )
     local options = {
-            effect = "crossFade",
-            time = 500
+        isModal = true,
+        effect = "crossFade",
+        time = 500
     }
     for i=8,0,-1 do 
         display.remove(newblock[i]) 
@@ -624,7 +625,8 @@ function scene:show( event )
     currLvl = myData.searchLvl
 
     if ( phase == "will" ) then
-        -- Called when the scene is still off screen (but is about to come on screen).
+        print(" ")
+        print("start Search")
         myData.rescue = 0
 
         getKey()
