@@ -569,13 +569,13 @@ local function onCollision( event )
 
 					composer.showOverlay("pass_rescue",options)
 					if(myData.error1_count > 2) then
-						myData.error1_count = 2
+						myData.error1_count = 0
 					end
 					if(myData.error2_count > 2) then
-						myData.error2_count = 2
+						myData.error2_count = 0
 					end
 					if(myData.error3_count > 2) then
-						myData.error3_count = 2
+						myData.error3_count = 0
 					end
 					timer.pause(countDownTimer)
 			        print("Finished with "..secondsLeft.." seconds left")
