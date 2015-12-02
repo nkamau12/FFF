@@ -351,17 +351,18 @@ function App42CallBack:onSuccess(object)
 
  --error
 	--Use of multiple function
+	--Creating method error(Search)
 	myData.error1_count = 0
-	myData.errorText1 = "Remember function 1 and 2 are used to get all the commands needed"
-	--myData.errorText1b = "Remember commands are spread between all the function"
-	--not reaching scientist or not getting all 
+	myData.errorText1 = "Remember once a method is complete it \n goes back to the method it was called from"
+	myData.errorText2 = "Remember robot starts from M (main) method"
+	--Calling method error (Rescue)
 	myData.error2_count = 0
-	myData.errorText2 = "Remember once a function is complete it \n goes back to the function it was called from"
-	myData.errorText3 = "Remember to get to function 1 and 2 they \n must be called in the Main (M) function"
-	--key error
+	myData.errorText3 = "Remember to use method 1 and 2 are used \n to get all the commands needed"
+	myData.errorText4 = "Remember robot start reading commands from M (main) method"
+	-- use of key error (Rescue)
 	myData.error3_count = 0
-	myData.errorText4 = "Remember each key only clears one wall"
-	myData.errorText5 = "Remember go to the key first before going to wall"
+	myData.errorText5 = "Remember each key only clears one wall"
+	myData.errorText6 = "Remember go to the key first before going to wall"
 	
 
   -- require the composer library

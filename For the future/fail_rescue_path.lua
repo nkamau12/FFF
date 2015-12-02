@@ -17,24 +17,30 @@ function scene:create( event )
 	sceneGroup:insert(background)
 	
 	local trial
-	if(errorcount1 > 2 or errorcount2 > 2 or errorcount3 > 2) then
-		local errorNum 
-		if (errorcount3 > 0) then
-			errorNum = math.random(1,4)
+	if(errorcount2 > 2 or errorcount3 > 2) then
+		local errorNum
+		print("2")
+		print(errorcount2)
+		print("3")
+		print(errorcount3)
+		if (errorcount2 > errorcount3) then
+			print("in")
+			errorNum = math.random(3,4)
+		elseif(errorcount3 > errorcount2) then
+			errorNum = math.random(5,6)
+			myData.error3_count = myData.error3_count - 2
 		else
-			errorNum = math.random(1,3)
+			errorNum = math.random(3,6)
 		end
 		
-		if(errorNum == 1)then
-			trial = display.newText(myData.errorText1 ,display.contentCenterX,display.contentCenterY)
-		elseif(errorNum == 2)then
-			trial = display.newText(myData.errorText2 ,display.contentCenterX,display.contentCenterY)
-		elseif(errorNum == 3)then
+		if(errorNum == 3)then
 			trial = display.newText(myData.errorText3 ,display.contentCenterX,display.contentCenterY)
 		elseif(errorNum == 4)then
-			trial = display.newText(myData.errorText3 ,display.contentCenterX,display.contentCenterY)
+			trial = display.newText(myData.errorText4 ,display.contentCenterX,display.contentCenterY)
+		elseif(errorNum == 5)then
+			trial = display.newText(myData.errorText5 ,display.contentCenterX,display.contentCenterY)
 		else
-			trial = display.newText(myData.errorText3 ,display.contentCenterX,display.contentCenterY)
+			trial = display.newText(myData.errorText6 ,display.contentCenterX,display.contentCenterY)
 		end
 	else
 		trial=display.newText("Sorry that path is blocked",display.contentCenterX,display.contentCenterY)

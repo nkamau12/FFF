@@ -2,7 +2,6 @@ local composer = require( "composer" )
 local widget = require( "widget" )
 local myData = require("mydata")
 local errorcount1 = myData.error1_count
-local errorcount2 = myData.error2_count
 local scene = composer.newScene()
 
 local function tryagain(event)
@@ -15,16 +14,12 @@ function scene:create( event )
 	background:setFillColor(grey,0.5)
 	sceneGroup:insert(background)
 	local trial
-	if(errorcount1 > 0 or errorcount2 > 0) then
-		local errorNum = math.random(1,3)
+	if(errorcount1 > 1) then
+		local errorNum = math.random(1,2)
 		if(errorNum == 1)then
 			trial = display.newText(myData.errorText1 ,display.contentCenterX,display.contentCenterY)
-		end
-		if(errorNum == 2)then
+		else
 			trial = display.newText(myData.errorText2 ,display.contentCenterX,display.contentCenterY)
-		end
-		if(errorNum == 3)then
-			trial = display.newText(myData.errorText3 ,display.contentCenterX,display.contentCenterY)
 		end
 	else
 		 trial=display.newText("Input error!",display.contentCenterX,display.contentCenterY)
