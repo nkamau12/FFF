@@ -5,6 +5,42 @@ local JSON = require ("json")
 local widget = require( "widget" )
 local scene = composer.newScene()
 
+
+local special_pic
+local extra_pic
+local extra_title
+local extra_cost
+local extra_table = {
+	"Images/robot_santa.png",
+	"Images/robot_potato.png",
+	"Images/scientist_present.png",
+	"Images/scientist_sadface.png",
+	"Images/theme_green/splash_main.png",
+	"Images/theme_red/splash_main.png",
+	"Images/theme_yellow/splash_main.png"
+}
+
+local extra_title_table = {
+	"Santa Robot",
+	"Potato Robot",
+	"Present Scientist",
+	"Sad Scientist",
+	"Green Theme",
+	"Red Theme",
+	"Yellow Theme"
+}
+
+local extra_cost_table = {
+	"Cost: 1",
+	"Cost: 2",
+	"Cost: 3",
+	"Cost: 4",
+	"Cost: 5",
+	"Cost: 6",
+	"Cost: 7"
+}
+
+local extra_counter = 1
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
@@ -12,9 +48,6 @@ local scene = composer.newScene()
 -- local forward references should go here
 
 -- -------------------------------------------------------------------------------
-
-
-
 local function gohome( event )
     local options = {
             isModal = true,
@@ -24,16 +57,73 @@ local function gohome( event )
     composer.gotoScene("MainMenu",options)
 end
 
-
 local function prevSpecial( event )
-    
+	if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+		
+	end
 end
+
 local function nextSpecial( event )
+	if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+	end
 end
 
 local function prevExtra( event )
+	if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+		extra_counter = extra_counter - 1
+		if(extra_counter == 0) then
+			extra_counter = 7
+		end
+		
+		extra_pic:removeSelf()
+		extra_title:removeSelf()
+		extra_cost:removeSelf()
+		extra_title = display.newText(extra_title_table[extra_counter], 1400, 700)
+		extra_cost = display.newText(extra_cost_table[extra_counter], 1400,800)
+		extra_pic = display.newImage(extra_table[extra_counter],system.ResourceDirectory)
+		extra_pic.anchorX = 0.5
+		extra_pic.anchorY = 0.5
+		extra_pic.x = 1385
+		extra_pic.y = 550
+		if(extra_counter > 4 and extra_counter < 8) then
+			extra_pic.height = 200
+			extra_pic.width = 350
+		else
+			extra_pic.height = 200
+			extra_pic.width = 200
+		end
+	end
 end
+
 local function nextExtra( event )
+	if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+		extra_counter = extra_counter + 1
+		if(extra_counter == 8) then
+			extra_counter = 1
+		end
+		
+		extra_pic:removeSelf()
+		extra_title:removeSelf()
+		extra_cost:removeSelf()
+		extra_title = display.newText(extra_title_table[extra_counter], 1400, 700)
+		extra_cost = display.newText(extra_cost_table[extra_counter], 1400,800)
+		extra_pic = display.newImage(extra_table[extra_counter],system.ResourceDirectory)
+		extra_pic.anchorX = 0.5
+		extra_pic.anchorY = 0.5
+		extra_pic.x = 1385
+		extra_pic.y = 550
+		if(extra_counter > 4 and extra_counter < 8) then
+			extra_pic.height = 200
+			extra_pic.width = 350
+		else
+			extra_pic.height = 200
+			extra_pic.width = 200
+		end
+	end
 end
 
 -- "scene:create()"
@@ -156,7 +246,30 @@ function scene:show( event )
             onEvent = nextExtra
         }
         sceneGroup:insert(rightextras)
-
+		
+		special_pic = display.newImage("Images/key.png",system.ResourceDirectory)
+		special_pic.anchorX = 0.5
+		special_pic.anchorY = 0.5
+		special_pic.height = 200
+		special_pic.width = 200
+		special_pic.x = 550
+		special_pic.y = 550
+		sceneGroup:insert(special_pic)
+		
+		extra_pic = display.newImage("Images/robot_santa.png",system.ResourceDirectory)
+		extra_pic.anchorX = 0.5
+		extra_pic.anchorY = 0.5
+		extra_pic.height = 200
+		extra_pic.width = 200
+		extra_pic.x = 1400
+		extra_pic.y = 550
+		sceneGroup:insert(extra_pic)
+		
+		extra_title = display.newText("Robot Santa", 1400, 700)
+		sceneGroup:insert(extra_title)
+		
+		extra_cost = display.newText("Cost: 1", 1400,800)
+		sceneGroup:insert(extra_cost)
 
         mx = 0
         scores = {}
@@ -196,6 +309,9 @@ function scene:hide( event )
     elseif ( phase == "did" ) then
     	display.remove( homebutton)
 		homebutton=nil
+		extra_pic:removeSelf()
+		extra_title:removeSelf()
+		extra_cost:removeSelf()
     end
 end
 
