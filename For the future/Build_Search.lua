@@ -353,8 +353,28 @@ local function test()
 		}
 		
 	show.one = one
+	i = 1
+	for i=1, 5, 1 do
+		if(show.one[i] == nil) then
+			show.one[i] = 0
+		end
+	end
+
 	show.two = two
+	i = 1
+	for i=1, 5, 1 do
+		if(show.two[i] == nil) then
+			show.two[i] = 0
+		end
+	end
+
 	show.three = three
+	i = 1
+	for i=1, 5, 1 do
+		if(show.three[i] == nil) then
+			show.three[i] = 0
+		end
+	end
 	
 	myData.bonusShow = show
 	

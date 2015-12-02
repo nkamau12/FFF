@@ -49,6 +49,9 @@ local userranked
 local rankscore
 local playthis
 
+local search
+local rescue
+
 
 
 local function gohome( event )
@@ -200,14 +203,16 @@ local function showSearchBonus( event )
 	if(event.phase == "ended") then
 		gamemode.text = "Search"
 		getSearch()
-		event.target:setEnabled(false)
+		search:setEnabled(false)
+		rescue:setEnabled(true)
 	end
 end
 
 local function showRescueBonus()
 	gamemode.text = "Rescue"
 	getRescue()
-	event.target:setEnabled(false)
+	rescue:setEnabled(false)
+	search:setEnabled(true)
 end
 
 -- "scene:create()"
@@ -268,7 +273,7 @@ function scene:show( event )
 		local text=display.newText("Select a game type ",display.contentCenterX,display.contentCenterY - 250)
 		sceneGroup:insert(text)	
 
-		local search = widget.newButton
+		search = widget.newButton
 		{
 			width = 180,
 			height = 60,
@@ -286,7 +291,7 @@ function scene:show( event )
 		search.x=display.contentCenterX - 150
 		search.y=display.contentCenterY - 170
 
-		local rescue = widget.newButton
+		rescue = widget.newButton
 		{
 			width = 180,
 			height = 60,

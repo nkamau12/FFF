@@ -1,6 +1,20 @@
 local myData = require( "mydata" )
 local composer = require( "composer" )
 local scene = composer.newScene()
+local JSON = require ("json")
+local loadsave = require( "loadsave" ) 
+local App42API = require("App42-Lua-API.App42API") 
+App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
+    "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
+require("App42-Lua-API.Operator")
+require("App42-Lua-API.Permission")
+require("App42-Lua-API.GeoOperator")
+require("App42-Lua-API.OrderByType")
+require("App42-Lua-API.Operator")
+local JSON = require("App42-Lua-API.JSON") 
+local queryBuilder = require("App42-Lua-API.QueryBuilder")
+local ACL = require("App42-Lua-API.ACL")
+local storageService = App42API:buildStorageService()  
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -13,7 +27,7 @@ local function setupmap()
 
         --level_map
 		i=1
-        while(myData.bonusShow.one[i] ~= nil) do
+        while(myData.bonusShow.one[i] ~= nil and myData.bonusShow.one[i] ~= 0) do
             currBlock = myData.bonusShow.one[i]
             mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
             mapmain[i].anchorX=0
@@ -25,7 +39,7 @@ local function setupmap()
             i = i + 1
         end
         i=1
-        while(myData.bonusShow.two[i] ~= nil) do
+        while(myData.bonusShow.two[i] ~= nil and myData.bonusShow.two[i] ~= 0) do
             currBlock = myData.bonusShow.two[i]
             mapone[i] = display.newImage("Images/"..currBlock.."_block.png")
             mapone[i].anchorX=0
@@ -37,7 +51,7 @@ local function setupmap()
             i = i + 1
         end
         i=1
-        while(myData.bonusShow.three[i] ~= nil) do
+        while(myData.bonusShow.three[i] ~= nil and myData.bonusShow.three[i] ~= 0) do
             currBlock = myData.bonusShow.three[i]
             maptwo[i] = display.newImage("Images/"..currBlock.."_block.png")
             maptwo[i].anchorX=0
@@ -218,7 +232,9 @@ local function tryagain()
     end
 end
 
-local function checkresult( event )
+
+
+local function checkresult()
     while answer<5 do
         print(answer)
         if(spacecolor[answer] == answerkey[answer+1])then
@@ -258,6 +274,126 @@ end
 
 local function getKey()
 	answerkey = myData.bonusKeyBuilt
+end
+
+local function checkLvl(event)
+    if ( event.phase == "ended") then
+        local dbName  = "USERS"
+        local collectionName = "Bonus Levels"
+
+        local key11 = "keyoneone"
+        local value11 = myData.bonusShow.one[1]
+        print("value11 is "..value11)
+        local key12 = "keyonetwo"
+        local value12 = myData.bonusShow.one[2]
+        print("value12 is "..value12)
+        local key13 = "keyonethree"
+        local value13 = myData.bonusShow.one[3]
+        print("value13 is "..value13)
+        local key14 = "keyonefour"
+        local value14 = myData.bonusShow.one[4]
+        print("value14 is "..value14)
+        local key15 = "keyonefive"
+        local value15 = myData.bonusShow.one[5]
+        print("value15 is "..value15)
+
+        local key21 = "keytwoone"
+        local value21 = myData.bonusShow.two[1]
+        print("value21 is "..value21)
+        local key22 = "keytwotwo"
+        local value22 = myData.bonusShow.two[2]
+        print("value22 is "..value22)
+        local key23 = "keytwothree"
+        local value23 = myData.bonusShow.two[3]
+        print("value23 is "..value23)
+        local key24 = "keytwofour"
+        local value24 = myData.bonusShow.two[4]
+        print("value24 is "..value24)
+        local key25 = "keytwofive"
+        local value25 = myData.bonusShow.two[5]
+        print("value25 is "..value25)
+
+        local key31 = "keythreeone"
+        local value31 = myData.bonusShow.three[1]
+        print("value31 is "..value31)
+        local key32 = "keythreetwo"
+        local value32 = myData.bonusShow.three[2]
+        print("value32 is "..value32)
+        local key33 = "keythreethree"
+        local value33 = myData.bonusShow.three[3]
+        print("value33 is "..value33)
+        local key34 = "keythreefour"
+        local value34 = myData.bonusShow.three[4]
+        print("value34 is "..value34)
+        local key35 = "keythreefive"
+        local value35 = myData.bonusShow.three[5]
+        print("value35 is "..value35)
+
+        
+        local q11 = queryBuilder:build(key11, value11, Operator.EQUALS) 
+        local q12 = queryBuilder:build(key12, value12, Operator.EQUALS) 
+        local q13 = queryBuilder:build(key13, value13, Operator.EQUALS) 
+        local q14 = queryBuilder:build(key14, value14, Operator.EQUALS) 
+        local q15 = queryBuilder:build(key15, value15, Operator.EQUALS) 
+
+        local q21 = queryBuilder:build(key21, value21, Operator.EQUALS) 
+        local q22 = queryBuilder:build(key22, value22, Operator.EQUALS) 
+        local q23 = queryBuilder:build(key23, value23, Operator.EQUALS) 
+        local q24 = queryBuilder:build(key24, value24, Operator.EQUALS) 
+        local q25 = queryBuilder:build(key25, value25, Operator.EQUALS) 
+
+        local q31 = queryBuilder:build(key31, value31, Operator.EQUALS) 
+        local q32 = queryBuilder:build(key32, value32, Operator.EQUALS) 
+        local q33 = queryBuilder:build(key33, value33, Operator.EQUALS) 
+        local q34 = queryBuilder:build(key34, value34, Operator.EQUALS) 
+        local q35 = queryBuilder:build(key35, value35, Operator.EQUALS) 
+
+        local query11 = queryBuilder:compoundOperator(q11,Operator.AND, q12)  
+        local query12 = queryBuilder:compoundOperator(q13,Operator.AND, q14)
+        local query13 = queryBuilder:compoundOperator(q15,Operator.AND, q21)
+        local query14 = queryBuilder:compoundOperator(q22,Operator.AND, q23)
+        local query15 = queryBuilder:compoundOperator(q24,Operator.AND, q25)
+        local query16 = queryBuilder:compoundOperator(q31,Operator.AND, q32)
+        local query17 = queryBuilder:compoundOperator(q33,Operator.AND, q34)
+
+        local query21 = queryBuilder:compoundOperator(query11,Operator.AND, query12)
+        local query22 = queryBuilder:compoundOperator(query13,Operator.AND, query14)
+        local query23 = queryBuilder:compoundOperator(query15,Operator.AND, query16)
+        local query24 = queryBuilder:compoundOperator(query17,Operator.AND, q35)
+
+        local query31 = queryBuilder:compoundOperator(query21,Operator.AND, query22)
+        local query32 = queryBuilder:compoundOperator(query23,Operator.AND, query24)
+
+        local query41 = queryBuilder:compoundOperator(query31,Operator.AND, query32)
+
+
+        local App42CallBack = {}
+        storageService = App42API:buildStorageService()  
+        storageService:findDocumentsByQuery(dbName, collectionName,query41,App42CallBack)  
+        function App42CallBack:onSuccess(object)
+            print("dbName is "..object:getDbName())
+                for i=1,table.getn(object:getJsonDocList()) do
+                    print("DocId is "..object:getJsonDocList()[i]:getDocId())
+                    print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
+                    print("value13 is "..object:getJsonDocList()[i]:getJsonDoc().keyonethree)
+                    local options = {
+                        isModal = true,
+                        effect = "crossFade",
+                        time = 500
+                    }
+                    composer.showOverlay("repeated_key", options)
+                end
+        end
+        function App42CallBack:onException(exception)
+            print("Message is : "..exception:getMessage())
+            print("App Error code is : "..exception:getAppErrorCode())
+            local errorCode = exception:getAppErrorCode()
+
+            if(errorCode == 2608) then
+                checkresult()
+            end
+        end
+    end
 end
 
 -- "scene:create()"
@@ -322,7 +458,7 @@ function scene:create( event )
         blockyellow:addEventListener( "tap", addyellow )
         deletebutton:addEventListener("tap",removelast)
         homebutton:addEventListener("tap",gohome)
-        runbutton:addEventListener("tap",checkresult)
+        runbutton:addEventListener("touch",checkLvl)
         spotx = 631
         spoty = 230
         countmax = 0
@@ -360,6 +496,7 @@ function scene:hide( event )
         do 
             display.remove(newblock[i]) 
         end
+
     elseif ( phase == "did" ) then
         
 

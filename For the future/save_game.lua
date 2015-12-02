@@ -17,30 +17,87 @@ local queryBuilder = require("App42-Lua-API.QueryBuilder")
 local ACL = require("App42-Lua-API.ACL")
 local storageService = App42API:buildStorageService()  
 
---Connects to App42's database and saves a JSON with the new level's information
-	--The JSON will contain: username, level name, level type(Search/Rescue), answer key, main function, one function, two function, and play count
-local function submitLvl(event)
+
+local function checkLvl(event)
 	if ( event.phase == "ended") then
 		local dbName  = "USERS"
 		local collectionName = "Bonus Levels"
-		local json = {}
-		json.user = myData.user
-		json.level = userField.text
-		json.type = myData.newType
-		json.key = myData.newSearchkey
-		json.keyone = myData.bonusShow.one
-		json.keytwo = myData.bonusShow.two
-		json.keythree = myData.bonusShow.three
-		json.playcount = 0
+		local key = "level"
+		local value = userField.text
 		local App42CallBack = {}
-		storageService:insertJSONDocument(dbName, collectionName, json,App42CallBack)
+		storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42CallBack)
 		function App42CallBack:onSuccess(object)
-			print("DocId is "..object:getJsonDocList():getDocId())
-			print("Created At is "..object:getJsonDocList():getCreatedAt())
+			print("dbName is "..object:getDbName())
+			for i=1,table.getn(object:getJsonDocList()) do
+				print("DocId is "..object:getJsonDocList()[i]:getDocId())
+				print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
+				local options = {
+                        isModal = true,
+                        effect = "crossFade",
+                        time = 500
+                }
+                composer.showOverlay("repeated_name", options)
+			end
 		end
 		function App42CallBack:onException(exception)
 			print("Message is : "..exception:getMessage())
+			print("App Error code is : "..exception:getAppErrorCode())
+			local errorCode = exception:getAppErrorCode()
+
+            if(errorCode == 2601) then
+                submitLvl()
+            end
+			print("Detail is : "..exception:getDetails())
 		end
+
+	end
+end
+
+--Connects to App42's database and saves a JSON with the new level's information
+	--The JSON will contain: username, level name, level type(Search/Rescue), answer key, main function, one function, two function, and play count
+local function submitLvl()
+	local dbName  = "USERS"
+	local collectionName = "Bonus Levels"
+	local json = {}
+	json.user = myData.user
+	json.level = userField.text
+	json.type = myData.newType
+	json.key = myData.newSearchkey
+	json.keyoneone = myData.bonusShow.one[1]
+	json.keyonetwo = myData.bonusShow.one[2]
+	json.keyonethree = myData.bonusShow.one[3]
+	json.keyonefour = myData.bonusShow.one[4]
+	json.keyonefive = myData.bonusShow.one[5]
+
+	json.keytwoone = myData.bonusShow.two[1]
+	json.keytwotwo = myData.bonusShow.two[2]
+	json.keytwothree = myData.bonusShow.two[3]
+	json.keytwofour = myData.bonusShow.two[4]
+	json.keytwofive = myData.bonusShow.two[5]
+
+	json.keythreeone = myData.bonusShow.three[1]
+	json.keythreetwo = myData.bonusShow.three[2]
+	json.keythreethree = myData.bonusShow.three[3]
+	json.keythreefour = myData.bonusShow.three[4]
+	json.keythreefive = myData.bonusShow.three[5]
+	
+
+	json.playcount = 0
+	local App42CallBack = {}
+	storageService:insertJSONDocument(dbName, collectionName, json,App42CallBack)
+	function App42CallBack:onSuccess(object)
+		print("DocId is "..object:getJsonDocList():getDocId())
+		print("Created At is "..object:getJsonDocList():getCreatedAt())
+		local options = {
+            isModal = true,
+            effect = "crossFade",
+            time = 500
+        }
+		composer.showOverlay("search_created",options)
+		
+	end
+	function App42CallBack:onException(exception)
+		print("Message is : "..exception:getMessage())
 	end
 end
 
@@ -59,6 +116,7 @@ local function userListener( event )
         print( event.text )
     end
 end
+
 
 function scene:create( event )
 
@@ -112,7 +170,7 @@ function scene:create( event )
 		defaultFile = "buttonDefault.png",
 		overFile = "buttonOver.png",
 		label = "Submit",
-		onEvent = submitLvl,
+		onEvent = checkLvl,
 		labelColor = { default={255,255,255}, over={255,255,255} },
 		fontSize=40,
 		fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },

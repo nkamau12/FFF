@@ -256,41 +256,24 @@ function scene:show( event )
 			shape="roundedRect"
 		}	
 		sceneGroup:insert(logBut)
-		logBut.x=display.contentCenterX - 400
+		logBut.x=display.contentCenterX - 300
 		logBut.y=display.contentCenterY+375
 
 		saveBut = widget.newButton{
-			width = 300,
+			width = 374.4,
 			height = 80.6,
 			defaultFile = "buttonDefault.png",
 			overFile = "buttonOver.png",
 			label = "Save Settings",
 			onRelease = saveUser,
 			labelColor = { default={255,255,255}, over={255,255,255} },
-			fontSize=40,
+			fontSize=48,
 			fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
 			shape="roundedRect"
 		}	
 		sceneGroup:insert(saveBut)
-		saveBut.x=display.contentCenterX
+		saveBut.x=display.contentCenterX + 300
 		saveBut.y=display.contentCenterY+375
-
-		if ( facebook.isActive ) then
-		    accessToken = facebook.getCurrentAccessToken()
-		    if not ( accessToken ) then
-		    	local facebookBtn = widget.newButton{
-				    width = 374.4,
-				    height = 80.6,
-				    defaultFile = "facebook.png",
-				    overFile = "facebook.png",
-				    onRelease = fblogin,
-				    labelColor = { default={255,255,255}, over={255,255,255} },
-				} 
-			  	sceneGroup:insert(facebookBtn)
-			  	facebookBtn.x=display.contentCenterX + 400
-			  	facebookBtn.y=display.contentCenterY + 375
-		    end
-		end
 
 		--volume Slider
 		local volumeText = {

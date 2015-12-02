@@ -2,6 +2,7 @@ local parse = require( "mod_parse" )
 local myData = require( "mydata" )
 local composer = require( "composer" )
 local JSON = require ("json")
+local widget = require( "widget" )
 local scene = composer.newScene()
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -21,6 +22,18 @@ local function gohome( event )
             time = 500
     }
     composer.gotoScene("MainMenu",options)
+end
+
+
+local function prevSpecial( event )
+    
+end
+local function nextSpecial( event )
+end
+
+local function prevExtra( event )
+end
+local function nextExtra( event )
 end
 
 -- "scene:create()"
@@ -97,7 +110,52 @@ function scene:show( event )
             align = "center"  --new alignment parameter
         }
         trial=display.newText(optionsText)
-        sceneGroup:insert(trial)    
+        sceneGroup:insert(trial) 
+
+
+        local leftspecials = widget.newButton
+            {
+            x = 240,
+            y = 650,
+            shape = "polygon",
+            vertices = {240,650, 340,550, 340,750},
+            fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+            onEvent = prevSpecial
+        }
+        sceneGroup:insert(leftspecials)
+        
+        local rightspecials = widget.newButton
+            {
+            x = 850,
+            y = 650,
+            shape = "polygon",
+            vertices = {950,650, 850,550, 850,750},
+            fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+            onEvent = nextSpecial
+        }
+        sceneGroup:insert(rightspecials)
+
+        local leftextras = widget.newButton
+            {
+            x = 1070,
+            y = 650,
+            shape = "polygon",
+            vertices = {1070,650, 1170,550, 1170,750},
+            fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+            onEvent = prevExtra
+        }
+        sceneGroup:insert(leftextras)
+
+        local rightextras = widget.newButton
+            {
+            x = 1700,
+            y = 650,
+            shape = "polygon",
+            vertices = {1800,650, 1700,550, 1700,750},
+            fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+            onEvent = nextExtra
+        }
+        sceneGroup:insert(rightextras)
 
 
         mx = 0

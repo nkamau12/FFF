@@ -626,6 +626,12 @@ local phase = event.phase
         clockText = nil
 
         answerkey = {}
+        newblock = {}
+        spacecolor = {}
+        answer = 0
+        undosearch = 0
+        homesearch = 0
+        runsearch = 0
 
 
     elseif ( phase == "did" ) then 
