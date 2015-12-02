@@ -317,7 +317,6 @@ local function checkresult( event )
     			isModal = true }
             composer.showOverlay( "fail_search", options )
 			myData.error1_count = myData.error1_count + 1
-			myData.error2_count = myData.error2_count + 1
     		tryagain()
             answer = 10
         end
@@ -344,7 +343,7 @@ local function checkresult( event )
         myData.currTokens = myData.currScore / 100
         local attribute = "Search"..currLvl
     	composer.showOverlay("pass_search", options)
-
+		myData.error1_count = 0
         timer.pause(countDownTimer)
         print("Finished with "..secondsLeft.." seconds left")
         gameScore = secondsLeft * 10

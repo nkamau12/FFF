@@ -122,7 +122,6 @@ local function setupmap()
 	--keys
 	i = 1
 	while(myData.levelkey[currResc].key[i] ~= nil) do
-		hasKey = true
 		setkey(currResc, i)
 		i = i + 1
 	end
@@ -482,9 +481,14 @@ local function moverobot()
 		print("in move robot")
 		timer.pause(countDownTimer)
 		composer.showOverlay( "fail_rescue_scientist", options )
-		myData.error1_count = myData.error1_count + 1
+		print("has key 1")
+		print(hasKey)
 		if(hasKey) then
-			myData.error3_count = myData.error3_count + 1
+			myData.error3_count = myData.error3_count + 2
+			myData.error2_count = myData.error2_count + 1
+		else
+			print("in else")
+			myData.error2_count = myData.error2_count + 1
 		end
 	end	
 end
@@ -541,6 +545,7 @@ local function onCollision( event )
 			end
 		elseif (event.object2 == keyset[1] or event.object2 ==keyset[2] or event.object2 ==keyset[3] or event.object2 ==keyset[4]) then
 			keyscount = keyscount + 1
+			hasKey = true
 			print("keys count: "..keyscount)
 			event.object2:removeSelf()
 		elseif (event.object2==science) then
@@ -672,6 +677,7 @@ local function onCollision( event )
 			timer.pause(countDownTimer)
             print(secondsLeft)
 			composer.showOverlay( "fail_rescue_path", options )
+			myData.error2_count = myData.error2_count + 1
 			print("why1")
 		else
 			i = 1
@@ -697,11 +703,15 @@ local function onCollision( event )
 						timer.pause(countDownTimer)
             			print(secondsLeft)
 						composer.showOverlay( "fail_rescue_path", options )
-						myData.error1_count = myData.error1_count + 1
-						myData.error2_count = myData.error2_count + 1
+						print("has key 2")
 						if(hasKey) then
-							myData.error3_count = myData.error3_count + 1
+							myData.error3_count = myData.error3_count + 2
+							myData.error2_count = myData.error2_count + 1
+						else
+							print("in else")
+							myData.error2_count = myData.error2_count + 1
 						end
+						
 						print("why1")
 					end
 				end
