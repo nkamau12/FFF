@@ -798,6 +798,13 @@ local function updateTime(event)
         clockText.text = timeDisplay
     end
 
+    if(secondsLeft == 0) then
+        timer.pause(countDownTimer)
+        local options = {
+            isModal = true }
+        composer.showOverlay( "fail_time_rescue", options )
+    end
+
 end
 
 local function getScoreDoc()

@@ -4,9 +4,11 @@ local JSON = require ("json")
 local loadsave = require( "loadsave" ) 
 local scene = composer.newScene()
 
+-- timer variables
 local secondsLeft
 local clockText
 local countDownTimer
+
 
 local JSON = require("App42-Lua-API.JSON") 
 local App42API = require("App42-Lua-API.App42API")
@@ -39,7 +41,7 @@ local newmax
 local oldscore
 local globalscore
 
-
+local setupItems = {}
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -49,7 +51,6 @@ local globalscore
 
 -- -------------------------------------------------------------------------------
 local function setupPic(name, pic, xVal, yVal, hVal,wVal)
-
     setupItems[name] = display.newImage(pic)
     setupItems[name].anchorX = 0
     setupItems[name].anchorY =0
@@ -57,7 +58,16 @@ local function setupPic(name, pic, xVal, yVal, hVal,wVal)
     setupItems[name].y = yVal
     setupItems[name].height = hVal
     setupItems[name].width= wVal
+end
 
+local function setupArray(array, num, pic, xVal, yVal, hVal,wVal)
+    array[num] = display.newImage(pic)
+    array[num].anchorX = 0
+    array[num].anchorY =0
+    array[num].x = xVal
+    array[num].y = yVal
+    array[num].height = hVal
+    array[num].width= wVal
 end
 
 
@@ -65,169 +75,47 @@ local function setupmap()
     i=1
     while(myData.searchkey[currLvl].one[i] ~= nil) do
         currBlock = myData.searchkey[currLvl].one[i]
-        mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
-        mapmain[i].anchorX=0
-        mapmain[i].anchorY=0
-        mapmain[i].x=352 + (i-1)*142
-        mapmain[i].y=595
-        mapmain[i].height=120
-        mapmain[i].width=120
+        setupArray(mapmain, i, "Images/"..currBlock.."_block.png", 352+(i-1)*142, 595, 120, 120)
         i = i + 1
     end
-
     i=1
     while(myData.searchkey[currLvl].two[i] ~= nil) do
         currBlock = myData.searchkey[currLvl].two[i]
-        mapone[i] = display.newImage("Images/"..currBlock.."_block.png")
-        mapone[i].anchorX=0
-        mapone[i].anchorY=0
-        mapone[i].x=352 + (i-1)*142
-        mapone[i].y=750
-        mapone[i].height=120
-        mapone[i].width=120
+        setupArray(mapone, i, "Images/"..currBlock.."_block.png", 352+(i-1)*142, 750, 120, 120)
         i = i + 1
     end
     i=1
     while(myData.searchkey[currLvl].three[i] ~= nil) do
         currBlock = myData.searchkey[currLvl].three[i]
-        maptwo[i] = display.newImage("Images/"..currBlock.."_block.png")
-        maptwo[i].anchorX=0
-        maptwo[i].anchorY=0
-        maptwo[i].x=352 + (i-1)*142
-        maptwo[i].y=903
-        maptwo[i].height=120
-        maptwo[i].width=120
+        setupArray(maptwo, i, "Images/"..currBlock.."_block.png", 352+(i-1)*142, 903, 120, 120)
         i = i + 1
     end
-    i=1
 
     --red_block
-    blockred = display.newImage("Images/red_block.png")
-    blockred.anchorX=0
-    blockred.anchorY=0
-    blockred.x=1289
-    blockred.y=729
-    blockred.height=120
-    blockred.width=120
-
+    setupPic("blockred", myData.blockred[5], myData.blockred[1], myData.blockred[2], myData.blockred[3], myData.blockred[4])
+    setupItems["blockred"].name = myData.blockred[6]
     --green_block
-    blockgreen = display.newImage("Images/green_block.png")
-    blockgreen.anchorX=0
-    blockgreen.anchorY=0
-    blockgreen.x=1426
-    blockgreen.y=729
-    blockgreen.height=120
-    blockgreen.width=120
-
+    setupPic("blockgreen", myData.blockgreen[5], myData.blockgreen[1], myData.blockgreen[2], myData.blockgreen[3], myData.blockgreen[4])
+    setupItems["blockgreen"].name = myData.blockgreen[6]
     --blue_block
-    blockblue = display.newImage("Images/blue_block.png")
-    blockblue.anchorX=0
-    blockblue.anchorY=0
-    blockblue.x=1564
-    blockblue.y=729
-    blockblue.height=120
-    blockblue.width=120
-    
+    setupPic("blockblue", myData.blockblue[5], myData.blockblue[1], myData.blockblue[2], myData.blockblue[3], myData.blockblue[4])
+    setupItems["blockblue"].name = myData.blockblue[6]
     --yellow_block
-    blockyellow = display.newImage("Images/yellow_block.png")
-    blockyellow.anchorX=0
-    blockyellow.anchorY=0
-    blockyellow.x=1700
-    blockyellow.y=729
-    blockyellow.height=120
-    blockyellow.width=120
+    setupPic("blockyellow", myData.blockyellow[5], myData.blockyellow[1], myData.blockyellow[2], myData.blockyellow[3], myData.blockyellow[4])
+    setupItems["blockyellow"].name = myData.blockyellow[6]
     
     --run_button
-    runbutton = display.newImage("Images/run_button.png")
-    runbutton.anchorX=0
-    runbutton.anchorY=0
-    runbutton.x=1450
-    runbutton.y=887
-    runbutton.height=120
-    runbutton.width=360
-
+    setupPic("runbutton", myData.searchRun[5], myData.searchRun[1], myData.searchRun[2], myData.searchRun[3], myData.searchRun[4])
     --delete_button
-    deletebutton = display.newImage("Images/delete_button.png")
-    deletebutton.anchorX=0
-    deletebutton.anchorY=0
-    deletebutton.x=1289
-    deletebutton.y=887
-    deletebutton.height=120
-    deletebutton.width=120
-
+    setupPic("deletebutton", myData.searchDelete[5], myData.searchDelete[1], myData.searchDelete[2], myData.searchDelete[3], myData.searchDelete[4])
     --home_button
-    homebutton = display.newImage("Images/home.png")
-    homebutton.anchorX=0
-    homebutton.anchorY=0
-    homebutton.x=1766
-    homebutton.y=28
-    homebutton.height=120
-    homebutton.width=120  
+    setupPic("homebutton", myData.searchHome[5], myData.searchHome[1], myData.searchHome[2], myData.searchHome[3], myData.searchHome[4])
 end 
 
-local function addred( event )
+local function addcolour( event )
     if (countmax < 8) then
-        newblock[countmax] = display.newImage("Images/red_block.png")
-        newblock[countmax].anchorX=0
-        newblock[countmax].anchorY=0
-        newblock[countmax].x= spotx
-        newblock[countmax].y= spoty
-        newblock[countmax].height=120
-        newblock[countmax].width=120
-
-        spacecolor[countmax] = "red"
-
-        spotx = spotx + 130
-        countmax = countmax + 1
-    end
-end
-
-local function addgreen( event )
-    if (countmax < 8) then
-        newblock[countmax] = display.newImage("Images/green_block.png")
-        newblock[countmax].anchorX=0
-        newblock[countmax].anchorY=0
-        newblock[countmax].x= spotx
-        newblock[countmax].y= spoty
-        newblock[countmax].height=120
-        newblock[countmax].width=120
-
-        spacecolor[countmax] = "green"
-
-        spotx = spotx + 130
-        countmax = countmax + 1
-    end
-end
-
-local function addblue( event )
-    if (countmax < 8) then
-        newblock[countmax] = display.newImage("Images/blue_block.png")
-        newblock[countmax].anchorX=0
-        newblock[countmax].anchorY=0
-        newblock[countmax].x= spotx
-        newblock[countmax].y= spoty
-        newblock[countmax].height=120
-        newblock[countmax].width=120
-
-        spacecolor[countmax] = "blue"
-
-        spotx = spotx + 130
-        countmax = countmax + 1
-    end
-end
-
-local function addyellow( event )
-    if (countmax < 8) then
-        newblock[countmax] = display.newImage("Images/yellow_block.png")
-        newblock[countmax].anchorX=0
-        newblock[countmax].anchorY=0
-        newblock[countmax].x= spotx
-        newblock[countmax].y= spoty
-        newblock[countmax].height=120
-        newblock[countmax].width=120
-
-        spacecolor[countmax] = "yellow"
-
+        setupArray(newblock, countmax, "Images/"..event.target.name.."_block.png", spotx, spoty, 120, 120)
+        spacecolor[countmax] = event.target.name
         spotx = spotx + 130
         countmax = countmax + 1
     end
@@ -271,8 +159,6 @@ local function tryagain()
 end
 
 local function addTokens()
-    local dbName  = "USERS"
-    local collectionName = "GameInfo"
     local key = "user"
     local value = myData.user
     local jsonDoc = {}
@@ -289,7 +175,7 @@ local function addTokens()
     jsonDoc.robot = myData.roboSprite
     jsonDoc.scientist = myData.scienceSprite
 
-    local App42CallBack = {}
+    App42CallBack = {}
     storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)
     function App42CallBack:onSuccess(object)
         print("dbName is "..object:getDbName())
@@ -358,10 +244,8 @@ local function checkresult( event )
             App42CallBack = {}
             scoreBoardService:editScoreValueById(scoreId,gameScore,App42CallBack)
             function App42CallBack:onSuccess(object)
-                print("Game name is "..object:getName())
                 print("userName is : "..object:getScoreList():getUserName())
                 print("score is : "..object:getScoreList():getValue())
-                print("scoreId is : "..object:getScoreList():getScoreId())
             end
             function App42CallBack:onException(exception)
                 print("Error!")
@@ -433,37 +317,13 @@ local function checkresult( event )
 end
 
 local function getKey()
-    if(currLvl == 1)then
-        answerkey = {"red","green","blue","green","yellow"}
-    elseif(currLvl == 2)then
-        answerkey = {"green","green","red","yellow","blue","green","green","red"}
-    elseif(currLvl == 3)then
-        answerkey = {"green","red","blue","red","blue","yellow","red","blue"}
-    elseif(currLvl == 4)then
-        answerkey = {"red","green","blue","yellow","green","yellow","red","blue"}
-    elseif(currLvl == 5)then
-        answerkey = {"yellow","red","yellow","green","blue","yellow"}
-    elseif(currLvl == 6)then
-        answerkey = {"blue","yellow","red","red","green","green"}
-    elseif(currLvl == 7)then
-        answerkey = {"red","blue","blue","red","red","blue","blue"}
-    elseif(currLvl == 8)then
-        answerkey = {"green","yellow","blue","red","green","green","red","yellow"}
-    elseif(currLvl == 9)then
-        answerkey = {"blue","yellow","red","green","blue","yellow","green","green"}
-    elseif(currLvl == 10)then
-        answerkey = {"yellow","red","green","green","blue","green","green","yellow"}
-    elseif(currLvl == 11)then
-        answerkey = {"blue","blue","yellow","blue","blue","yellow","blue","blue"}
-    elseif(currLvl == 12)then
-        answerkey = {"green","red","blue","yellow","green","red","blue","green"}
-    end
+    answerkey = myData.searchAnswerkey[currLvl]
 end
 
 local function updateTime(event)
     -- decrement the number of seconds
     secondsLeft = secondsLeft - 1
-
+    print("Seconds left: "..secondsLeft)
     -- time is tracked in seconds.  We need to convert it to minutes and seconds
     local minutes = math.floor( secondsLeft / 60 )
     local seconds = secondsLeft % 60
@@ -474,6 +334,13 @@ local function updateTime(event)
         timer.cancel( event.source )
     else
         clockText.text = timeDisplay
+    end
+
+    if(secondsLeft == 0) then
+        timer.pause(countDownTimer)
+        local options = {
+            isModal = true }
+        composer.showOverlay( "fail_time_search", options )
     end
 
 end
@@ -547,7 +414,6 @@ function scene:create( event )
     searchMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
     searchMusicplay = audio.play( searchMusic, {  channel = 1, fadein = 4000, loops=-1 } )
 
-
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 
@@ -573,13 +439,13 @@ function scene:create( event )
     runsearch = 0
     
 
-    sceneGroup:insert(blockred)
-    sceneGroup:insert(blockgreen)
-    sceneGroup:insert(blockblue)
-    sceneGroup:insert(blockyellow)
-    sceneGroup:insert(runbutton)
-    sceneGroup:insert(deletebutton)
-    sceneGroup:insert(homebutton)
+    sceneGroup:insert(setupItems["blockred"])
+    sceneGroup:insert(setupItems["blockgreen"])
+    sceneGroup:insert(setupItems["blockblue"])
+    sceneGroup:insert(setupItems["blockyellow"])
+    sceneGroup:insert(setupItems["runbutton"])
+    sceneGroup:insert(setupItems["deletebutton"])
+    sceneGroup:insert(setupItems["homebutton"])
     
 
     i=1
@@ -602,13 +468,13 @@ function scene:create( event )
     i = 1
 
 
-    blockred:addEventListener( "tap", addred )
-    blockgreen:addEventListener( "tap", addgreen )
-    blockblue:addEventListener( "tap", addblue )
-    blockyellow:addEventListener( "tap", addyellow )
-    deletebutton:addEventListener("tap",removelast)
-    homebutton:addEventListener("tap",gohome)
-    runbutton:addEventListener("tap",checkresult)
+    setupItems["blockred"]:addEventListener( "tap", addcolour )
+    setupItems["blockgreen"]:addEventListener( "tap", addcolour )
+    setupItems["blockblue"]:addEventListener( "tap", addcolour )
+    setupItems["blockyellow"]:addEventListener( "tap", addcolour )
+    setupItems["deletebutton"]:addEventListener("tap",removelast)
+    setupItems["homebutton"]:addEventListener("tap",gohome)
+    setupItems["runbutton"]:addEventListener("tap",checkresult)
     spotx = 631
     spoty = 230
     countmax = 0
@@ -641,42 +507,23 @@ function scene:show( event )
             i=1
             while(myData.searchkey[currLvl].one[i] ~= nil) do
                 currBlock = myData.searchkey[currLvl].one[i]
-                mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
-                mapmain[i].anchorX=0
-                mapmain[i].anchorY=0
-                mapmain[i].x=352 + (i-1)*142
-                mapmain[i].y=595
-                mapmain[i].height=120
-                mapmain[i].width=120
+                setupArray(mapmain, i, "Images/"..currBlock.."_block.png", 352+(i-1)*142, 595, 120, 120)
                 i = i + 1
             end
 
             i=1
             while(myData.searchkey[currLvl].two[i] ~= nil) do
                 currBlock = myData.searchkey[currLvl].two[i]
-                mapone[i] = display.newImage("Images/"..currBlock.."_block.png")
-                mapone[i].anchorX=0
-                mapone[i].anchorY=0
-                mapone[i].x=352 + (i-1)*142
-                mapone[i].y=750
-                mapone[i].height=120
-                mapone[i].width=120
+                setupArray(mapone, i, "Images/"..currBlock.."_block.png", 352+(i-1)*142, 750, 120, 120)
                 i = i + 1
             end
 
             i=1
             while(myData.searchkey[currLvl].three[i] ~= nil) do
                 currBlock = myData.searchkey[currLvl].three[i]
-                maptwo[i] = display.newImage("Images/"..currBlock.."_block.png")
-                maptwo[i].anchorX=0
-                maptwo[i].anchorY=0
-                maptwo[i].x=352 + (i-1)*142
-                maptwo[i].y=903
-                maptwo[i].height=120
-                maptwo[i].width=120
+                setupArray(maptwo, i, "Images/"..currBlock.."_block.png", 352+(i-1)*142, 903, 120, 120)
                 i = i + 1
             end
-
             i=1
 
             while(mapmain[i] ~= nil) do
@@ -735,28 +582,23 @@ local phase = event.phase
             mapmain[i] = nil
             i = i + 1
         end
-
         i = 1
         while(mapone[i] ~= nil) do
             display.remove(mapone[i])
             mapone[i] = nil
             i = i + 1
         end
-
         i = 1
         while(maptwo[i] ~= nil) do
             display.remove(maptwo[i])
             maptwo[i] = nil
             i = i + 1
         end
-
-        i = 1
         currLvl = nil
 
         display.remove(clockText)
         countDownTimer = nil
         clockText = nil
-
 
     elseif ( phase == "did" ) then 
     end
@@ -765,7 +607,6 @@ end
 
 -- "scene:destroy()"
 function scene:destroy( event )
-
 local sceneGroup = self.view
 end
 

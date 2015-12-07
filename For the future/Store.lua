@@ -350,12 +350,13 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
-    elseif ( phase == "did" ) then
-    	display.remove( homebutton)
+        display.remove( homebutton)
 		homebutton=nil
 		extra_pic:removeSelf()
 		extra_title:removeSelf()
 		extra_cost:removeSelf()
+    elseif ( phase == "did" ) then
+    	
     end
 end
 

@@ -148,7 +148,7 @@ function App42CallBack:onSuccess(object)
   --       |_____|_____|_____|_____|
   --              bottomwall
   function setObjects()
-     myData.background = {0, 0, 1080, 1920,"Images/theme_"..myData.theme.."/rescue_background.png"}
+    myData.background = {0, 0, 1080, 1920,"Images/theme_"..myData.theme.."/rescue_background.png"}
     --horizontal walls
     myData.walla = {110, 288, 10, 124, "Images/locked_door_horizontal.png"}
     myData.wallb = {359, 288, 11, 124, "Images/locked_door_horizontal.png"}
@@ -286,10 +286,32 @@ function App42CallBack:onSuccess(object)
 
 
   --SEARCH OBJECTS:
-  myData.blockred = {1289, 729, 120, 120, "Images/red_block.png"}
-  myData.blockgreen = {1426, 729, 120, 120, "Images/green_block.png"}
-  myData.blockblue = {1564, 729, 120, 120, "Images/blue_block.png"}
-  myData.blockyellow = {1700, 729, 120, 120, "Images/yellow_block.png"}
+  myData.blockred = {1289, 729, 120, 120, "Images/red_block.png", "red"}
+  myData.blockgreen = {1426, 729, 120, 120, "Images/green_block.png", "green"}
+  myData.blockblue = {1564, 729, 120, 120, "Images/blue_block.png", "blue"}
+  myData.blockyellow = {1700, 729, 120, 120, "Images/yellow_block.png", "yellow"}
+
+  myData.searchRun = {1450, 887, 120, 360, "Images/run_button.png"}
+  myData.searchDelete = {1289, 887, 120, 120, "Images/delete_button.png"}
+  myData.searchHome = {1766, 28, 120, 120, "Images/home.png"}
+
+  -- Search answer keys. Used for the single player levels
+  myData.searchAnswerkey = {
+    {"red","green","blue","green","yellow"},                            -- level 1
+    {"green","green","red","yellow","blue","green","green","red"},      -- level 2
+    {"green","red","blue","red","blue","yellow","red","blue"},          -- level 3
+    {"red","green","blue","yellow","green","yellow","red","blue"},      -- level 4
+    {"yellow","red","yellow","green","blue","yellow"},                  -- level 5
+    {"blue","yellow","red","red","green","green"},                      -- level 6
+    {"red","blue","blue","red","red","blue","blue"},                    -- level 7
+    {"green","yellow","blue","red","green","green","red","yellow"},     -- level 8
+    {"blue","yellow","red","green","blue","yellow","green","green"},    -- level 9
+    {"yellow","red","green","green","blue","green","green","yellow"},   -- level 10
+    {"blue","blue","yellow","blue","blue","yellow","blue","blue"},      -- level 11
+    {"green","red","blue","yellow","green","red","blue","green"}        -- level 12
+  }
+
+
   -- Search setup keys. Each array corresponds to a function, so one = Main function, two = one function, and three = two Function
   myData.searchkey = {
     { one = {"red",1,"blue",1,"yellow"}, two = {"green",nil,nil,nil,nil}, three = {nil,nil,nil,nil,nil}},                    -- level 1
