@@ -15,9 +15,9 @@ local extra_table = {
 	"Images/robot_potato.png",
 	"Images/scientist_present.png",
 	"Images/scientist_sadface.png",
-	"Images/theme_green/splash_main.png",
+	"Images/theme_yellow/splash_main.png",
 	"Images/theme_red/splash_main.png",
-	"Images/theme_yellow/splash_main.png"
+	"Images/theme_green/splash_main.png"
 }
 
 local extra_title_table = {
@@ -25,19 +25,19 @@ local extra_title_table = {
 	"Potato Robot",
 	"Present Scientist",
 	"Sad Scientist",
-	"Green Theme",
+	"Yellow Theme",
 	"Red Theme",
-	"Yellow Theme"
+	"Green Theme"
 }
 
 local extra_cost_table = {
-	"Cost: 1",
-	"Cost: 2",
-	"Cost: 3",
-	"Cost: 4",
-	"Cost: 5",
-	"Cost: 6",
-	"Cost: 7"
+	"Cost: 100",
+	"Cost: 200",
+	"Cost: 100",
+	"Cost: 200",
+	"Cost: 50",
+	"Cost: 100",
+	"Cost: 150"
 }
 
 local extra_counter = 1
@@ -268,7 +268,7 @@ function scene:show( event )
 		extra_title = display.newText("Robot Santa", 1400, 700)
 		sceneGroup:insert(extra_title)
 		
-		extra_cost = display.newText("Cost: 1", 1400,800)
+		extra_cost = display.newText("Cost: 100", 1400,800)
 		sceneGroup:insert(extra_cost)
 
         mx = 0
