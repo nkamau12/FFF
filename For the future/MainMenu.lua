@@ -119,23 +119,40 @@ end
 --Checks if the current user is the top player. This is later used in GamesMenu to determine if the user is allowed to create new content.
 local function checkTop()
 	local gameName = "Max Scores"
-	local max = 1
+	local max = 5
 	local App42CallBack = {}
 	App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
     "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
 	local scoreBoardService = App42API.buildScoreBoardService() 
 	scoreBoardService:getTopNRankings(gameName,max,App42CallBack)
 	function App42CallBack:onSuccess(object)
-		print("Game name is "..object:getName())
-		print("userName is : "..object:getScoreList():getUserName())
-		if(myData.user == object:getScoreList():getUserName()) then
-			myData.isLeader = 1
+		if table.getn(object:getScoreList()) > 1 then
+			print("Game name is "..object:getName())
+			for i=1,table.getn(object:getScoreList()),1 do
+				print("i is "..i)
+				print("userName is : "..object:getScoreList()[i]:getUserName())
+				if(myData.user == object:getScoreList()[i]:getUserName() and myData.isLeader == nil) then
+					myData.isLeader = i
+				end
+				print("score is : "..object:getScoreList()[i]:getValue())
+				print("scoreId is : "..object:getScoreList()[i]:getScoreId())
+				print("isLeader is "..myData.isLeader)
+			end
+			if(myData.isLeader == nil) then
+				myData.isLeader = 0
+			end
+			print("isLeader is "..myData.isLeader)
 		else
-			myData.isLeader = 0
+			print("userName is : "..object:getScoreList():getUserName())
+			if(myData.user == object:getScoreList():getUserName()) then
+				myData.isLeader = 1
+			else
+				myData.isLeader = 0
+			end
+			print("score is : "..object:getScoreList():getValue())
+			print("scoreId is : "..object:getScoreList():getScoreId())
+			print("isLeader is "..myData.isLeader)
 		end
-		print("score is : "..object:getScoreList():getValue())
-		print("scoreId is : "..object:getScoreList():getScoreId())
-		print("isLeader is "..myData.isLeader)
 	end
 	function App42CallBack:onException(exception)
 		print("Message is : "..exception:getMessage())
