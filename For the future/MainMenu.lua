@@ -133,10 +133,11 @@ local function checkTop()
 				print("userName is : "..object:getScoreList()[i]:getUserName())
 				if(myData.user == object:getScoreList()[i]:getUserName() and myData.isLeader == nil) then
 					myData.isLeader = i
+					print("isLeader is "..myData.isLeader)
 				end
 				print("score is : "..object:getScoreList()[i]:getValue())
 				print("scoreId is : "..object:getScoreList()[i]:getScoreId())
-				print("isLeader is "..myData.isLeader)
+				
 			end
 			if(myData.isLeader == nil) then
 				myData.isLeader = 0
