@@ -57,6 +57,26 @@ local function gohome( event )
     composer.gotoScene("MainMenu",options)
 end
 
+local function buy()
+	print("buy")
+end
+
+local function notBuy()
+	print("decline")
+end
+
+local function buyExtra(event)
+	if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+		print(extra_table[extra_counter])
+		local options = {
+			isModal = true
+		}
+		composer.showOverlay( "ConfirmStoreBuy", options )
+	end
+end
+
+
 local function prevSpecial( event )
 	if ( "moved" == event.phase ) then
     elseif ( "ended" == event.phase ) then
@@ -82,7 +102,7 @@ local function prevExtra( event )
 		extra_title:removeSelf()
 		extra_cost:removeSelf()
 		extra_title = display.newText(extra_title_table[extra_counter], 1400, 700)
-		extra_cost = display.newText(extra_cost_table[extra_counter], 1400,800)
+		extra_cost = display.newText(extra_cost_table[extra_counter], 1400,775)
 		extra_pic = display.newImage(extra_table[extra_counter],system.ResourceDirectory)
 		extra_pic.anchorX = 0.5
 		extra_pic.anchorY = 0.5
@@ -102,7 +122,7 @@ local function nextExtra( event )
 	if ( "moved" == event.phase ) then
     elseif ( "ended" == event.phase ) then
 		extra_counter = extra_counter + 1
-		if(extra_counter == 8) then
+		if(extra_table[extra_counter + 1] == nil) then
 			extra_counter = 1
 		end
 		
@@ -110,7 +130,7 @@ local function nextExtra( event )
 		extra_title:removeSelf()
 		extra_cost:removeSelf()
 		extra_title = display.newText(extra_title_table[extra_counter], 1400, 700)
-		extra_cost = display.newText(extra_cost_table[extra_counter], 1400,800)
+		extra_cost = display.newText(extra_cost_table[extra_counter], 1400,775)
 		extra_pic = display.newImage(extra_table[extra_counter],system.ResourceDirectory)
 		extra_pic.anchorX = 0.5
 		extra_pic.anchorY = 0.5
@@ -125,6 +145,8 @@ local function nextExtra( event )
 		end
 	end
 end
+
+
 
 -- "scene:create()"
 function scene:create( event )
@@ -247,6 +269,24 @@ function scene:show( event )
         }
         sceneGroup:insert(rightextras)
 		
+		local buy_extra = widget.newButton
+		{
+			x = 1400,
+			y = 860,
+			width = 200,
+			height = 100,
+			defaultFile = "buttonDefault.png",
+			overFile = "buttonOver.png",
+			label = "Buy",
+			onEvent = buyExtra,
+			labelColor = { default={255,255,255}, over={255,255,255} },
+			fontSize=40,
+			fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+			shape="roundedRect"
+		}
+		sceneGroup:insert(buy_extra)
+		
+		
 		special_pic = display.newImage("Images/key.png",system.ResourceDirectory)
 		special_pic.anchorX = 0.5
 		special_pic.anchorY = 0.5
@@ -254,6 +294,7 @@ function scene:show( event )
 		special_pic.width = 200
 		special_pic.x = 550
 		special_pic.y = 550
+		
 		sceneGroup:insert(special_pic)
 		
 		extra_pic = display.newImage("Images/robot_santa.png",system.ResourceDirectory)
@@ -265,10 +306,11 @@ function scene:show( event )
 		extra_pic.y = 550
 		sceneGroup:insert(extra_pic)
 		
+		
 		extra_title = display.newText("Robot Santa", 1400, 700)
 		sceneGroup:insert(extra_title)
 		
-		extra_cost = display.newText("Cost: 100", 1400,800)
+		extra_cost = display.newText("Cost: 100", 1400,775)
 		sceneGroup:insert(extra_cost)
 
         mx = 0
@@ -282,6 +324,8 @@ function scene:show( event )
         rankscore = {}
         App42CallBack = {}
         myData.leader = 0
+		
+		extra_counter = 1
 		
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
