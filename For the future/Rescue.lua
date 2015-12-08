@@ -24,10 +24,10 @@ local myrectl
 local myrectr
 local currResc
 local currwall
-local keyset = {}
 local numkeys
 local hasKey = false
 local hasClock = false
+local removedImage={}
 
 local i = 1
 
@@ -83,6 +83,7 @@ local function setupPic(name, pic, xVal, yVal, hVal,wVal)
 	setupItems[name].y = yVal
 	setupItems[name].height = hVal
 	setupItems[name].width= wVal
+	setupItems[name].myName= name
 end
 
 local function setupmap()
@@ -134,14 +135,7 @@ local function setupmap()
 	i = 1
 	while(myData.levelkey[currResc].key[i] ~= nil)do
 		if(myData.key[i][1] ~= 0) then
-			keyset[i] = display.newImage("Images/key.png")
-			keyset[i].anchorX=0
-			keyset[i].anchorY=0
-			keyset[i].x=myData.key[i][1]
-			keyset[i].y=myData.key[i][2]
-			keyset[i].height=124
-			keyset[i].width=140
-			keyset[i].name="key"
+			setupPic("key"..i,"Images/key.png",key[i][1],key[i][2],124,140)
 			numkeys = i
 		end
 		i = i + 1
@@ -181,9 +175,9 @@ local function setupmap()
 	physics.addBody( myrectr, "static",{bounce=0})
 	--keys physics
 	i = 1
-	while(keyset[i] ~= nil) do
+	while(setupItems["key"..i] ~= nil) do
 		print("keyphys "..i)
-		physics.addBody(keyset[i], "static",{ isSensor=true })
+		physics.addBody(setupItems["key"..i], "static",{ isSensor=true })
 		i = i + 1
 	end
 	--outer walls physics
@@ -439,12 +433,26 @@ local function twotap()
 	popup(myData.twobutton[1], myData.twobutton[2], myData.twobutton[3], myData.twobutton[4])
 end
 
+local function resetWallKey()
+    while(removedImage[1]~=nil) do
+        setupItems[removedImage[1][1]] = setupPic(removedImage[1][1], removedImage[1][2], removedImage[1][3],removedImage[1][4],removedImage[1][5], removedImage[1][6])
+        if (string.find( removedImage[1][1], "key" )~=nil) then
+            physics.addBody(setupItems[removedImage[1][1]], "static",{ isSensor=true })
+
+        else
+            physics.addBody(setupItems[removedImage[1][1]], "static")
+        end
+        table.remove( removedImage, 1 )
+    end
+end
+
 function scene:resetrobot()
 		transition.moveTo( robot, { time=0, x=109, y=819} )
 		fintable=nil
 		fintable={}
 		counter=1
-		timer.performWithDelay(20,restartr)	
+		timer.performWithDelay(20,restartr)
+		timer.performWithDelay(180,resetWallKey()) 	
 		
 end
 
@@ -551,9 +559,12 @@ local function onCollision( event )
 			if ( event.phase == "began" ) then
 				moverobot()
 			end
-		elseif (event.object2 == keyset[1] or event.object2 ==keyset[2] or event.object2 ==keyset[3] or event.object2 ==keyset[4]) then
+		elseif (string.find( event.object2.myName , "key" )~=nil) then
 			keyscount = keyscount + 1
 			hasKey = true
+			currkey = event.object2
+            Image = {currkey.myName,"Images/key.png",currkey.x,currkey.y,124,140}
+            table.insert( removedImage, Image )
 			print("keys count: "..keyscount)
 			event.object2:removeSelf()
 		elseif (event.object2==science) then
@@ -696,6 +707,9 @@ local function onCollision( event )
 				print("currwall "..currwall)
 				if(event.object2==setupItems[currwall]) then
 					if(keyscount > 0)then
+						currdata = myData[currwall]
+		                Image = {currwall, currdata[5], currdata[1], currdata[2], currdata[3], currdata[4]}
+		                table.insert( removedImage, Image )
 						event.object2:removeSelf()
 						keyscount = keyscount - 1
 						counter = counter - 1
@@ -907,7 +921,6 @@ end
 function scene:create( event )
 	currResc = myData.rescueLvl
 	myData.rescue = 1
-	keyset = {}
 	setscience(currResc)
 
 	
@@ -1029,8 +1042,8 @@ function scene:create( event )
 	sceneGroup:insert(robot)
 	sceneGroup:insert(science)
 	i = 1
-	while(keyset[i] ~= nil) do
-		sceneGroup:insert(keyset[i])
+	while(setupItems["key"..i] ~= nil) do
+		sceneGroup:insert(setupItems["key"..i])
 		i = i + 1
 	end
 	
@@ -1097,14 +1110,8 @@ function scene:show( event )
 			i = 1
 			while(myData.levelkey[currResc].key[i] ~= nil)do
 				if(myData.key[i][1] ~= 0) then
-					keyset[i] = display.newImage("Images/key.png")
-					keyset[i].anchorX=0
-					keyset[i].anchorY=0
-					keyset[i].x=myData.key[i][1]
-					keyset[i].y=myData.key[i][2]
-					keyset[i].height=124
-					keyset[i].width=140
-					keyset[i].name="key"
+					setupPic("key"..i,"Images/key.png",key[i][1],key[i][2],124,140)
+					
 					numkeys = i
 				end
 				i = i + 1
@@ -1158,8 +1165,8 @@ function scene:show( event )
 		
 			--keys
 			i = 1
-			while(keyset[i] ~= nil) do
-				physics.addBody(keyset[i], "static",{ isSensor=true })
+			while(setupItems["key"..i] ~= nil) do
+				physics.addBody(setupItems["key"..i], "static",{ isSensor=true })
 				i = i + 1
 			end
 
@@ -1193,8 +1200,8 @@ function scene:show( event )
 			sceneGroup:insert(science)
 
 			i = 1
-			while(keyset[i] ~= nil) do
-				sceneGroup:insert(keyset[i])
+			while(setupItems["key"..i] ~= nil) do
+				sceneGroup:insert(setupItems["key"..i])
 				i = i + 1
 			end
 
@@ -1250,9 +1257,9 @@ function scene:hide( event )
 		display.remove( robot)
 		robot=nil
 		i = 1
-		while(keyset[i] ~= nil) do
-			display.remove( keyset[i])
-			keyset[i]=nil
+		while(setupItems["key"..i] ~= nil) do
+			display.remove( setupItems["key"..i])
+			setupItems["key"..i]=nil
 			i = i + 1
 		end
 		i = 1
