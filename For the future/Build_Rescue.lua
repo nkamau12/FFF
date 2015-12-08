@@ -166,6 +166,7 @@ local function build( )
     bleh[4]=level.key[2][2]
     bleh[5]=level.key[3][1]
     bleh[6]=level.key[3][2]
+    wally={}
     if (sciencefail==false and keyfails==false) then
         
             myData.Build_Rescue.scientist[1] = blah[1]
@@ -177,15 +178,14 @@ local function build( )
             myData.Build_Rescue.key[2][2]=bleh[4]
             myData.Build_Rescue.key[3][1]=bleh[5]
             myData.Build_Rescue.key[3][2]=bleh[6]
-            
-            --print("looking for this-> "..myData.Build_Rescue.key[1][2])
+            --print("looking for this-> "..myData.Build_Rescue.walls[1] )
             --myData.Build_Rescue.key[1] = bleh
             local options = {
                 effect = "crossFade",
                 time = 500
             }  
             
-            composer.gotoScene("Rescue_check",options)
+            composer.gotoScene("Test_Build_Rescue",options)
             
     else
         composer.showOverlay( "fail_create_rescue", options )
@@ -200,11 +200,26 @@ function scene:reset()
         basicItems["key"..i].y=186
         basicItems["key"..i]:removeEventListener("touch", move)
     end
+    transition.to( basicItems["key1"], { time=16, x=1468, y=186} )
     keycount=2
-    level.scientist = {} 
+    level.scientist = {nil,nil} 
     level.key = {{nil,nil},{nil,nil},{nil,nil}}
 end
+local function gohome()
+    
 
+    local options = {
+                isModal = true,
+                effect = "crossFade",
+                time = 500
+            }
+            audio.stop(1)
+            audio.stop(2)
+            audio.pause(backgroundMusicplay)
+            composer.gotoScene("MainMenu",optionsh)
+            
+            
+end
 -- "scene:create()"
 function scene:create( event )
     local sceneGroup = self.view
@@ -219,9 +234,9 @@ function scene:create( event )
     basicItems["key3"]=setupPic("key3", myData.keybase[5], 1468, 186, myData.keybase[3], myData.keybase[4],0)
     
     basicItems["start"]:addEventListener("tap", build)
-    basicItems["home"]:addEventListener("tap", instructionTap)
+    basicItems["home"]:addEventListener("tap", gohome)
     basicItems["science"]:addEventListener("touch", move)
-    basicItems["key"..keycount]:addEventListener("touch", move)
+    basicItems["key1"]:addEventListener("touch", move)
     
 
     basicItems["robot"] = setupPic("robot", myData.robot[5], myData.robot[1], myData.robot[2], myData.robot[3], myData.robot[4])
@@ -314,10 +329,16 @@ function scene:hide( event )
         for i=1,wallno,1 do
             if(string.find( level.walls[i], "%d" )==nil) then
                 display.remove(items['wall'..level.walls[i]])
+                --items['wall'..level.walls[i]]:removeSelf()
+                print( 'wall'..level.walls[i])
             else
                 display.remove(items['wall0'..level.walls[i]])
+                --items['wall0'..level.walls[i]]:removeSelf()
+                print( 'wall'..level.walls[i])
             end
         end
+        level.walls=nil
+        level.walls={}
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
