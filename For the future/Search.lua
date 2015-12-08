@@ -163,6 +163,7 @@ local function tryagain()
 end
 
 local function addTokens()
+    local collectionName = "GameInfo" 
     local key = "user"
     local value = myData.user
     local jsonDoc = {}
