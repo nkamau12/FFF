@@ -6,6 +6,13 @@
 settings =
 {
 
+	plugins =
+	{
+		["plugin.facebook.v4"] =
+        {
+            publisherId = "com.coronalabs"
+        },
+	},
 
 	orientation =
 	{
