@@ -243,7 +243,7 @@ local function checkresult( event )
         print("Score: "..gameScore)
         
 
-        if(gameScore >= oldscore) then
+        if(gameScore >= oldscore or oldscore == nil) then
             --update score
             local scoreId = scoreKey
             gameScore = secondsLeft * 10
