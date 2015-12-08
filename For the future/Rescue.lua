@@ -819,6 +819,10 @@ local function updateKeys(event)
     local keyDisplay = myData.savedkeys
     key_num.text = keyDisplay
 end
+local function updateClocks(event)
+    local clocksDisplay = myData.savedclocks
+    clock_num.text = clocksDisplay
+end
 
 
 local function usekey()
@@ -836,7 +840,12 @@ local function useclock()
 	clockscount = clockscount + 1
 	hasClock = true
 	print("clockscount is "..clockscount)
-	
+	updateClocks()
+	if(myData.savedclocks == 0) then
+		setupItems["clockpowerup"]:removeEventListener("tap", useclock)
+	end
+	secondsLeft = secondsLeft + 11
+	updateTime()
 end
 
 local function getScoreDoc()
