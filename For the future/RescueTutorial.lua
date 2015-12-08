@@ -80,7 +80,6 @@ local function setupmap()
 	setupPic("downa", myData.downarrow[5], myData.downarrow[1], myData.downarrow[2], myData.downarrow[3], myData.downarrow[4])
 	setupPic("lefta", myData.leftarrow[5], myData.leftarrow[1], myData.leftarrow[2], myData.leftarrow[3], myData.leftarrow[4])
 	setupPic("righta", myData.rightarrow[5], myData.rightarrow[1], myData.rightarrow[2], myData.rightarrow[3], myData.rightarrow[4])
-	setupPic("mainb", myData.mainbutton[5], myData.mainbutton[1], myData.mainbutton[2], myData.mainbutton[3], myData.mainbutton[4])
 	setupPic("oneb", myData.onebutton[5], myData.onebutton[1], myData.onebutton[2], myData.onebutton[3], myData.onebutton[4])
 	setupPic("twob", myData.twobutton[5], myData.twobutton[1], myData.twobutton[2], myData.twobutton[3], myData.twobutton[4])
 	setupPic("start", myData.startbutton[5], myData.startbutton[1], myData.startbutton[2], myData.startbutton[3], myData.startbutton[4])
@@ -359,10 +358,7 @@ local function mltap()
 	popup(myData.leftarrow[1], myData.leftarrow[2], myData.leftarrow[3], myData.leftarrow[4])
 end
 
-local function maintap()
-	picToAdd = "Images/main_block.png"
-	popup(myData.mainbutton[1], myData.mainbutton[2], myData.mainbutton[3], myData.mainbutton[4])
-end
+
 
 local function onetap()
 	picToAdd = "Images/1_block.png"
@@ -643,7 +639,6 @@ function scene:create( event )
 	setupItems["downa"]:addEventListener( "tap", mdtap )
 	setupItems["lefta"]:addEventListener( "tap", mltap )
 	setupItems["righta"]:addEventListener( "tap", mrtap )
-	setupItems["mainb"]:addEventListener("tap", maintap)
 	setupItems["oneb"]:addEventListener("tap", onetap)
 	setupItems["twob"]:addEventListener("tap", twotap)
 	setupItems["home"]:addEventListener("tap", gohome)
@@ -676,7 +671,6 @@ function scene:create( event )
 	sceneGroup:insert(setupItems["downa"])
 	sceneGroup:insert(setupItems["lefta"])
 	sceneGroup:insert(setupItems["righta"])
-	sceneGroup:insert(setupItems["mainb"])
 	sceneGroup:insert(setupItems["oneb"])
 	sceneGroup:insert(setupItems["start"])
 	sceneGroup:insert(setupItems["twob"])
