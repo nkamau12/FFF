@@ -27,53 +27,111 @@ local function confirm(event)
 		newCreds = myData.credits - myData.purchase[4]
 
 		if(newCreds >= 0)then
-			local dbName  = "USERS"
-			local collectionName = "Store"
-			local docId = myData.storeDoc
-			local keys = "{\""..myData.purchase[5].."\":1}"
+			if(myData.purchase[1] == "powerup") then
+				local dbName  = "USERS"
+				local collectionName = "GameInfo"
+				local docId = myData.userDoc
 
-			App42CallBack = {}
-			storageService = App42API:buildStorageService()
-			storageService:addOrUpdateKeys(dbName, collectionName,docId, keys,App42CallBack) 
-			function App42CallBack:onSuccess(object)
-				print("dbName is "..object:getDbName())
-				print("collectionName is "..object:getCollectionName())
-				print("DocId is "..object:getJsonDocList():getDocId())
-				print("Created At is "..object:getJsonDocList():getCreatedAt())
-				print("Updated At is "..object:getJsonDocList():getUpdatedAt())
-				print("GetJsonDoc is : "..JSON:encode(object:getJsonDocList():getJsonDoc()) )  
-				
+				local keys
+				if(myData.purchase[5] == "keys") then
+					myData.savedkeys = myData.savedkeys + 1
+					keys = "{\""..myData.purchase[5].."\":"..myData.savedkeys.."}"
+				else
+					myData.savedclocks = myData.savedclocks + 1
+					keys = "{\""..myData.purchase[5].."\":"..myData.savedclocks.."}"
+				end
+
+				App42CallBack = {}
+				storageService = App42API:buildStorageService()
+				storageService:addOrUpdateKeys(dbName, collectionName,docId, keys,App42CallBack) 
+				function App42CallBack:onSuccess(object)
+					print("dbName is "..object:getDbName())
+					print("collectionName is "..object:getCollectionName())
+					print("DocId is "..object:getJsonDocList():getDocId())
+					print("Created At is "..object:getJsonDocList():getCreatedAt())
+					print("Updated At is "..object:getJsonDocList():getUpdatedAt())
+					print("GetJsonDoc is : "..JSON:encode(object:getJsonDocList():getJsonDoc()) )  
+					
+				end
+				function App42CallBack:onException(exception)
+					print("Message is : "..exception:getMessage())
+					print("App Error code is : "..exception:getAppErrorCode())
+					print("Http Error code is "..exception:getHttpErrorCode())
+					print("Detail is : "..exception:getDetails())
+				end 
+
+				local docId = myData.userDoc
+				local keys = "{\"credits\":"..newCreds.."}"
+
+				App42CallBack = {}
+				storageService = App42API:buildStorageService()
+				storageService:addOrUpdateKeys(dbName, collectionName,docId, keys,App42CallBack) 
+				function App42CallBack:onSuccess(object)
+					print("dbName is "..object:getDbName())
+					print("collectionName is "..object:getCollectionName())
+					print("DocId is "..object:getJsonDocList():getDocId())
+					print("Created At is "..object:getJsonDocList():getCreatedAt())
+					print("Updated At is "..object:getJsonDocList():getUpdatedAt())
+					print("GetJsonDoc is : "..JSON:encode(object:getJsonDocList():getJsonDoc()) )  
+					
+				end
+				function App42CallBack:onException(exception)
+					print("Message is : "..exception:getMessage())
+					print("App Error code is : "..exception:getAppErrorCode())
+					print("Http Error code is "..exception:getHttpErrorCode())
+					print("Detail is : "..exception:getDetails())
+				end 
+				myData.credits = newCreds
+
+			else
+				local dbName  = "USERS"
+				local collectionName = "Store"
+				local docId = myData.storeDoc
+				local keys = "{\""..myData.purchase[5].."\":1}"
+
+				App42CallBack = {}
+				storageService = App42API:buildStorageService()
+				storageService:addOrUpdateKeys(dbName, collectionName,docId, keys,App42CallBack) 
+				function App42CallBack:onSuccess(object)
+					print("dbName is "..object:getDbName())
+					print("collectionName is "..object:getCollectionName())
+					print("DocId is "..object:getJsonDocList():getDocId())
+					print("Created At is "..object:getJsonDocList():getCreatedAt())
+					print("Updated At is "..object:getJsonDocList():getUpdatedAt())
+					print("GetJsonDoc is : "..JSON:encode(object:getJsonDocList():getJsonDoc()) )  
+					
+				end
+				function App42CallBack:onException(exception)
+					print("Message is : "..exception:getMessage())
+					print("App Error code is : "..exception:getAppErrorCode())
+					print("Http Error code is "..exception:getHttpErrorCode())
+					print("Detail is : "..exception:getDetails())
+				end 
+
+				collectionName = "GameInfo"
+				local docId = myData.userDoc
+				local keys = "{\"credits\":"..newCreds.."}"
+
+				App42CallBack = {}
+				storageService = App42API:buildStorageService()
+				storageService:addOrUpdateKeys(dbName, collectionName,docId, keys,App42CallBack) 
+				function App42CallBack:onSuccess(object)
+					print("dbName is "..object:getDbName())
+					print("collectionName is "..object:getCollectionName())
+					print("DocId is "..object:getJsonDocList():getDocId())
+					print("Created At is "..object:getJsonDocList():getCreatedAt())
+					print("Updated At is "..object:getJsonDocList():getUpdatedAt())
+					print("GetJsonDoc is : "..JSON:encode(object:getJsonDocList():getJsonDoc()) )  
+					
+				end
+				function App42CallBack:onException(exception)
+					print("Message is : "..exception:getMessage())
+					print("App Error code is : "..exception:getAppErrorCode())
+					print("Http Error code is "..exception:getHttpErrorCode())
+					print("Detail is : "..exception:getDetails())
+				end 
+				myData.credits = newCreds
 			end
-			function App42CallBack:onException(exception)
-				print("Message is : "..exception:getMessage())
-				print("App Error code is : "..exception:getAppErrorCode())
-				print("Http Error code is "..exception:getHttpErrorCode())
-				print("Detail is : "..exception:getDetails())
-			end 
-
-			collectionName = "GameInfo"
-			local docId = myData.userDoc
-			local keys = "{\"credits\":"..newCreds.."}"
-
-			App42CallBack = {}
-			storageService = App42API:buildStorageService()
-			storageService:addOrUpdateKeys(dbName, collectionName,docId, keys,App42CallBack) 
-			function App42CallBack:onSuccess(object)
-				print("dbName is "..object:getDbName())
-				print("collectionName is "..object:getCollectionName())
-				print("DocId is "..object:getJsonDocList():getDocId())
-				print("Created At is "..object:getJsonDocList():getCreatedAt())
-				print("Updated At is "..object:getJsonDocList():getUpdatedAt())
-				print("GetJsonDoc is : "..JSON:encode(object:getJsonDocList():getJsonDoc()) )  
-				
-			end
-			function App42CallBack:onException(exception)
-				print("Message is : "..exception:getMessage())
-				print("App Error code is : "..exception:getAppErrorCode())
-				print("Http Error code is "..exception:getHttpErrorCode())
-				print("Detail is : "..exception:getDetails())
-			end 
-			myData.credits = newCreds
 		end
 		print("new credits is "..newCreds)
 		composer.hideOverlay( "fade", 400 )

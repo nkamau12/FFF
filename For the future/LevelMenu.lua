@@ -117,6 +117,8 @@ function scene:show( event )
 	    jsonDoc.sfx = myData.sfx
 	    jsonDoc.robot = myData.roboSprite
 	    jsonDoc.scientist = myData.scienceSprite
+	    jsonDoc.keys = myData.savedkeys
+	    jsonDoc.stopwatch = myData.savedclocks
 
 	    local App42CallBack = {}
 	    storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)

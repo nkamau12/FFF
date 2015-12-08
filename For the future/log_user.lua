@@ -62,6 +62,8 @@ local function trylogin(event)
           jsonDoc.sfx = object:getJsonDocList()[i]:getJsonDoc().sfx
           jsonDoc.robot = object:getJsonDocList()[i]:getJsonDoc().robot
           jsonDoc.scientist = object:getJsonDocList()[i]:getJsonDoc().scientist
+          jsonDoc.keys = object:getJsonDocList()[i]:getJsonDoc().keys
+          jsonDoc.stopwatch = object:getJsonDocList()[i]:getJsonDoc().stopwatch
 
           myData.maxsrch = jsonDoc.search
           myData.maxrsc = jsonDoc.rescue
@@ -71,6 +73,8 @@ local function trylogin(event)
           myData.sfx = jsonDoc.sfx
           myData.roboSprite = jsonDoc.robot
           myData.scienceSprite = jsonDoc.scientist
+          myData.savedkeys = jsonDoc.keys
+          myData.savedclocks = jsonDoc.stopwatch
         end
       end
 
@@ -108,7 +112,9 @@ function loaduserinfo()
     credits = 0,
   	theme = "default",
   	robot = "default",
-  	science = "default"
+  	science = "default",
+    keys = 0,
+    stopwatch = 0
 	}
 	loadsave.saveTable( userSettings, "user.json" )
 	myData.theme = "default"
@@ -118,6 +124,8 @@ function loaduserinfo()
   myData.credits = 0
 	myData.roboSprite = "default"
 	myData.scienceSprite = "default"
+  myData.savedkeys = 0
+  myData.savedclocks = 0
 end
 
 

@@ -111,6 +111,8 @@ local function saveUser(event)
     jsonDoc.sfx = myData.sfx
     jsonDoc.robot = myData.roboSprite
     jsonDoc.scientist = myData.scienceSprite
+    jsonDoc.stopwatch = myData.savedclocks
+    jsonDoc.keys = myData.savedkeys
 
     local App42CallBack = {}
     App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",

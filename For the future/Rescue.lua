@@ -892,6 +892,9 @@ function scene:create( event )
 
 	key_text = display.newText("x", 1179, 393)
 	sceneGroup:insert(key_text)
+	print("keys is "..myData.savedkeys)
+	key_num = display.newText(myData.savedkeys, 1229, 393)
+	sceneGroup:insert(key_num)
 
 	clock_text = display.newText("x", 1411, 393)
 	sceneGroup:insert(clock_text)

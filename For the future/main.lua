@@ -33,7 +33,9 @@ if (loadedUser == nil) then
     credits = 0,
     theme = "default",
     robot = "default",
-    science = "default"
+    science = "default",
+    keys = 0,
+    stopwatch = 0
   }
   loadsave.saveTable( userSettings, "user.json" )
   loadedUser = loadsave.loadTable( "user.json" )
@@ -76,6 +78,8 @@ if(loadedUser == nil)then
   myData.musicVol = 100
   myData.sfx = 100
   myData.credits = 0
+  myData.savedkeys = 0
+  myData.savedclocks = 0
 else
   value = loadedUser.user
   print("value ")
@@ -107,6 +111,8 @@ function App42CallBack:onSuccess(object)
     jsonDoc.volume = object:getJsonDocList()[i]:getJsonDoc().volume
     jsonDoc.sfx = object:getJsonDocList()[i]:getJsonDoc().sfx
     jsonDoc.scientist = object:getJsonDocList()[i]:getJsonDoc().scientist
+    jsonDoc.keys = object:getJsonDocList()[i]:getJsonDoc().keys
+    jsonDoc.stopwatch = object:getJsonDocList()[i]:getJsonDoc().stopwatch
   end
 
   if(value == nil)then
@@ -123,6 +129,9 @@ function App42CallBack:onSuccess(object)
   myData.credits = jsonDoc.credits
   myData.scienceSprite = jsonDoc.scientist
   myData.userDoc = jsonDoc.userDoc
+  myData.savedkeys = jsonDoc.keys
+  myData.savedclocks = jsonDoc.stopwatch
+
   myData.key = {}
   
   myData.error1_count = 0
@@ -348,7 +357,7 @@ function App42CallBack:onSuccess(object)
 
   -- object = {type, displayname, picture, cost, backName}
   myData.buyPowerUps = {
-    {"powerup", "Key", "Images/key.png", 200, "key"},
+    {"powerup", "Key", "Images/key.png", 200, "keys"},
     {"powerup", "Time Stop", "Images/stopwatch.png", 200, "stopwatch"}
   } 
 
@@ -437,6 +446,8 @@ function App42CallBack:onException(exception)
   myData.scienceSprite = loadedUser.science
   myData.musicVol = loadedUser.volume
   myData.sfx = loadedUser.sfx
+  myData.savedkeys = loadedUser.keys
+  myData.savedclocks = loadedUser.stopwatch
 
   local composer = require "composer"
   local options = {

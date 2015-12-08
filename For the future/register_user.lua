@@ -245,7 +245,8 @@ local function tryregister(event)
 
           local dbName  = "USERS"
           local collectionName = "GameInfo"
-          local json2 = "{\"user\":"..newUser..",\"credits\":0,\"search\":1,\"rescue\":1,\"volume\":100,\"sfx\":100,\"theme\":\"default\",\"robot\":\"default\",\"scientist\":\"default\"}"
+          local json2 = "{\"user\":"..newUser..",\"credits\":0,\"search\":1,\"rescue\":1,\"volume\":100,\"sfx\":100,\"theme\":\"default\",
+                      \"robot\":\"default\",\"scientist\":\"default\",\"keys\":0,\"stopwatch\":0}"
           local App42CallBack = {}
           local storageService = App42API:buildStorageService()
           storageService:insertJSONDocument(dbName, collectionName, json2,App42CallBack)
@@ -286,7 +287,9 @@ function loaduserinfo()
     credits = 0,
   	theme = "default",
   	robot = "default",
-  	science = "default"
+  	science = "default",
+    keys = 0,
+    stopwatch = 0
 	}
 	loadsave.saveTable( userSettings, "user.json" )
 	myData.theme = "default"
@@ -296,6 +299,8 @@ function loaduserinfo()
   myData.credits = 0
 	myData.roboSprite = "default"
 	myData.scienceSprite = "default"
+  myData.savedkeys = 0
+  myData.savedclocks = 0
 end
 
 
