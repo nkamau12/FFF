@@ -96,11 +96,12 @@ local function setupmap()
 	setupPic("downa", myData.downarrow[5], myData.downarrow[1], myData.downarrow[2], myData.downarrow[3], myData.downarrow[4])
 	setupPic("lefta", myData.leftarrow[5], myData.leftarrow[1], myData.leftarrow[2], myData.leftarrow[3], myData.leftarrow[4])
 	setupPic("righta", myData.rightarrow[5], myData.rightarrow[1], myData.rightarrow[2], myData.rightarrow[3], myData.rightarrow[4])
-	setupPic("mainb", myData.mainbutton[5], myData.mainbutton[1], myData.mainbutton[2], myData.mainbutton[3], myData.mainbutton[4])
 	setupPic("oneb", myData.onebutton[5], myData.onebutton[1], myData.onebutton[2], myData.onebutton[3], myData.onebutton[4])
 	setupPic("twob", myData.twobutton[5], myData.twobutton[1], myData.twobutton[2], myData.twobutton[3], myData.twobutton[4])
 	setupPic("start", myData.startbutton[5], myData.startbutton[1], myData.startbutton[2], myData.startbutton[3], myData.startbutton[4])
 	setupPic("home", myData.homebutton[5], myData.homebutton[1], myData.homebutton[2], myData.homebutton[3], myData.homebutton[4])
+	setupPic("keypowerup", myData.keypowerup[5], myData.keypowerup[1], myData.keypowerup[2], myData.keypowerup[3], myData.keypowerup[4])
+	setupPic("clockpowerup", myData.clockpowerup[5], myData.clockpowerup[1], myData.clockpowerup[2], myData.clockpowerup[3], myData.clockpowerup[4])
 	--robot
 	robot = display.newImage("Images/robot_"..myData.roboSprite..".png")
 	robot.anchorX=0
@@ -888,6 +889,12 @@ function scene:create( event )
 	background.x= display.contentCenterX
 	background.y=display.contentCenterY
 	sceneGroup:insert(background)
+
+	key_text = display.newText("x", 1179, 393)
+	sceneGroup:insert(key_text)
+
+	clock_text = display.newText("x", 1411, 393)
+	sceneGroup:insert(clock_text)
 	
 	--buttons
 	
@@ -922,7 +929,6 @@ function scene:create( event )
 	setupItems["downa"]:addEventListener( "tap", mdtap )
 	setupItems["lefta"]:addEventListener( "tap", mltap )
 	setupItems["righta"]:addEventListener( "tap", mrtap )
-	setupItems["mainb"]:addEventListener("tap", maintap)
 	setupItems["oneb"]:addEventListener("tap", onetap)
 	setupItems["twob"]:addEventListener("tap", twotap)
 	setupItems["start"]:addEventListener("tap", pass)
@@ -956,11 +962,12 @@ function scene:create( event )
 	sceneGroup:insert(setupItems["downa"])
 	sceneGroup:insert(setupItems["lefta"])
 	sceneGroup:insert(setupItems["righta"])
-	sceneGroup:insert(setupItems["mainb"])
 	sceneGroup:insert(setupItems["oneb"])
 	sceneGroup:insert(setupItems["twob"])
 	sceneGroup:insert(setupItems["start"])
 	sceneGroup:insert(setupItems["home"])
+	sceneGroup:insert(setupItems["keypowerup"])
+	sceneGroup:insert(setupItems["clockpowerup"])
 	
 	--add character
 	sceneGroup:insert(robot)
@@ -1120,11 +1127,12 @@ function scene:show( event )
 			sceneGroup:insert(setupItems["downa"])
 			sceneGroup:insert(setupItems["lefta"])
 			sceneGroup:insert(setupItems["righta"])
-			sceneGroup:insert(setupItems["mainb"])
 			sceneGroup:insert(setupItems["oneb"])
 			sceneGroup:insert(setupItems["twob"])
 			sceneGroup:insert(setupItems["start"])
 			sceneGroup:insert(setupItems["home"])
+			sceneGroup:insert(setupItems["keypowerup"])
+			sceneGroup:insert(setupItems["clockpowerup"])
 			sceneGroup:insert(robot)
 			sceneGroup:insert(science)
 

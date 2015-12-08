@@ -138,6 +138,39 @@ local function createMax(user)
   end
 end
 
+local function createStore(user)
+  local dbName  = "USERS"
+  local collectionName = "Store"
+  local json = {}
+  json.name = user
+  json.theme_default = 1
+  json.theme_red = 0
+  json.theme_green = 0
+  json.theme_yellow = 0
+  json.robot_default = 1
+  json.robot_potato = 0
+  json.robot_santa = 0
+  json.scientist_default = 1
+  json.scientist_present = 0
+  json.scientist_sadface = 0
+  App42CallBack = {}
+  local storageService = App42API:buildStorageService()
+  storageService:insertJSONDocument(dbName, collectionName, json,App42CallBack)
+  function App42CallBack:onSuccess(object)
+    print("dbName is "..object:getDbName())
+    print("collectionName is "..object:getCollectionName())
+    print("DocId is "..object:getJsonDocList():getDocId())
+    print("Created At is "..object:getJsonDocList():getCreatedAt())
+    print("Updated At is "..object:getJsonDocList():getUpdatedAt())
+  end
+  function App42CallBack:onException(exception)
+    print("Message is : "..exception:getMessage())
+    print("App Error code is : "..exception:getAppErrorCode())
+    print("Http Error code is "..exception:getHttpErrorCode())
+    print("Detail is : "..exception:getDetails())
+  end
+end
+
 
 local function tryregister(event)
 	--"[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?" email regex
@@ -229,6 +262,7 @@ local function tryregister(event)
               createScores(newUser,"Rescue",i)
             end
             createMax(newUser)
+            createStore(newUser)
           end
           function App42CallBack:onException(exception)
             print("Message is : "..exception:getMessage())

@@ -1,11 +1,96 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
+local myData = require( "mydata" )
+local loadsave = require( "loadsave" ) 
 local scene = composer.newScene()
 local yes 
 
+require("App42-Lua-API.Operator")
+require("App42-Lua-API.Permission")
+require("App42-Lua-API.GeoOperator")
+require("App42-Lua-API.OrderByType")
+require("App42-Lua-API.Operator")
+local JSON = require("App42-Lua-API.JSON") 
+local queryBuilder = require("App42-Lua-API.QueryBuilder")
+local App42API = require("App42-Lua-API.App42API")
+local ACL = require("App42-Lua-API.ACL")
+App42API:initialize("b6887ae37e4088c5a4f198454ec46fdbfdfd0f96e0732c339f2534b4c5ca1080",
+    "4e6f1ff5df8a77a619e5eeb4356445330e449b3ead02a7b2fea42c2e1080e44a")
+local storageService = App42API:buildStorageService()  
+
+local newCreds
+
 
 local function confirm(event)
-	composer.hideOverlay( "fade", 400 )
+	if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+		newCreds = myData.credits - myData.purchase[4]
+
+		if(newCreds >= 0)then
+			local dbName  = "USERS"
+			local collectionName = "Store"
+			local docId = myData.storeDoc
+			local keys = "{\""..myData.purchase[5].."\":1}"
+
+			App42CallBack = {}
+			storageService = App42API:buildStorageService()
+			storageService:addOrUpdateKeys(dbName, collectionName,docId, keys,App42CallBack) 
+			function App42CallBack:onSuccess(object)
+				print("dbName is "..object:getDbName())
+				print("collectionName is "..object:getCollectionName())
+				print("DocId is "..object:getJsonDocList():getDocId())
+				print("Created At is "..object:getJsonDocList():getCreatedAt())
+				print("Updated At is "..object:getJsonDocList():getUpdatedAt())
+				print("GetJsonDoc is : "..JSON:encode(object:getJsonDocList():getJsonDoc()) )  
+				
+			end
+			function App42CallBack:onException(exception)
+				print("Message is : "..exception:getMessage())
+				print("App Error code is : "..exception:getAppErrorCode())
+				print("Http Error code is "..exception:getHttpErrorCode())
+				print("Detail is : "..exception:getDetails())
+			end 
+
+			collectionName = "GameInfo"
+			local docId = myData.userDoc
+			local keys = "{\"credits\":"..newCreds.."}"
+
+			App42CallBack = {}
+			storageService = App42API:buildStorageService()
+			storageService:addOrUpdateKeys(dbName, collectionName,docId, keys,App42CallBack) 
+			function App42CallBack:onSuccess(object)
+				print("dbName is "..object:getDbName())
+				print("collectionName is "..object:getCollectionName())
+				print("DocId is "..object:getJsonDocList():getDocId())
+				print("Created At is "..object:getJsonDocList():getCreatedAt())
+				print("Updated At is "..object:getJsonDocList():getUpdatedAt())
+				print("GetJsonDoc is : "..JSON:encode(object:getJsonDocList():getJsonDoc()) )  
+				
+			end
+			function App42CallBack:onException(exception)
+				print("Message is : "..exception:getMessage())
+				print("App Error code is : "..exception:getAppErrorCode())
+				print("Http Error code is "..exception:getHttpErrorCode())
+				print("Detail is : "..exception:getDetails())
+			end 
+			myData.credits = newCreds
+		end
+		print("new credits is "..newCreds)
+		composer.hideOverlay( "fade", 400 )
+
+		local userSettings = {
+		  	user = myData.user,
+		  	search = myData.maxsrch,
+		  	rescue = myData.maxrsc,
+		    volume = myData.musicVol,
+		    sfx = myData.sfx,
+		    credits = myData.credits,
+		  	theme = myData.theme,
+		  	robot = myData.roboSprite,
+		  	science = myData.scienceSprite
+		}
+		loadsave.saveTable( userSettings, "user.json" )
+	end
 end
 
 local function decline(event)
@@ -19,6 +104,9 @@ function scene:create( event )
 	background:setFillColor(grey,0.5)
 	sceneGroup:insert(background)
 	
+	local trial=display.newText("Confirm purchase of "..myData.purchase[2],display.contentCenterX,display.contentCenterY)
+	sceneGroup:insert(trial)
+
 	local confirm = widget.newButton
 	{
 		x = display.contentCenterX - 150,

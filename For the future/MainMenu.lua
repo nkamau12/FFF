@@ -160,6 +160,72 @@ local function checkTop()
 	end
 end
 
+local function getExtras()
+	myData.buyable = {}
+	myData.roboSprites = {}
+	myData.scienceSprites = {}
+	myData.themeColours = {}
+	table.insert(myData.roboSprites, myData.storeItems[8])
+	table.insert(myData.scienceSprites, myData.storeItems[9])
+	table.insert(myData.themeColours, myData.storeItems[10])
+	local dbName  = "USERS"
+	local collectionName = "Store"
+	local key = "name"
+	local value = myData.user
+	local App42CallBack = {}
+	storageService = App42API:buildStorageService()
+	storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42CallBack)
+	function App42CallBack:onSuccess(object)
+		print("dbName is "..object:getDbName())
+		for i=1,table.getn(object:getJsonDocList()) do
+			print("DocId is "..object:getJsonDocList()[i]:getDocId())
+			myData.storeDoc = object:getJsonDocList()[i]:getDocId()
+			print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
+			if(object:getJsonDocList()[i]:getJsonDoc().robot_santa == 0) then
+				table.insert(myData.buyable, myData.storeItems[1])
+			else
+				table.insert(myData.roboSprites, myData.storeItems[1])
+			end
+			if(object:getJsonDocList()[i]:getJsonDoc().robot_potato == 0) then
+				table.insert(myData.buyable, myData.storeItems[2])
+			else
+				table.insert(myData.roboSprites, myData.storeItems[2])
+			end
+			if(object:getJsonDocList()[i]:getJsonDoc().scientist_present == 0) then
+				table.insert(myData.buyable, myData.storeItems[3])
+			else
+				table.insert(myData.scienceSprites, myData.storeItems[3])
+			end
+			if(object:getJsonDocList()[i]:getJsonDoc().scientist_sadface == 0) then
+				table.insert(myData.buyable, myData.storeItems[4])
+			else
+				table.insert(myData.scienceSprites, myData.storeItems[4])
+			end
+			if(object:getJsonDocList()[i]:getJsonDoc().theme_yellow == 0) then
+				table.insert(myData.buyable, myData.storeItems[5])
+			else
+				table.insert(myData.themeColours, myData.storeItems[5])
+			end
+			if(object:getJsonDocList()[i]:getJsonDoc().theme_red == 0) then
+				table.insert(myData.buyable, myData.storeItems[6])
+			else
+				table.insert(myData.themeColours, myData.storeItems[6])
+			end
+			if(object:getJsonDocList()[i]:getJsonDoc().theme_green == 0) then
+				table.insert(myData.buyable, myData.storeItems[7])
+			else
+				table.insert(myData.themeColours, myData.storeItems[7])
+			end
+		end
+	end
+	function App42CallBack:onException(exception)
+		print("Message is : "..exception:getMessage())
+		print("App Error code is : "..exception:getAppErrorCode())
+		print("Http Error code is "..exception:getHttpErrorCode())
+		print("Detail is : "..exception:getDetails())
+	end
+end
+
 
 function scene:create( event )
 end
@@ -260,6 +326,7 @@ function scene:show( event )
 		end
 
 		checkTop()
+		getExtras()
 
     elseif ( phase == "did" ) then
 		audio.resume(backgroundMusicplay)

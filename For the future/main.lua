@@ -97,6 +97,7 @@ function App42CallBack:onSuccess(object)
   for i=1,table.getn(object:getJsonDocList()) do
     print("DocId is "..object:getJsonDocList()[i]:getDocId())
     print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
+    jsonDoc.userDoc = object:getJsonDocList()[i]:getDocId()
     jsonDoc.user = object:getJsonDocList()[i]:getJsonDoc().user
     jsonDoc.search = object:getJsonDocList()[i]:getJsonDoc().search
     jsonDoc.rescue = object:getJsonDocList()[i]:getJsonDoc().rescue
@@ -121,6 +122,7 @@ function App42CallBack:onSuccess(object)
   myData.sfx = jsonDoc.sfx
   myData.credits = jsonDoc.credits
   myData.scienceSprite = jsonDoc.scientist
+  myData.userDoc = jsonDoc.userDoc
   myData.key = {}
   
   myData.error1_count = 0
@@ -186,15 +188,16 @@ function App42CallBack:onSuccess(object)
     myData.oneloop = {1063.96, 768, 133, 805,"Images/one_loop.png"}
     myData.twoloop = {1063.96, 910, 133, 805,"Images/two_loop.png"}
     --buttons
-    myData.uparrow = {1192, 186, 122, 122, "Images/up_arrow.png"}
-    myData.downarrow = {1330, 186, 122, 122, "Images/down_arrow.png"}
-    myData.leftarrow = {1468, 186, 122, 122, "Images/left_arrow.png"}
-    myData.rightarrow = {1606, 186, 122, 122, "Images/right_arrow.png"}
-    myData.mainbutton = {1126, 332, 122, 122, "Images/main_block.png"}
-    myData.onebutton = {1264, 332, 122, 122, "Images/1_block.png"}
-    myData.twobutton = {1403, 332, 122, 122, "Images/2_block.png"}
+    myData.uparrow = {1065, 186, 122, 122, "Images/up_arrow.png"}
+    myData.downarrow = {1203, 186, 122, 122, "Images/down_arrow.png"}
+    myData.leftarrow = {1341, 186, 122, 122, "Images/left_arrow.png"}
+    myData.rightarrow = {1479, 186, 122, 122, "Images/right_arrow.png"}
+    myData.onebutton = {1617, 186, 122, 122, "Images/1_block.png"}
+    myData.twobutton = {1755, 186, 122, 122, "Images/2_block.png"}
     myData.homebutton = {1764, 30, 122, 122, "Images/home.png"}
-    myData.startbutton = {1542, 332, 122, 320, "Images/run_button.png"}
+    myData.startbutton = {1552, 332, 122, 320, "Images/run_button.png"}
+    myData.keypowerup = {1065, 349, 88, 88, "Images/key.png"}
+    myData.clockpowerup = {1301, 349, 88, 88, "Images/stopwatch.png"}
     --robot
     myData.robot = {109, 819, 140, 140, "Images/robot_"..myData.roboSprite..".png"}
     --scientist
@@ -328,6 +331,27 @@ function App42CallBack:onSuccess(object)
     { one = {2,"yellow",1,2,"green"}, two = {nil,nil,nil,nil,nil}, three = {"green",1,"red","blue",1}}                       -- level 12
   }
   
+  --STORE OBJECTS:
+  -- object = {type, displayname, picture, cost, backName}
+  myData.storeItems = {
+    {"robot", "Santa Robot", "Images/robot_santa.png", 100, "santa"},
+    {"robot", "Potato Robot", "Images/robot_potato.png", 200, "potato"},
+    {"scientist", "Present Scientist", "Images/scientist_present.png", 100, "present"},
+    {"scientist", "Sad Scientist", "Images/scientist_sadface.png", 200, "sadface"},
+    {"theme", "Yellow Theme", "Images/theme_yellow/splash_main.png", 50, "yellow"},
+    {"theme", "Red Theme", "Images/theme_red/splash_main.png", 100, "red"},
+    {"theme", "Green Theme", "Images/theme_green/splash_main.png", 150, "green"},
+    {"robot", "Default Robot", "Images/robot_default.png", 0, "default"},
+    {"scientist", "Default Scientist", "Images/scientist_default.png", 0, "default"},
+    {"theme", "Default Theme", "Images/theme_default/splash_main.png", 0, "default"}
+  } 
+
+  -- object = {type, displayname, picture, cost, backName}
+  myData.buyPowerUps = {
+    {"powerup", "Key", "Images/key.png", 200, "key"},
+    {"powerup", "Time Stop", "Images/stopwatch.png", 200, "stopwatch"}
+  } 
+
 
   --TUTORIAL OBJECTS:
   --Search Tutorial objects

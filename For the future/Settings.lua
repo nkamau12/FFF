@@ -28,6 +28,9 @@ local sfxValue
 local homebutton
 
 local saveBut
+local robo_counter = 1
+local science_counter = 1
+local theme_counter = 1
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -76,6 +79,11 @@ end
 
 
 local function saveUser(event)
+
+    myData.roboSprite = myData.roboSprites[robo_counter][5]
+    myData.scienceSprite = myData.scienceSprites[science_counter][5]
+    myData.theme = myData.themeColours[theme_counter][5]
+
 	local userSettings = {
 	  	user = myData.user,
 	  	search = maxsrch,
@@ -125,53 +133,6 @@ local function saveUser(event)
     end
 end
 
-
-function fblogin()
-  if ( facebook.isActive ) then
-    accessToken = facebook.getCurrentAccessToken()
-    facebook.login( fbAppID, facebookListener, { "public_profile", "user_friends", "email" } )
-	App42CallBack = {}
-	App42API:initialize("1115061051839753", "ceb665dfcdccce67e201ad66ebc741f3")
-	socialService:linkUserFacebookAccount(myData.user, accessToken.token, App42CallBack)
-	function App42CallBack:onSuccess(object)
-	  print("userName is " ..object:getUserName()) 
-	  print("facebookAccessToken is "..object:getFacebookAccessToken()) 
-	end
-	function App42CallBack:onException(exception)
-	  print("Message is : "..exception:getMessage())
-	  print("App Error code is : "..exception:getAppErrorCode())
-	  print("Http Error code is "..exception:getHttpErrorCode())
-	  print("Detail is : "..exception:getDetails())
-	end
-  end
-end
-
-
-local function facebookListener( event )
-    print( "event.name:" .. event.name )  --"fbconnect"
-    print( "isError: " .. tostring( event.isError ) )
-    print( "didComplete: " .. tostring( event.didComplete ) )
-    print( "event.type:" .. event.type )  --"session", "request", or "dialog"
-    --"session" events cover various login/logout events
-    --"request" events handle calls to various Graph API calls
-    --"dialog" events are standard popup boxes that can be displayed
-    if ( "session" == event.type ) then
-        --options are "login", "loginFailed", "loginCancelled", or "logout"
-        if ( "login" == event.phase ) then
-            accessToken = event.token
-        end
-    elseif ( "request" == event.type ) then
-        print("facebook request")
-        if ( not event.isError ) then
-            local response = json.decode( event.response )
-            --process response data here
-        end
-    elseif ( "dialog" == event.type ) then
-        print( "dialog", event.response )
-        --handle dialog results here
-    end
-end
-
 -- Slider listener
 local function sliderListener( event )
     print( "Slider at " .. event.value .. "%" )
@@ -197,6 +158,133 @@ local function sfxSliderListener( event )
     end
 end
 
+local function prevRobo( event )
+    if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+        print("roboSprites size is "..table.maxn(myData.roboSprites))
+        print("roboSprites3 size is "..myData.roboSprites[3][5])
+        if(myData.roboSprites[robo_counter - 1] == nil) then
+            robo_counter = table.maxn(myData.roboSprites)
+        else
+            robo_counter = robo_counter - 1
+        end
+        print("robo_counter is "..robo_counter)
+        robo_pic:removeSelf()
+        robo_title:removeSelf()
+        robo_title = display.newText(myData.roboSprites[robo_counter][2], display.contentCenterX-600, display.contentCenterY+275, native.systemFont, 40)
+        robo_pic = display.newImage(myData.roboSprites[robo_counter][3],system.ResourceDirectory)
+        robo_pic.x = display.contentCenterX - 600
+        robo_pic.y = display.contentCenterY + 175
+        robo_pic.height = 125
+        robo_pic.width = 125
+    end
+end
+
+local function nextRobo( event )
+    if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+        print("roboSprites size is "..table.maxn(myData.roboSprites))
+        print("roboSprites3 size is "..myData.roboSprites[3][5])
+        if(myData.roboSprites[robo_counter + 1] == nil) then
+            robo_counter = 1
+        else
+            robo_counter = robo_counter + 1
+        end
+        print("robo_counter is "..robo_counter)
+        robo_pic:removeSelf()
+        robo_title:removeSelf()
+        robo_title = display.newText(myData.roboSprites[robo_counter][2], display.contentCenterX-600, display.contentCenterY+275, native.systemFont, 40)
+        robo_pic = display.newImage(myData.roboSprites[robo_counter][3],system.ResourceDirectory)
+        robo_pic.x = display.contentCenterX - 600
+        robo_pic.y = display.contentCenterY + 175
+        robo_pic.height = 125
+        robo_pic.width = 125
+    end
+end
+
+local function prevTheme( event )
+    if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+        print("themeColours size is "..table.maxn(myData.themeColours))
+        if(myData.themeColours[theme_counter - 1] == nil) then
+            theme_counter = table.maxn(myData.themeColours)
+        else
+            theme_counter = theme_counter - 1
+        end
+        print("theme_counter is "..robo_counter)
+        theme_pic:removeSelf()
+        theme_title:removeSelf()
+        theme_title = display.newText(myData.themeColours[theme_counter][2], display.contentCenterX, display.contentCenterY+275, native.systemFont, 40)
+        theme_pic = display.newImage(myData.themeColours[theme_counter][3],system.ResourceDirectory)
+        theme_pic.x = display.contentCenterX
+        theme_pic.y = display.contentCenterY + 175
+        theme_pic.height = 125
+        theme_pic.width = 218.74
+    end
+end
+
+local function nextTheme( event )
+    if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+        print("themeColours size is "..table.maxn(myData.themeColours))
+        if(myData.themeColours[theme_counter + 1] == nil) then
+            theme_counter = 1
+        else
+            theme_counter = theme_counter + 1
+        end
+        print("theme_counter is "..theme_counter)
+        theme_pic:removeSelf()
+        theme_title:removeSelf()
+        theme_title = display.newText(myData.themeColours[theme_counter][2], display.contentCenterX, display.contentCenterY+275, native.systemFont, 40)
+        theme_pic = display.newImage(myData.themeColours[theme_counter][3],system.ResourceDirectory)
+        theme_pic.x = display.contentCenterX
+        theme_pic.y = display.contentCenterY + 175
+        theme_pic.height = 125
+        theme_pic.width = 218.74
+    end
+end
+
+local function prevScience( event )
+    if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+        print("scienceSprites size is "..table.maxn(myData.scienceSprites))
+        if(myData.scienceSprites[science_counter - 1] == nil) then
+            science_counter = table.maxn(myData.scienceSprites)
+        else
+            science_counter = science_counter - 1
+        end
+        print("science_counter is "..science_counter)
+        science_pic:removeSelf()
+        science_title:removeSelf()
+        science_title = display.newText(myData.scienceSprites[science_counter][2], display.contentCenterX + 600, display.contentCenterY+275, native.systemFont, 40)
+        science_pic = display.newImage(myData.scienceSprites[science_counter][3],system.ResourceDirectory)
+        science_pic.x = display.contentCenterX + 600
+        science_pic.y = display.contentCenterY + 175
+        science_pic.height = 125
+        science_pic.width = 125
+    end
+end
+
+local function nextScience( event )
+    if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+        print("scienceSprites size is "..table.maxn(myData.scienceSprites))
+        if(myData.scienceSprites[science_counter + 1] == nil) then
+            science_counter = 1
+        else
+            science_counter = science_counter + 1
+        end
+        print("science_counter is "..science_counter)
+        science_pic:removeSelf()
+        science_title:removeSelf()
+        science_title = display.newText(myData.scienceSprites[science_counter][2], display.contentCenterX + 600, display.contentCenterY+275, native.systemFont, 40)
+        science_pic = display.newImage(myData.scienceSprites[science_counter][3],system.ResourceDirectory)
+        science_pic.x = display.contentCenterX + 600
+        science_pic.y = display.contentCenterY + 175
+        science_pic.height = 125
+        science_pic.width = 125
+    end
+end
 
 -- "scene:create()"
 function scene:create( event )
@@ -328,6 +416,135 @@ function scene:show( event )
         sfxValue:setFillColor( 1, 1, 1 )
         sceneGroup:insert(sfxValue)
 
+
+        for i=1, table.maxn(myData.roboSprites), 1 do
+            if(myData.roboSprite == myData.roboSprites[i][5])then
+                robo_counter = i
+            end
+        end
+        print("roboSprite is "..myData.roboSprite)
+        print("robo_counter is "..robo_counter)
+
+        local leftrobo = widget.newButton{
+            x = display.contentCenterX - 750,
+            y = display.contentCenterY+175,
+            shape = "polygon",
+            vertices = {display.contentCenterX - 750,display.contentCenterY+175, 
+                    display.contentCenterX - 675,display.contentCenterY+125, 
+                    display.contentCenterX - 675,display.contentCenterY+225},
+            fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+            onEvent = prevRobo
+        }
+        sceneGroup:insert(leftrobo)
+
+        local rightrobo = widget.newButton{
+            x = display.contentCenterX - 450,
+            y = display.contentCenterY+175,
+            shape = "polygon",
+            vertices = {display.contentCenterX - 375,display.contentCenterY+175, 
+                    display.contentCenterX - 450,display.contentCenterY+125, 
+                    display.contentCenterX - 450,display.contentCenterY+225},
+            fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+            onEvent = nextRobo
+        }
+        sceneGroup:insert(rightrobo)
+
+        robo_pic = display.newImage(myData.roboSprites[robo_counter][3],system.ResourceDirectory)
+        robo_pic.height = 125
+        robo_pic.width = 125
+        robo_pic.x = display.contentCenterX - 600
+        robo_pic.y = display.contentCenterY+175
+        sceneGroup:insert(robo_pic)
+        
+        robo_title = display.newText(myData.roboSprites[robo_counter][2], display.contentCenterX-600, display.contentCenterY+275, native.systemFont, 40)
+        sceneGroup:insert(robo_title)
+
+
+        for i=1, table.maxn(myData.themeColours), 1 do
+            if(myData.theme == myData.themeColours[i][5])then
+                theme_counter = i
+            end
+        end
+        print("theme is "..myData.theme)
+        print("theme_counter is "..theme_counter)
+
+        local lefttheme = widget.newButton{
+            x = display.contentCenterX - 175,
+            y = display.contentCenterY+175,
+            shape = "polygon",
+            vertices = {display.contentCenterX - 175,display.contentCenterY+175, 
+                    display.contentCenterX - 100,display.contentCenterY+125, 
+                    display.contentCenterX - 100,display.contentCenterY+225},
+            fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+            onEvent = prevTheme
+        }
+        sceneGroup:insert(lefttheme)
+
+        local righttheme = widget.newButton{
+            x = display.contentCenterX + 175,
+            y = display.contentCenterY+175,
+            shape = "polygon",
+            vertices = {display.contentCenterX + 175,display.contentCenterY+175, 
+                    display.contentCenterX + 100,display.contentCenterY+125, 
+                    display.contentCenterX + 100,display.contentCenterY+225},
+            fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+            onEvent = nextTheme
+        }
+        sceneGroup:insert(righttheme)
+
+        theme_pic = display.newImage(myData.themeColours[theme_counter][3],system.ResourceDirectory)
+        theme_pic.height = 125
+        theme_pic.width = 218.74
+        theme_pic.x = display.contentCenterX
+        theme_pic.y = display.contentCenterY+175
+        sceneGroup:insert(theme_pic)
+        
+        theme_title = display.newText(myData.themeColours[theme_counter][2], display.contentCenterX, display.contentCenterY+275, native.systemFont, 40)
+        sceneGroup:insert(theme_title)
+
+
+        for i=1, table.maxn(myData.scienceSprites), 1 do
+            if(myData.scienceSprite == myData.scienceSprites[i][5])then
+                science_counter = i
+            end
+        end
+        print("scienceSprite is "..myData.scienceSprite)
+        print("science_counter is "..science_counter)
+
+        local leftscience = widget.newButton{
+            x = display.contentCenterX + 750,
+            y = display.contentCenterY+175,
+            shape = "polygon",
+            vertices = {display.contentCenterX + 750,display.contentCenterY+175, 
+                    display.contentCenterX + 675,display.contentCenterY+125, 
+                    display.contentCenterX + 675,display.contentCenterY+225},
+            fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+            onEvent = prevScience
+        }
+        sceneGroup:insert(leftscience)
+
+        local rightscience = widget.newButton{
+            x = display.contentCenterX + 450,
+            y = display.contentCenterY+175,
+            shape = "polygon",
+            vertices = {display.contentCenterX + 375,display.contentCenterY+175, 
+                    display.contentCenterX + 450,display.contentCenterY+125, 
+                    display.contentCenterX + 450,display.contentCenterY+225},
+            fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+            onEvent = nextScience
+        }
+        sceneGroup:insert(rightscience)
+
+        science_pic = display.newImage(myData.scienceSprites[science_counter][3],system.ResourceDirectory)
+        science_pic.height = 125
+        science_pic.width = 125
+        science_pic.x = display.contentCenterX+600
+        science_pic.y = display.contentCenterY+175
+        sceneGroup:insert(science_pic)
+        
+        science_title = display.newText(myData.scienceSprites[science_counter][2], display.contentCenterX+600, display.contentCenterY+275, native.systemFont, 40)
+        sceneGroup:insert(science_title)
+
 		
     elseif ( phase == "did" ) then
 		audio.resume(backgroundMusicplay)
@@ -343,6 +560,26 @@ function scene:hide( event )
 
     if ( phase == "will" ) then
     	homebutton:removeEventListener( "tap", gohome )
+        if(robo_pic ~= nil)then
+            robo_pic:removeSelf()
+        end
+        if(robo_title ~= nil)then
+            robo_title:removeSelf()
+        end
+
+        if(science_pic ~= nil)then
+            science_pic:removeSelf()
+        end
+        if(science_title ~= nil)then
+            science_title:removeSelf()
+        end
+
+        if(theme_pic ~= nil)then
+            theme_pic:removeSelf()
+        end
+        if(theme_title ~= nil)then
+            theme_title:removeSelf()
+        end
     elseif ( phase == "did" ) then
     end
 end
