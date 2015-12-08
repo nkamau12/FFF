@@ -306,6 +306,7 @@ function App42CallBack:onSuccess(object)
   myData.searchRun = {1450, 887, 120, 360, "Images/run_button.png"}
   myData.searchDelete = {1289, 887, 120, 120, "Images/delete_button.png"}
   myData.searchHome = {1766, 28, 120, 120, "Images/home.png"}
+  myData.searchClock = {75, 35, 88, 88, "Images/stopwatch.png"}
 
   -- Search answer keys. Used for the single player levels
   myData.searchAnswerkey = {

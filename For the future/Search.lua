@@ -9,6 +9,8 @@ local secondsLeft
 local clockText
 local countDownTimer
 
+local clock_text
+
 
 local JSON = require("App42-Lua-API.JSON") 
 local App42API = require("App42-Lua-API.App42API")
@@ -110,6 +112,8 @@ local function setupmap()
     setupPic("deletebutton", myData.searchDelete[5], myData.searchDelete[1], myData.searchDelete[2], myData.searchDelete[3], myData.searchDelete[4])
     --home_button
     setupPic("homebutton", myData.searchHome[5], myData.searchHome[1], myData.searchHome[2], myData.searchHome[3], myData.searchHome[4])
+
+    setupPic("clockpowerup", myData.searchClock[5], myData.searchClock[1], myData.searchClock[2], myData.searchClock[3], myData.searchClock[4])
 end 
 
 local function addcolour( event )
@@ -349,6 +353,22 @@ local function updateTime(event)
 
 end
 
+local function updateClocks(event)
+    local clocksDisplay = myData.savedclocks
+    clock_num.text = clocksDisplay
+end
+local function useclock()
+    myData.savedclocks = myData.savedclocks - 1
+    clockscount = clockscount + 1
+    hasClock = true
+    print("clockscount is "..clockscount)
+    updateClocks()
+    if(myData.savedclocks == 0) then
+        setupItems["clockpowerup"]:removeEventListener("tap", useclock)
+    end
+    secondsLeft = secondsLeft + 11
+    updateTime()
+end
 
 local function getScoreDoc()
     local key = "name"
@@ -441,6 +461,12 @@ function scene:create( event )
     undosearch = 0
     homesearch = 0
     runsearch = 0
+    clockscount = 0
+
+    clock_text = display.newText("x", 185, 79)
+    sceneGroup:insert(clock_text)
+    clock_num = display.newText(myData.savedclocks, 235, 79)
+    sceneGroup:insert(clock_num)
     
 
     sceneGroup:insert(setupItems["blockred"])
@@ -450,6 +476,7 @@ function scene:create( event )
     sceneGroup:insert(setupItems["runbutton"])
     sceneGroup:insert(setupItems["deletebutton"])
     sceneGroup:insert(setupItems["homebutton"])
+    sceneGroup:insert(setupItems["clockpowerup"])
     
 
     i=1
@@ -479,6 +506,11 @@ function scene:create( event )
     setupItems["deletebutton"]:addEventListener("tap",removelast)
     setupItems["homebutton"]:addEventListener("tap",gohome)
     setupItems["runbutton"]:addEventListener("tap",checkresult)
+
+    if(myData.savedclocks > 0) then
+        setupItems["clockpowerup"]:addEventListener("tap", useclock)
+    end
+
     spotx = 631
     spoty = 230
     countmax = 0
