@@ -245,8 +245,7 @@ local function tryregister(event)
 
           local dbName  = "USERS"
           local collectionName = "GameInfo"
-          local json2 = "{\"user\":"..newUser..",\"credits\":0,\"search\":1,\"rescue\":1,\"volume\":100,\"sfx\":100,\"theme\":\"default\",
-                      \"robot\":\"default\",\"scientist\":\"default\",\"keys\":0,\"stopwatch\":0}"
+          local json2 = "{\"user\":"..newUser..",\"credits\":0,\"search\":1,\"rescue\":1,\"volume\":100,\"sfx\":100,\"theme\":\"default\",\"robot\":\"default\",\"scientist\":\"default\",\"keys\":0,\"stopwatch\":0}"
           local App42CallBack = {}
           local storageService = App42API:buildStorageService()
           storageService:insertJSONDocument(dbName, collectionName, json2,App42CallBack)

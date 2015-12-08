@@ -205,8 +205,8 @@ function App42CallBack:onSuccess(object)
     myData.twobutton = {1755, 186, 122, 122, "Images/2_block.png"}
     myData.homebutton = {1764, 30, 122, 122, "Images/home.png"}
     myData.startbutton = {1552, 332, 122, 320, "Images/run_button.png"}
-    myData.keypowerup = {1065, 349, 88, 88, "Images/key.png"}
-    myData.clockpowerup = {1301, 349, 88, 88, "Images/stopwatch.png"}
+    myData.keypowerup = {1085, 349, 88, 88, "Images/key.png"}
+    myData.clockpowerup = {1321, 349, 88, 88, "Images/stopwatch.png"}
     --robot
     myData.robot = {109, 819, 140, 140, "Images/robot_"..myData.roboSprite..".png"}
     --scientist

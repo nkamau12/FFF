@@ -27,12 +27,17 @@ local currwall
 local keyset = {}
 local numkeys
 local hasKey = false
+local hasClock = false
 
 local i = 1
 
 local secondsLeft
 local clockText
 local countDownTimer
+local key_text
+local clock_text
+
+
 
 local JSON = require("App42-Lua-API.JSON") 
 local App42API = require("App42-Lua-API.App42API")
@@ -771,6 +776,8 @@ local function gohome()
 			
 end
 
+
+
 local function addButton(position, xPos, yPos,idName)
 	buttonTable[position] = widget.newButton
 	{
@@ -806,6 +813,30 @@ local function updateTime(event)
         composer.showOverlay( "fail_time_rescue", options )
     end
 
+end
+
+local function updateKeys(event)
+    local keyDisplay = myData.savedkeys
+    key_num.text = keyDisplay
+end
+
+
+local function usekey()
+	myData.savedkeys = 	myData.savedkeys - 1
+	keyscount = keyscount + 1
+	hasKey = true
+	print("keyscount is "..keyscount)
+	updateKeys()
+	if(myData.savedkeys == 0) then
+		setupItems["keypowerup"]:removeEventListener("tap", usekey)
+	end
+end
+local function useclock()
+	myData.savedclocks = myData.savedclocks - 1
+	clockscount = clockscount + 1
+	hasClock = true
+	print("clockscount is "..clockscount)
+	
 end
 
 local function getScoreDoc()
@@ -878,6 +909,7 @@ function scene:create( event )
 	undoloop = 0
 	emptyloop = 0
 	keyscount = 0
+	clockscount = 0
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -890,14 +922,16 @@ function scene:create( event )
 	background.y=display.contentCenterY
 	sceneGroup:insert(background)
 
-	key_text = display.newText("x", 1179, 393)
+	key_text = display.newText("x", 1200, 393)
 	sceneGroup:insert(key_text)
 	print("keys is "..myData.savedkeys)
-	key_num = display.newText(myData.savedkeys, 1229, 393)
+	key_num = display.newText(myData.savedkeys, 1250, 393)
 	sceneGroup:insert(key_num)
 
-	clock_text = display.newText("x", 1411, 393)
+	clock_text = display.newText("x", 1431, 393)
 	sceneGroup:insert(clock_text)
+	clock_num = display.newText(myData.savedclocks, 1481, 393)
+	sceneGroup:insert(clock_num)
 	
 	--buttons
 	
@@ -936,6 +970,12 @@ function scene:create( event )
 	setupItems["twob"]:addEventListener("tap", twotap)
 	setupItems["start"]:addEventListener("tap", pass)
 	setupItems["home"]:addEventListener("tap", gohome)
+	if(myData.savedkeys > 0) then
+		setupItems["keypowerup"]:addEventListener("tap", usekey)
+	end
+	if(myData.savedclocks > 0) then
+		setupItems["clockpowerup"]:addEventListener("tap", useclock)
+	end
 	
 	--add buttons
 	sceneGroup:insert(buttonTable[11])
