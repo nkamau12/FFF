@@ -112,7 +112,7 @@ function scene:show( event )
 		sceneGroup:insert(bonus)
 
 		--depending on whether the user is the #1 player, this sets the listener for bonus to either the standard menu or the play/create overlay
-		if(myData.isLeader == 1) then
+		if(myData.isLeader >= 1) then
 			bonus:addEventListener( "tap", bestMenu )
 		elseif(myData.isLeader == 0) then
 			bonus:addEventListener( "tap", normalMenu )
@@ -137,7 +137,7 @@ function scene:hide( event )
 
         homebutton:removeEventListener( "tap", gohome )
         play:removeEventListener( "touch", showSingle )
-        if(myData.isLeader == 1) then
+        if(myData.isLeader >= 1) then
 			bonus:removeEventListener( "tap", bestMenu )
 		elseif(myData.isLeader == 0) then
 			bonus:removeEventListener( "tap", normalMenu )
