@@ -374,6 +374,7 @@ end
 local function getScoreDoc()
     local key = "name"
     local value = myData.user
+    local collectionName = "Scores"
     local key1 = "level"
     local varname = "_$scoreId"
     local value1 = "Search"..currLvl
