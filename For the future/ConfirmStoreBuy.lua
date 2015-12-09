@@ -87,7 +87,14 @@ local function confirm(event)
 				local dbName  = "USERS"
 				local collectionName = "Store"
 				local docId = myData.storeDoc
-				local keys = "{\""..myData.purchase[5].."\":1}"
+				local keys
+				if(myData.purchase[1] == "robot") then
+					keys = "{\"".."robot_"..myData.purchase[5].."\":1}"
+				elseif(myData.purchase[1] == "scientist") then
+					keys = "{\"".."scientist_"..myData.purchase[5].."\":1}"
+				elseif(myData.purchase[1] == "theme") then
+					keys = "{\"".."theme_"..myData.purchase[5].."\":1}"
+				end
 
 				App42CallBack = {}
 				storageService = App42API:buildStorageService()
