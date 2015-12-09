@@ -18,9 +18,7 @@ local ACL = require("App42-Lua-API.ACL")
 local userService  = App42API:buildUserService()  
 local storageService = App42API:buildStorageService()  
 local socialService  = App42API:buildSocialService() 
-local fbAppID = "1115061051839753"  --replace with your Facebook App ID
 local App42CallBack = {}
-local facebook = require( "plugin.facebook.v4" )
 local showButton = 1
 local accessToken
 local volumeValue

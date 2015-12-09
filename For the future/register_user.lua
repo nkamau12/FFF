@@ -37,50 +37,6 @@ checkEmail = nil
 
 
 
-function fblogin()
-  facebook.login( fbAppID, facebookListener, { "public_profile", "user_friends", "email" } )
-end
-
-
-local function facebookListener( event )
-    print( "event.name:" .. event.name )  --"fbconnect"
-    print( "isError: " .. tostring( event.isError ) )
-    print( "didComplete: " .. tostring( event.didComplete ) )
-    print( "event.type:" .. event.type )  --"session", "request", or "dialog"
-    --"session" events cover various login/logout events
-    --"request" events handle calls to various Graph API calls
-    --"dialog" events are standard popup boxes that can be displayed
-    if ( "session" == event.type ) then
-        --options are "login", "loginFailed", "loginCancelled", or "logout"
-        if ( "login" == event.phase ) then
-            local access_token = event.token
-            local userName = myData.user
-            local App42CallBack = {}
-            socialService:linkUserFacebookAccount(userName, access_token, App42CallBack)
-            
-            function App42CallBack:onSuccess(object)
-              print("userName is " ..object:getUserName());    
-              print("facebookAccessToken is "..object:getFacebookAccessToken());  
-            end
-            function App42CallBack:onException(exception)
-              print("Message is : "..exception:getMessage())
-              print("App Error code is : "..exception:getAppErrorCode())
-              print("Http Error code is "..exception:getHttpErrorCode())
-              print("Detail is : "..exception:getDetails())
-            end
-
-        end
-    elseif ( "request" == event.type ) then
-        print("facebook request")
-        if ( not event.isError ) then
-            local response = json.decode( event.response )
-            --process response data here
-        end
-    elseif ( "dialog" == event.type ) then
-        print( "dialog", event.response )
-        --handle dialog results here
-    end
-end
 
 local function createScores(user,name,number)
   local lvlName = name
@@ -255,11 +211,13 @@ local function tryregister(event)
               print("DocId is "..object:getJsonDocList():getDocId())
               print("Created At is "..object:getJsonDocList():getCreatedAt())
             print("Updated At is "..object:getJsonDocList():getUpdatedAt())
-            for i=1, 12, 1 do
-              createScores(newUser,"Search",i)
+
+            for l=1, 12, 1 do
+              createScores(newUser,"Search",l)
             end
-            for i=1, 12, 1 do
-              createScores(newUser,"Rescue",i)
+
+            for m=1, 12, 1 do
+              createScores(newUser,"Rescue",m)
             end
             createMax(newUser)
             createStore(newUser)

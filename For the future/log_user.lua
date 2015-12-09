@@ -20,7 +20,6 @@ local newPass
 local userField
 local passField
 
-local fbAppID = "1115061051839753"  --replace with your Facebook App ID
 
 local function trylogin(event)
 	newUser = userField.text
