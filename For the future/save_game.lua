@@ -17,42 +17,6 @@ local queryBuilder = require("App42-Lua-API.QueryBuilder")
 local ACL = require("App42-Lua-API.ACL")
 local storageService = App42API:buildStorageService()  
 
-
-local function checkLvl(event)
-	if ( event.phase == "ended") then
-		local dbName  = "USERS"
-		local collectionName = "Bonus Levels"
-		local key = "level"
-		local value = userField.text
-		local App42CallBack = {}
-		storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42CallBack)
-		function App42CallBack:onSuccess(object)
-			print("dbName is "..object:getDbName())
-			for i=1,table.getn(object:getJsonDocList()) do
-				print("DocId is "..object:getJsonDocList()[i]:getDocId())
-				print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
-				local options = {
-                        isModal = true,
-                        effect = "crossFade",
-                        time = 500
-                }
-                composer.showOverlay("repeated_name", options)
-			end
-		end
-		function App42CallBack:onException(exception)
-			print("Message is : "..exception:getMessage())
-			print("App Error code is : "..exception:getAppErrorCode())
-			local errorCode = exception:getAppErrorCode()
-
-            if(errorCode == 2601) then
-                submitLvl()
-            end
-			print("Detail is : "..exception:getDetails())
-		end
-
-	end
-end
-
 --Connects to App42's database and saves a JSON with the new level's information
 	--The JSON will contain: username, level name, level type(Search/Rescue), answer key, main function, one function, two function, and play count
 local function submitLvl()
@@ -100,6 +64,44 @@ local function submitLvl()
 		print("Message is : "..exception:getMessage())
 	end
 end
+
+
+local function checkLvl(event)
+	if ( event.phase == "ended") then
+		local dbName  = "USERS"
+		local collectionName = "Bonus Levels"
+		local key = "level"
+		local value = userField.text
+		local App42CallBack = {}
+		storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42CallBack)
+		function App42CallBack:onSuccess(object)
+			print("dbName is "..object:getDbName())
+			for i=1,table.getn(object:getJsonDocList()) do
+				print("DocId is "..object:getJsonDocList()[i]:getDocId())
+				print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
+				local options = {
+                        isModal = true,
+                        effect = "crossFade",
+                        time = 500
+                }
+                composer.showOverlay("repeated_name", options)
+			end
+		end
+		function App42CallBack:onException(exception)
+			print("Message is : "..exception:getMessage())
+			print("App Error code is : "..exception:getAppErrorCode())
+			local errorCode = exception:getAppErrorCode()
+
+            if(errorCode == 2601) then
+                submitLvl()
+            end
+			print("Detail is : "..exception:getDetails())
+		end
+
+	end
+end
+
+
 
 local function userListener( event )
     if ( event.phase == "began" ) then

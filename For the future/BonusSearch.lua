@@ -60,7 +60,7 @@ end
 
 local function setupmap()
     i=1
-    while(myData.bonusSearchLvlOne[i] ~= 0) do
+    while(myData.bonusSearchLvlOne[i] ~= nil and myData.bonusSearchLvlOne[i] ~= 0) do
         currBlock = myData.bonusSearchLvlOne[i]
         print("currblock is "..currBlock)
         mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
@@ -74,7 +74,7 @@ local function setupmap()
     end
 
     i=1
-    while(myData.bonusSearchLvlTwo[i] ~= 0) do
+    while(myData.bonusSearchLvlTwo[i] ~= nil and myData.bonusSearchLvlTwo[i] ~= 0) do
         currBlock = myData.bonusSearchLvlTwo[i]
         mapone[i] = display.newImage("Images/"..currBlock.."_block.png")
         mapone[i].anchorX=0
@@ -86,7 +86,7 @@ local function setupmap()
         i = i + 1
     end
     i=1
-    while(myData.bonusSearchLvlThree[i] ~= 0) do
+    while(myData.bonusSearchLvlThree[i] ~= nil and myData.bonusSearchLvlThree[i] ~= 0) do
         currBlock = myData.bonusSearchLvlThree[i]
         maptwo[i] = display.newImage("Images/"..currBlock.."_block.png")
         maptwo[i].anchorX=0
@@ -300,9 +300,21 @@ local function updateCount()
     jsonDoc.level = myData.bonusTitle
     jsonDoc.type = "Search"
     jsonDoc.key = myData.bonusSearchLvlKey
-    jsonDoc.keyone = myData.bonusSearchLvlOne
-    jsonDoc.keytwo = myData.bonusSearchLvlTwo
-    jsonDoc.keythree = myData.bonusSearchLvlThree
+    jsonDoc.keyoneone = myData.bonusSearchLvlOne[1]
+    jsonDoc.keyonetwo = myData.bonusSearchLvlOne[2]
+    jsonDoc.keyonethree = myData.bonusSearchLvlOne[3]
+    jsonDoc.keyonefour = myData.bonusSearchLvlOne[4]
+    jsonDoc.keyonefive = myData.bonusSearchLvlOne[5]
+    jsonDoc.keytwoone = myData.bonusSearchLvlTwo[1]
+    jsonDoc.keytwotwo = myData.bonusSearchLvlTwo[2]
+    jsonDoc.keytwothree = myData.bonusSearchLvlTwo[3]
+    jsonDoc.keytwofour = myData.bonusSearchLvlTwo[4]
+    jsonDoc.keytwofive = myData.bonusSearchLvlTwo[5]
+    jsonDoc.keythreeone = myData.bonusSearchLvlThree[1]
+    jsonDoc.keythreetwo = myData.bonusSearchLvlThree[2]
+    jsonDoc.keythreethree = myData.bonusSearchLvlThree[3]
+    jsonDoc.keythreefour = myData.bonusSearchLvlThree[4]
+    jsonDoc.keythreefive = myData.bonusSearchLvlThree[5]
     jsonDoc.playcount = myData.bonusCount + 1
 
     App42CallBack = {}
@@ -512,7 +524,7 @@ function scene:show( event )
             searchMusicplay = audio.play( searchMusic, {  channel = 1, fadein = 4000, loops=-1 } )
 
             i=1
-            while(myData.bonusSearchLvlOne[i] ~= nil) do
+            while(myData.bonusSearchLvlOne[i] ~= nil and myData.bonusSearchLvlOne[i] ~= 0) do
                 currBlock = myData.bonusSearchLvlOne[i]
                 mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
                 mapmain[i].anchorX=0
@@ -525,7 +537,7 @@ function scene:show( event )
             end
 
             i=1
-            while(myData.bonusSearchLvlTwo[i] ~= nil) do
+            while(myData.bonusSearchLvlTwo[i] ~= nil and myData.bonusSearchLvlTwo[i] ~= 0) do
                 currBlock = myData.bonusSearchLvlTwo[i]
                 mapone[i] = display.newImage("Images/"..currBlock.."_block.png")
                 mapone[i].anchorX=0
@@ -537,7 +549,7 @@ function scene:show( event )
                 i = i + 1
             end
             i=1
-            while(myData.bonusSearchLvlThree[i] ~= nil) do
+            while(myData.bonusSearchLvlThree[i] ~= nil and myData.bonusSearchLvlThree[i] ~= 0) do
                 currBlock = myData.bonusSearchLvlThree[i]
                 maptwo[i] = display.newImage("Images/"..currBlock.."_block.png")
                 maptwo[i].anchorX=0
