@@ -96,7 +96,7 @@ local function setupmap()
 	robot.myName="robot"
 
 	--scientist
-	setscience(currResc)
+	setscience(1)
 	science = display.newImage("Images/scientist_present.png")
 	science.anchorX=0
 	science.anchorY=0
@@ -109,8 +109,8 @@ local function setupmap()
 
 	--walls
 	i = 1
-	while(myData.levelkey[currResc].walls[i] ~= nil) do
-		currwall = "wall"..(myData.levelkey[currResc].walls[i])
+	while(myData.levelkey[1].walls[i] ~= nil) do
+		currwall = "wall"..(myData.levelkey[1].walls[i])
 		print(currwall)
 		currdata = myData[currwall]
 		print(currdata)
@@ -145,8 +145,8 @@ local function setupmap()
 	physics.addBody( setupItems["rightwall"], "static",{bounce=0})
 	physics.addBody( setupItems["topwall"], "static",{bounce=0})
 	physics.addBody( setupItems["bottomwall"], "static",{bounce=0})
-	while(myData.levelkey[currResc].walls[i] ~= nil) do
-		currwall = "wall"..(myData.levelkey[currResc].walls[i])
+	while(myData.levelkey[1].walls[i] ~= nil) do
+		currwall = "wall"..(myData.levelkey[1].walls[i])
 		physics.addBody( setupItems[currwall], "static",{bounce=0})
 		i = i + 1
 	end
@@ -443,7 +443,6 @@ local function onCollision( event )
 				}
 				audio.stop(elevatorMusicplay)
 				audio.pause(backgroundMusicplay)
-				if(currResc ~= 4) then
 					for h = 15, 1, -1 do
 						if(picTable[h] ~= nil) then
 							picTable[h]:removeSelf()
@@ -451,14 +450,6 @@ local function onCollision( event )
 					end
 					composer.showOverlay("pass_tutorial",options)
 					
-				else
-					for h = 15, 1, -1 do
-						if(picTable[h] ~= nil) then
-							picTable[h]:removeSelf()
-						end
-					end
-					composer.gotoScene("Credits",options)
-				end
 		elseif (event.object2==setupItems["bottomwall"] or event.object2==setupItems["topwall"] 
 				or event.object2==setupItems["leftwall"] or event.object2==setupItems["rightwall"] ) then
 			local options = {
@@ -469,8 +460,8 @@ local function onCollision( event )
 			print("why1")
 
 		else
-			while(myData.levelkey[currResc].walls[i] ~= nil) do
-				currwall = "wall"..myData.levelkey[currResc].walls[i]
+			while(myData.levelkey[1].walls[i] ~= nil) do
+				currwall = "wall"..myData.levelkey[1].walls[i]
 				if(event.object2==setupItems[currwall]) then
 					
 						local options = {
@@ -685,8 +676,8 @@ function scene:create( event )
 	sceneGroup:insert(setupItems["topwall"])
 	sceneGroup:insert(setupItems["leftwall"])
 	sceneGroup:insert(setupItems["rightwall"])
-	while(myData.levelkey[currResc].walls[i] ~= nil) do
-		currwall = "wall"..myData.levelkey[currResc].walls[i]
+	while(myData.levelkey[1].walls[i] ~= nil) do
+		currwall = "wall"..myData.levelkey[1].walls[i]
 		sceneGroup:insert(setupItems[currwall])
 		i = i + 1
 	end
@@ -707,6 +698,8 @@ function scene:show( event )
     	print(myData.rescueLvl)
     	currResc = 1
         if(robot == nil) then
+
+    		ShowSpeech(myData.SpeechR)
 			elevatorMusic = audio.loadStream( "Music/bensound-theelevatorbossanova.mp3")
 			elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
 
@@ -721,7 +714,7 @@ function scene:show( event )
 			robot.myName="robot"
 
 			--scientist
-			setscience(currResc)
+			setscience(1)
 			science = display.newImage("Images/scientist_present.png")
 			science.anchorX=0
 			science.anchorY=0
@@ -735,8 +728,8 @@ function scene:show( event )
 			setupPic("topwall", myData.topwall[5], myData.topwall[1], myData.topwall[2], myData.topwall[3], myData.topwall[4])
 			setupPic("bottomwall", myData.bottomwall[5], myData.bottomwall[1], myData.bottomwall[2], myData.bottomwall[3], myData.bottomwall[4])
 			i=1
-			while(myData.levelkey[currResc].walls[i] ~= nil) do
-				currwall = "wall"..myData.levelkey[currResc].walls[i]
+			while(myData.levelkey[1].walls[i] ~= nil) do
+				currwall = "wall"..myData.levelkey[1].walls[i]
 				print(currwall)
 				currdata = myData[currwall]
 				print(currdata)
@@ -753,8 +746,8 @@ function scene:show( event )
 			physics.addBody( setupItems["rightwall"], "static",{bounce=0})
 			physics.addBody( setupItems["topwall"], "static",{bounce=0})
 			physics.addBody( setupItems["bottomwall"], "static",{bounce=0})
-			while(myData.levelkey[currResc].walls[i] ~= nil) do
-				currwall = "wall"..myData.levelkey[currResc].walls[i]
+			while(myData.levelkey[1].walls[i] ~= nil) do
+				currwall = "wall"..myData.levelkey[1].walls[i]
 				physics.addBody( setupItems[currwall], "static",{bounce=0})
 				i = i + 1
 			end
@@ -787,7 +780,7 @@ function scene:show( event )
 			--sceneGroup:insert(setupItems["downa"])
 			--sceneGroup:insert(setupItems["lefta"])
 			--sceneGroup:insert(setupItems["righta"])
-			--sceneGroup:insert(setupItems["mainb"])
+			--sceneGroup:insert(setupItems[""])
 			--sceneGroup:insert(setupItems["oneb"])
 			--sceneGroup:insert(setupItems["twob"])
 			--sceneGroup:insert(setupItems["start"])
@@ -798,8 +791,8 @@ function scene:show( event )
 			sceneGroup:insert(setupItems["topwall"])
 			sceneGroup:insert(setupItems["leftwall"])
 			sceneGroup:insert(setupItems["rightwall"])
-			while(myData.levelkey[currResc].walls[i] ~= nil) do
-				currwall = "wall"..myData.levelkey[currResc].walls[i]
+			while(myData.levelkey[1].walls[i] ~= nil) do
+				currwall = "wall"..myData.levelkey[1].walls[i]
 				sceneGroup:insert(setupItems[currwall])
 				i = i + 1
 			end
@@ -846,8 +839,8 @@ function scene:hide( event )
 		display.remove( setupItems["rightwall"])
 		display.remove( setupItems["topwall"])
 		display.remove( setupItems["bottomwall"])
-		while(myData.levelkey[currResc].walls[i] ~= nil) do
-			currwall = "wall"..myData.levelkey[currResc].walls[i]
+		while(myData.levelkey[1].walls[i] ~= nil) do
+			currwall = "wall"..myData.levelkey[1].walls[i]
 			display.remove( setupItems[currwall])
 			setupItems[currwall]=nil
 			i = i + 1
@@ -856,6 +849,11 @@ function scene:hide( event )
 		physics.stop()
 		currResc = nil
 		i = 1
+		for h = 15, 1, -1 do
+			if(picTable[h] ~= nil) then
+				display.remove(picTable[h])
+			end
+		end
 		while setupItems["speech"..i]~=nil do
     		display.remove( setupItems["speech"..i] )
     		i=i+1

@@ -346,7 +346,7 @@ end
 local function mover()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, {  channel = 2, loops=0 } )
-		local robotX, robotY = robot:localToContent( 0, -70 )
+		local robotX, robotY = robot:localToContent( 0, 0 )
 		transition.to( myrectr, { time=16, x=robotX+320, y=robotY} )
 		timer.performWithDelay(20,moveri)
 end
@@ -354,13 +354,14 @@ end
 local function moverhalf()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, {  channel = 2, loops=0 } )
-		local robotX, robotY = robot:localToContent( 0, -70 )
+		local robotX, robotY = robot:localToContent( 0, 0 )
 		transition.to( myrectr, { time=16, x=robotX+270, y=robotY} )
 		timer.performWithDelay(20,moveri)
 end
 
 local function movedo()
 		robot:applyForce( 0, 200, robot.x+70, robot.y+70 )
+
 end
 
 local function moved()
