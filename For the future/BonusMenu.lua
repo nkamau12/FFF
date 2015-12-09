@@ -36,9 +36,9 @@ local userbox
 local scorebox 
 local playthis
 local bonuskeys
-local bonusone
-local bonustwo
-local bonusthree
+local bonusone = {}
+local bonustwo = {}
+local bonusthree = {}
 local title1
 local title2
 local title3
@@ -75,8 +75,11 @@ local function playLevel( event )
     myData.bonusUser = levels[myData.bonusSearchLvl][2]
     myData.bonusCount = levels[myData.bonusSearchLvl][3]
     myData.bonusSearchLvlKey = bonuskeys[myData.bonusSearchLvl]
+    myData.bonusSearchLvlOne = {}
     myData.bonusSearchLvlOne = bonusone[myData.bonusSearchLvl]
+    myData.bonusSearchLvlTwo = {}
     myData.bonusSearchLvlTwo = bonustwo[myData.bonusSearchLvl]
+    myData.bonusSearchLvlThree = {}
     myData.bonusSearchLvlThree = bonusthree[myData.bonusSearchLvl]
     print("level name is "..myData.bonusTitle)
     print("play count is "..myData.bonusCount)
@@ -142,9 +145,9 @@ local function printRanks()
 			
 		}	
 		bonuskeys[i] = levels[i][4]
-		bonusone[i] = levels[i][5]
-		bonustwo[i] = levels[i][6]
-		bonusthree[i] = levels[i][7]
+		bonusone[i] = {levels[i][5],levels[i][6],levels[i][7],levels[i][8],levels[i][9]}
+		bonustwo[i] = {levels[i][10],levels[i][11],levels[i][12],levels[i][13],levels[i][14]}
+		bonusthree[i] = {levels[i][15],levels[i][16],levels[i][17],levels[i][18],levels[i][19]}
 		playthis[i].x=display.contentCenterX + 500
 		playthis[i].y=display.contentCenterY + 15 + (i-1)*60
 	end
@@ -165,7 +168,10 @@ function getSearch()
 			print("DocId is "..object:getJsonDocList()[i]:getDocId())
 			print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
 			templevel = {object:getJsonDocList()[i]:getJsonDoc().level,object:getJsonDocList()[i]:getJsonDoc().user,object:getJsonDocList()[i]:getJsonDoc().playcount,
-			object:getJsonDocList()[i]:getJsonDoc().key,object:getJsonDocList()[i]:getJsonDoc().keyone,object:getJsonDocList()[i]:getJsonDoc().keytwo,object:getJsonDocList()[i]:getJsonDoc().keythree}
+			object:getJsonDocList()[i]:getJsonDoc().key,
+			object:getJsonDocList()[i]:getJsonDoc().keyoneone,object:getJsonDocList()[i]:getJsonDoc().keyonetwo,object:getJsonDocList()[i]:getJsonDoc().keyonethree,object:getJsonDocList()[i]:getJsonDoc().keyonefour,object:getJsonDocList()[i]:getJsonDoc().keyonefive,
+			object:getJsonDocList()[i]:getJsonDoc().keytwoone,object:getJsonDocList()[i]:getJsonDoc().keytwotwo,object:getJsonDocList()[i]:getJsonDoc().keytwothree,object:getJsonDocList()[i]:getJsonDoc().keytwofour,object:getJsonDocList()[i]:getJsonDoc().keytwofive,
+			object:getJsonDocList()[i]:getJsonDoc().keythreeone,object:getJsonDocList()[i]:getJsonDoc().keythreetwo,object:getJsonDocList()[i]:getJsonDoc().keythreethree,object:getJsonDocList()[i]:getJsonDoc().keythreefour,object:getJsonDocList()[i]:getJsonDoc().keythreefive}
 			table.insert( levels, templevel )
 		end
 		printRanks()

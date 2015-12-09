@@ -60,8 +60,9 @@ end
 
 local function setupmap()
     i=1
-    while(myData.bonusSearchLvlOne[i] ~= nil) do
+    while(myData.bonusSearchLvlOne[i] ~= 0) do
         currBlock = myData.bonusSearchLvlOne[i]
+        print("currblock is "..currBlock)
         mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
         mapmain[i].anchorX=0
         mapmain[i].anchorY=0
@@ -73,7 +74,7 @@ local function setupmap()
     end
 
     i=1
-    while(myData.bonusSearchLvlTwo[i] ~= nil) do
+    while(myData.bonusSearchLvlTwo[i] ~= 0) do
         currBlock = myData.bonusSearchLvlTwo[i]
         mapone[i] = display.newImage("Images/"..currBlock.."_block.png")
         mapone[i].anchorX=0
@@ -85,7 +86,7 @@ local function setupmap()
         i = i + 1
     end
     i=1
-    while(myData.bonusSearchLvlThree[i] ~= nil) do
+    while(myData.bonusSearchLvlThree[i] ~= 0) do
         currBlock = myData.bonusSearchLvlThree[i]
         maptwo[i] = display.newImage("Images/"..currBlock.."_block.png")
         maptwo[i].anchorX=0
