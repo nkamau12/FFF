@@ -241,7 +241,7 @@ local function checkresult( event )
         print("Finished with "..secondsLeft.." seconds left")
         gameScore = secondsLeft * 10
         print("Score: "..gameScore)
-        
+        print("oldScore: "..oldscore)
 
         if(gameScore >= oldscore or oldscore == nil) then
             --update score

@@ -83,7 +83,7 @@ local function setupPic(name, pic, xVal, yVal, hVal,wVal)
 	setupItems[name].y = yVal
 	setupItems[name].height = hVal
 	setupItems[name].width= wVal
-	setupItems[name].myName= name
+	setupItems[name].myName=name
 end
 
 local function setupmap()
@@ -126,6 +126,7 @@ local function setupmap()
 	science.y=myData.science[2]
 	science.height=140
 	science.width=140
+	science.myName="science"
 	--keys
 	i = 1
 	while(myData.levelkey[currResc].key[i] ~= nil) do
@@ -135,8 +136,9 @@ local function setupmap()
 	i = 1
 	while(myData.levelkey[currResc].key[i] ~= nil)do
 		if(myData.key[i][1] ~= 0) then
-			setupPic("key"..i,"Images/key.png",key[i][1],key[i][2],124,140)
+			setupPic("key"..i,"Images/key.png",myData.key[i][1],myData.key[i][2],124,140)
 			numkeys = i
+			print( setupItems["key"..i] )
 		end
 		i = i + 1
 	end
@@ -537,8 +539,6 @@ local function addTokens()
     jsonDoc.sfx = myData.sfx
     jsonDoc.robot = myData.roboSprite
     jsonDoc.scientist = myData.scienceSprite
-    jsonDoc.keys = myData.savedkeys
-    jsonDoc.stopwatch = myData.savedclocks
 
     local App42CallBack = {}
     storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)
@@ -676,9 +676,7 @@ local function onCollision( event )
         			volume = myData.musicVol,
         			sfx = myData.sfx,
         			robot = myData.roboSprite,
-        			science = myData.scienceSprite,
-        			keys = myData.savedkeys,
-        			stopwatch = myData.savedclocks
+        			science = myData.scienceSprite
         			}
         			loadsave.saveTable( userSettings, "user.json" )
 				else
@@ -837,10 +835,6 @@ local function updateKeys(event)
     local keyDisplay = myData.savedkeys
     key_num.text = keyDisplay
 end
-local function updateClocks(event)
-    local clocksDisplay = myData.savedclocks
-    clock_num.text = clocksDisplay
-end
 
 
 local function usekey()
@@ -858,12 +852,7 @@ local function useclock()
 	clockscount = clockscount + 1
 	hasClock = true
 	print("clockscount is "..clockscount)
-	updateClocks()
-	if(myData.savedclocks == 0) then
-		setupItems["clockpowerup"]:removeEventListener("tap", useclock)
-	end
-	secondsLeft = secondsLeft + 11
-	updateTime()
+	
 end
 
 local function getScoreDoc()
@@ -1100,6 +1089,7 @@ function scene:show( event )
 			science.y=myData.science[2]
 			science.height=140
 			science.width=140
+			science.myName="science"
 
 			--keys
 			i = 1
@@ -1110,7 +1100,7 @@ function scene:show( event )
 			i = 1
 			while(myData.levelkey[currResc].key[i] ~= nil)do
 				if(myData.key[i][1] ~= 0) then
-					setupPic("key"..i,"Images/key.png",key[i][1],key[i][2],124,140)
+					setupPic("key"..i,"Images/key.png",myData.key[i][1],myData.key[i][2],124,140)
 					
 					numkeys = i
 				end
