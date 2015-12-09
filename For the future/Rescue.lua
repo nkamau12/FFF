@@ -83,7 +83,7 @@ local function setupPic(name, pic, xVal, yVal, hVal,wVal)
 	setupItems[name].y = yVal
 	setupItems[name].height = hVal
 	setupItems[name].width= wVal
-	setupItems[name].myName=name
+	setupItems[name].myName= name
 end
 
 local function setupmap()
@@ -539,6 +539,8 @@ local function addTokens()
     jsonDoc.sfx = myData.sfx
     jsonDoc.robot = myData.roboSprite
     jsonDoc.scientist = myData.scienceSprite
+    jsonDoc.keys = myData.savedkeys
+    jsonDoc.stopwatch = myData.savedclocks
 
     local App42CallBack = {}
     storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)
@@ -676,7 +678,9 @@ local function onCollision( event )
         			volume = myData.musicVol,
         			sfx = myData.sfx,
         			robot = myData.roboSprite,
-        			science = myData.scienceSprite
+        			science = myData.scienceSprite,
+        			keys = myData.savedkeys,
+        			stopwatch = myData.savedclocks
         			}
         			loadsave.saveTable( userSettings, "user.json" )
 				else
@@ -835,6 +839,10 @@ local function updateKeys(event)
     local keyDisplay = myData.savedkeys
     key_num.text = keyDisplay
 end
+local function updateClocks(event)
+    local clocksDisplay = myData.savedclocks
+    clock_num.text = clocksDisplay
+end
 
 
 local function usekey()
@@ -852,7 +860,12 @@ local function useclock()
 	clockscount = clockscount + 1
 	hasClock = true
 	print("clockscount is "..clockscount)
-	
+	updateClocks()
+	if(myData.savedclocks == 0) then
+		setupItems["clockpowerup"]:removeEventListener("tap", useclock)
+	end
+	secondsLeft = secondsLeft + 11
+	updateTime()
 end
 
 local function getScoreDoc()
