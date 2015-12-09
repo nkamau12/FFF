@@ -437,12 +437,14 @@ end
 
 local function resetWallKey()
     while(removedImage[1]~=nil) do
-        setupItems[removedImage[1][1]] = setupPic(removedImage[1][1], removedImage[1][2], removedImage[1][3],removedImage[1][4],removedImage[1][5], removedImage[1][6])
+        setupPic(removedImage[1][1], removedImage[1][2], removedImage[1][3],removedImage[1][4],removedImage[1][5], removedImage[1][6])
+        print( "-->"..setupItems[removedImage[1][1]].myName )
         if (string.find( removedImage[1][1], "key" )~=nil) then
             physics.addBody(setupItems[removedImage[1][1]], "static",{ isSensor=true })
-
+            keyscount=keyscount-1
         else
             physics.addBody(setupItems[removedImage[1][1]], "static")
+            keyscount=keyscount+1
         end
         table.remove( removedImage, 1 )
     end
