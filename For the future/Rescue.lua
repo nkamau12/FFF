@@ -955,7 +955,7 @@ function scene:create( event )
 
 	key_text = display.newText("x", 1200, 393)
 	sceneGroup:insert(key_text)
-	print("keys is "..myData.savedkeys)
+
 	key_num = display.newText(myData.savedkeys, 1250, 393)
 	sceneGroup:insert(key_num)
 
@@ -991,7 +991,6 @@ function scene:create( event )
 		
 	--robot.collision = onLocalCollision
 	--robot:addEventListener( "collision", robot )
-	Runtime:addEventListener( "collision", onCollision )
 	
 	setupItems["upa"]:addEventListener( "tap", mutap )
 	setupItems["downa"]:addEventListener( "tap", mdtap )
@@ -1225,6 +1224,9 @@ function scene:show( event )
 			i = 1
 		end	
 
+		Runtime:addEventListener( "collision", onCollision )
+
+
 		--time: minutes * seconds
         secondsLeft = 2 * 60 
 
@@ -1301,7 +1303,9 @@ function scene:hide( event )
 
 
     elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.	
+        -- Called immediately after scene goes off screen.
+        	Runtime:removeEventListener( "collision", onCollision )
+	
     end
 end
 

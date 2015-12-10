@@ -624,7 +624,7 @@ function scene:create( event )
 		
 	--robot.collision = onLocalCollision
 	--robot:addEventListener( "collision", robot )
-	Runtime:addEventListener( "collision", onCollision )
+	
 	
 	setupItems["upa"]:addEventListener( "tap", mutap )
 	setupItems["downa"]:addEventListener( "tap", mdtap )
@@ -693,6 +693,10 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
+        print(" ")
+	    print("start RescueTutorial")
+
+
 		picTable = {}
     	setObjects()
     	print(myData.rescueLvl)
@@ -798,7 +802,7 @@ function scene:show( event )
 			end
 			i = 1
 		end	
-		
+		Runtime:addEventListener( "collision", onCollision )
     elseif ( phase == "did" ) then
     	
     end
@@ -816,7 +820,9 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
-        restartr()
+        --restartr()
+        fintable = nil
+        fintable = {}
         table1=nil
         table2=nil
         table3=nil
@@ -858,12 +864,12 @@ function scene:hide( event )
     		display.remove( setupItems["speech"..i] )
     		i=i+1
 		end
-		setupItems={}
+		--setupItems={}
 		myData.SpeechR=1
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
 		
-
+        Runtime:removeEventListener( "collision", onCollision )
 		
     end
 end

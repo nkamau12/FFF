@@ -8,7 +8,9 @@ local scene = composer.newScene()
 -- -----------------------------------------------------------------------------------------------------------------
 -- local forward references should go here
 -- -------------------------------------------------------------------------------
-
+local tut
+local play
+local homebutton
 
 local function showSearch()
 	audio.pause(backgroundMusicplay)
@@ -79,7 +81,7 @@ function scene:show( event )
         sceneGroup:insert(homebutton)
 		homebutton:addEventListener( "tap", gohome )
 		
-		local play = display.newImage("Images/searchtut.png")
+		play = display.newImage("Images/searchtut.png")
 		play.height=163
 		play.width=412
 		play.x = display.contentCenterX - 300
@@ -87,7 +89,7 @@ function scene:show( event )
 		sceneGroup:insert(play)
 		play:addEventListener( "tap", showSearch )
 		
-		local tut = display.newImage("Images/rescuetut.png")
+		tut = display.newImage("Images/rescuetut.png")
 		tut.height=163
 		tut.width=412
 		tut.x = display.contentCenterX + 300
@@ -113,9 +115,15 @@ function scene:hide( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-        -- Called when the scene is on screen (but is about to go off screen).
-        -- Insert code here to "pause" the scene.
-        -- Example: stop timers, stop animation, stop audio, etc.
+        if(tut ~= nil) then
+        	tut:removeEventListener( "tap", showRescue )
+        end
+        if(play ~= nil) then
+        	play:removeEventListener( "tap", showSearch )
+        end
+        if(homebutton ~= nil) then
+        	homebutton:removeEventListener( "tap", gohome )
+        end
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
     end
