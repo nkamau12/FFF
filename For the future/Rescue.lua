@@ -217,7 +217,7 @@ local function	popup(x,y,height,width)
 		popupPic.anchorY = 0	
 		popupPic:setFillColor(grey, 0.2)
 	elseif(x ~= popupPic.x)then
-		popupPic:removeSelf()
+		display.remove(popupPic)
 		popupPic = display.newRect(x,y,height,width)
 		popupPic.anchorX = 0
 		popupPic.anchorY = 0	
@@ -697,6 +697,7 @@ local function onCollision( event )
 				end
 		elseif (event.object2==setupItems["bottomwall"] or event.object2==setupItems["topwall"] 
 				or event.object2==setupItems["leftwall"] or event.object2==setupItems["rightwall"] ) then
+			print("in")
 			local options = {
 			isModal = true,
 			
