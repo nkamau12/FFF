@@ -117,7 +117,7 @@ local function  popup(x,y,height,width)
         popupPic.anchorY = 0    
         popupPic:setFillColor(grey, 0.2)
     elseif(x ~= popupPic.x)then
-        popupPic:removeSelf()
+        display.remove(popupPic)
         popupPic = display.newRect(x,y,height,width)
         popupPic.anchorX = 0
         popupPic.anchorY = 0    
@@ -137,7 +137,7 @@ local function addPic(xVal,yVal,name,spot)
         addPicTo(spot, name, xVal, yVal)
 
     elseif (picToAdd == "") then
-        picTable[spot]:removeSelf()
+        display.remove(picTable[spot])
         picTable[spot] = nil
 
         undoloop = undoloop + 1
@@ -159,7 +159,7 @@ local function addPic(xVal,yVal,name,spot)
     end
     picToAdd = ""
     if(popupPic~=nil)then
-        popupPic:removeSelf()
+        display.remove(popupPic)
         popupPic = nil
     end
 end
@@ -253,7 +253,7 @@ end
 local function mover()
         local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
         local robotMusicplay = audio.play( robotMusic, {  loops=0 } )
-        local robotX, robotY = setupItems["robot"]:localToContent( 0, -70 )
+        local robotX, robotY = setupItems["robot"]:localToContent( 0, 0 )
         transition.to( myrectr, { time=16, x=robotX+320, y=robotY} )
         timer.performWithDelay(20,moveri)
 end
@@ -273,7 +273,7 @@ end
 
 
 local function movele()
-        setupItems["robot"]:applyForce( -200, 0, robot.x+70, robot.y+70 )
+        setupItems["robot"]:applyForce( -200, 0, setupItems["robot"].x+70, setupItems["robot"].y+70 )
 end
 
 local function movel()
@@ -352,7 +352,7 @@ local function onCollision( event )
             Image = {currkey.myName,"Images/key.png",currkey.x,currkey.y,124,140}
             table.insert( removedImage, Image )
             keyscount = keyscount + 1
-            event.object2:removeSelf( )
+            display.remove(event.object2)
         elseif (event.object2==setupItems["science"]) then
             local options = {
                 isModal = true,
@@ -466,6 +466,7 @@ local function resetWallKey()
         end
         table.remove( removedImage, 1 )
     end
+    removedImage={}
 end
 function scene:resetrobot()
     transition.moveTo( setupItems["robot"], { time=0, x=109, y=819} )
@@ -714,6 +715,7 @@ function scene:hide( event )
         -- Example: stop timers, stop animation, stop audio, etc.
         --reset level
         restartr()
+        removedImage={}
         --clear the tables
         display.remove(myrectu)
         display.remove(myrectd)
@@ -731,7 +733,7 @@ function scene:hide( event )
             end
         end
 
-        setupItems["science"]:removeSelf()
+        display.remove(setupItems["science"])
         --remove keys
         for i=1,3,1 do
             if(myData.Build_Rescue.key[i][1]~=nil) then

@@ -28,8 +28,10 @@ local function submitLvl()
 	json.scientist = myData.Build_Rescue.scientist
 	i=1
 	keys = {{0,0}}
-	while (myData.Build_Rescue.key[i][1]~=nil) do
-		keys[i]=myData.Build_Rescue.key[i]
+	while (myData.Build_Rescue.key[i]~=nil) do
+		if(myData.Build_Rescue.key[i][1]~=nil)then
+			keys[i]=myData.Build_Rescue.key[i]
+		end
 		i=i+1
 	end
 	json.key = keys
@@ -180,8 +182,8 @@ function scene:hide( event )
     if ( phase == "will" ) then
         -- Call the "resumeGame()" function in the parent scene
         --parent:tryagain()
-		
-	elseif(phase == "did")
+		parent:resetrobot()
+	elseif(phase == "did") then
     end
 end
 
