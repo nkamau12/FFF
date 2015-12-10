@@ -57,7 +57,11 @@ local function showScores()
 		effect = "crossFade",
 		time = 500
 	}
+	if(myData.internet == 1)then
 		composer.gotoScene("Leaderboard",options)
+	else
+		composer.showOverlay("no_internet",options)
+	end
 end
 
 --Sends user to the game store screen
@@ -68,7 +72,11 @@ local function showStore()
 		effect = "crossFade",
 		time = 500
 	}
+	if(myData.internet == 1)then
 		composer.gotoScene("Store",options)
+	else
+		composer.showOverlay("no_internet",options)
+	end
 end
 
 --Sends user to the settings screen
@@ -246,6 +254,20 @@ function scene:show( event )
 			}
 			composer.showOverlay( "permission", options )
 		end
+
+		local userSettings = {
+            user = myData.user,
+            search = myData.maxsrch,
+            rescue = myData.maxrsc,
+            theme = myData.theme,
+            volume = myData.musicVol,
+            sfx = myData.sfx,
+            robot = myData.roboSprite,
+            science = myData.scienceSprite,
+            keys = myData.savedkeys,
+            credits = myData.credits,
+            stopwatch = myData.savedclocks }
+        loadsave.saveTable( userSettings, "user.json" )
 
 		--background image
 		local background = display.newImage("Images/theme_"..myData.theme.."/splash_main.png",system.ResourceDirectory)

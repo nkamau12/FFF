@@ -52,6 +52,17 @@ local function bestMenu()
 	composer.showOverlay("bonus_menu",options)
 end
 
+local function noInternet( event )
+	if ( event.phase == "ended" ) then
+		local options = {
+			isModal = true,
+			effect = "fade",
+			time = 400
+		}
+		composer.showOverlay("no_internet",options)
+	end
+end
+
 --Sends user back to the main menu screen
 local function gohome( event )
     local options = {
@@ -112,10 +123,16 @@ function scene:show( event )
 		sceneGroup:insert(bonus)
 
 		--depending on whether the user is the #1 player, this sets the listener for bonus to either the standard menu or the play/create overlay
-		if(myData.isLeader >= 1) then
-			bonus:addEventListener( "tap", bestMenu )
-		elseif(myData.isLeader == 0) then
-			bonus:addEventListener( "tap", normalMenu )
+		if(myData.isLeader ~= nil)then
+			if(myData.isLeader >= 1) then
+				bonus:addEventListener( "tap", bestMenu )
+			elseif(myData.isLeader == 0) then
+				bonus:addEventListener( "tap", normalMenu )
+			end
+		end
+
+		if(myData.internet == 0) then
+			bonus:addEventListener( "touch", noInternet )
 		end
 		
 		audio.resume(backgroundMusicplay)
@@ -137,10 +154,16 @@ function scene:hide( event )
 
         homebutton:removeEventListener( "tap", gohome )
         play:removeEventListener( "touch", showSingle )
-        if(myData.isLeader >= 1) then
-			bonus:removeEventListener( "tap", bestMenu )
-		elseif(myData.isLeader == 0) then
-			bonus:removeEventListener( "tap", normalMenu )
+        if(myData.isLeader ~= nil)then
+	        if(myData.isLeader >= 1) then
+				bonus:removeEventListener( "tap", bestMenu )
+			elseif(myData.isLeader == 0) then
+				bonus:removeEventListener( "tap", normalMenu )
+			end
+		end
+
+		if(myData.internet == 0)then
+			bonus:removeEventListener( "touch", noInternet )
 		end
     elseif ( phase == "did" ) then
     end

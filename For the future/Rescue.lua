@@ -683,7 +683,8 @@ local function onCollision( event )
         			robot = myData.roboSprite,
         			science = myData.scienceSprite,
         			keys = myData.savedkeys,
-        			stopwatch = myData.savedclocks
+        			stopwatch = myData.savedclocks,
+        			credits = myData.credits
         			}
         			loadsave.saveTable( userSettings, "user.json" )
 				else
@@ -897,6 +898,7 @@ local function getScoreDoc()
     function App42CallBack:onException(exception)
         print("Message is : "..exception:getMessage())
         print("Detail is : "..exception:getDetails())
+        oldscore = 0
     end
 
     local gameName = "Max Scores"
@@ -912,6 +914,7 @@ local function getScoreDoc()
     function App42CallBack:onException(exception)
         print("Message is : "..exception:getMessage())
         print("Detail is : "..exception:getDetails())
+        globalscore = 0
     end
 end
 

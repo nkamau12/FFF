@@ -308,14 +308,15 @@ local function checkresult( event )
 
         local userSettings = {
             user = myData.user,
-            search = myData.searchLvl,
-            rescue = myData.rescueLvl,
+            search = myData.maxsrch,
+            rescue = myData.maxrsc,
             theme = myData.theme,
             volume = myData.musicVol,
             sfx = myData.sfx,
             robot = myData.roboSprite,
             science = myData.scienceSprite,
             keys = myData.savedkeys,
+            credits = myData.credits,
             stopwatch = myData.savedclocks }
         loadsave.saveTable( userSettings, "user.json" )
         print("Current level: "..myData.searchLvl)
@@ -398,6 +399,7 @@ local function getScoreDoc()
     function App42CallBack:onException(exception)
         print("Message is : "..exception:getMessage())
         print("Detail is : "..exception:getDetails())
+        oldscore = 0
     end
 
     local gameName = "Max Scores"
@@ -413,6 +415,7 @@ local function getScoreDoc()
     function App42CallBack:onException(exception)
         print("Message is : "..exception:getMessage())
         print("Detail is : "..exception:getDetails())
+        globalscore = 0
     end
 
 end

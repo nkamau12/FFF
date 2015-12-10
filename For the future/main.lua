@@ -21,8 +21,12 @@ local loadsave = require( "loadsave" )
   --science = "default"
 --}
 --loadsave.saveTable( userSettings, "user.json" )
+
+
+
 local loadedUser = loadsave.loadTable( "user.json" )
 print(loadedUser)
+--creates default data if no user information is stored in the local file
 if (loadedUser == nil) then
   local userSettings = {
     user = "nil",
@@ -38,6 +42,7 @@ if (loadedUser == nil) then
     stopwatch = 0
   }
   loadsave.saveTable( userSettings, "user.json" )
+
   loadedUser = loadsave.loadTable( "user.json" )
 end
 
@@ -64,6 +69,8 @@ myData.searchLvl = 1
 myData.rescueLvl = 1
 myData.rescue = 0
 
+myData.internet = 0
+
 --load user
 local dbName  = "USERS"
 local collectionName = "GameInfo"
@@ -75,17 +82,31 @@ local value
 if(loadedUser == nil)then
   value = "nil"
   myData.user = nil
+  myData.theme = "default"
   myData.musicVol = 100
   myData.sfx = 100
   myData.credits = 0
   myData.savedkeys = 0
   myData.savedclocks = 0
+  myData.roboSprite = "default"
+  myData.scienceSprite = "default"
+  myData.maxsrch = 1
+  myData.maxrsc = 1
+
 else
   value = loadedUser.user
   print("value ")
+  myData.user = loadedUser.user
   myData.musicVol = loadedUser.volume
   myData.sfx = loadedUser.sfx
   myData.credits = loadedUser.credits
+  myData.theme = loadedUser.theme
+  myData.roboSprite = loadedUser.robot
+  myData.scienceSprite = loadedUser.science
+  myData.maxsrch = loadedUser.search
+  myData.maxrsc = loadedUser.rescue
+  myData.savedkeys = loadedUser.keys
+  myData.savedclocks = loadedUser.stopwatch
 end
 if(value == nil)then
   value = "nil"
@@ -97,6 +118,7 @@ storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42Call
 
 --if this function is called, it means the user was found in the database and all their content will be downloaded.
 function App42CallBack:onSuccess(object)
+  myData.internet = 1
   print("dbName is "..object:getDbName())
   for i=1,table.getn(object:getJsonDocList()) do
     print("DocId is "..object:getJsonDocList()[i]:getDocId())
@@ -120,17 +142,72 @@ function App42CallBack:onSuccess(object)
   else
     myData.user = jsonDoc.user
   end
-  myData.maxsrch = jsonDoc.search
-  myData.maxrsc = jsonDoc.rescue
+
+  if(myData.maxsrch > jsonDoc.search) then
+  else
+    myData.maxsrch = jsonDoc.search
+  end
+
+  if(myData.maxrsc > jsonDoc.rescue) then
+  else
+    myData.maxrsc = jsonDoc.rescue
+  end
+
+  if(myData.credits < jsonDoc.credits) then
+    myData.credits = jsonDoc.credits
+  end
+  
   myData.theme = jsonDoc.theme
   myData.roboSprite = jsonDoc.robot
   myData.musicVol = jsonDoc.volume
   myData.sfx = jsonDoc.sfx
-  myData.credits = jsonDoc.credits
   myData.scienceSprite = jsonDoc.scientist
   myData.userDoc = jsonDoc.userDoc
   myData.savedkeys = jsonDoc.keys
   myData.savedclocks = jsonDoc.stopwatch
+  
+	
+
+  -- require the composer library
+  local composer = require "composer"
+  local options = {
+    isModal = true,
+    effect = "fade",
+    time = 500
+  }
+  composer.gotoScene( "Splash" )
+end
+
+--this function runs if for any reason the game is unable to connect to the API. Then the default data will be pre-loaded in the game.
+function App42CallBack:onException(exception)
+  print("Message is : "..exception:getMessage())
+  print("App Error code is : "..exception:getAppErrorCode())
+  print("Http Error code is "..exception:getHttpErrorCode())
+  print("Detail is : "..exception:getDetails())
+
+  myData.maxsrch = loadedUser.search
+  myData.maxrsc = loadedUser.rescue
+  myData.user = loadedUser.user
+  myData.theme = loadedUser.theme
+  myData.credits = loadedUser.credits
+  myData.roboSprite = loadedUser.robot
+  myData.scienceSprite = loadedUser.science
+  myData.musicVol = loadedUser.volume
+  myData.sfx = loadedUser.sfx
+  myData.savedkeys = loadedUser.keys
+  myData.savedclocks = loadedUser.stopwatch
+
+
+end
+
+  local composer = require "composer"
+  local options = {
+        isModal = true,
+    effect = "fade",
+    time = 500
+  }
+
+
 
   myData.key = {}
   
@@ -406,55 +483,19 @@ function App42CallBack:onSuccess(object)
   
 
  --error
-	--Use of multiple function
-	--Creating method error(Search)
-	myData.error1_count = 0
-	myData.errorText1 = "Remember once a method is complete it \n goes back to the method it was called from"
-	myData.errorText2 = "Remember robot starts from M (main) method"
-	--Calling method error (Rescue)
-	myData.error2_count = 0
-	myData.errorText3 = "Remember to use method 1 and 2 are used \n to get all the commands needed"
-	myData.errorText4 = "Remember robot start reading commands from M (main) method"
-	-- use of key error (Rescue)
-	myData.error3_count = 0
-	myData.errorText5 = "Remember each key only clears one wall"
-	myData.errorText6 = "Remember go to the key first before going to wall"
-	
+  --Use of multiple function
+  --Creating method error(Search)
+  myData.error1_count = 0
+  myData.errorText1 = "Remember once a method is complete it \n goes back to the method it was called from"
+  myData.errorText2 = "Remember the program starts from M (main) method"
+  --Calling method error (Rescue)
+  myData.error2_count = 0
+  myData.errorText3 = "Remember to use method 1 and 2 are used \n to get all the commands needed"
+  myData.errorText4 = "Remember robot start reading commands from M (main) method"
+  -- use of key error (Rescue)
+  myData.error3_count = 0
+  myData.errorText5 = "Remember each key only clears one wall"
+  myData.errorText6 = "Remember go to the key first before going to wall"
 
-  -- require the composer library
-  local composer = require "composer"
-  local options = {
-    isModal = true,
-    effect = "fade",
-    time = 500
-  }
+
   composer.gotoScene( "Splash" )
-end
-
---this function runs if for any reason the game is unable to connect to the API. Then the default data will be pre-loaded in the game.
-function App42CallBack:onException(exception)
-  print("Message is : "..exception:getMessage())
-  print("App Error code is : "..exception:getAppErrorCode())
-  print("Http Error code is "..exception:getHttpErrorCode())
-  print("Detail is : "..exception:getDetails())
-
-  myData.maxsrch = loadedUser.search
-  myData.maxrsc = loadedUser.rescue
-  myData.user = loadedUser.user
-  myData.theme = loadedUser.theme
-  myData.credits = loadedUser.credits
-  myData.roboSprite = loadedUser.robot
-  myData.scienceSprite = loadedUser.science
-  myData.musicVol = loadedUser.volume
-  myData.sfx = loadedUser.sfx
-  myData.savedkeys = loadedUser.keys
-  myData.savedclocks = loadedUser.stopwatch
-
-  local composer = require "composer"
-  local options = {
-        isModal = true,
-    effect = "fade",
-    time = 500
-  }
-  composer.gotoScene( "Splash" )
-end

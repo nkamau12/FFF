@@ -1,6 +1,7 @@
 local myData = require( "mydata" )
 local composer = require( "composer" )
 local JSON = require ("json")
+local loadsave = require( "loadsave" )
 local scene = composer.newScene()
 
 local App42API = require("App42-Lua-API.App42API") 
@@ -101,6 +102,21 @@ function scene:show( event )
 	    if(myData.rescueLvl > maxrsc) then
 	    	maxrsc = myData.rescueLvl
 	    end
+
+	    local userSettings = {
+		    user = myData.user,
+		    search = maxsrch,
+		    rescue = maxrsc,
+		    volume = myData.musicVol,
+		    sfx = myData.sfx,
+		    credits = myData.credits,
+		    theme = myData.theme,
+		    robot = myData.roboSprite,
+		    science = myData.scienceSprite,
+		    keys = myData.savedkeys,
+		    stopwatch = myData.savedclocks
+		}
+		loadsave.saveTable( userSettings, "user.json" )
 		
 
 	    local dbName  = "USERS"

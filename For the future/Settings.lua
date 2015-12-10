@@ -66,6 +66,8 @@ local function logout(event)
 	myData.credits = 0
 	myData.roboSprite = "default"
 	myData.scienceSprite = "default"
+    myData.maxsrch = 1
+    myData.maxrsc = 1
 
 	local options = {
     		isModal = true,
@@ -84,14 +86,16 @@ local function saveUser(event)
 
 	local userSettings = {
 	  	user = myData.user,
-	  	search = maxsrch,
-	  	rescue = maxrsc,
+	  	search = myData.maxsrch,
+	  	rescue = myData.maxrsc,
 	    volume = myData.musicVol,
 	    sfx = myData.sfx,
 	    credits = myData.credits,
 	  	theme = myData.theme,
 	  	robot = myData.roboSprite,
-	  	science = myData.scienceSprite
+	  	science = myData.scienceSprite,
+        keys = myData.savedkeys,
+        stopwatch = myData.savedclocks
 	}
 	loadsave.saveTable( userSettings, "user.json" )
 
