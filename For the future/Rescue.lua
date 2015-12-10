@@ -780,7 +780,7 @@ end
 
 local function gohome()
 	homerescue = homerescue + 1
-
+	display.remove(popupPic)
     local options = {
     			isModal = true,
 				effect = "crossFade",
