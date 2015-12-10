@@ -49,8 +49,16 @@ local userranked
 local rankscore
 local playthis
 
+local pagenum = 1
+local currpage
+local pagetext
+local maxpages = 1
+
 local search
 local rescue
+
+local prevpage
+local nextpage
 
 
 
@@ -89,69 +97,108 @@ local function playLevel( event )
 	end
 end
 
+
+
+
 local function printRanks()
 	mx = table.getn(levels)
 	print("levels size is "..mx)
-	for i=1, mx, 1 do
-		ranknum = {
-    		text = levels[i][1],    
-    		x = display.contentCenterX,
-    		y = display.contentCenterY + 15 + (i-1)*60,
-    		width = 1200,     --required for multi-line and alignment
-    		font = native.systemFontBold,   
-    		fontSize = 42,
-    		align = "left"  --new alignment parameter
-		}
-		rankbox[i] = display.newText(ranknum)	
+	for i=1, 6, 1 do
+		if( i <= mx-((pagenum - 1)*6) ) then
+			currpage = (pagenum - 1)*6 + i
+			ranknum = {
+	    		text = levels[currpage][1],    
+	    		x = display.contentCenterX,
+	    		y = display.contentCenterY + 15 + (i-1)*60,
+	    		width = 1200,     --required for multi-line and alignment
+	    		font = native.systemFontBold,   
+	    		fontSize = 42,
+	    		align = "left"  --new alignment parameter
+			}
+			rankbox[i] = display.newText(ranknum)	
+		end
 	end
-	for i=1, mx, 1 do
-		userranked = {
-    		text = levels[i][2],    
-    		x = display.contentCenterX + 350,
-    		y = display.contentCenterY + 15 + (i-1)*60,
-    		width = 1200,     --required for multi-line and alignment
-    		font = native.systemFontBold,   
-    		fontSize = 42,
-    		align = "left"  --new alignment parameter
-		}
-		userbox[i] = display.newText(userranked)	
+	for i=1, 6, 1 do
+		if( i <= mx-((pagenum - 1)*6) ) then
+			currpage = (pagenum - 1)*6 + i
+			userranked = {
+	    		text = levels[currpage][2],    
+	    		x = display.contentCenterX + 350,
+	    		y = display.contentCenterY + 15 + (i-1)*60,
+	    		width = 1200,     --required for multi-line and alignment
+	    		font = native.systemFontBold,   
+	    		fontSize = 42,
+	    		align = "left"  --new alignment parameter
+			}
+			userbox[i] = display.newText(userranked)
+		end	
 	end
-	for i=1, mx, 1 do
-		rankscore = {
-    		text = levels[i][3],    
-    		x = display.contentCenterX + 700,
-    		y = display.contentCenterY + 15 + (i-1)*60,
-    		width = 1200,     --required for multi-line and alignment
-    		font = native.systemFontBold,   
-    		fontSize = 42,
-    		align = "left"  --new alignment parameter
-		}
-		scorebox[i] = display.newText(rankscore)	
+	for i=1, 6, 1 do
+		if( i <= mx-((pagenum - 1)*6) ) then
+			currpage = (pagenum - 1)*6 + i
+			rankscore = {
+	    		text = levels[currpage][3],    
+	    		x = display.contentCenterX + 700,
+	    		y = display.contentCenterY + 15 + (i-1)*60,
+	    		width = 1200,     --required for multi-line and alignment
+	    		font = native.systemFontBold,   
+	    		fontSize = 42,
+	    		align = "left"  --new alignment parameter
+			}
+			scorebox[i] = display.newText(rankscore)
+		end	
 	end
-	for i=1, mx, 1 do
-		playthis[i] = widget.newButton
-		{
-			id = i,
-			width = 150,
-			height = 45,
-			defaultFile = "buttonDefault.png",
-			overFile = "buttonOver.png",
-			label = "Play",
-			onEvent = playLevel,
-			labelColor = { default={255,255,255}, over={255,255,255} },
-			fontSize = 36,
-			fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
-			shape="roundedRect"
-			
-		}	
-		bonuskeys[i] = levels[i][4]
-		bonusone[i] = {levels[i][5],levels[i][6],levels[i][7],levels[i][8],levels[i][9]}
-		bonustwo[i] = {levels[i][10],levels[i][11],levels[i][12],levels[i][13],levels[i][14]}
-		bonusthree[i] = {levels[i][15],levels[i][16],levels[i][17],levels[i][18],levels[i][19]}
-		playthis[i].x=display.contentCenterX + 500
-		playthis[i].y=display.contentCenterY + 15 + (i-1)*60
+	for i=1, 6, 1 do
+		if( i <= mx-((pagenum - 1)*6) ) then
+			currpage = (pagenum - 1)*6 + i
+			playthis[i] = widget.newButton
+			{
+				id = currpage,
+				width = 150,
+				height = 45,
+				defaultFile = "buttonDefault.png",
+				overFile = "buttonOver.png",
+				label = "Play",
+				onEvent = playLevel,
+				labelColor = { default={255,255,255}, over={255,255,255} },
+				fontSize = 36,
+				fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+				shape="roundedRect"
+				
+			}	
+			bonuskeys[currpage] = levels[currpage][4]
+			bonusone[currpage] = {levels[currpage][5],levels[currpage][6],levels[currpage][7],levels[currpage][8],levels[currpage][9]}
+			bonustwo[currpage] = {levels[currpage][10],levels[currpage][11],levels[currpage][12],levels[currpage][13],levels[currpage][14]}
+			bonusthree[currpage] = {levels[currpage][15],levels[currpage][16],levels[currpage][17],levels[currpage][18],levels[currpage][19]}
+			playthis[i].x=display.contentCenterX + 500
+			playthis[i].y=display.contentCenterY + 15 + (i-1)*60
+		end
 	end
 
+end
+
+local function clearRanks()
+	for i=table.getn(rankbox),1, -1 do
+		display.remove(rankbox[i])
+		table.remove(rankbox,i)
+	end
+
+	for i=table.getn(userbox),1, -1 do
+		display.remove(userbox[i])
+		table.remove(userbox,i)
+	end
+	for i=table.getn(scorebox),1, -1 do
+		display.remove(scorebox[i])
+		table.remove(scorebox,i)
+	end
+	for i=table.getn(playthis),1, -1 do
+		display.remove(playthis[i])
+		table.remove(playthis,i)
+	end
+end
+
+local function printPage()
+	pagetext.text = pagenum
 end
 
 function getSearch()
@@ -174,6 +221,8 @@ function getSearch()
 			object:getJsonDocList()[i]:getJsonDoc().keythreeone,object:getJsonDocList()[i]:getJsonDoc().keythreetwo,object:getJsonDocList()[i]:getJsonDoc().keythreethree,object:getJsonDocList()[i]:getJsonDoc().keythreefour,object:getJsonDocList()[i]:getJsonDoc().keythreefive}
 			table.insert( levels, templevel )
 		end
+		maxpages = math.ceil( (table.getn(levels))/6 )
+		print("there are "..maxpages.." pages")
 		printRanks()
 	end
 	function App42CallBack:onException(exception)
@@ -219,6 +268,32 @@ local function showRescueBonus()
 	getRescue()
 	rescue:setEnabled(false)
 	search:setEnabled(true)
+end
+
+local function prevPage(event)
+	if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+    	if(pagenum == 1) then
+    	else
+    		pagenum = pagenum - 1
+    		printPage()
+    		clearRanks()
+    		printRanks()
+    	end
+	end
+end
+
+local function nextPage(event)
+	if ( "moved" == event.phase ) then
+    elseif ( "ended" == event.phase ) then
+    	if(pagenum == maxpages) then
+    	else
+    		pagenum = pagenum + 1
+    		printPage()
+    		clearRanks()
+    		printRanks()
+    	end
+	end
 end
 
 -- "scene:create()"
@@ -405,7 +480,53 @@ function scene:show( event )
 		title4=display.newText(PlaysTitle)
 		sceneGroup:insert(title4)
 
+		local pageTitle = {
+    		text = pagenum,    
+    		x = display.contentCenterX,
+    		y = display.contentCenterY + 385,
+    		width = 100,     --required for multi-line and alignment
+    		font = native.systemFontBold,   
+    		fontSize = 44,
+    		align = "center"  --new alignment parameter
+		}
+		pagetext=display.newText(pageTitle)
+		sceneGroup:insert(pagetext)
 
+		prevpage = widget.newButton
+		{
+			width = 150,
+			height = 45,
+			defaultFile = "buttonDefault.png",
+			overFile = "buttonOver.png",
+			label = "Prev",
+			onEvent = prevPage,
+			labelColor = { default={255,255,255}, over={255,255,255} },
+			fontSize=40,
+			fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+			shape="roundedRect"
+			
+		}	
+		sceneGroup:insert(prevpage)
+		prevpage.x=display.contentCenterX - 150
+		prevpage.y=display.contentCenterY + 385
+
+		nextpage = widget.newButton
+		{
+			width = 150,
+			height = 45,
+			defaultFile = "buttonDefault.png",
+			overFile = "buttonOver.png",
+			label = "Next",
+			onEvent = nextPage,
+			labelColor = { default={255,255,255}, over={255,255,255} },
+			fontSize=40,
+			fillColor = { default={ 0, 104/255, 139/255 }, over={ 1, 0.2, 0.5, 1 } },
+			shape="roundedRect"
+			
+		}	
+		sceneGroup:insert(nextpage)
+		nextpage.x=display.contentCenterX + 150
+		nextpage.y=display.contentCenterY + 385
 		
 		audio.resume(backgroundMusicplay)
 		
@@ -465,6 +586,9 @@ function scene:hide( event )
 		title2 = nil
 		title3 = nil
 		title4 = nil
+
+		pagenum = 1
+		maxpages = 1
 
 
 		for i=table.getn(levels),1, -1 do
