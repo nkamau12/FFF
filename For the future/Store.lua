@@ -394,9 +394,10 @@ function scene:hide( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
+
+
     	homebutton:removeEventListener( "tap", gohome )
-        display.remove( homebutton)
-		homebutton=nil
+        
 		if(extra_pic ~= nil)then
 			extra_pic:removeSelf()
 		end
