@@ -21,24 +21,6 @@ end
 
 -- "scene:create()"
 function scene:create( event )
-
-    local sceneGroup = self.view
-    
-    creds = display.newImage("Images/theme_"..myData.theme.."/credits_screen.png",system.ResourceDirectory)
-        creds.anchorX=0
-        creds.anchorY=1
-        creds.height=2615.227
-        creds.width=1920
-        creds.x= 0
-        creds.y=2448.6
-        sceneGroup:insert(creds)
-	creds:addEventListener( "tap", bye )
-
-    local backgroundMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
-    local backgroundMusicplay = audio.play( backgroundMusic, {  channel = 1, fadein = 4000, loops=-1 } )
-
-    timer.performWithDelay( 9000, transition.moveTo(creds, { x=0, y=1080, time=20000 } ))
-    
 end
 
 
@@ -52,6 +34,20 @@ function scene:show( event )
         print(" ")
         print("start Credits")
         
+        creds = display.newImage("Images/theme_"..myData.theme.."/credits_screen.png",system.ResourceDirectory)
+        creds.anchorX=0
+        creds.anchorY=1
+        creds.height=2615.227
+        creds.width=1920
+        creds.x= 0
+        creds.y=2448.6
+        sceneGroup:insert(creds)
+        creds:addEventListener( "tap", bye )
+
+        local backgroundMusic = audio.loadStream( "Music/bensound-slowmotion.mp3")
+        local backgroundMusicplay = audio.play( backgroundMusic, {  channel = 1, fadein = 4000, loops=-1 } )
+
+        timer.performWithDelay( 9000, transition.moveTo(creds, { x=0, y=1080, time=20000 } ))
         
     elseif ( phase == "did" ) then
     end
