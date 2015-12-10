@@ -181,6 +181,7 @@ function scene:hide( event )
         -- Call the "resumeGame()" function in the parent scene
         --parent:tryagain()
 		
+	elseif(phase == "did")
     end
 end
 

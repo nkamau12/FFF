@@ -446,7 +446,7 @@ end
 local function movel()
 		local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
 		local robotMusicplay = audio.play( robotMusic, { channel = 2, loops=0 } )
-		local robotX, robotY = robot:localToContent( 0, -70 )
+		local robotX, robotY = robot:localToContent( 0, 0 )
 		transition.to( myrectl, { time=16, x=robotX-320, y=robotY} )
 		timer.performWithDelay(20,movele)	
 end

@@ -279,7 +279,7 @@ end
 local function movel()
         local robotMusic = audio.loadStream( "Music/Pew_Pew.mp3")
         local robotMusicplay = audio.play( robotMusic, { loops=0 } )
-        local robotX, robotY = setupItems["robot"]:localToContent( 0, -70 )
+        local robotX, robotY = setupItems["robot"]:localToContent( 0, 0 )
         transition.to( myrectl, { time=16, x=robotX-320, y=robotY} )
         timer.performWithDelay(20,movele)   
 end
@@ -602,7 +602,7 @@ function scene:create( event )
     sceneGroup:insert(buttonTable[35])
 
     --Adding event listeners
-    Runtime:addEventListener( "collision", onCollision )
+    
     setupItems["upa"]:addEventListener( "tap", mutap )
     setupItems["downa"]:addEventListener( "tap", mdtap )
     setupItems["lefta"]:addEventListener( "tap", mltap )
@@ -677,7 +677,7 @@ function scene:show( event )
                 i=i+1
         end
         i=1
-
+        Runtime:addEventListener( "collision", onCollision )
         --walls physics
         physics.addBody( setupItems["leftwall"], "static",{bounce=0})
         physics.addBody( setupItems["rightwall"], "static",{bounce=0})
@@ -752,7 +752,7 @@ function scene:hide( event )
         physics.stop()
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
-        
+        Runtime:removeEventListener( "collision", onCollision )
     end
 end
 
