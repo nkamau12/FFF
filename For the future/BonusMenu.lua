@@ -73,27 +73,30 @@ end
 
 local function playLevel( event )
 	if(event.phase == "ended") then
-	local options = {
-		isModal = true,
-        effect = "crossFade",
-        time = 500
-    }
-    myData.bonusSearchLvl = event.target.id
-    myData.bonusTitle = levels[myData.bonusSearchLvl][1]
-    myData.bonusUser = levels[myData.bonusSearchLvl][2]
-    myData.bonusCount = levels[myData.bonusSearchLvl][3]
-    myData.bonusSearchLvlKey = bonuskeys[myData.bonusSearchLvl]
-    myData.bonusSearchLvlOne = {}
-    myData.bonusSearchLvlOne = bonusone[myData.bonusSearchLvl]
-    myData.bonusSearchLvlTwo = {}
-    myData.bonusSearchLvlTwo = bonustwo[myData.bonusSearchLvl]
-    myData.bonusSearchLvlThree = {}
-    myData.bonusSearchLvlThree = bonusthree[myData.bonusSearchLvl]
-    print("level name is "..myData.bonusTitle)
-    print("play count is "..myData.bonusCount)
-    print(myData.bonusSearchLvlKey)
-    composer.gotoScene("BonusSearch",options)
-    
+		local options = {
+			isModal = true,
+	        effect = "crossFade",
+	        time = 500
+	    }
+	    myData.bonusSearchLvl = event.target.id
+	    myData.bonusTitle = levels[myData.bonusSearchLvl][1]
+	    myData.bonusUser = levels[myData.bonusSearchLvl][2]
+	    myData.bonusCount = levels[myData.bonusSearchLvl][3]
+	    myData.bonusSearchLvlKey = bonuskeys[myData.bonusSearchLvl]
+	    myData.bonusSearchLvlOne = {}
+	    myData.bonusSearchLvlOne = bonusone[myData.bonusSearchLvl]
+	    myData.bonusSearchLvlTwo = {}
+	    myData.bonusSearchLvlTwo = bonustwo[myData.bonusSearchLvl]
+	    myData.bonusSearchLvlThree = {}
+	    myData.bonusSearchLvlThree = bonusthree[myData.bonusSearchLvl]
+	    
+	    print("level name is "..myData.bonusTitle)
+	    print("play count is "..myData.bonusCount)
+	    print(myData.bonusSearchLvlKey)
+	    if(gamemode.text == "Search")then
+	    	composer.gotoScene("BonusSearch",options)
+	    else
+    	end
 	end
 end
 
@@ -223,6 +226,7 @@ function getSearch()
 		end
 		maxpages = math.ceil( (table.getn(levels))/6 )
 		print("there are "..maxpages.." pages")
+		clearRanks()
 		printRanks()
 	end
 	function App42CallBack:onException(exception)
@@ -244,9 +248,12 @@ function getRescue()
 			print("DocId is "..object:getJsonDocList()[i]:getDocId())
 			print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
 			templevel = {object:getJsonDocList()[i]:getJsonDoc().level,object:getJsonDocList()[i]:getJsonDoc().user,object:getJsonDocList()[i]:getJsonDoc().playcount,
-			object:getJsonDocList()[i]:getJsonDoc().walls,object:getJsonDocList()[i]:getJsonDoc().scientist,object:getJsonDocList()[i]:getJsonDoc().key}
+			object:getJsonDocList()[i]:getJsonDoc().walls, object:getJsonDocList()[i]:getJsonDoc().scientist, object:getJsonDocList()[i]:getJsonDoc().key}
 			table.insert( levels, templevel )
 		end
+		maxpages = math.ceil( (table.getn(levels))/6 )
+		print("there are "..maxpages.." pages")
+		clearRanks()
 		printRanks()
 	end
 	function App42CallBack:onException(exception)
@@ -256,18 +263,27 @@ end
 
 local function showSearchBonus( event )
 	if(event.phase == "ended") then
+		levels = {}
+		pagenum = 1
+		printPage()
 		gamemode.text = "Search"
 		getSearch()
 		search:setEnabled(false)
 		rescue:setEnabled(true)
+
 	end
 end
 
-local function showRescueBonus()
-	gamemode.text = "Rescue"
-	getRescue()
-	rescue:setEnabled(false)
-	search:setEnabled(true)
+local function showRescueBonus( event )
+	if(event.phase == "ended") then
+		levels = {}
+		pagenum = 1
+		printPage()
+		gamemode.text = "Rescue"
+		getRescue()
+		rescue:setEnabled(false)
+		search:setEnabled(true)
+	end
 end
 
 local function prevPage(event)
