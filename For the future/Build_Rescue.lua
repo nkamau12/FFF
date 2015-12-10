@@ -9,7 +9,7 @@ local level={ walls = {}, scientist = {nil,nil}, key = {{nil,nil},{nil,nil},{nil
 local buttonTable = {}
 local items = {}
 local GridPos = {}
-local keycount=1
+local keycount=0
 local wall_buttons={
             wall01=myData.wall1, wall02=myData.wall2, wall03=myData.wall3, wall04=myData.wall4, wall05=myData.wall5, wall06=myData.wall6, 
             wall07=myData.wall7, wall08=myData.wall8, wall09=myData.wall9, wall10=myData.wall10, wall11=myData.wall11, wall12=myData.wall12,
@@ -103,7 +103,7 @@ local function move( event )
         basicItems["key"..keycount].alpha=1
         basicItems["key"..keycount]:addEventListener("touch", move)
         keycount=keycount+1
-    end
+        end
     end
     
     return true
@@ -181,6 +181,7 @@ local function build( )
             --print("looking for this-> "..myData.Build_Rescue.walls[1] )
             --myData.Build_Rescue.key[1] = bleh
             local options = {
+                isModal = true,
                 effect = "crossFade",
                 time = 500
             }  
@@ -229,7 +230,7 @@ function scene:create( event )
     basicItems["start"]=setupPic("run_button", myData.startbutton[5], myData.startbutton[1], myData.startbutton[2], myData.startbutton[3], myData.startbutton[4])
     basicItems["home"]=setupPic("home", myData.homebutton[5], myData.homebutton[1], myData.homebutton[2], myData.homebutton[3], myData.homebutton[4])
     basicItems["science"]=setupPic("science", myData.science[5], 1192, 186, myData.science[3], myData.science[4])
-    basicItems["key1"]=setupPic("key"..keycount, myData.keybase[5], 1468, 186, myData.keybase[3], myData.keybase[4])
+    basicItems["key1"]=setupPic("key1", myData.keybase[5], 1468, 186, myData.keybase[3], myData.keybase[4])
     basicItems["key2"]=setupPic("key2", myData.keybase[5], 1468, 186, myData.keybase[3], myData.keybase[4],0)
     basicItems["key3"]=setupPic("key3", myData.keybase[5], 1468, 186, myData.keybase[3], myData.keybase[4],0)
     
@@ -268,8 +269,6 @@ function scene:create( event )
     sceneGroup:insert(basicItems["start"])
     sceneGroup:insert(basicItems["home"])
     sceneGroup:insert(basicItems["science"])
-    sceneGroup:insert(basicItems["key"..keycount])
-    keycount=keycount+1
     
 end
 
@@ -294,7 +293,7 @@ function scene:show( event )
 
     local sceneGroup = self.view
     local phase = event.phase
-
+    keycount=2
     if ( phase == "will" ) then
         
         
@@ -320,7 +319,6 @@ function scene:hide( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-        keycount = 2
         for key,value in pairs(wall_buttons) do
             display.remove(items[key])
         end

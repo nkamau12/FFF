@@ -21,7 +21,6 @@ local popupPic
 local setupItems = {}
 local myrectd
 local myrectu
-local keyset = {}
 local numkeys
 local myrectl
 local myrectr
@@ -29,6 +28,7 @@ local currResc
 local currwall
 local scoreKey
 local keyscount
+local removedImage={}
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -147,7 +147,7 @@ local function addPic(xVal,yVal,name,spot)
             end
         end     
     else
-        picTable[spot]:removeSelf()
+        display.remove(picTable[spot])
         addPicTo(spot, name, xVal, yVal)
             
         undoloop = undoloop + 1
@@ -307,10 +307,6 @@ local function mltap()
     popup(myData.leftarrow[1], myData.leftarrow[2], myData.leftarrow[3], myData.leftarrow[4])
 end
 
-local function maintap()
-    picToAdd = "Images/main_block.png"
-    popup(myData.mainbutton[1], myData.mainbutton[2], myData.mainbutton[3], myData.mainbutton[4])
-end
 
 local function onetap()
     picToAdd = "Images/1_block.png"
@@ -326,6 +322,7 @@ local function moverobot()
     local max = table.maxn(fintable)
     
     if not (counter>max) then
+        print(fintable[counter])
         if (fintable[counter]=="Images/up_arrow.png") then
             moveup()
         elseif (fintable[counter]=="Images/down_arrow.png") then
@@ -335,10 +332,7 @@ local function moverobot()
         elseif (fintable[counter]=="Images/right_arrow.png") then
             mover()
         else
-            local options = {
-            isModal = true
-            }
-            composer.showOverlay( "fail_rescue_build", options )
+            
         end
         counter=counter+1
     else
@@ -353,7 +347,10 @@ local function onCollision( event )
     if ( event.phase == "began" ) then
         if (event.object2==myrectu or event.object2==myrectd or event.object2==myrectl or event.object2==myrectr) then
             moverobot()
-        elseif (event.object2.myName == "key") then
+        elseif (string.find( event.object2.myName , "key" )~=nil) then
+            currkey = event.object2
+            Image = {currkey.myName,"Images/key.png",currkey.x,currkey.y,124,140}
+            table.insert( removedImage, Image )
             keyscount = keyscount + 1
             event.object2:removeSelf( )
         elseif (event.object2==setupItems["science"]) then
@@ -364,7 +361,7 @@ local function onCollision( event )
             }
             audio.stop(elevatorMusicplay)
             audio.pause(backgroundMusicplay)
-            composer.showOverlay("success_rescue_build",options)
+            composer.showOverlay("Save_Rescue",options)
 
         elseif (event.object2==setupItems["bottomwall"] or event.object2==setupItems["topwall"] 
                 or event.object2==setupItems["leftwall"] or event.object2==setupItems["rightwall"] ) then
@@ -375,8 +372,10 @@ local function onCollision( event )
             composer.showOverlay( "fail_rescue_build", options )
         else
             if(keyscount > 0)then
-
-            print("This: "..currwall)
+                currwall = event.object2.myName
+                currdata = myData[currwall]
+                Image = {currwall, currdata[5], currdata[1], currdata[2], currdata[3], currdata[4]}
+                table.insert( removedImage, Image )
                 event.object2:removeSelf()
                 keyscount = keyscount - 1
                 counter = counter - 1
@@ -394,7 +393,6 @@ end
 local function merge(tablel)
     
     for i=1,5,1 do
-        print(tablel[i])
         if (tablel[i]=="Images/main_block.png") then
             merge(table1)
         elseif (tablel[i]=="Images/1_block.png") then
@@ -407,6 +405,7 @@ local function merge(tablel)
         else
         end
     end
+    
 end
 
 
@@ -456,19 +455,33 @@ local function myscientist( )
   end
 end
 
+local function resetWallKey()
+    while(removedImage[1]~=nil) do
+        setupItems[removedImage[1][1]] = setupPic(removedImage[1][1], removedImage[1][2], removedImage[1][3],removedImage[1][4],removedImage[1][5], removedImage[1][6])
+        if (string.find( removedImage[1][1], "key" )~=nil) then
+            physics.addBody(setupItems[removedImage[1][1]], "static",{ isSensor=true })
+
+        else
+            physics.addBody(setupItems[removedImage[1][1]], "static")
+        end
+        table.remove( removedImage, 1 )
+    end
+end
 function scene:resetrobot()
     transition.moveTo( setupItems["robot"], { time=0, x=109, y=819} )
     fintable=nil
     fintable={}
     counter=1
-    
     timer.performWithDelay(20,restartr) 
+    timer.performWithDelay(180,resetWallKey()) 
+    
     if(myData.trya==true) then
         local options = {
             isModal = true,
             effect = "crossFade",
             time = 500
-        }  
+        } 
+        myData.trya=false 
         composer.gotoScene("Build_Rescue",options)
     end
 end
@@ -486,6 +499,8 @@ local function restartr()
     counter=1
 end
 
+
+
 local function gohome()
     local options = {
         isModal = true,
@@ -495,7 +510,7 @@ local function gohome()
     audio.stop(1)
     audio.stop(2)
     audio.pause(backgroundMusicplay)
-    composer.gotoScene("MainMenu",optionsh)   
+    composer.gotoScene("MainMenu",options)   
 end
 
 -- "scene:create()"
@@ -524,7 +539,6 @@ function scene:create( event )
     setupItems["downa"] =setupPic("downa", myData.downarrow[5], myData.downarrow[1], myData.downarrow[2], myData.downarrow[3], myData.downarrow[4])
     setupItems["lefta"] =setupPic("lefta", myData.leftarrow[5], myData.leftarrow[1], myData.leftarrow[2], myData.leftarrow[3], myData.leftarrow[4])
     setupItems["righta"] =setupPic("righta", myData.rightarrow[5], myData.rightarrow[1], myData.rightarrow[2], myData.rightarrow[3], myData.rightarrow[4])
-    setupItems["mainb"] =setupPic("mainb", myData.mainbutton[5], myData.mainbutton[1], myData.mainbutton[2], myData.mainbutton[3], myData.mainbutton[4])
     setupItems["oneb"] =setupPic("oneb", myData.onebutton[5], myData.onebutton[1], myData.onebutton[2], myData.onebutton[3], myData.onebutton[4])
     setupItems["twob"] =setupPic("twob", myData.twobutton[5], myData.twobutton[1], myData.twobutton[2], myData.twobutton[3], myData.twobutton[4])
 
@@ -545,7 +559,6 @@ function scene:create( event )
     sceneGroup:insert(setupItems["downa"])
     sceneGroup:insert(setupItems["lefta"])
     sceneGroup:insert(setupItems["righta"])
-    sceneGroup:insert(setupItems["mainb"])
     sceneGroup:insert(setupItems["oneb"])
     sceneGroup:insert(setupItems["twob"])
 
@@ -594,7 +607,6 @@ function scene:create( event )
     setupItems["downa"]:addEventListener( "tap", mdtap )
     setupItems["lefta"]:addEventListener( "tap", mltap )
     setupItems["righta"]:addEventListener( "tap", mrtap )
-    setupItems["mainb"]:addEventListener("tap", maintap)
     setupItems["oneb"]:addEventListener("tap", onetap)
     setupItems["twob"]:addEventListener("tap", twotap)
     setupItems["start"]:addEventListener("tap", pass)
@@ -619,8 +631,8 @@ function scene:show( event )
             if(myData.Build_Rescue.key[i][1]~=nil) then
                 setkeys(i)
                 levelkeys = levelkeys+1
-                keyset[i] = setupPic("key","Images/key.png",key[i][1],key[i][2],124,140)
-                sceneGroup:insert(keyset[i])
+                setupItems["key"..i] = setupPic("key"..i,"Images/key.png",key[i][1],key[i][2],124,140)
+                sceneGroup:insert(setupItems["key"..i])
             end
         end
 
@@ -658,8 +670,11 @@ function scene:show( event )
         physics.addBody( myrectr, "static",{bounce=0})
             
         --keys
-        for i=1,levelkeys,1 do
-            physics.addBody(keyset[i], "static",{ isSensor=true })
+        i=1
+        while(setupItems["key"..i]~=nil) do
+            print( setupItems["key"..i].myName )
+                physics.addBody(setupItems["key"..i], "static",{ isSensor=true })
+                i=i+1
         end
         i=1
 
@@ -711,7 +726,7 @@ function scene:hide( event )
         i = 1
         for h = 15, 1, -1 do
             if(picTable[h] ~= nil) then
-                picTable[h]:removeSelf()
+                display.remove(picTable[h])
                 table.remove(picTable[h])
             end
         end
@@ -720,7 +735,8 @@ function scene:hide( event )
         --remove keys
         for i=1,3,1 do
             if(myData.Build_Rescue.key[i][1]~=nil) then
-                display.remove(keyset[i])
+                display.remove(setupItems["key"..i])
+                setupItems["key"..i]=nil
             end
         end
 
@@ -729,14 +745,14 @@ function scene:hide( event )
         while(myData.Build_Rescue.walls[i] ~= nil) do
             currwall = "wall"..(myData.Build_Rescue.walls[i])
             display.remove( setupItems[currwall] )
+            setupItems[currwall] =nil
             i = i + 1
         end
         i = 1
+        physics.stop()
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
         
-        physics.stop()
-        myData.Build_Rescue={ walls = {}, scientist = {nil,nil}, key = {{nil,nil},{nil,nil},{nil,nil}}}
     end
 end
 
