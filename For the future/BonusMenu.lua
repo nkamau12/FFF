@@ -48,6 +48,9 @@ local ranknum
 local userranked
 local rankscore
 local playthis
+local bonusScience = {}
+local bonusKeys = {}
+local bonusWalls = {}
 
 local pagenum = 1
 local currpage
@@ -78,24 +81,38 @@ local function playLevel( event )
 	        effect = "crossFade",
 	        time = 500
 	    }
-	    myData.bonusSearchLvl = event.target.id
-	    myData.bonusTitle = levels[myData.bonusSearchLvl][1]
-	    myData.bonusUser = levels[myData.bonusSearchLvl][2]
-	    myData.bonusCount = levels[myData.bonusSearchLvl][3]
-	    myData.bonusSearchLvlKey = bonuskeys[myData.bonusSearchLvl]
-	    myData.bonusSearchLvlOne = {}
-	    myData.bonusSearchLvlOne = bonusone[myData.bonusSearchLvl]
-	    myData.bonusSearchLvlTwo = {}
-	    myData.bonusSearchLvlTwo = bonustwo[myData.bonusSearchLvl]
-	    myData.bonusSearchLvlThree = {}
-	    myData.bonusSearchLvlThree = bonusthree[myData.bonusSearchLvl]
 	    
-	    print("level name is "..myData.bonusTitle)
-	    print("play count is "..myData.bonusCount)
-	    print(myData.bonusSearchLvlKey)
+	    
+	    
 	    if(gamemode.text == "Search")then
+	    	
+	    	myData.bonusSearchLvl = event.target.id
+	    	myData.bonusTitle = levels[myData.bonusSearchLvl][1]
+	    	print("level name is "..myData.bonusTitle)
+	    	myData.bonusUser = levels[myData.bonusSearchLvl][2]
+	    	myData.bonusCount = levels[myData.bonusSearchLvl][3]
+	    	print("play count is "..myData.bonusCount)
+	    	myData.bonusSearchLvlKey = bonuskeys[myData.bonusSearchLvl]
+		    myData.bonusSearchLvlOne = {}
+		    myData.bonusSearchLvlOne = bonusone[myData.bonusSearchLvl]
+		    myData.bonusSearchLvlTwo = {}
+		    myData.bonusSearchLvlTwo = bonustwo[myData.bonusSearchLvl]
+		    myData.bonusSearchLvlThree = {}
+		    myData.bonusSearchLvlThree = bonusthree[myData.bonusSearchLvl]
+		    print(myData.bonusSearchLvlKey)
 	    	composer.gotoScene("BonusSearch",options)
+
 	    else
+	    	myData.bonusRescueLvl = event.target.id
+			myData.bonusTitle = levels[myData.bonusRescueLvl][1]
+	    	print("level name is "..myData.bonusTitle)
+	    	myData.bonusUser = levels[myData.bonusRescueLvl][2]
+	    	myData.bonusCount = levels[myData.bonusRescueLvl][3]
+	    	print("play count is "..myData.bonusCount)
+	    	myData.bonusRescueScience = bonusScience[myData.bonusRescueLvl]
+	    	myData.Bonuslevel.key = bonusKeys[myData.bonusRescueLvl]
+	    	myData.Bonuslevel.walls = bonusWalls[myData.bonusRescueLvl]
+	    	composer.gotoScene("BonusRescue",options)
     	end
 	end
 end
@@ -169,10 +186,17 @@ local function printRanks()
 				shape="roundedRect"
 				
 			}	
-			bonuskeys[currpage] = levels[currpage][4]
-			bonusone[currpage] = {levels[currpage][5],levels[currpage][6],levels[currpage][7],levels[currpage][8],levels[currpage][9]}
-			bonustwo[currpage] = {levels[currpage][10],levels[currpage][11],levels[currpage][12],levels[currpage][13],levels[currpage][14]}
-			bonusthree[currpage] = {levels[currpage][15],levels[currpage][16],levels[currpage][17],levels[currpage][18],levels[currpage][19]}
+			if(gamemode.text == "Search") then
+				bonuskeys[currpage] = levels[currpage][4]
+				bonusone[currpage] = {levels[currpage][5],levels[currpage][6],levels[currpage][7],levels[currpage][8],levels[currpage][9]}
+				bonustwo[currpage] = {levels[currpage][10],levels[currpage][11],levels[currpage][12],levels[currpage][13],levels[currpage][14]}
+				bonusthree[currpage] = {levels[currpage][15],levels[currpage][16],levels[currpage][17],levels[currpage][18],levels[currpage][19]}
+			end
+			if(gamemode.text == "Rescue") then
+				bonusScience[currpage] = levels[currpage][5]
+				bonusKeys[currpage] = levels[currpage][6]
+				bonusWalls[currpage] = levels[currpage][4]
+			end
 			playthis[i].x=display.contentCenterX + 500
 			playthis[i].y=display.contentCenterY + 15 + (i-1)*60
 		end
@@ -247,7 +271,7 @@ function getRescue()
 		for i=1,table.getn(object:getJsonDocList()) do
 			print("DocId is "..object:getJsonDocList()[i]:getDocId())
 			print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
-			templevel = {object:getJsonDocList()[i]:getJsonDoc().level,object:getJsonDocList()[i]:getJsonDoc().user,object:getJsonDocList()[i]:getJsonDoc().playcount,
+			templevel = {object:getJsonDocList()[i]:getJsonDoc().level, object:getJsonDocList()[i]:getJsonDoc().user, object:getJsonDocList()[i]:getJsonDoc().playcount,
 			object:getJsonDocList()[i]:getJsonDoc().walls, object:getJsonDocList()[i]:getJsonDoc().scientist, object:getJsonDocList()[i]:getJsonDoc().key}
 			table.insert( levels, templevel )
 		end
@@ -346,6 +370,7 @@ function scene:show( event )
 		userranked = {}
 		rankscore = {}
 		App42CallBack = {}
+		myData.Bonuslevel = {}
 
 		local background = display.newImage("Images/theme_"..myData.theme.."/splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5
