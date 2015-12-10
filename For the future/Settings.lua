@@ -183,7 +183,6 @@ local function nextRobo( event )
     if ( "moved" == event.phase ) then
     elseif ( "ended" == event.phase ) then
         print("roboSprites size is "..table.maxn(myData.roboSprites))
-        print("roboSprites3 size is "..myData.roboSprites[3][5])
         if(myData.roboSprites[robo_counter + 1] == nil) then
             robo_counter = 1
         else

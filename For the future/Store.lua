@@ -30,6 +30,8 @@ local extra_counter = 1
 local special_counter = 1
 
 local buyable = {}
+
+local homebutton
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
