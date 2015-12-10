@@ -617,6 +617,35 @@ local function addTokens()
     end
 end
 
+local function updateCount()
+    local dbName  = "USERS"
+    local collectionName = "Bonus Levels"
+    local key = "level"
+    local value = myData.bonusTitle
+    local jsonDoc = {}
+
+    jsonDoc.user = myData.bonusUser
+    jsonDoc.level = myData.bonusTitle
+    jsonDoc.type = "Rescue"
+    jsonDoc.key = myData.Bonuslevel.key
+    jsonDoc.walls = myData.Bonuslevel.walls
+    jsonDoc.scientist = myData.bonusRescueScience
+    jsonDoc.playcount = myData.bonusCount + 1
+
+    App42CallBack = {}
+    storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)
+    function App42CallBack:onSuccess(object)
+        print("dbName is "..object:getDbName())
+        for i=1,table.getn(object:getJsonDocList()) do
+            print("Success!")
+            print("New count is "..object:getJsonDocList()[i]:getJsonDoc().playcount)
+        end
+    end
+    function App42CallBack:onException(exception)
+        print("Message is : "..exception:getMessage())
+    end
+end
+
 local function onCollision( event )
 	if ( event.phase == "began" ) then
 		if (event.object2==myrectu or event.object2==myrectd or event.object2==myrectl or event.object2==myrectr) then
@@ -649,7 +678,8 @@ local function onCollision( event )
     			addTokens()
     			myData.currTokens = myData.currScore / 100
 
-				composer.showOverlay("pass_rescue",options)
+				composer.showOverlay("pass_bonus_rescue",options)
+				updateCount()
 				if(myData.error1_count > 2) then
 					myData.error1_count = 0
 				end
