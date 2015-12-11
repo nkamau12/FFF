@@ -9,6 +9,9 @@ local scene = composer.newScene()
 -- local forward references should go here
 
 -- -------------------------------------------------------------------------------
+
+local levelmap
+
 local function setupmap()
 
         --level_map

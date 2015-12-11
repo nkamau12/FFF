@@ -693,10 +693,6 @@ local function onCollision( event )
 						else
 							myData.error2_count = myData.error2_count + 1
 						end
-<<<<<<< HEAD
-=======
-						
->>>>>>> f024449e5f162e6a94f17bb2c020b1107449141d
 					end
 				end
 				i = i + 1

@@ -257,8 +257,6 @@ local function checkresult( event )
             App42CallBack = {}
             storageService:updateDocumentByDocId(dbName,collectionName,docId,jsonDoc,App42CallBack)
             function App42CallBack:onSuccess(object)
-                for i=1,table.getn(object:getJsonDocList()) d
-                end
             end
             function App42CallBack:onException(exception)
             end
@@ -282,8 +280,11 @@ local function checkresult( event )
             end
 
         end
-
-        myData.searchLvl = currLvl + 1
+        if(currLvl < 12) then
+            myData.searchLvl = currLvl + 1
+        else
+            myData.searchLvl = 12
+        end
         myData.rescueLvl = currLvl
 
         local userSettings = {
