@@ -47,7 +47,6 @@ end
 
 local function printRanks()
 	mx = table.getn(scores)
-	print("scores size is "..mx)
 	for i=1, 5, 1 do
 		ranknum = {
     		text = '\t\t'..i,    
@@ -121,7 +120,6 @@ local function printRanks()
 end
 
 function getRanks()
-	print("start")
 	local gameName = "Max Scores"
 	local max = 5
 	App42CallBack = {} 
@@ -130,43 +128,27 @@ function getRanks()
 	scoreBoardService = App42API.buildScoreBoardService()
 	scoreBoardService:getTopRankings(gameName,App42CallBack)  
 	function App42CallBack:onSuccess(object)
-		print("Game name is "..object:getName())
-		print("table size is "..table.getn(object:getScoreList()))
 		if table.getn(object:getScoreList()) > 1 then
 			for i=1,table.getn(object:getScoreList()),1 do
-				print("i is "..i)
-				print("userName is : "..object:getScoreList()[i]:getUserName())
 				if(object:getScoreList()[i]:getUserName() == myData.user) then
 					myData.leader = i
 				end
-				print("user is leader: "..myData.leader)
-				print("score is : "..object:getScoreList()[i]:getValue())
 				tempuser = {object:getScoreList()[i]:getUserName(),object:getScoreList()[i]:getValue()}
 				table.insert( scores, tempuser )
-				print("score updating size is : "..table.getn(scores))
-				print("scoreId is : "..object:getScoreList()[i]:getScoreId())
 				if(myData.leader >5) then
 					myData.leader = 6
 					break
 				end
 			end
 		else
-			print("userName is : "..object:getScoreList():getUserName())
-			print("score is : "..object:getScoreList():getValue())
 			tempuser = {object:getScoreList()[i]:getUserName(),object:getScoreList()[i]:getValue()}
 			table.insert( scores, tempuser )
-			print("unique score size is : "..table.getn(scores))
-			print("scoreId is : "..object:getScoreList():getScoreId())
 		end
 		printRanks()
 		
 
 	end
 	function App42CallBack:onException(exception)
-		print("Message is : "..exception:getMessage())
-		print("App Error code is : "..exception:getAppErrorCode())
-		print("Http Error code is "..exception:getHttpErrorCode())
-		print("Detail is : "..exception:getDetails())
 	end
 end
 
@@ -342,9 +324,6 @@ function scene:hide( event )
 			display.remove(scorebox[i])
 			table.remove(scorebox,i)
 		end
-		print("rankbox end size is "..table.getn(rankbox))
-		print("userbox end size is "..table.getn(userbox))
-		print("scorebox end size is "..table.getn(scorebox))
 		ranknum = nil
 		userranked = nil
 		rankscore = nil
@@ -365,7 +344,6 @@ function scene:hide( event )
 		end
 
 		mx = nil
-		print("scores end size is "..table.getn(scores))
 		scores = {}
 
 

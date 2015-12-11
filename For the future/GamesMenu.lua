@@ -48,7 +48,6 @@ local function bestMenu()
 		effect = "fade",
 		time = 400
 	}
-	print("hi")
 	composer.showOverlay("bonus_menu",options)
 end
 
@@ -84,8 +83,6 @@ function scene:show( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-    	print(" ")
-        print("start GamesMenu")
 
 		local background = display.newImage("Images/theme_"..myData.theme.."/splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5

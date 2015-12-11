@@ -142,8 +142,6 @@ local function addPic(xVal,yVal,name,spot)
 		picTableBonus[spot] = nil
 
 	else
-		print("in")
-		print(picTableBonus[spot])
 		picTableBonus[spot]:removeSelf()
 		addPicTo(spot, name, xVal, yVal)
 			
@@ -241,12 +239,6 @@ end
 
 local function gohome( event )
     homesearch = homesearch + 1
-	print("in")
-    local function onUpdateObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
     --local dataTable = {["Search"..currLvl] = homesearch }
 
     local options = {
@@ -313,19 +305,15 @@ local function merge(tablel)
 		elseif ( tablel[i]=="Images/red_block.png") then
 			table.insert(fintable,tablel[i])
 			table.insert(bonuskey,"red")
-			print(fintable[i])
 		elseif (tablel[i]=="Images/green_block.png") then
 			table.insert(fintable,tablel[i])
 			table.insert(bonuskey,"green")
-			print(fintable[i])
 		elseif (tablel[i]=="Images/blue_block.png") then
 			table.insert(fintable,tablel[i])
 			table.insert(bonuskey,"blue")
-			print(fintable[i])
 		elseif (tablel[i]=="Images/yellow_block.png") then
 			table.insert(fintable,tablel[i])
 			table.insert(bonuskey,"yellow")
-			print(fintable[i])
 		else
 		end
 	end

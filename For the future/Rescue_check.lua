@@ -154,9 +154,7 @@ local function setupmap()
 	i = 1
 	while(myData.Build_Rescue.walls[i] ~= nil) do
 		currwall = "wall"..(myData.Build_Rescue.walls[i])
-		print(currwall)
 		currdata = myData[currwall]
-		print(currdata)
 		setupPic(currwall, currdata[5], currdata[1], currdata[2], currdata[3], currdata[4])
 		i = i + 1
 	end
@@ -187,7 +185,6 @@ local function setupmap()
 	--keys
 	i = 1
 	while(keyset[i] ~= nil) do
-		print("keyphys "..i)
 		physics.addBody(keyset[i], "static",{ isSensor=true })
 		i = i + 1
 	end
@@ -242,11 +239,6 @@ end
 local function addPic(xVal,yVal,name,spot)
 	if((picTable[spot]== nil) and (picToAdd == ""))then
 		emptyloop = emptyloop + 1
-		local function onEmptyRescue( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
 
 	elseif(picTable[spot] == nil) then
 		addPicTo(spot, name, xVal, yVal)
@@ -256,21 +248,11 @@ local function addPic(xVal,yVal,name,spot)
 		picTable[spot] = nil
 
 		undoloop = undoloop + 1
-		local function onUndoSearch( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end		
 	else
 		picTable[spot]:removeSelf()
 		addPicTo(spot, name, xVal, yVal)
 			
 		undoloop = undoloop + 1
-		local function onUndoSearch( event )
-        	if not event.error then
-            	print( event.response.updatedAt )
-        	end
-    	end
 	end
 	picToAdd = ""
 	if(popupPic~=nil)then
@@ -468,7 +450,6 @@ local function restartr()
 		transition.to( myrectr, { time=16, x=robotX+240, y=robotY} )
 		fintable=nil
 		fintable={}
-		print(table.maxn(fintable))
 		counter=1
 end
 
@@ -510,10 +491,8 @@ local function onCollision( event )
 			end
 		elseif (event.object2 == keyset[1] or event.object2 ==keyset[2] or event.object2 ==keyset[3] or event.object2 ==keyset[4]) then
 			keyscount = keyscount + 1
-			print("keys count: "..keyscount)
 			event.object2:removeSelf()
 		elseif (event.object2==science) then
-				print("Scientist")
 				local options = {
 					effect = "crossFade",
 					time = 500
@@ -537,7 +516,6 @@ local function onCollision( event )
 			
 			}
 			composer.showOverlay( "fail_rescue_build", options )
-			print("why1")
 
 		else
 			while(myData.Build_Rescue ~= nil) do
@@ -553,7 +531,6 @@ local function onCollision( event )
 						isModal = true
 						}
 						composer.showOverlay( "fail_rescue_build", options )
-						print("why1")
 					end
 				end
 				i = i + 1
@@ -566,7 +543,6 @@ end
 local function merge(tablel)
 	
 	for i=1,5,1 do
-		print(tablel[i])
 		if (tablel[i]=="Images/main_block.png") then
 			merge(table1)
 		elseif (tablel[i]=="Images/1_block.png") then
@@ -585,11 +561,6 @@ end
 
 local function pass()
 	runrescue = runrescue + 1
-    local function onRunningObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
     counter=1
 	merge(table1)
 	moverobot()
@@ -600,12 +571,6 @@ end
 
 local function gohome()
 	homerescue = homerescue + 1
-
-    local function onUpdateObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
 
     local options = {
 				effect = "crossFade",
@@ -664,7 +629,6 @@ function scene:create( event )
 	keyset = {}
 	keyscount = 0
 	--mykey()
-	print( myData.Build_Rescue.key[1] )
     local sceneGroup = self.view
     elevatorMusic = audio.loadStream( "Music/bensound-theelevatorbossanova.mp3")
 	elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
@@ -846,9 +810,7 @@ function scene:show( event )
 			setupPic("bottomwall", myData.bottomwall[5], myData.bottomwall[1], myData.bottomwall[2], myData.bottomwall[3], myData.bottomwall[4])
 			while(myData.Build_Rescue.walls[i] ~= nil) do
 				currwall = "wall"..myData.Build_Rescue.walls[i]
-				print(currwall)
 				currdata = myData[currwall]
-				print(currdata)
 				setupPic(currwall, currdata[5], currdata[1], currdata[2], currdata[3], currdata[4])
 				i = i + 1
 			end
@@ -872,7 +834,6 @@ function scene:show( event )
 			--keys
 			i = 1
 			while(keyset[i] ~= nil) do
-				print("keyphys "..i)
 				physics.addBody(keyset[i], "static",{ isSensor=true })
 				i = i + 1
 			end

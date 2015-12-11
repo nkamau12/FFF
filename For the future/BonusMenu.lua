@@ -88,10 +88,8 @@ local function playLevel( event )
 	    	
 	    	myData.bonusSearchLvl = event.target.id
 	    	myData.bonusTitle = levels[myData.bonusSearchLvl][1]
-	    	print("level name is "..myData.bonusTitle)
 	    	myData.bonusUser = levels[myData.bonusSearchLvl][2]
 	    	myData.bonusCount = levels[myData.bonusSearchLvl][3]
-	    	print("play count is "..myData.bonusCount)
 	    	myData.bonusSearchLvlKey = bonuskeys[myData.bonusSearchLvl]
 		    myData.bonusSearchLvlOne = {}
 		    myData.bonusSearchLvlOne = bonusone[myData.bonusSearchLvl]
@@ -99,16 +97,13 @@ local function playLevel( event )
 		    myData.bonusSearchLvlTwo = bonustwo[myData.bonusSearchLvl]
 		    myData.bonusSearchLvlThree = {}
 		    myData.bonusSearchLvlThree = bonusthree[myData.bonusSearchLvl]
-		    print(myData.bonusSearchLvlKey)
 	    	composer.gotoScene("BonusSearch",options)
 
 	    else
 	    	myData.bonusRescueLvl = event.target.id
 			myData.bonusTitle = levels[myData.bonusRescueLvl][1]
-	    	print("level name is "..myData.bonusTitle)
 	    	myData.bonusUser = levels[myData.bonusRescueLvl][2]
 	    	myData.bonusCount = levels[myData.bonusRescueLvl][3]
-	    	print("play count is "..myData.bonusCount)
 	    	myData.bonusRescueScience = bonusScience[myData.bonusRescueLvl]
 	    	myData.Bonuslevel.key = bonusKeys[myData.bonusRescueLvl]
 	    	myData.Bonuslevel.walls = bonusWalls[myData.bonusRescueLvl]
@@ -122,7 +117,6 @@ end
 
 local function printRanks()
 	mx = table.getn(levels)
-	print("levels size is "..mx)
 	for i=1, 6, 1 do
 		if( i <= mx-((pagenum - 1)*6) ) then
 			currpage = (pagenum - 1)*6 + i
@@ -229,7 +223,6 @@ local function printPage()
 end
 
 function getSearch()
-	print("start")
 	local dbName  = "USERS"
 	local collectionName = "Bonus Levels"
 	App42CallBack = {} 
@@ -237,10 +230,7 @@ function getSearch()
 	local value = "Search"
 	storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42CallBack)
 	function App42CallBack:onSuccess(object)
-		print("dbName is "..object:getDbName())
 		for i=1,table.getn(object:getJsonDocList()) do
-			print("DocId is "..object:getJsonDocList()[i]:getDocId())
-			print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
 			templevel = {object:getJsonDocList()[i]:getJsonDoc().level,object:getJsonDocList()[i]:getJsonDoc().user,object:getJsonDocList()[i]:getJsonDoc().playcount,
 			object:getJsonDocList()[i]:getJsonDoc().key,
 			object:getJsonDocList()[i]:getJsonDoc().keyoneone,object:getJsonDocList()[i]:getJsonDoc().keyonetwo,object:getJsonDocList()[i]:getJsonDoc().keyonethree,object:getJsonDocList()[i]:getJsonDoc().keyonefour,object:getJsonDocList()[i]:getJsonDoc().keyonefive,
@@ -249,17 +239,14 @@ function getSearch()
 			table.insert( levels, templevel )
 		end
 		maxpages = math.ceil( (table.getn(levels))/6 )
-		print("there are "..maxpages.." pages")
 		clearRanks()
 		printRanks()
 	end
 	function App42CallBack:onException(exception)
-		print("Error!")
 	end
 end
 
 function getRescue()
-	print("start")
 	local dbName  = "USERS"
 	local collectionName = "Bonus Levels"
 	App42CallBack = {} 
@@ -267,21 +254,16 @@ function getRescue()
 	local value = "Rescue"
 	storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42CallBack)
 	function App42CallBack:onSuccess(object)
-		print("dbName is "..object:getDbName())
 		for i=1,table.getn(object:getJsonDocList()) do
-			print("DocId is "..object:getJsonDocList()[i]:getDocId())
-			print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
 			templevel = {object:getJsonDocList()[i]:getJsonDoc().level, object:getJsonDocList()[i]:getJsonDoc().user, object:getJsonDocList()[i]:getJsonDoc().playcount,
 			object:getJsonDocList()[i]:getJsonDoc().walls, object:getJsonDocList()[i]:getJsonDoc().scientist, object:getJsonDocList()[i]:getJsonDoc().key}
 			table.insert( levels, templevel )
 		end
 		maxpages = math.ceil( (table.getn(levels))/6 )
-		print("there are "..maxpages.." pages")
 		clearRanks()
 		printRanks()
 	end
 	function App42CallBack:onException(exception)
-		print("Error!")
 	end
 end
 
@@ -352,8 +334,6 @@ function scene:show( event )
     local phase = event.phase
 	
     if ( phase == "will" ) then
-        print(" ")
-	    print("start BonusMenu")
 
 	    mx = 0
     	levels = {}
@@ -604,9 +584,6 @@ function scene:hide( event )
 			display.remove(playthis[i])
 			table.remove(playthis,i)
 		end
-		print("rankbox end size is "..table.getn(rankbox))
-		print("userbox end size is "..table.getn(userbox))
-		print("scorebox end size is "..table.getn(scorebox))
 		ranknum = nil
 		userranked = nil
 		rankscore = nil
@@ -637,7 +614,6 @@ function scene:hide( event )
 		end
 
 		mx = nil
-		print("scores end size is "..table.getn(levels))
 		scores = {}
 
 

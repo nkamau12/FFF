@@ -328,11 +328,9 @@ function scene:hide( event )
             if(string.find( level.walls[i], "%d" )==nil) then
                 display.remove(items['wall'..level.walls[i]])
                 --items['wall'..level.walls[i]]:removeSelf()
-                print( 'wall'..level.walls[i])
             else
                 display.remove(items['wall0'..level.walls[i]])
                 --items['wall0'..level.walls[i]]:removeSelf()
-                print( 'wall'..level.walls[i])
             end
         end
         level.walls=nil
