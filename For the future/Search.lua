@@ -287,6 +287,14 @@ local function checkresult( event )
         end
         myData.rescueLvl = currLvl
 
+        if(myData.searchLvl > myData.maxsrch) then
+            myData.maxsrch = myData.searchLvl
+        end
+
+        if(myData.rescueLvl > myData.maxrsc) then
+            myData.maxrsc = myData.rescueLvl
+        end
+
         local userSettings = {
             user = myData.user,
             search = myData.maxsrch,

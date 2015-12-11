@@ -633,6 +633,14 @@ local function onCollision( event )
 
         			myData.rescueLvl = currResc + 1
 
+        			if(myData.searchLvl > myData.maxsrch) then
+			            myData.maxsrch = myData.searchLvl
+			        end
+
+			        if(myData.rescueLvl > myData.maxrsc) then
+			            myData.maxrsc = myData.rescueLvl
+			        end
+
         			local userSettings = {
         			user = myData.user,
         			search = myData.searchLvl,
