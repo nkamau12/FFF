@@ -860,12 +860,6 @@ function scene:resumeGame()
     timer.resume(countDownTimer)
 end
 
--- Custom function for resuming the game (from pause state)
-function scene:restartGame()
-    --code to resume game
-    secondsLeft = 120
-    timer.resume(countDownTimer)
-end
 
 -- "scene:create()"
 function scene:create( event )
