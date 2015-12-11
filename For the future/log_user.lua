@@ -29,6 +29,8 @@ local function trylogin(event)
 	userService:authenticate(newUser,newPass,App42CallBack)  
 
 	function App42CallBack:onSuccess(object)
+  		print("userName is "..object:getUserName())
+  		print("session id is "..object:getSessionId()) 
   		local options = {
 				isModal = true,
     			effect = "crossFade",
@@ -46,7 +48,10 @@ local function trylogin(event)
       storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42CallBack)
 
       function App42CallBack:onSuccess(object)
+        print("dbName is "..object:getDbName())
         for i=1,table.getn(object:getJsonDocList()) do
+          print("DocId is "..object:getJsonDocList()[i]:getDocId())
+          print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
           jsonDoc.user = object:getJsonDocList()[i]:getJsonDoc().user
           jsonDoc.search = object:getJsonDocList()[i]:getJsonDoc().search
           jsonDoc.rescue = object:getJsonDocList()[i]:getJsonDoc().rescue
@@ -77,6 +82,10 @@ local function trylogin(event)
 	end
 
 	function App42CallBack:onException(exception)
+  		print("Message is : "..exception:getMessage())
+  		print("App Error code is : "..exception:getAppErrorCode())
+  		print("Http Error code is "..exception:getHttpErrorCode())
+  		print("Detail is : "..exception:getDetails())
 
   		local options = {
         isModal = true,
@@ -122,20 +131,30 @@ end
 local function userListener( event )
     if ( event.phase == "began" ) then
         -- user begins editing defaultField
+        print( event.text )
     elseif ( event.phase == "ended") then
       native.setKeyboardFocus( nil )
     elseif ( event.phase == "submitted" ) then
       native.setKeyboardFocus( passField )
     elseif ( event.phase == "editing" ) then
+        print( event.newCharacters )
+        print( event.oldText )
+        print( event.startPosition )
+        print( event.text )
     end
 end
 
 local function passListener( event )
     if ( event.phase == "began" ) then
         -- user begins editing defaultField
+        print( event.text )
     elseif ( event.phase == "ended" or event.phase == "submitted" ) then
         native.setKeyboardFocus( nil )
     elseif ( event.phase == "editing" ) then
+        print( event.newCharacters )
+        print( event.oldText )
+        print( event.startPosition )
+        print( event.text )
     end
 end
 

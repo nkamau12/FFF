@@ -56,8 +56,20 @@ local function createScores(user,name,number)
   scoreBoardService:addJSONObject( collectionName, jsonDoc)
   scoreBoardService:saveUserScore(gameName,userName,gameScore,App42CallBack)
   function App42CallBack:onSuccess(object)
+    print("Game name is "..object:getName())
+    print("userName is : "..object:getScoreList():getUserName())
+    print("score is : "..object:getScoreList():getValue())
+    print("scoreId is : "..object:getScoreList():getScoreId())
+    print("GetCreatedAt is : "..object:getScoreList():getJsonDocList():getCreatedAt())
+    print("Doc ID is : "..object:getScoreList():getJsonDocList():getDocId())
+    print("getUpdatedAt is : "..object:getScoreList():getJsonDocList():getUpdatedAt() )
+    print("GetJsonDoc is : "..JSON:encode(object:getScoreList():getJsonDocList():getJsonDoc()))
   end
   function App42CallBack:onException(exception)
+    print("Message is : "..exception:getMessage())
+    print("App Error code is : "..exception:getAppErrorCode())
+    print("Http Error code is "..exception:getHttpErrorCode())
+    print("Detail is : "..exception:getDetails())
   end
 end
 
@@ -69,8 +81,16 @@ local function createMax(user)
   local scoreBoardService = App42API.buildScoreBoardService() 
   scoreBoardService:saveUserScore(gameName,userName,gameScore,App42CallBack)
   function App42CallBack:onSuccess(object)
+    print("Game name is "..object:getName())
+    print("userName is : "..object:getScoreList():getUserName())
+    print("score is : "..object:getScoreList():getValue())
+    print("scoreId is : "..object:getScoreList():getScoreId())
   end
   function App42CallBack:onException(exception)
+    print("Message is : "..exception:getMessage())
+    print("App Error code is : "..exception:getAppErrorCode())
+    print("Http Error code is "..exception:getHttpErrorCode())
+    print("Detail is : "..exception:getDetails())
   end
 end
 
@@ -93,8 +113,17 @@ local function createStore(user)
   local storageService = App42API:buildStorageService()
   storageService:insertJSONDocument(dbName, collectionName, json,App42CallBack)
   function App42CallBack:onSuccess(object)
+    print("dbName is "..object:getDbName())
+    print("collectionName is "..object:getCollectionName())
+    print("DocId is "..object:getJsonDocList():getDocId())
+    print("Created At is "..object:getJsonDocList():getCreatedAt())
+    print("Updated At is "..object:getJsonDocList():getUpdatedAt())
   end
   function App42CallBack:onException(exception)
+    print("Message is : "..exception:getMessage())
+    print("App Error code is : "..exception:getAppErrorCode())
+    print("Http Error code is "..exception:getHttpErrorCode())
+    print("Detail is : "..exception:getDetails())
   end
 end
 
@@ -136,7 +165,10 @@ local function tryregister(event)
 
 		userService:getUser(newUser,App42CallBack)
 		function App42CallBack:onSuccess(object)
+  			print("userName is "..object:getUserName())
   			checkUser = object:getUserName()
+  			print("emailId is "..object:getEmail())
+  			print("checked user: "..checkUser)
   			local options = {
 				isModal = true,
     			effect = "crossFade",
@@ -150,10 +182,16 @@ local function tryregister(event)
 		end
 
 		function App42CallBack:onException(exception)
+			
+  			print("Message is : "..exception:getMessage())
+  			print("App Error code is : "..exception:getAppErrorCode())
+  			print("Http Error code is "..exception:getHttpErrorCode())
+  			print("Detail is : "..exception:getDetails())
 
   			App42CallBack = {}
   			userService:createUser(newUser,newPass,newEmail,App42CallBack)
   			function App42CallBack:onSuccess(object)
+  				print("userName is "..object:getUserName())
   				local options = {
 					isModal = true,
     				effect = "crossFade",
@@ -168,6 +206,11 @@ local function tryregister(event)
           local storageService = App42API:buildStorageService()
           storageService:insertJSONDocument(dbName, collectionName, json2,App42CallBack)
           function App42CallBack:onSuccess(object)
+              print("dbName is "..object:getDbName())
+              print("collectionName is "..object:getCollectionName())
+              print("DocId is "..object:getJsonDocList():getDocId())
+              print("Created At is "..object:getJsonDocList():getCreatedAt())
+            print("Updated At is "..object:getJsonDocList():getUpdatedAt())
 
             for l=1, 12, 1 do
               createScores(newUser,"Search",l)
@@ -180,6 +223,10 @@ local function tryregister(event)
             createStore(newUser)
           end
           function App42CallBack:onException(exception)
+            print("Message is : "..exception:getMessage())
+            print("App Error code is : "..exception:getAppErrorCode())
+            print("Http Error code is "..exception:getHttpErrorCode())
+            print("Detail is : "..exception:getDetails())
           end
 				  composer.showOverlay("complete_reg",options)
 			  end
@@ -217,9 +264,16 @@ end
 local function textListener( event )
     if ( event.phase == "began" ) then
         -- user begins editing defaultField
+        print( event.text )
     elseif ( event.phase == "ended" or event.phase == "submitted" ) then
         -- do something with defaultField text
+        native.setKeyboardFocus(nil)
+        print( event.target.text )
     elseif ( event.phase == "editing" ) then
+        print( event.newCharacters )
+        print( event.oldText )
+        print( event.startPosition )
+        print( event.text )
     end
 end
 
