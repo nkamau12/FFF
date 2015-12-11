@@ -41,6 +41,21 @@ local function confirm(event)
 					keys = "{\""..myData.purchase[5].."\":"..myData.savedclocks.."}"
 				end
 
+				local userSettings = {
+				  	user = myData.user,
+				  	search = myData.maxsrch,
+				  	rescue = myData.maxrsc,
+				    volume = myData.musicVol,
+				    sfx = myData.sfx,
+				    credits = myData.credits,
+				  	theme = myData.theme,
+				  	robot = myData.roboSprite,
+				  	science = myData.scienceSprite,
+				  	keys = myData.savedkeys,
+				  	stopwatch = myData.savedclocks
+				}
+				loadsave.saveTable( userSettings, "user.json" )
+
 				App42CallBack = {}
 				storageService = App42API:buildStorageService()
 				storageService:addOrUpdateKeys(dbName, collectionName,docId, keys,App42CallBack) 
