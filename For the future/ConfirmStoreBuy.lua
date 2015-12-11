@@ -111,7 +111,9 @@ local function confirm(event)
 		    credits = myData.credits,
 		  	theme = myData.theme,
 		  	robot = myData.roboSprite,
-		  	science = myData.scienceSprite
+		  	science = myData.scienceSprite,
+		  	keys = myData.savedkeys,
+		  	stopwatch = myData.savedclocks
 		}
 		loadsave.saveTable( userSettings, "user.json" )
 	end

@@ -5,7 +5,7 @@ local errorcount1 = myData.error1_count
 local scene = composer.newScene()
 
 local function tryagain(event)
-	composer.gotoScene("Rescue",options)
+	composer.hideOverlay("fade",400)
 end
 function scene:create( event )
 
@@ -52,6 +52,8 @@ function scene:hide( event )
 
     if ( phase == "will" ) then
         -- Call the "resumeGame()" function in the parent scene
+        parent:resetrobot()
+        parent:restartGame()
 		
     end
 end

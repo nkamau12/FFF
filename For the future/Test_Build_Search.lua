@@ -281,7 +281,7 @@ local function checkLvl(event)
         local collectionName = "Bonus Levels"
 
         local key11 = "keyoneone"
-        local value11 = myData.("value11 is "..value11)
+        local value11 = myData.bonusShow.one[1]
         local key12 = "keyonetwo"
         local value12 = myData.bonusShow.one[2]
         local key13 = "keyonethree"
@@ -366,7 +366,6 @@ local function checkLvl(event)
         end
         function App42CallBack:onException(exception)
             local errorCode = exception:getAppErrorCode()
-
             if(errorCode == 2608) then
                 checkresult()
             end

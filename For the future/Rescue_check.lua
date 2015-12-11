@@ -239,13 +239,6 @@ end
 local function addPic(xVal,yVal,name,spot)
 	if((picTable[spot]== nil) and (picToAdd == ""))then
 		emptyloop = emptyloop + 1
-<<<<<<< HEAD
-		local function onEmptyRescue( event )
-        	if not event.error then
-        	end
-    	end
-=======
->>>>>>> f024449e5f162e6a94f17bb2c020b1107449141d
 
 	elseif(picTable[spot] == nil) then
 		addPicTo(spot, name, xVal, yVal)
@@ -255,25 +248,11 @@ local function addPic(xVal,yVal,name,spot)
 		picTable[spot] = nil
 
 		undoloop = undoloop + 1
-<<<<<<< HEAD
-		local function onUndoSearch( event )
-        	if not event.error then
-        	end
-    	end		
-=======
->>>>>>> f024449e5f162e6a94f17bb2c020b1107449141d
 	else
 		picTable[spot]:removeSelf()
 		addPicTo(spot, name, xVal, yVal)
 			
 		undoloop = undoloop + 1
-<<<<<<< HEAD
-		local function onUndoSearch( event )
-        	if not event.error then
-        	end
-    	end
-=======
->>>>>>> f024449e5f162e6a94f17bb2c020b1107449141d
 	end
 	picToAdd = ""
 	if(popupPic~=nil)then

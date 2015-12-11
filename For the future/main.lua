@@ -412,13 +412,13 @@ end
   --STORE OBJECTS:
   -- object = {type, displayname, picture, cost, backName}
   myData.storeItems = {
-    {"robot", "Santa Robot", "Images/robot_santa.png", 100, "santa"},
-    {"robot", "Potato Robot", "Images/robot_potato.png", 200, "potato"},
-    {"scientist", "Present Scientist", "Images/scientist_present.png", 100, "present"},
-    {"scientist", "Sad Scientist", "Images/scientist_sadface.png", 200, "sadface"},
-    {"theme", "Yellow Theme", "Images/theme_yellow/splash_main.png", 50, "yellow"},
-    {"theme", "Red Theme", "Images/theme_red/splash_main.png", 100, "red"},
-    {"theme", "Green Theme", "Images/theme_green/splash_main.png", 150, "green"},
+    {"robot", "Santa Robot", "Images/robot_santa.png", 200, "santa"},
+    {"robot", "Potato Robot", "Images/robot_potato.png", 400, "potato"},
+    {"scientist", "Present Scientist", "Images/scientist_present.png", 200, "present"},
+    {"scientist", "Sad Scientist", "Images/scientist_sadface.png", 400, "sadface"},
+    {"theme", "Yellow Theme", "Images/theme_yellow/splash_main.png", 100, "yellow"},
+    {"theme", "Red Theme", "Images/theme_red/splash_main.png", 200, "red"},
+    {"theme", "Green Theme", "Images/theme_green/splash_main.png", 300, "green"},
     {"robot", "Default Robot", "Images/robot_default.png", 0, "default"},
     {"scientist", "Default Scientist", "Images/scientist_default.png", 0, "default"},
     {"theme", "Default Theme", "Images/theme_default/splash_main.png", 0, "default"}
@@ -426,8 +426,8 @@ end
 
   -- object = {type, displayname, picture, cost, backName}
   myData.buyPowerUps = {
-    {"powerup", "Key", "Images/key.png", 200, "keys"},
-    {"powerup", "Time Stop", "Images/stopwatch.png", 200, "stopwatch"}
+    {"powerup", "Key", "Images/key.png", 500, "keys"},
+    {"powerup", "Time Stop", "Images/stopwatch.png", 500, "stopwatch"}
   } 
 
 
