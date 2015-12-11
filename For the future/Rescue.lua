@@ -1144,7 +1144,10 @@ function scene:show( event )
 
 			physics.start()
 			physics.setGravity( 0, 0 )
-
+			--robot
+			physics.addBody(robot,"dynamic",{bounce=0,friction=.8})
+			robot.isFixedRotation = true
+		
 			--walls physics
 			physics.addBody( setupItems["leftwall"], "static",{bounce=0})
 			physics.addBody( setupItems["rightwall"], "static",{bounce=0})
@@ -1153,10 +1156,7 @@ function scene:show( event )
 
 			
 		
-			--robot
-			physics.addBody(robot,"dynamic",{bounce=0,friction=.8})
-			robot.isFixedRotation = true
-		
+			
 			--Misc
 			local robotX, robotY = robot:localToContent( -70, -70 )
 			myrectu = display.newRect( robotX, robotY-248, 1, 1)

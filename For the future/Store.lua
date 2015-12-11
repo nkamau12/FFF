@@ -95,13 +95,13 @@ local function prevSpecial( event )
 			special_counter = special_counter - 1
 		end
 		if(special_pic ~= nil)then
-			special_pic:removeSelf()
+			display.remove(special_pic)
 		end
 		if(special_title ~= nil)then
-			special_title:removeSelf()
+			display.remove(special_title)
 		end
 		if(special_cost ~= nil)then
-			special_cost:removeSelf()
+			display.remove(special_cost)
 		end
 		special_title = display.newText(myData.buyPowerUps[special_counter][2], 550, 700)
 		special_cost = display.newText("Cost: "..myData.buyPowerUps[special_counter][4], 550,775)
@@ -123,13 +123,13 @@ local function nextSpecial( event )
 		end
 		print("Special counter is "..special_counter)
 		if(special_pic ~= nil)then
-			special_pic:removeSelf()
+			display.remove(special_pic)
 		end
 		if(special_title ~= nil)then
-			special_title:removeSelf()
+			display.remove(special_title)
 		end
 		if(special_cost ~= nil)then
-			special_cost:removeSelf()
+			display.remove(special_cost)
 		end
 		special_title = display.newText(myData.buyPowerUps[special_counter][2], 550, 700)
 		special_cost = display.newText("Cost: "..myData.buyPowerUps[special_counter][4], 550,775)
@@ -408,13 +408,13 @@ function scene:hide( event )
 			extra_cost:removeSelf()
 		end
 		if(special_pic ~= nil)then
-			special_pic:removeSelf()
+			display.remove(special_pic)
 		end
 		if(special_title ~= nil)then
-			special_title:removeSelf()
+			display.remove(special_title)
 		end
 		if(special_cost ~= nil)then
-			special_cost:removeSelf()
+			display.remove(special_cost)
 		end
     elseif ( phase == "did" ) then
     	
