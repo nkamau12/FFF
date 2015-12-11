@@ -390,7 +390,9 @@ end
 -- Custom function for resuming the game (from pause state)
 function scene:resumeGame()
     --code to resume game
-    secondsLeft = secondsLeft - 9
+    if(secondsLeft >14)then
+        secondsLeft = secondsLeft - 9
+    end
     timer.resume(countDownTimer)
 end
 
