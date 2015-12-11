@@ -37,9 +37,6 @@ function scene:show( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-        print(" ")
-	    print("start Splash")
-
 	    --sets volume level according to the user settings
 		local vol = myData.musicVol / 100
 		audio.setVolume(vol, {channel = 1})

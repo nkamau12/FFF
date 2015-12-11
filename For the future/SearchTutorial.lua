@@ -202,7 +202,6 @@ local function checkresult( event )
     runsearch = runsearch + 1
 
     while answer<5 do
-        print(answer)
         if(spacecolor[answer] == answerkey[answer+1])then
             answer = answer + 1
         else
@@ -238,7 +237,6 @@ local function checkresult( event )
         end
         setupItems={}
         composer.showOverlay("pass_tutorial", options)
-        print("Current level: "..myData.searchLvl)
     else
         answer = countmax
     end

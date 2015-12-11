@@ -58,8 +58,6 @@ function scene:show( event )
     local phase = event.phase
 	
     if ( phase == "will" ) then
-        print(" ")
-	    print("start TutorialsMenu")
 
 		local background = display.newImage("Images/theme_"..myData.theme.."/splash_main.png",system.ResourceDirectory)
 		background.anchorX=0.5

@@ -129,7 +129,6 @@ local function addPic(xVal,yVal,name,spot)
         emptyloop = emptyloop + 1
         local function onEmptyRescue( event )
             if not event.error then
-                print( event.response.updatedAt )
             end
         end
 
@@ -143,7 +142,6 @@ local function addPic(xVal,yVal,name,spot)
         undoloop = undoloop + 1
         local function onUndoSearch( event )
             if not event.error then
-                print( event.response.updatedAt )
             end
         end     
     else
@@ -153,7 +151,6 @@ local function addPic(xVal,yVal,name,spot)
         undoloop = undoloop + 1
         local function onUndoSearch( event )
             if not event.error then
-                print( event.response.updatedAt )
             end
         end
     end
@@ -322,7 +319,6 @@ local function moverobot()
     local max = table.maxn(fintable)
     
     if not (counter>max) then
-        print(fintable[counter])
         if (fintable[counter]=="Images/up_arrow.png") then
             moveup()
         elseif (fintable[counter]=="Images/down_arrow.png") then
@@ -431,7 +427,6 @@ local function addButton(position, xPos, yPos,idName)
 end
 
 local function myscientist( )
-    print( 'Being called' )
   sciencex = myData.Build_Rescue.scientist[1]
   if(sciencex == 1) then
     myData.science[1] = 100
@@ -673,7 +668,6 @@ function scene:show( event )
         --keys
         i=1
         while(setupItems["key"..i]~=nil) do
-            print( setupItems["key"..i].myName )
                 physics.addBody(setupItems["key"..i], "static",{ isSensor=true })
                 i=i+1
         end

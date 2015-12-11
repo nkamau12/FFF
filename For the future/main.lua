@@ -25,7 +25,6 @@ local loadsave = require( "loadsave" )
 
 
 local loadedUser = loadsave.loadTable( "user.json" )
-print(loadedUser)
 --creates default data if no user information is stored in the local file
 if (loadedUser == nil) then
   local userSettings = {
@@ -95,7 +94,6 @@ if(loadedUser == nil)then
 
 else
   value = loadedUser.user
-  print("value ")
   myData.user = loadedUser.user
   myData.musicVol = loadedUser.volume
   myData.sfx = loadedUser.sfx
@@ -119,10 +117,7 @@ storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42Call
 --if this function is called, it means the user was found in the database and all their content will be downloaded.
 function App42CallBack:onSuccess(object)
   myData.internet = 1
-  print("dbName is "..object:getDbName())
   for i=1,table.getn(object:getJsonDocList()) do
-    print("DocId is "..object:getJsonDocList()[i]:getDocId())
-    print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
     jsonDoc.userDoc = object:getJsonDocList()[i]:getDocId()
     jsonDoc.user = object:getJsonDocList()[i]:getJsonDoc().user
     jsonDoc.search = object:getJsonDocList()[i]:getJsonDoc().search
@@ -180,10 +175,6 @@ end
 
 --this function runs if for any reason the game is unable to connect to the API. Then the default data will be pre-loaded in the game.
 function App42CallBack:onException(exception)
-  print("Message is : "..exception:getMessage())
-  print("App Error code is : "..exception:getAppErrorCode())
-  print("Http Error code is "..exception:getHttpErrorCode())
-  print("Detail is : "..exception:getDetails())
 
   myData.maxsrch = loadedUser.search
   myData.maxrsc = loadedUser.rescue

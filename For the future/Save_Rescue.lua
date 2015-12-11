@@ -39,8 +39,6 @@ local function submitLvl()
 	local App42CallBack = {}
 	storageService:insertJSONDocument(dbName, collectionName, json,App42CallBack)
 	function App42CallBack:onSuccess(object)
-		print("DocId is "..object:getJsonDocList():getDocId())
-		print("Created At is "..object:getJsonDocList():getCreatedAt())
 		local options = {
             isModal = true,
             effect = "crossFade",
@@ -50,7 +48,6 @@ local function submitLvl()
 		
 	end
 	function App42CallBack:onException(exception)
-		print("Message is : "..exception:getMessage())
 	end
 end
 local function checkLvl(event)
@@ -62,10 +59,7 @@ local function checkLvl(event)
 		local App42CallBack = {}
 		storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42CallBack)
 		function App42CallBack:onSuccess(object)
-			print("dbName is "..object:getDbName())
 			for i=1,table.getn(object:getJsonDocList()) do
-				print("DocId is "..object:getJsonDocList()[i]:getDocId())
-				print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
 				local options = {
                         isModal = true,
                         effect = "crossFade",
@@ -75,14 +69,11 @@ local function checkLvl(event)
 			end
 		end
 		function App42CallBack:onException(exception)
-			print("Message is : "..exception:getMessage())
-			print("App Error code is : "..exception:getAppErrorCode())
 			local errorCode = exception:getAppErrorCode()
 
             if(errorCode == 2601) then
                 submitLvl()
             end
-			print("Detail is : "..exception:getDetails())
 		end
 
 	end
@@ -95,16 +86,11 @@ end
 local function userListener( event )
     if ( event.phase == "began" ) then
         -- user begins editing defaultField
-        print( event.text )
     elseif ( event.phase == "ended") then
       native.setKeyboardFocus( nil )
     elseif ( event.phase == "submitted" ) then
       native.setKeyboardFocus( passField )
     elseif ( event.phase == "editing" ) then
-        print( event.newCharacters )
-        print( event.oldText )
-        print( event.startPosition )
-        print( event.text )
     end
 end
 

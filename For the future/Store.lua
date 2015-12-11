@@ -49,11 +49,9 @@ local function gohome( event )
 end
 
 local function buy()
-	print("buy")
 end
 
 local function notBuy()
-	print("decline")
 end
 
 
@@ -62,7 +60,6 @@ local function buyExtra(event)
 	myData.purchase = myData.buyable[extra_counter]
 	if ( "moved" == event.phase ) then
     elseif ( "ended" == event.phase ) then
-		print(myData.buyable[extra_counter])
 		local options = {
 			isModal = true
 		}
@@ -75,7 +72,6 @@ local function buySpecial(event)
 	myData.purchase = myData.buyPowerUps[special_counter]
 	if ( "moved" == event.phase ) then
     elseif ( "ended" == event.phase ) then
-		print(myData.buyPowerUps[special_counter])
 		local options = {
 			isModal = true
 		}
@@ -121,7 +117,6 @@ local function nextSpecial( event )
 		else
 			special_counter = special_counter + 1
 		end
-		print("Special counter is "..special_counter)
 		if(special_pic ~= nil)then
 			display.remove(special_pic)
 		end
@@ -187,7 +182,6 @@ local function nextExtra( event )
 		else
 			extra_counter = extra_counter + 1
 		end
-		print("Extra counter is "..extra_counter)
 		if(extra_pic ~= nil)then
 			extra_pic:removeSelf()
 		end
@@ -226,9 +220,6 @@ function scene:show( event )
     local phase = event.phase
 	
     if ( phase == "will" ) then
-    	print(" ")
-        print("start Store")
-
         myData.purchase = {}
         extra_counter = 1
 

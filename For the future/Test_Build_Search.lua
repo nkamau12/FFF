@@ -236,7 +236,6 @@ end
 
 local function checkresult()
     while answer<5 do
-        print(answer)
         if(spacecolor[answer] == answerkey[answer+1])then
             answer = answer + 1
         else
@@ -282,52 +281,37 @@ local function checkLvl(event)
         local collectionName = "Bonus Levels"
 
         local key11 = "keyoneone"
-        local value11 = myData.bonusShow.one[1]
-        print("value11 is "..value11)
+        local value11 = myData.("value11 is "..value11)
         local key12 = "keyonetwo"
         local value12 = myData.bonusShow.one[2]
-        print("value12 is "..value12)
         local key13 = "keyonethree"
         local value13 = myData.bonusShow.one[3]
-        print("value13 is "..value13)
         local key14 = "keyonefour"
         local value14 = myData.bonusShow.one[4]
-        print("value14 is "..value14)
         local key15 = "keyonefive"
         local value15 = myData.bonusShow.one[5]
-        print("value15 is "..value15)
 
         local key21 = "keytwoone"
         local value21 = myData.bonusShow.two[1]
-        print("value21 is "..value21)
         local key22 = "keytwotwo"
         local value22 = myData.bonusShow.two[2]
-        print("value22 is "..value22)
         local key23 = "keytwothree"
         local value23 = myData.bonusShow.two[3]
-        print("value23 is "..value23)
         local key24 = "keytwofour"
         local value24 = myData.bonusShow.two[4]
-        print("value24 is "..value24)
         local key25 = "keytwofive"
         local value25 = myData.bonusShow.two[5]
-        print("value25 is "..value25)
 
         local key31 = "keythreeone"
         local value31 = myData.bonusShow.three[1]
-        print("value31 is "..value31)
         local key32 = "keythreetwo"
         local value32 = myData.bonusShow.three[2]
-        print("value32 is "..value32)
         local key33 = "keythreethree"
         local value33 = myData.bonusShow.three[3]
-        print("value33 is "..value33)
         local key34 = "keythreefour"
         local value34 = myData.bonusShow.three[4]
-        print("value34 is "..value34)
         local key35 = "keythreefive"
         local value35 = myData.bonusShow.three[5]
-        print("value35 is "..value35)
 
         
         local q11 = queryBuilder:build(key11, value11, Operator.EQUALS) 
@@ -371,11 +355,7 @@ local function checkLvl(event)
         storageService = App42API:buildStorageService()  
         storageService:findDocumentsByQuery(dbName, collectionName,query41,App42CallBack)  
         function App42CallBack:onSuccess(object)
-            print("dbName is "..object:getDbName())
                 for i=1,table.getn(object:getJsonDocList()) do
-                    print("DocId is "..object:getJsonDocList()[i]:getDocId())
-                    print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
-                    print("value13 is "..object:getJsonDocList()[i]:getJsonDoc().keyonethree)
                     local options = {
                         isModal = true,
                         effect = "crossFade",
@@ -385,8 +365,6 @@ local function checkLvl(event)
                 end
         end
         function App42CallBack:onException(exception)
-            print("Message is : "..exception:getMessage())
-            print("App Error code is : "..exception:getAppErrorCode())
             local errorCode = exception:getAppErrorCode()
 
             if(errorCode == 2608) then

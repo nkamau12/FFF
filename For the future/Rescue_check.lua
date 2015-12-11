@@ -154,9 +154,7 @@ local function setupmap()
 	i = 1
 	while(myData.Build_Rescue.walls[i] ~= nil) do
 		currwall = "wall"..(myData.Build_Rescue.walls[i])
-		print(currwall)
 		currdata = myData[currwall]
-		print(currdata)
 		setupPic(currwall, currdata[5], currdata[1], currdata[2], currdata[3], currdata[4])
 		i = i + 1
 	end
@@ -187,7 +185,6 @@ local function setupmap()
 	--keys
 	i = 1
 	while(keyset[i] ~= nil) do
-		print("keyphys "..i)
 		physics.addBody(keyset[i], "static",{ isSensor=true })
 		i = i + 1
 	end
@@ -244,7 +241,6 @@ local function addPic(xVal,yVal,name,spot)
 		emptyloop = emptyloop + 1
 		local function onEmptyRescue( event )
         	if not event.error then
-            	print( event.response.updatedAt )
         	end
     	end
 
@@ -258,7 +254,6 @@ local function addPic(xVal,yVal,name,spot)
 		undoloop = undoloop + 1
 		local function onUndoSearch( event )
         	if not event.error then
-            	print( event.response.updatedAt )
         	end
     	end		
 	else
@@ -268,7 +263,6 @@ local function addPic(xVal,yVal,name,spot)
 		undoloop = undoloop + 1
 		local function onUndoSearch( event )
         	if not event.error then
-            	print( event.response.updatedAt )
         	end
     	end
 	end
@@ -468,7 +462,6 @@ local function restartr()
 		transition.to( myrectr, { time=16, x=robotX+240, y=robotY} )
 		fintable=nil
 		fintable={}
-		print(table.maxn(fintable))
 		counter=1
 end
 
@@ -510,10 +503,8 @@ local function onCollision( event )
 			end
 		elseif (event.object2 == keyset[1] or event.object2 ==keyset[2] or event.object2 ==keyset[3] or event.object2 ==keyset[4]) then
 			keyscount = keyscount + 1
-			print("keys count: "..keyscount)
 			event.object2:removeSelf()
 		elseif (event.object2==science) then
-				print("Scientist")
 				local options = {
 					effect = "crossFade",
 					time = 500
@@ -537,7 +528,6 @@ local function onCollision( event )
 			
 			}
 			composer.showOverlay( "fail_rescue_build", options )
-			print("why1")
 
 		else
 			while(myData.Build_Rescue ~= nil) do
@@ -553,7 +543,6 @@ local function onCollision( event )
 						isModal = true
 						}
 						composer.showOverlay( "fail_rescue_build", options )
-						print("why1")
 					end
 				end
 				i = i + 1

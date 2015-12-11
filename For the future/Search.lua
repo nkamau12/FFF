@@ -185,13 +185,10 @@ local function addTokens()
     App42CallBack = {}
     storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)
     function App42CallBack:onSuccess(object)
-        print("dbName is "..object:getDbName())
         for i=1,table.getn(object:getJsonDocList()) do
-            print("Succesful connection")
         end
     end
     function App42CallBack:onException(exception)
-        print("Message is : "..exception:getMessage())
     end
 end
 
@@ -200,12 +197,10 @@ local function checkresult( event )
     runsearch = runsearch + 1
 
     while answer<5 do
-        print(answer)
         if(spacecolor[answer] == answerkey[answer+1])then
             answer = answer + 1
         else
             timer.pause(countDownTimer)
-            print(secondsLeft)
     		local options = {
     			isModal = true }
             composer.showOverlay( "fail_search", options )
@@ -238,9 +233,7 @@ local function checkresult( event )
     	composer.showOverlay("pass_search", options)
 		myData.error1_count = 0
         timer.pause(countDownTimer)
-        print("Finished with "..secondsLeft.." seconds left")
         gameScore = secondsLeft * 10
-        print("Score: "..gameScore)
         
 
         if(gameScore >= oldscore or oldscore == nil) then
@@ -251,11 +244,8 @@ local function checkresult( event )
             App42CallBack = {}
             scoreBoardService:editScoreValueById(scoreId,gameScore,App42CallBack)
             function App42CallBack:onSuccess(object)
-                print("userName is : "..object:getScoreList():getUserName())
-                print("score is : "..object:getScoreList():getValue())
             end
             function App42CallBack:onException(exception)
-                print("Error!")
             end
             --update score json
             local docId = jdocKey
@@ -267,12 +257,10 @@ local function checkresult( event )
             App42CallBack = {}
             storageService:updateDocumentByDocId(dbName,collectionName,docId,jsonDoc,App42CallBack)
             function App42CallBack:onSuccess(object)
-                for i=1,table.getn(object:getJsonDocList()) do
-                    print("DocId is "..object:getJsonDocList()[i]:getDocId())
+                for i=1,table.getn(object:getJsonDocList()) d
                 end
             end
             function App42CallBack:onException(exception)
-                print("Error!")
             end
 
             -- update max score
@@ -281,24 +269,16 @@ local function checkresult( event )
             App42CallBack = {}
             scoreBoardService:getLastScoreByUser(gameName,userName,App42CallBack)
             function App42CallBack:onSuccess(object)
-                print("userName is : "..object:getScoreList():getUserName())
-                print("score is : "..object:getScoreList():getValue())
-                print("scoreId is : "..object:getScoreList():getScoreId())
                 local scoreId = object:getScoreList():getScoreId()
                 local gameScore = newmax + globalscore
                 App42CallBack = {}
                 scoreBoardService:editScoreValueById(scoreId,gameScore,App42CallBack)
                 function App42CallBack:onSuccess(object)
-                    print("success")
                 end
                 function App42CallBack:onException(exception)
-                    print("Message is : "..exception:getMessage())
-                    print("Detail is : "..exception:getDetails())
                 end
             end
             function App42CallBack:onException(exception)
-                print("Message is : "..exception:getMessage())
-                print("Detail is : "..exception:getDetails())
             end
 
         end
@@ -319,7 +299,6 @@ local function checkresult( event )
             credits = myData.credits,
             stopwatch = myData.savedclocks }
         loadsave.saveTable( userSettings, "user.json" )
-        print("Current level: "..myData.searchLvl)
     else
         answer = countmax
     end
@@ -333,7 +312,6 @@ end
 local function updateTime(event)
     -- decrement the number of seconds
     secondsLeft = secondsLeft - 1
-    print("Seconds left: "..secondsLeft)
     -- time is tracked in seconds.  We need to convert it to minutes and seconds
     local minutes = math.floor( secondsLeft / 60 )
     local seconds = secondsLeft % 60
@@ -363,7 +341,6 @@ local function useclock()
     myData.savedclocks = myData.savedclocks - 1
     clockscount = clockscount + 1
     hasClock = true
-    print("clockscount is "..clockscount)
     updateClocks()
     if(myData.savedclocks == 0) then
         setupItems["clockpowerup"]:removeEventListener("tap", useclock)
@@ -379,7 +356,6 @@ local function getScoreDoc()
     local key1 = "level"
     local varname = "_$scoreId"
     local value1 = "Search"..currLvl
-    print("curr level "..currLvl)
     local q1 = queryBuilder:build(key, value, Operator.EQUALS)   
     local q2 = queryBuilder:build(key1, value1, Operator.EQUALS)      
     local query = queryBuilder:compoundOperator(q1,Operator.AND, q2)
@@ -391,14 +367,9 @@ local function getScoreDoc()
                 scoreKey = object:getJsonDocList()[i]:getJsonDoc()["_$scoreId"]
                 jdocKey = object:getJsonDocList()[i]:getDocId()
                 oldscore = object:getJsonDocList()[i]:getJsonDoc().score
-                print("DocId is "..object:getJsonDocList()[i]:getDocId())
-                print("Level is "..object:getJsonDocList()[i]:getJsonDoc().level)
-                print("ScoreId is "..object:getJsonDocList()[i]:getJsonDoc()["_$scoreId"])
             end
     end
     function App42CallBack:onException(exception)
-        print("Message is : "..exception:getMessage())
-        print("Detail is : "..exception:getDetails())
         oldscore = 0
     end
 
@@ -406,15 +377,9 @@ local function getScoreDoc()
     App42CallBack = {}
     scoreBoardService:getLastScoreByUser(gameName,userName,App42CallBack)
     function App42CallBack:onSuccess(object)
-        print("Game name is "..object:getName())
-        print("userName is : "..object:getScoreList():getUserName())
-        print("score is : "..object:getScoreList():getValue())
         globalscore = object:getScoreList():getValue()
-        print("scoreId is : "..object:getScoreList():getScoreId())
     end
     function App42CallBack:onException(exception)
-        print("Message is : "..exception:getMessage())
-        print("Detail is : "..exception:getDetails())
         globalscore = 0
     end
 
@@ -532,13 +497,9 @@ function scene:show( event )
     currLvl = myData.searchLvl
 
     if ( phase == "will" ) then
-        print(" ")
-        print("start Search")
         myData.rescue = 0
 
         getKey()
-
-        print("This level: "..currLvl)
         if(mapmain[1] == nil) then
             undosearch = 0
             homesearch = 0

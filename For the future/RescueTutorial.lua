@@ -111,9 +111,7 @@ local function setupmap()
 	i = 1
 	while(myData.levelkey[1].walls[i] ~= nil) do
 		currwall = "wall"..(myData.levelkey[1].walls[i])
-		print(currwall)
 		currdata = myData[currwall]
-		print(currdata)
 		setupPic(currwall, currdata[5], currdata[1], currdata[2], currdata[3], currdata[4])
 		i = i + 1
 	end
@@ -391,7 +389,6 @@ local function restartr()
 		transition.to( myrectr, { time=16, x=robotX+240, y=robotY} )
 		fintable=nil
 		fintable={}
-		print(table.maxn(fintable))
 		counter=1
 end
 
@@ -435,7 +432,6 @@ local function onCollision( event )
 			end
 
 		elseif (event.object2==science) then
-				print("Scientist")
 				local options = {
 					isModal = true,
 					effect = "crossFade",
@@ -457,7 +453,6 @@ local function onCollision( event )
 			
 			}
 			composer.showOverlay( "fail", options )
-			print("why1")
 
 		else
 			while(myData.levelkey[1].walls[i] ~= nil) do
@@ -468,7 +463,6 @@ local function onCollision( event )
 						isModal = true
 						}
 						composer.showOverlay( "fail", options )
-						print("why1")
 					
 				end
 				i = i + 1
@@ -481,7 +475,6 @@ end
 local function merge(tablel)
 	
 	for i=1,5,1 do
-		print(tablel[i])
 		if (tablel[i]=="Images/main_block.png") then
 			merge(table1)
 		elseif (tablel[i]=="Images/1_block.png") then
@@ -693,13 +686,10 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
-        print(" ")
-	    print("start RescueTutorial")
 
 
 		picTable = {}
     	setObjects()
-    	print(myData.rescueLvl)
     	currResc = 1
         if(robot == nil) then
 
@@ -734,9 +724,7 @@ function scene:show( event )
 			i=1
 			while(myData.levelkey[1].walls[i] ~= nil) do
 				currwall = "wall"..myData.levelkey[1].walls[i]
-				print(currwall)
 				currdata = myData[currwall]
-				print(currdata)
 				setupPic(currwall, currdata[5], currdata[1], currdata[2], currdata[3], currdata[4])
 				i = i + 1
 			end
