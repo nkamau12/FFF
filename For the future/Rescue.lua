@@ -784,6 +784,12 @@ local function updateTime(event)
         local options = {
             isModal = true }
         composer.showOverlay( "fail_time_rescue", options )
+        for h = 15, 1, -1 do
+			if(picTable[h] ~= nil) then
+				display.remove(picTable[h])
+			end
+		end
+
     end
 
 end
