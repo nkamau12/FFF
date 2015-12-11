@@ -276,7 +276,7 @@ local function	popup(x,y,height,width)
 		popupPic.anchorY = 0	
 		popupPic:setFillColor(grey, 0.2)
 	elseif(x ~= popupPic.x)then
-		popupPic:removeSelf()
+		display.remove(popupPic)
 		popupPic = display.newRect(x,y,height,width)
 		popupPic.anchorX = 0
 		popupPic.anchorY = 0	
@@ -795,7 +795,7 @@ end
 
 local function gohome()
 	homerescue = homerescue + 1
-
+	display.remove(popupPic)
     local options = {
     			isModal = true,
 				effect = "crossFade",
