@@ -11,7 +11,7 @@ end
 function scene:create( event )
 
     local sceneGroup = self.view
-	local background = display.newRect(display.contentCenterX, display.contentCenterY,1920-400,1080-400)
+	local background = display.newRect(display.contentCenterX, display.contentCenterY,2100-450,1080-400)
 	background:setFillColor(grey,0.5)
 	sceneGroup:insert(background)
 	if(errorcount2 > 2 or errorcount3 > 2) then
