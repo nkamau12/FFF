@@ -239,10 +239,13 @@ end
 local function addPic(xVal,yVal,name,spot)
 	if((picTable[spot]== nil) and (picToAdd == ""))then
 		emptyloop = emptyloop + 1
+<<<<<<< HEAD
 		local function onEmptyRescue( event )
         	if not event.error then
         	end
     	end
+=======
+>>>>>>> f024449e5f162e6a94f17bb2c020b1107449141d
 
 	elseif(picTable[spot] == nil) then
 		addPicTo(spot, name, xVal, yVal)
@@ -252,19 +255,25 @@ local function addPic(xVal,yVal,name,spot)
 		picTable[spot] = nil
 
 		undoloop = undoloop + 1
+<<<<<<< HEAD
 		local function onUndoSearch( event )
         	if not event.error then
         	end
     	end		
+=======
+>>>>>>> f024449e5f162e6a94f17bb2c020b1107449141d
 	else
 		picTable[spot]:removeSelf()
 		addPicTo(spot, name, xVal, yVal)
 			
 		undoloop = undoloop + 1
+<<<<<<< HEAD
 		local function onUndoSearch( event )
         	if not event.error then
         	end
     	end
+=======
+>>>>>>> f024449e5f162e6a94f17bb2c020b1107449141d
 	end
 	picToAdd = ""
 	if(popupPic~=nil)then
@@ -555,7 +564,6 @@ end
 local function merge(tablel)
 	
 	for i=1,5,1 do
-		print(tablel[i])
 		if (tablel[i]=="Images/main_block.png") then
 			merge(table1)
 		elseif (tablel[i]=="Images/1_block.png") then
@@ -574,11 +582,6 @@ end
 
 local function pass()
 	runrescue = runrescue + 1
-    local function onRunningObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
     counter=1
 	merge(table1)
 	moverobot()
@@ -589,12 +592,6 @@ end
 
 local function gohome()
 	homerescue = homerescue + 1
-
-    local function onUpdateObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
 
     local options = {
 				effect = "crossFade",
@@ -653,7 +650,6 @@ function scene:create( event )
 	keyset = {}
 	keyscount = 0
 	--mykey()
-	print( myData.Build_Rescue.key[1] )
     local sceneGroup = self.view
     elevatorMusic = audio.loadStream( "Music/bensound-theelevatorbossanova.mp3")
 	elevatorMusicplay = audio.play( elevatorMusic, {  fadein = 4000, loops=-1 } )
@@ -835,9 +831,7 @@ function scene:show( event )
 			setupPic("bottomwall", myData.bottomwall[5], myData.bottomwall[1], myData.bottomwall[2], myData.bottomwall[3], myData.bottomwall[4])
 			while(myData.Build_Rescue.walls[i] ~= nil) do
 				currwall = "wall"..myData.Build_Rescue.walls[i]
-				print(currwall)
 				currdata = myData[currwall]
-				print(currdata)
 				setupPic(currwall, currdata[5], currdata[1], currdata[2], currdata[3], currdata[4])
 				i = i + 1
 			end
@@ -861,7 +855,6 @@ function scene:show( event )
 			--keys
 			i = 1
 			while(keyset[i] ~= nil) do
-				print("keyphys "..i)
 				physics.addBody(keyset[i], "static",{ isSensor=true })
 				i = i + 1
 			end

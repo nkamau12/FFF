@@ -19,12 +19,7 @@ function scene:create( event )
 	local trial
 	if(errorcount2 > 2 or errorcount3 > 2) then
 		local errorNum
-		print("2")
-		print(errorcount2)
-		print("3")
-		print(errorcount3)
 		if (errorcount2 > errorcount3) then
-			print("in")
 			errorNum = math.random(3,4)
 		elseif(errorcount3 > errorcount2) then
 			errorNum = math.random(5,6)

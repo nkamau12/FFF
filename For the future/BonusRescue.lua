@@ -197,7 +197,6 @@ local function setupmap()
 		if(myData.key[i][1] ~= 0) then
 			setupPic("key"..i,"Images/key.png",myData.key[i][1],myData.key[i][2],124,140)
 			numkeys = i
-			print( setupItems["key"..i] )
 		end
 		i = i + 1
 	end
@@ -205,9 +204,7 @@ local function setupmap()
 	i = 1
 	while(myData.Bonuslevel.walls[i] ~= nil) do
 		currwall = "wall"..(myData.Bonuslevel.walls[i])
-		print(currwall)
 		currdata = myData[currwall]
-		print(currdata)
 		setupPic(currwall, currdata[5], currdata[1], currdata[2], currdata[3], currdata[4])
 		i = i + 1
 	end
@@ -237,7 +234,6 @@ local function setupmap()
 	--keys physics
 	i = 1
 	while(setupItems["key"..i] ~= nil) do
-		print("keyphys "..i)
 		physics.addBody(setupItems["key"..i], "static",{ isSensor=true })
 		i = i + 1
 	end
@@ -498,7 +494,6 @@ end
 local function resetWallKey()
     while(removedImage[1]~=nil) do
         setupPic(removedImage[1][1], removedImage[1][2], removedImage[1][3],removedImage[1][4],removedImage[1][5], removedImage[1][6])
-        print( "-->"..setupItems[removedImage[1][1]].myName )
         if (string.find( removedImage[1][1], "key" )~=nil) then
             physics.addBody(setupItems[removedImage[1][1]], "static",{ isSensor=true })
             keyscount=keyscount-1
@@ -528,7 +523,6 @@ local function restartr()
 		transition.to( myrectr, { time=16, x=robotX+240, y=robotY} )
 		fintable=nil
 		fintable={}
-		print(table.maxn(fintable))
 		counter=1
 end
 
@@ -556,16 +550,12 @@ local function moverobot()
 		local options = {
 			isModal = true
 		}
-		print("in move robot")
 		timer.pause(countDownTimer)
 		composer.showOverlay( "fail_rescue_scientist", options )
-		print("has key 1")
-		print(hasKey)
 		if(hasKey) then
 			myData.error3_count = myData.error3_count + 2
 			myData.error2_count = myData.error2_count + 1
 		else
-			print("in else")
 			myData.error2_count = myData.error2_count + 1
 		end
 	end	
@@ -607,13 +597,10 @@ local function addTokens()
     local App42CallBack = {}
     storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)
     function App42CallBack:onSuccess(object)
-        print("dbName is "..object:getDbName())
         for i=1,table.getn(object:getJsonDocList()) do
-            print("Succesful connection")
         end
     end
     function App42CallBack:onException(exception)
-        print("Message is : "..exception:getMessage())
     end
 end
 
@@ -635,14 +622,10 @@ local function updateCount()
     App42CallBack = {}
     storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)
     function App42CallBack:onSuccess(object)
-        print("dbName is "..object:getDbName())
         for i=1,table.getn(object:getJsonDocList()) do
-            print("Success!")
-            print("New count is "..object:getJsonDocList()[i]:getJsonDoc().playcount)
         end
     end
     function App42CallBack:onException(exception)
-        print("Message is : "..exception:getMessage())
     end
 end
 
@@ -658,10 +641,8 @@ local function onCollision( event )
 			currkey = event.object2
             Image = {currkey.myName,"Images/key.png",currkey.x,currkey.y,124,140}
             table.insert( removedImage, Image )
-			print("keys count: "..keyscount)
 			event.object2:removeSelf()
 		elseif (event.object2==science) then
-				print("Scientist")
 				local options = {
 					effect = "crossFade",
 					time = 500
@@ -690,10 +671,7 @@ local function onCollision( event )
 					myData.error3_count = 0
 				end
 				timer.pause(countDownTimer)
-		        print("Finished with "..secondsLeft.." seconds left")
-		        print("Finished with "..counter.." moves")
 		        gameScore = secondsLeft * 10 + (1500 - (counter-1)*100)
-		        print("Score: "..gameScore)
 
 		        
 
@@ -717,15 +695,12 @@ local function onCollision( event )
 			
 			}
 			timer.pause(countDownTimer)
-            print(secondsLeft)
 			composer.showOverlay( "fail_rescue_path", options )
 			myData.error2_count = myData.error2_count + 1
-			print("why1")
 		else
 			i = 1
 			while(myData.Bonuslevel.walls[i] ~= nil) do
 				currwall = "wall"..myData.Bonuslevel.walls[i]
-				print("currwall "..currwall)
 				if(event.object2==setupItems[currwall]) then
 					if(keyscount > 0)then
 						currdata = myData[currwall]
@@ -734,8 +709,6 @@ local function onCollision( event )
 						event.object2:removeSelf()
 						keyscount = keyscount - 1
 						counter = counter - 1
-						print("keyscount "..keyscount)
-						print("counter "..counter)
 						movehalf()
 						--timer.performWithDelay(10,movehalf)
 						counter = counter + 1
@@ -746,18 +719,14 @@ local function onCollision( event )
 						isModal = true
 						}
 						timer.pause(countDownTimer)
-            			print(secondsLeft)
 						composer.showOverlay( "fail_rescue_path", options )
-						print("has key 2")
 						if(hasKey) then
 							myData.error3_count = myData.error3_count + 2
 							myData.error2_count = myData.error2_count + 1
 						else
-							print("in else")
 							myData.error2_count = myData.error2_count + 1
 						end
 						
-						print("why1")
 					end
 				end
 				i = i + 1
@@ -770,7 +739,6 @@ end
 local function merge(tablel)
 	
 	for i=1,5,1 do
-		print(tablel[i])
 		if (tablel[i]=="Images/main_block.png") then
 			merge(table1)
 		elseif (tablel[i]=="Images/1_block.png") then
@@ -867,7 +835,6 @@ local function usekey()
 	myData.savedkeys = 	myData.savedkeys - 1
 	keyscount = keyscount + 1
 	hasKey = true
-	print("keyscount is "..keyscount)
 	updateKeys()
 	if(myData.savedkeys == 0) then
 		setupItems["keypowerup"]:removeEventListener("tap", usekey)
@@ -877,7 +844,6 @@ local function useclock()
 	myData.savedclocks = myData.savedclocks - 1
 	clockscount = clockscount + 1
 	hasClock = true
-	print("clockscount is "..clockscount)
 	updateClocks()
 	if(myData.savedclocks == 0) then
 		setupItems["clockpowerup"]:removeEventListener("tap", useclock)
@@ -1051,7 +1017,6 @@ function scene:show( event )
 		picTable = {}
 		
     	setObjects()
-    	print(myData.rescueLvl)
     	currResc = myData.bonusRescueLvl
         myData.rescue = 1
 		
@@ -1104,9 +1069,7 @@ function scene:show( event )
 			i = 1
 			while(myData.Bonuslevel.walls[i] ~= nil) do
 				currwall = "wall"..myData.Bonuslevel.walls[i]
-				print(currwall)
 				currdata = myData[currwall]
-				print(currdata)
 				setupPic(currwall, currdata[5], currdata[1], currdata[2], currdata[3], currdata[4])
 				i = i + 1
 			end

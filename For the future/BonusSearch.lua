@@ -62,7 +62,6 @@ local function setupmap()
     i=1
     while(myData.bonusSearchLvlOne[i] ~= nil and myData.bonusSearchLvlOne[i] ~= 0) do
         currBlock = myData.bonusSearchLvlOne[i]
-        print("currblock is "..currBlock)
         mapmain[i] = display.newImage("Images/"..currBlock.."_block.png")
         mapmain[i].anchorX=0
         mapmain[i].anchorY=0
@@ -281,13 +280,10 @@ local function addTokens()
     local App42CallBack = {}
     storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)
     function App42CallBack:onSuccess(object)
-        print("dbName is "..object:getDbName())
         for i=1,table.getn(object:getJsonDocList()) do
-            print("Succesful connection")
         end
     end
     function App42CallBack:onException(exception)
-        print("Message is : "..exception:getMessage())
     end
 end
 
@@ -322,14 +318,10 @@ local function updateCount()
     App42CallBack = {}
     storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)
     function App42CallBack:onSuccess(object)
-        print("dbName is "..object:getDbName())
         for i=1,table.getn(object:getJsonDocList()) do
-            print("Success!")
-            print("New count is "..object:getJsonDocList()[i]:getJsonDoc().playcount)
         end
     end
     function App42CallBack:onException(exception)
-        print("Message is : "..exception:getMessage())
     end
 end
 
@@ -338,19 +330,12 @@ local function checkresult( event )
     runsearch = runsearch + 1
     
 
-    local function onRunningObject( event )
-        if not event.error then
-            print( event.response.updatedAt )
-        end
-    end
 
     while answer<5 do
-        print(answer)
         if(spacecolor[answer] == answerkey[answer+1])then
             answer = answer + 1
         else
             timer.pause(countDownTimer)
-            print(secondsLeft)
     		local options = {
     			isModal = true }
             composer.showOverlay( "fail_search", options )
@@ -382,9 +367,7 @@ local function checkresult( event )
     	composer.showOverlay("pass_bonus_search", options)
         updateCount()
         timer.pause(countDownTimer)
-        print("Finished with "..secondsLeft.." seconds left")
         gameScore = secondsLeft * 10
-        print("Score: "..gameScore)
         
     else
         answer = countmax
@@ -517,7 +500,6 @@ function scene:show( event )
 
         getKey()
 
-        print("This level: Bonus "..currLvl)
         if(mapmain[1] == nil) then
             undosearch = 0
             homesearch = 0

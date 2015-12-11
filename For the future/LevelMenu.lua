@@ -48,7 +48,6 @@ local function showRescue()
 end
 
 local function Searchnum(event)
-	print(event.target.name)
 	myData.searchLvl = event.target.name
 	showSearch()
 end
@@ -56,7 +55,6 @@ end
 
 local function Rescuenum(event)
 	myData.rescueLvl = event.target.name
-	print("Going to rescue "..event.target.name)
 	showRescue()
 	myData.searchLvl = myData.rescueLvl + 1
 end
@@ -91,10 +89,6 @@ function scene:show( event )
 	    maxsrch = myData.maxsrch
 	    maxrsc = myData.maxrsc
 
-	    print(" ")
-	    print("start LevelMenu")
-	    print("maxsrch "..maxsrch)
-	    print("maxrsc "..maxrsc)
 
 	    if(myData.searchLvl > maxsrch) then
 	    	maxsrch = myData.searchLvl
@@ -139,13 +133,10 @@ function scene:show( event )
 	    local App42CallBack = {}
 	    storageService:saveOrupdateDocumentByKeyValue(dbName,collectionName,key,value,jsonDoc,App42CallBack)
 	    function App42CallBack:onSuccess(object)
-	        print("dbName is "..object:getDbName())
 	        for i=1,table.getn(object:getJsonDocList()) do
-	            print("Succesful connection")
 	        end
 	    end
 	    function App42CallBack:onException(exception)
-	        print("Message is : "..exception:getMessage())
 	    end
 
 		local background = display.newImage("Images/theme_"..myData.theme.."/levels_menu.png",system.ResourceDirectory)

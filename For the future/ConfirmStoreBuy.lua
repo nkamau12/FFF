@@ -44,20 +44,10 @@ local function confirm(event)
 				App42CallBack = {}
 				storageService = App42API:buildStorageService()
 				storageService:addOrUpdateKeys(dbName, collectionName,docId, keys,App42CallBack) 
-				function App42CallBack:onSuccess(object)
-					print("dbName is "..object:getDbName())
-					print("collectionName is "..object:getCollectionName())
-					print("DocId is "..object:getJsonDocList():getDocId())
-					print("Created At is "..object:getJsonDocList():getCreatedAt())
-					print("Updated At is "..object:getJsonDocList():getUpdatedAt())
-					print("GetJsonDoc is : "..JSON:encode(object:getJsonDocList():getJsonDoc()) )  
+				function App42CallBack:onSuccess(object) 
 					
 				end
 				function App42CallBack:onException(exception)
-					print("Message is : "..exception:getMessage())
-					print("App Error code is : "..exception:getAppErrorCode())
-					print("Http Error code is "..exception:getHttpErrorCode())
-					print("Detail is : "..exception:getDetails())
 				end 
 
 				local docId = myData.userDoc
@@ -66,20 +56,10 @@ local function confirm(event)
 				App42CallBack = {}
 				storageService = App42API:buildStorageService()
 				storageService:addOrUpdateKeys(dbName, collectionName,docId, keys,App42CallBack) 
-				function App42CallBack:onSuccess(object)
-					print("dbName is "..object:getDbName())
-					print("collectionName is "..object:getCollectionName())
-					print("DocId is "..object:getJsonDocList():getDocId())
-					print("Created At is "..object:getJsonDocList():getCreatedAt())
-					print("Updated At is "..object:getJsonDocList():getUpdatedAt())
-					print("GetJsonDoc is : "..JSON:encode(object:getJsonDocList():getJsonDoc()) )  
+				function App42CallBack:onSuccess(object) 
 					
 				end
 				function App42CallBack:onException(exception)
-					print("Message is : "..exception:getMessage())
-					print("App Error code is : "..exception:getAppErrorCode())
-					print("Http Error code is "..exception:getHttpErrorCode())
-					print("Detail is : "..exception:getDetails())
 				end 
 				myData.credits = newCreds
 
@@ -99,20 +79,10 @@ local function confirm(event)
 				App42CallBack = {}
 				storageService = App42API:buildStorageService()
 				storageService:addOrUpdateKeys(dbName, collectionName,docId, keys,App42CallBack) 
-				function App42CallBack:onSuccess(object)
-					print("dbName is "..object:getDbName())
-					print("collectionName is "..object:getCollectionName())
-					print("DocId is "..object:getJsonDocList():getDocId())
-					print("Created At is "..object:getJsonDocList():getCreatedAt())
-					print("Updated At is "..object:getJsonDocList():getUpdatedAt())
-					print("GetJsonDoc is : "..JSON:encode(object:getJsonDocList():getJsonDoc()) )  
+				function App42CallBack:onSuccess(object) 
 					
 				end
 				function App42CallBack:onException(exception)
-					print("Message is : "..exception:getMessage())
-					print("App Error code is : "..exception:getAppErrorCode())
-					print("Http Error code is "..exception:getHttpErrorCode())
-					print("Detail is : "..exception:getDetails())
 				end 
 
 				collectionName = "GameInfo"
@@ -123,24 +93,13 @@ local function confirm(event)
 				storageService = App42API:buildStorageService()
 				storageService:addOrUpdateKeys(dbName, collectionName,docId, keys,App42CallBack) 
 				function App42CallBack:onSuccess(object)
-					print("dbName is "..object:getDbName())
-					print("collectionName is "..object:getCollectionName())
-					print("DocId is "..object:getJsonDocList():getDocId())
-					print("Created At is "..object:getJsonDocList():getCreatedAt())
-					print("Updated At is "..object:getJsonDocList():getUpdatedAt())
-					print("GetJsonDoc is : "..JSON:encode(object:getJsonDocList():getJsonDoc()) )  
 					
 				end
 				function App42CallBack:onException(exception)
-					print("Message is : "..exception:getMessage())
-					print("App Error code is : "..exception:getAppErrorCode())
-					print("Http Error code is "..exception:getHttpErrorCode())
-					print("Detail is : "..exception:getDetails())
 				end 
 				myData.credits = newCreds
 			end
 		end
-		print("new credits is "..newCreds)
 		composer.hideOverlay( "fade", 400 )
 
 		local userSettings = {

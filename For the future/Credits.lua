@@ -31,8 +31,6 @@ function scene:show( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-        print(" ")
-        print("start Credits")
         
         creds = display.newImage("Images/theme_"..myData.theme.."/credits_screen.png",system.ResourceDirectory)
         creds.anchorX=0

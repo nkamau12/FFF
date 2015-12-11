@@ -135,36 +135,24 @@ local function checkTop()
 	scoreBoardService:getTopNRankings(gameName,max,App42CallBack)
 	function App42CallBack:onSuccess(object)
 		if table.getn(object:getScoreList()) > 1 then
-			print("Game name is "..object:getName())
 			for i=1,table.getn(object:getScoreList()),1 do
-				print("i is "..i)
-				print("userName is : "..object:getScoreList()[i]:getUserName())
 				if(myData.user == object:getScoreList()[i]:getUserName() and myData.isLeader == nil) then
 					myData.isLeader = i
-					print("isLeader is "..myData.isLeader)
 				end
-				print("score is : "..object:getScoreList()[i]:getValue())
-				print("scoreId is : "..object:getScoreList()[i]:getScoreId())
 				
 			end
 			if(myData.isLeader == nil) then
 				myData.isLeader = 0
 			end
-			print("isLeader is "..myData.isLeader)
 		else
-			print("userName is : "..object:getScoreList():getUserName())
 			if(myData.user == object:getScoreList():getUserName()) then
 				myData.isLeader = 1
 			else
 				myData.isLeader = 0
 			end
-			print("score is : "..object:getScoreList():getValue())
-			print("scoreId is : "..object:getScoreList():getScoreId())
-			print("isLeader is "..myData.isLeader)
 		end
 	end
 	function App42CallBack:onException(exception)
-		print("Message is : "..exception:getMessage())
 	end
 end
 
@@ -184,11 +172,8 @@ local function getExtras()
 	storageService = App42API:buildStorageService()
 	storageService:findDocumentByKeyValue(dbName, collectionName,key,value,App42CallBack)
 	function App42CallBack:onSuccess(object)
-		print("dbName is "..object:getDbName())
 		for i=1,table.getn(object:getJsonDocList()) do
-			print("DocId is "..object:getJsonDocList()[i]:getDocId())
 			myData.storeDoc = object:getJsonDocList()[i]:getDocId()
-			print("CreatedAt is "..object:getJsonDocList()[i]:getCreatedAt())
 			if(object:getJsonDocList()[i]:getJsonDoc().robot_santa == 0) then
 				table.insert(myData.buyable, myData.storeItems[1])
 			else
@@ -227,10 +212,6 @@ local function getExtras()
 		end
 	end
 	function App42CallBack:onException(exception)
-		print("Message is : "..exception:getMessage())
-		print("App Error code is : "..exception:getAppErrorCode())
-		print("Http Error code is "..exception:getHttpErrorCode())
-		print("Detail is : "..exception:getDetails())
 	end
 end
 
@@ -245,8 +226,6 @@ function scene:show( event )
     local phase = event.phase
 	
     if ( phase == "will" ) then
-    	print(" ")
-        print("start MainMenu")
 		if (check1()=="1") then
 		else
 			local options = {

@@ -138,7 +138,6 @@ local function setupmap()
 		if(myData.key[i][1] ~= 0) then
 			setupPic("key"..i,"Images/key.png",myData.key[i][1],myData.key[i][2],124,140)
 			numkeys = i
-			print( setupItems["key"..i] )
 		end
 		i = i + 1
 	end
@@ -146,9 +145,7 @@ local function setupmap()
 	i = 1
 	while(myData.levelkey[currResc].walls[i] ~= nil) do
 		currwall = "wall"..(myData.levelkey[currResc].walls[i])
-		print(currwall)
 		currdata = myData[currwall]
-		print(currdata)
 		setupPic(currwall, currdata[5], currdata[1], currdata[2], currdata[3], currdata[4])
 		i = i + 1
 	end
@@ -178,7 +175,6 @@ local function setupmap()
 	--keys physics
 	i = 1
 	while(setupItems["key"..i] ~= nil) do
-		print("keyphys "..i)
 		physics.addBody(setupItems["key"..i], "static",{ isSensor=true })
 		i = i + 1
 	end
@@ -697,6 +693,10 @@ local function onCollision( event )
 						else
 							myData.error2_count = myData.error2_count + 1
 						end
+<<<<<<< HEAD
+=======
+						
+>>>>>>> f024449e5f162e6a94f17bb2c020b1107449141d
 					end
 				end
 				i = i + 1
