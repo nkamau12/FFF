@@ -233,20 +233,20 @@ local function addPic(xVal,yVal,name,spot)
 		addPicTo(spot, name, xVal, yVal)
 
 	elseif (picToAdd == "") then
-		picTable[spot]:removeSelf()
+		display.remove(picTable[spot])
 		picTable[spot] = nil
 
 		undoloop = undoloop + 1
 		
 	else
-		picTable[spot]:removeSelf()
+		display.remove(picTable[spot])
 		addPicTo(spot, name, xVal, yVal)
 			
 		undoloop = undoloop + 1
 	end
 	picToAdd = ""
 	if(popupPic~=nil)then
-		popupPic:removeSelf()
+		display.remove(popupPic)
 		popupPic = nil
 	end
 end
@@ -571,7 +571,7 @@ local function onCollision( event )
             Image = {currkey.myName,"Images/key.png",currkey.x,currkey.y,124,140}
             table.insert( removedImage, Image )
 			print("keys count: "..keyscount)
-			event.object2:removeSelf()
+			display.remove(event.object2)
 		elseif (event.object2==science) then
 				print("Scientist")
 				local options = {
@@ -584,7 +584,7 @@ local function onCollision( event )
 				if(currResc ~= 12) then
 					for h = 15, 1, -1 do
 						if(picTable[h] ~= nil) then
-							picTable[h]:removeSelf()
+							display.remove(picTable[h])
 						end
 					end
 					myData.currScore = secondsLeft * 10 + (1500 - (counter-1)*100)
@@ -690,7 +690,7 @@ local function onCollision( event )
 				else
 					for h = 15, 1, -1 do
 						if(picTable[h] ~= nil) then
-							picTable[h]:removeSelf()
+							display.remove(picTable[h])
 						end
 					end
 					composer.gotoScene("Credits",options)
@@ -717,7 +717,7 @@ local function onCollision( event )
 						currdata = myData[currwall]
 		                Image = {currwall, currdata[5], currdata[1], currdata[2], currdata[3], currdata[4]}
 		                table.insert( removedImage, Image )
-						event.object2:removeSelf()
+						display.remove(event.object2)
 						keyscount = keyscount - 1
 						counter = counter - 1
 						print("keyscount "..keyscount)
@@ -794,7 +794,7 @@ local function gohome()
 			myData.rescue = 1
 			for h = 15, 1, -1 do
 				if(picTable[h] ~= nil) then
-					picTable[h]:removeSelf()
+					display.remove(picTable[h])
 				end
 			end
 			picTable = {}
