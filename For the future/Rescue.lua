@@ -1187,6 +1187,9 @@ function scene:show( event )
         sceneGroup:insert(clockText)
         -- run them timer
         countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
+
+        updateClocks()
+        updateKeys()
 		
 		getScoreDoc()
     elseif ( phase == "did" ) then

@@ -33,6 +33,9 @@ local special_counter = 1
 local buyable = {}
 
 local homebutton
+
+local optionsText
+local trial
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
@@ -48,13 +51,6 @@ local function gohome( event )
     }
     composer.gotoScene("MainMenu",options)
 end
-
-local function buy()
-end
-
-local function notBuy()
-end
-
 
 
 local function buyExtra(event)
@@ -207,7 +203,15 @@ local function nextExtra( event )
 	end
 end
 
+local function updateTokens(event)
+    local tokenDisplay = "Your tokens: "..myData.credits
+    trial.text = tokenDisplay
+end
 
+function scene:resumeStore()
+    --code to resume game
+    updateTokens()
+end
 
 -- "scene:create()"
 function scene:create( event )
@@ -244,7 +248,7 @@ function scene:show( event )
         sceneGroup:insert(homebutton)
 		homebutton:addEventListener( "tap", gohome )
 
-        local optionsText = {
+        optionsText = {
             text = "Your tokens: "..myData.credits,     
             x = display.contentCenterX - 600,
             y = display.contentCenterY - 350,
@@ -307,7 +311,7 @@ function scene:show( event )
 		sceneGroup:insert(special_cost)
 
 
-
+		updateTokens()
 
 
 

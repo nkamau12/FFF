@@ -195,6 +195,8 @@ function scene:hide( event )
 
     if ( phase == "will" ) then
 		-- Call the "resumeGame()" function in the parent scene
+
+		parent:resumeStore()
         
     end
 end
