@@ -35,7 +35,7 @@ function scene:create( event )
 			trial = display.newText(myData.errorText6 ,display.contentCenterX,display.contentCenterY)
 		end
 	else
-		trial=display.newText("Sorry that path is blocked",display.contentCenterX,display.contentCenterY)
+		trial=display.newText("Sorry the scientist is not there",display.contentCenterX,display.contentCenterY)
 	end
 	sceneGroup:insert(trial)	
 	local try = widget.newButton
